@@ -4,6 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
+//[[Rcpp::export]]
 double Kast(double dX){
 
   double dOut = Rf_lgammafn((dX+1.0)/2.0) - 0.5*log(M_PI*dX) - Rf_lgammafn(dX*0.5);
@@ -240,26 +241,23 @@ arma::mat ast1_IM(arma::vec vTheta){
 
 }
 
-// arma::vec rast_C(int n, double mu, double sigma,double alpha, double df1, double df2){
-//   NumericVector U = runif(n);
-//   NumericVector T1 = rt(n,df1);
-//   NumericVector T2 = rt(n,df2);
-//
-//
-//   double K1=Kast(df1);
-//   double K2=Kast(df2);
-//
-//   double alpha_star = alpha * K1 / (alpha*K1+(1-alpha)*K2);
-//
-//   NumericVector out;
-//
-//   NumericVector foo=sign_C(U-alpha);
-//
-//   out= mu + sigma * (alpha_star * abs(T1)* (foo-1) +
-//                        (1-alpha_star)*abs(T2) * (foo+1) );
-//
-//   return out;
-// }
+double rAST(double dMu, double dSigma,double dAlpha, double dNu1, double dNu2){
+  double dU  = Rf_runif(0.0,1.0);
+  double dT1 = Rf_rt(dNu1);
+  double dT2 = Rf_rt(dNu2);
+
+  double K1=Kast(dNu1);
+  double K2=Kast(dNu2);
+
+  double dAlpha_star = dAlpha * K1 / (dAlpha*K1+(1-dAlpha)*K2);
+
+  double dSign = sign_C(dU-dAlpha);
+
+  double dY = dMu + dSigma * (dAlpha_star * abs3(dT1)* (dSign-1) +
+                       (1-dAlpha_star)*abs3(dT2) * (dSign+1) );
+
+  return dY;
+}
 //
 // double past_C(double dY, double dMu, double dSigma, double dAlpha, double dV1, double dV2) {
 //

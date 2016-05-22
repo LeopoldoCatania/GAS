@@ -16,18 +16,19 @@ IM_univ(vTheta, "norm")
 
 #std
 
-dMu     = 1
-dSigma2 = 4
-dNu     = 5
+dMu     = 0
+dPhi2   = 1
+dNu     = 20
 
-vTheta = c(dMu,dSigma2,dNu)
+vTheta = c(dMu,dPhi,dNu)
 
 round(matrix(adaptIntegrate(function(dY,vTheta){
   vScore = Score_univ(dY, vTheta, "std")
   vScore%*%t(vScore) * ddist_univ(dY, vTheta, "std", bLog=FALSE)
-},lowerLimit = -50, upperLimit = 50, vTheta = vTheta, fDim = length(vTheta)^2)$integral,length(vTheta)),4)
+},lowerLimit = -5, upperLimit = 5, vTheta = vTheta, fDim = length(vTheta)^2)$integral,length(vTheta)),7)
 
-IM_univ(vTheta, "std")   #check
+IM_univ(vTheta, "std")
+
 
 ## ast
 

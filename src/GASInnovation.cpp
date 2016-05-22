@@ -22,9 +22,9 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
 
     arma::mat mIM = IM_univ(vTheta, Dist);
 
-    arma::mat mIM_Tilde = mJ.t() * mIM * mJ;
+    arma::mat mIM_Tilde_inv = mJ.t() * pinv(mIM) * mJ;
 
-    vS_tilde = pinv(mIM_Tilde) * Score_tilde;
+    vS_tilde = mIM_Tilde_inv * Score_tilde;
 
   }
   if(ScalingType=="InvSqrt") {

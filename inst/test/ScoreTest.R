@@ -18,10 +18,10 @@ Score_univ(dY, vTheta, "norm")
 
 dY   = 0
 dMu  = 1
-dPhi = 4
+dPhi2 =5
 dNu  = 5
 
-vTheta = c(dMu,dPhi,dNu)
+vTheta = c(dMu,dPhi2,dNu)
 
 grad(function(vTheta,dY){
   ddist_univ(dY, vTheta, "std", bLog=TRUE)
@@ -29,6 +29,10 @@ grad(function(vTheta,dY){
 
 Score_univ(dY, vTheta, "std")
 
+ddist("std",dY,(dPhi2)*(dNu-2)/dNu,shape = dNu)
+
+ddist_univ(dY, vTheta, "std", bLog=FALSE)
+dt( (dY-vTheta[1])/sqrt(vTheta[2]),vTheta[3])/sqrt(vTheta[2])
 
 ## ast score
 

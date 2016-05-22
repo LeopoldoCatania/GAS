@@ -12,10 +12,12 @@ double Unmap(double dG, double dL,double dU) {
   double dUnmap = log((dG-dL)/(dU-dG));
   return dUnmap;
 }
+//[[Rcpp::export]]
 arma::vec Map_Vec(arma::vec vX, double dL ,double dU) {
   arma::vec vMap =  dL + ( dU - dL ) / (1.0 + exp( - vX ));
   return vMap;
 }
+//[[Rcpp::export]]
 arma::vec unmapVec_C(arma::vec vG, double dL, double dU) {
   arma::vec vUnmap = log((vG-dL)/(dU-vG));
   return vUnmap;
@@ -27,6 +29,7 @@ double MapDeriv(double dX, double dL, double dU){
 
   return exp(dDeriv);
 }
+//[[Rcpp::export]]
 arma::vec MapParameters(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   arma::vec vTheta(iK);
@@ -81,7 +84,6 @@ arma::vec MapParameters(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(1) = dPhi;
     vTheta(2) = dNu;
   }
-
   if(Dist=="norm"){
 
     double dMu_tilde     = vTheta_tilde(0);
@@ -94,8 +96,9 @@ arma::vec MapParameters(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(1) = dSigma2;
   }
 
-  return vTheta;
+  return InfRemover_vec(vTheta);
 }
+//[[Rcpp::export]]
 arma::vec UnmapParameters(arma::vec vTheta, std::string Dist, int iK){
 
   arma::vec vTheta_tilde(iK);
@@ -145,7 +148,7 @@ arma::vec UnmapParameters(arma::vec vTheta, std::string Dist, int iK){
 
     double dMu_tilde  = dMu;
     double dPhi_tilde = log(dPhi);
-    double dNu_tilde  = log(dNu_tilde - 2.01);
+    double dNu_tilde  = log(dNu - 2.01);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dPhi_tilde;
@@ -166,7 +169,7 @@ arma::vec UnmapParameters(arma::vec vTheta, std::string Dist, int iK){
 
   return vTheta_tilde;
 }
-arma::vec MapParametersJacobian(arma::vec vTheta_tilde, std::string Dist, int iK){
+arma::mat MapParametersJacobian(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   arma::mat mJ=zeros(iK,iK);
 
@@ -210,6 +213,7 @@ arma::vec MapParametersJacobian(arma::vec vTheta_tilde, std::string Dist, int iK
     mJ(0,0) = 1;
     mJ(1,1) = exp(dSigma2_tilde);
   }
-
+  arma::vec vJ_safe =  InfRemover_vec(mJ.diag());
+  mJ.diag() = vJ_safe;
   return mJ;
 }
