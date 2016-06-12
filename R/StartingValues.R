@@ -114,3 +114,47 @@ starting_vB<-function(vY, vKappa, dB_foo, mA, iT, iK, Dist,ScalingType){
 
   return(diag(mB))
 }
+
+
+StartingValues_mvnorm<-function(mY,iN){
+
+  iT = ncol(mY)
+  iK = NumberParameters("mvnorm",iN)
+
+  vEmpRho    = build_vR(cor(t(mY)),N)
+  vEmpPhi    = UnMapR_C(vEmpRho, N)
+
+  vEmpMu     = apply(mY,1,mean)
+  vEmpSigma  = apply(mY,1,sd)
+
+  vA     = c(unmapVec_C(c(rep(0.000001,iN),rep(0.001,iN),
+                        rep(0.0001,iN*(iN-1)/2)),
+                      LowerA(), UpperA() ) )              ; names(vA) = paste("a.",mvnormParNames(iN),sep="")
+  vB     = c(unmapVec_C(rep(0.90,iK) , LowerB(), UpperB())) ; names(vB) = paste("b.",mvnormParNames(iN),sep="")
+  vKappa = c(vEmpMu,log(vEmpSigma),vEmpPhi)               ; names(vKappa) = paste("kappa.",mvnormParNames(iN),sep="")
+
+  pw = c(vKappa,vA,vB)
+  return(pw)
+}
+StartingValues_mvt<-function(mY,iN){
+
+  iT = ncol(mY)
+  iK = NumberParameters("mvt",iN)
+
+  vEmpRho    = build_vR(cor(t(mY)),iN)
+  vEmpPhi    = UnMapR_C(vEmpRho, iN)
+
+  dNu        = 5.0
+  vEmpMu     = apply(mY,1,mean)
+  vEmpSigma  = apply(mY,1,sd)*sqrt((dNu-2.0)/dNu)
+
+  vKappa = c(vEmpMu,log(vEmpSigma),vEmpPhi, log(dNu - 2.01))                         ; names(vKappa) = paste("kappa.",mvtParNames(iN),sep="")
+  vB     = c(unmapVec_C(rep(0.90,iK), LowerB(), UpperB()))                             ; names(vB) = paste("b.",mvtParNames(iN),sep="")
+  vA     = c(unmapVec_C(c(rep(0.000001,iN),rep(0.001,iN),
+                        rep(0.0001,iN*(iN-1)/2), 0.00001),
+                      LowerA(), UpperA()) )                                          ; names(vA) = paste("a.",mvtParNames(iN),sep="")
+
+  pw = c(vKappa,vA,vB)
+  return(pw)
+}
+

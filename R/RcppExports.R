@@ -9,12 +9,24 @@ ddist_univ <- function(dY, vTheta, Dist, bLog) {
     .Call('GAS_ddist_univ', PACKAGE = 'GAS', dY, vTheta, Dist, bLog)
 }
 
+ddist_multi <- function(vY, vTheta, iN, Dist, bLog) {
+    .Call('GAS_ddist_multi', PACKAGE = 'GAS', vY, vTheta, iN, Dist, bLog)
+}
+
 rdist_univ <- function(vTheta, Dist) {
     .Call('GAS_rdist_univ', PACKAGE = 'GAS', vTheta, Dist)
 }
 
+rdist_multi <- function(vTheta, iN, Dist) {
+    .Call('GAS_rdist_multi', PACKAGE = 'GAS', vTheta, iN, Dist)
+}
+
 GASFilter_univ <- function(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_univ', PACKAGE = 'GAS', vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)
+}
+
+GASFilter_multi <- function(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType) {
+    .Call('GAS_GASFilter_multi', PACKAGE = 'GAS', mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)
 }
 
 IM_univ <- function(vTheta, Dist) {
@@ -29,27 +41,47 @@ unmapVec_C <- function(vG, dL, dU) {
     .Call('GAS_unmapVec_C', PACKAGE = 'GAS', vG, dL, dU)
 }
 
-MapParameters <- function(vTheta_tilde, Dist, iK) {
-    .Call('GAS_MapParameters', PACKAGE = 'GAS', vTheta_tilde, Dist, iK)
+MapParameters_univ <- function(vTheta_tilde, Dist, iK) {
+    .Call('GAS_MapParameters_univ', PACKAGE = 'GAS', vTheta_tilde, Dist, iK)
 }
 
-UnmapParameters <- function(vTheta, Dist, iK) {
-    .Call('GAS_UnmapParameters', PACKAGE = 'GAS', vTheta, Dist, iK)
+UnmapParameters_univ <- function(vTheta, Dist, iK) {
+    .Call('GAS_UnmapParameters_univ', PACKAGE = 'GAS', vTheta, Dist, iK)
+}
+
+UnMapR_C <- function(vRho, iN) {
+    .Call('GAS_UnMapR_C', PACKAGE = 'GAS', vRho, iN)
+}
+
+MapParameters_multi <- function(vTheta_tilde, Dist, iN, iK) {
+    .Call('GAS_MapParameters_multi', PACKAGE = 'GAS', vTheta_tilde, Dist, iN, iK)
 }
 
 StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
 }
 
-Score_univ <- function(dY, vTheta, dist) {
-    .Call('GAS_Score_univ', PACKAGE = 'GAS', dY, vTheta, dist)
+Score_univ <- function(dY, vTheta, Dist) {
+    .Call('GAS_Score_univ', PACKAGE = 'GAS', dY, vTheta, Dist)
+}
+
+Score_multi <- function(vY, vTheta, iN, Dist) {
+    .Call('GAS_Score_multi', PACKAGE = 'GAS', vY, vTheta, iN, Dist)
 }
 
 SimulateGAS_univ <- function(iT, vKappa, mA, mB, Dist, ScalingType) {
     .Call('GAS_SimulateGAS_univ', PACKAGE = 'GAS', iT, vKappa, mA, mB, Dist, ScalingType)
 }
 
-NumberParameters <- function(Dist) {
-    .Call('GAS_NumberParameters', PACKAGE = 'GAS', Dist)
+SimulateGAS_multi <- function(iT, iN, vKappa, mA, mB, Dist, ScalingType) {
+    .Call('GAS_SimulateGAS_multi', PACKAGE = 'GAS', iT, iN, vKappa, mA, mB, Dist, ScalingType)
+}
+
+NumberParameters <- function(Dist, iN = 1L) {
+    .Call('GAS_NumberParameters', PACKAGE = 'GAS', Dist, iN)
+}
+
+build_vR <- function(mR, iN) {
+    .Call('GAS_build_vR', PACKAGE = 'GAS', mR, iN)
 }
 

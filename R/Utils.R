@@ -24,4 +24,5 @@ UpperB<-function(){
   return(0.9999)
 }
 
+getSpec<-function(object) object@ModelInfo$Spec
 

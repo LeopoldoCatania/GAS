@@ -20,6 +20,8 @@ StaticMLFIT<-function(vY,Dist){
 
 UniGASFit<-function(GASSpec,vY){
 
+  Start = Sys.time()
+
   iT = length(vY)
   iK = GASSpec$iK
 
@@ -39,10 +41,22 @@ UniGASFit<-function(GASSpec,vY){
   #optimise
   optimiser = solnp(vPw, UnivGASOptimiser, vY=vY, Dist=Dist, ScalingType=ScalingType, iT=iT, iK=iK)
 
+  vPw = optimiser$pars
+
   lParList = vPw2lPn_Univ(vPw,iK)
   lParList = AddFixedPar(lParList)
 
+  Inference = InferenceFun(optimiser$hessian,vPw, iK)
+
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
-  return(list(Spec = GASSpec, GASDyn = GASDyn, Estimates = list(lParList=lParList, optimiser=optimiser, StaticFit=StaticFit )))
+  elapsedTime =  Sys.time() - Start
+
+  Out <- new("uGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, elapsedTime = elapsedTime),
+             GASDyn = GASDyn,
+             Estimates = list(lParList=lParList, optimiser=optimiser, StaticFit=StaticFit,
+                                                                          Inference = Inference ),
+             Data = list(vY = vY))
+
+  return(Out)
 }

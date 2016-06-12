@@ -9,6 +9,25 @@ arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma) {
   arma::mat mY = arma::randn(iN, incols);
   return arma::repmat(vMu, 1, iN).t() + mY * chol(mSigma);
 }
+arma::mat rmvnorm_ThetaParam(arma::vec vTheta,int iN, int iJ) { //iJ = # of draws
+
+  int iK = NumberParameters("mvnorm", iN);
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iK-1);
+
+  arma::mat mD = diagmat(vSigma);
+  arma::mat mR = build_mR(vRho, iN);
+
+  arma::mat mSigma = mD * mR * mD;
+
+  arma::mat mY = rmvnorm_mat(iJ, vMu, mSigma);
+
+  return mY;
+
+}
+
 const double log2pi = std::log(2.0 * M_PI);
 double dmvnorm(arma::vec vY,
                arma::vec vMu,
@@ -28,7 +47,26 @@ double dmvnorm(arma::vec vY,
   }
   return dOut;
 }
+double dmvnorm_ThetaParam(arma::vec vY,
+                          arma::vec vTheta,
+                          int iN,
+                          bool bLog = false) {
+  int iL = 2*iN + iN*(iN-1)/2;
 
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iL-1);
+
+  arma::mat mD = diagmat(vSigma);
+  arma::mat mR = build_mR(vRho, iN);
+
+  arma::mat mSigma = mD * mR * mD;
+
+  double dPDF = dmvnorm(vY, vMu, mSigma, bLog);
+
+  return dPDF;
+
+}
 arma::vec RhoScore(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, int iN){
 
   arma::mat mRho_S = zeros(iN,iN);
@@ -97,7 +135,7 @@ arma::vec MuScore(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, int i
   return vMu_s;
 
 }
-arma::vec mvnorm_Score(arma::vec vTheta, arma::vec vY, int iN){
+arma::vec mvnorm_Score(arma::vec vY, arma::vec vTheta, int iN){
 
   int iL = 2*iN + iN*(iN-1)/2;
 

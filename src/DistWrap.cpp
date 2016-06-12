@@ -2,6 +2,9 @@
 #include "norm.h"
 #include "std.h"
 #include "ast.h"
+#include "mvnorm.h"
+#include "mvt.h"
+
 
 using namespace Rcpp;
 using namespace arma;
@@ -17,6 +20,14 @@ double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog){
 }
 
 //[[Rcpp::export]]
+double ddist_multi(arma::vec vY, arma::vec vTheta, int iN,std::string Dist, bool bLog){
+  double dLPDF=0.0;
+  if(Dist == "mvnorm") dLPDF = dmvnorm_ThetaParam(vY, vTheta, iN, bLog);
+  if(Dist == "mvt")    dLPDF = dmvt_ThetaParam(vY, vTheta, iN, bLog);
+  return dLPDF;
+}
+
+//[[Rcpp::export]]
 double rdist_univ(arma::vec vTheta, std::string Dist){
   double dY = 0.0;
   if(Dist == "norm") dY = vTheta(0) + pow(vTheta(1),0.5)*Rf_rnorm(0.0,1.0);
@@ -26,3 +37,10 @@ double rdist_univ(arma::vec vTheta, std::string Dist){
   return dY;
 }
 
+//[[Rcpp::export]]
+arma::vec rdist_multi(arma::vec vTheta, int iN,std::string Dist){
+  arma::vec vY(iN);
+  if(Dist == "mvnorm") vY = arma::vectorise(rmvnorm_ThetaParam(vTheta,iN, 1));
+  if(Dist == "mvt")    vY = arma::vectorise(rmvt_ThetaParam(vTheta,iN, 1));
+  return vY;
+}

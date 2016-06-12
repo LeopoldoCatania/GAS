@@ -10,3 +10,16 @@ vPw2lPn_Univ<-function(vPw,iK){
 
   return(lParList)
 }
+
+vPw2vPn_Univ<-function(vPw,iK){
+
+  vA = c(Map_Vec(vPw[paste("a",1:iK,sep = "")], LowerA(), UpperA())); names(vA) = paste("a",1:iK,sep="")
+  vB = c(Map_Vec(vPw[paste("b",1:iK,sep = "")], LowerB(), UpperB())); names(vB) = paste("b",1:iK,sep="")
+
+  vParList = c(vPw[paste("kappa",1:iK,sep = "")], vA, vB)
+
+  vParList = vParList[!is.na(vParList)] # nas are fixed parameters. the order is preserved
+
+  return(vParList)
+}
+

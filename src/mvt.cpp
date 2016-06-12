@@ -9,7 +9,7 @@ double dmvt(arma::vec vY,
             arma::vec vMu,
             arma::mat mSigma,
             double dNu,
-            bool dLog= false) {
+            bool bLog= false) {
 
   double dDetSigma = det(mSigma);
   if(dDetSigma<1e-50){
@@ -24,10 +24,31 @@ double dmvt(arma::vec vY,
   double dLLK = Rf_lgammafn((dNu + dN)*0.5) - Rf_lgammafn(dNu*0.5) - 0.5*dN * log(dNu) - 0.5*dN*log(M_PI*1.0) - 0.5*log(dDetSigma) -
     0.5*(dN+dNu)*log(1.0 + dFoo/dNu);
 
-  if (!dLog) {
+  if (!bLog) {
     dLLK = exp(dLLK);
   }
   return dLLK;
+
+}
+double dmvt_ThetaParam(arma::vec vY,
+                       arma::vec vTheta,
+                       int iN,
+                       bool bLog = false) {
+  int iL = 2*iN + iN*(iN-1)/2 + 1;
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iL-2);
+  double dNu       = vTheta(iL-1);
+
+  arma::mat mD = diagmat(vSigma);
+  arma::mat mR = build_mR(vRho, iN);
+
+  arma::mat mSigma = mD * mR * mD;
+
+  double dPDF = dmvt(vY, vMu, mSigma, dNu, bLog);
+
+  return dPDF;
 
 }
 
@@ -55,6 +76,27 @@ arma::mat rmvt_mat(int iN, arma::vec vMu, arma::mat mSigma, double dNu) {
   }
   return mY;
 }
+
+arma::mat rmvt_ThetaParam(arma::vec vTheta, int iN, int iJ) {//iJ = # of draws
+
+  int iK = NumberParameters("mvt", iN);
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iK-2);
+  double dNu       = vTheta(iK-1);
+
+  arma::mat mD = diagmat(vSigma);
+  arma::mat mR = build_mR(vRho, iN);
+
+  arma::mat mSigma = mD * mR * mD;
+
+  arma::mat mY = rmvt_mat(iN, vMu, mSigma, dNu);
+
+  return mY;
+
+}
+
 
 arma::vec RhoScore_mvt(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, double dNu, int iN){
 
@@ -158,7 +200,7 @@ double NuScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, doub
   return dNu_s;
 
 }
-arma::vec mvt_Score(arma::vec vTheta, arma::vec vY, int iN){
+arma::vec mvt_Score(arma::vec vY,arma::vec vTheta,  int iN){
 
   int iL = 2*iN + iN*(iN-1)/2 + 1;
 

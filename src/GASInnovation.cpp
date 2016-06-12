@@ -11,7 +11,7 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
   arma::vec vS_tilde(iK);
 
   arma::vec vScore       = Score_univ(dY,vTheta,Dist);
-  arma::mat mJ           = MapParametersJacobian(vTheta_tilde, Dist, iK);
+  arma::mat mJ           = MapParametersJacobian_univ(vTheta_tilde, Dist, iK);
   arma::vec Score_tilde  = mJ.t() * vScore ;
 
   if(ScalingType=="Identity") {
@@ -37,5 +37,14 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
 
   }
   //
+  return vS_tilde;
+}
+
+arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_tilde, int iN, int iK,  std::string Dist, std::string ScalingType){
+
+  arma::vec vScore   = Score_multi(vY, vTheta, iN, Dist);
+  arma::mat mJ       = MapParametersJacobian_multi(vTheta_tilde, Dist, iN, iK);
+  arma::vec vS_tilde = mJ.t() * vScore ;
+
   return vS_tilde;
 }

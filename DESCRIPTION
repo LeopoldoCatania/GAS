@@ -11,5 +11,5 @@ Imports:
     Rcpp (>= 0.12.2)
 LinkingTo: Rcpp, RcppArmadillo
 Depends:
-    Rsolnp, methods
+    Rsolnp, methods, numDeriv, MASS
 RoxygenNote: 5.0.1

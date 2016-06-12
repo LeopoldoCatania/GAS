@@ -1,3 +1,4 @@
+library(GAS)
 ## Simulate GAS process
 
 # norm
@@ -14,7 +15,7 @@ plot.ts(lSim$vY)
 
 plot.ts(t(lSim$mTheta))
 
-GASSpec = UnivGASSpec("norm","Identity", GASPar = list(location = T, scale = T, skewness = F, shape = F, shape2 = F))
+GASSpec = UnivGASSpec("norm","Identity", GASPar = list(location = F, scale = T, skewness = F, shape = F, shape2 = F))
 
 vY = lSim$vY
 
