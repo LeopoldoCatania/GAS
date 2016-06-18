@@ -1,5 +1,5 @@
 
-GetFixedPar_Univ<-function(Dist,GASPar){
+GetFixedPar_Uni<-function(Dist,GASPar){
   FixedPar = NULL
   if(Dist=="norm"){
     if(!GASPar$location)    FixedPar = c(FixedPar, a1=0,b1=0)

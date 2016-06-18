@@ -1,4 +1,4 @@
-StaticStarting_Univ<-function(vY,Dist,iK){
+StaticStarting_Uni<-function(vY,Dist,iK){
 
   if(Dist=="std"){
     mu=mean(vY)
@@ -42,12 +42,13 @@ StaticStarting_Univ<-function(vY,Dist,iK){
       vTheta=c(mu,sigma,alpha,df1)
     }
   }
-  vTheta_tilde = as.numeric(UnmapParameters(vTheta, Dist, iK = iK))
-  names(vTheta_tilde) = getParNames(Dist)
+
+  vTheta_tilde = as.numeric(UnmapParameters_univ(vTheta, Dist, iK = iK))
+  names(vTheta_tilde) = FullNamesUni(Dist)
   return(vTheta_tilde)
 }
 
-UnivGAS_Starting<-function(vY,iT,iK,Dist,ScalingType){
+UniGAS_Starting<-function(vY,iT,iK,Dist,ScalingType){
   StaticFit = StaticMLFIT(vY,Dist)
   vKappa = StaticFit$optimiser$pars; names(vKappa) = paste("kappa",1:iK,sep="")
 

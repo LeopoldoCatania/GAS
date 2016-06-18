@@ -1,7 +1,7 @@
 ##############################
 #         UNIVARIATE         #
 ##############################
-vPw2lPn_Univ<-function(vPw,iK){
+vPw2lPn_Uni<-function(vPw,iK){
 
   vA_tilde = vPw[paste("a",1:iK,sep = "")]
   vB_tilde = vPw[paste("b",1:iK,sep = "")]
@@ -14,7 +14,7 @@ vPw2lPn_Univ<-function(vPw,iK){
   return(lParList)
 }
 
-vPw2vPn_Univ<-function(vPw,iK){
+vPw2vPn_Uni<-function(vPw,iK){
 
   vA = c(Map_Vec(vPw[paste("a",1:iK,sep = "")], LowerA(), UpperA())); names(vA) = paste("a",1:iK,sep="")
   vB = c(Map_Vec(vPw[paste("b",1:iK,sep = "")], LowerB(), UpperB())); names(vB) = paste("b",1:iK,sep="")

@@ -33,3 +33,33 @@ FullNamesMulti<-function(iN,Dist){
   return(vNames)
 }
 
+FullNamesUni<-function(Dist){
+  vNames = c("location","scale","skewness","shape","shape2")
+
+  if(Dist == "norm")  vNames = vNames[c(1,2)]
+  if(Dist == "std")   vNames = vNames[c(1,2,4)]
+  if(Dist == "ast")   vNames = vNames
+  if(Dist == "ast1")  vNames = vNames[c(1,2,3,4)]
+
+  return(vNames)
+}
+
+getParNamesUni<-function(object){
+  Dist = getDist(object)
+  parNames = FullNamesUni(Dist)
+  return(parNames)
+}
+getParNamesMulti<-function(object){
+  Dist = getDist(object)
+  iN   = object@ModelInfo$iN
+  parNames = FullNamesMulti(iN,Dist)
+  return(parNames)
+}
+
+getParNames<-function(object){
+  if(is(object,"uGASFit") | is(object,"uGASSim")) parNames = getParNamesUni(object)
+  if(is(object,"mGASFit") | is(object,"mGASSim")) parNames = getParNamesMulti(object)
+  return(parNames)
+}
+
+
