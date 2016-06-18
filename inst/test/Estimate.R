@@ -1,6 +1,9 @@
+## download/install/load the GAS package
+library(devtools)
 
+install_github("LeopoldoCatania/GAS")
 
-
+library(GAS)
 
 ############################
 #       UNIVARIATE        #
@@ -16,7 +19,7 @@
 #
 # The Order of the distributions parameters is : location, scale, skewness, shape, shape2
 #
-# ScalingType represent the scaling mechanism for the conditiona score
+# ScalingType represents the scaling mechanism for the conditiona score
 # possible choices are :
 # ScalingType = "Identity" , no scaling
 # ScalingType = "Inv"  , invese of the information matrix
@@ -41,16 +44,22 @@ Sim = uGASSim(iT, vKappa, mA, mB, Dist = "norm", ScalingType = "Identity")
 
 ## summary of the simulation
 Sim
+
 ## graphical representation
 plot(Sim)
+
 ## get the simulated data
 vY = getObs(Sim)
+
 ## build the GAS specification
 GASSpec = UniGASSpec(Dist = "norm", ScalingType = "Identity", GASPar = list(location = T, scale = T))
+
 ## Estimate the GAS model
 Fit = UniGASFit(GASSpec,vY)
+
 ## summary of the estimation
 Fit
+
 ## graphical representation
 plot(Fit)
 
@@ -71,16 +80,22 @@ Sim = uGASSim(iT, vKappa, mA, mB, Dist = "std", ScalingType = "Identity")
 
 ## summary of the simulation
 Sim
+
 ## graphical representation
 plot(Sim)
+
 ## get the simulated data
 vY = getObs(Sim)
+
 ## build the GAS specification
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = T, scale = T, shape =T))
+
 ## Estimate the GAS model
 Fit = UniGASFit(GASSpec,vY)
+
 ## summary of the estimation
 Fit
+
 ## graphical representation
 plot(Fit)
 
