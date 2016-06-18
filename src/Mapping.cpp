@@ -331,7 +331,7 @@ arma::vec MapParameters_multi(arma::vec vTheta_tilde, std::string Dist,int iN, i
   if(Dist=="mvnorm"){
     vTheta = mvnormMap(vTheta_tilde, iN, iK);
   }
-  if(Dist=="std"){
+  if(Dist=="mvt"){
     vTheta = mvtMap(vTheta_tilde, iN, iK);
   }
   return InfRemover_vec(vTheta);

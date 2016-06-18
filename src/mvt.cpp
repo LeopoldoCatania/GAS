@@ -91,7 +91,7 @@ arma::mat rmvt_ThetaParam(arma::vec vTheta, int iN, int iJ) {//iJ = # of draws
 
   arma::mat mSigma = mD * mR * mD;
 
-  arma::mat mY = rmvt_mat(iN, vMu, mSigma, dNu);
+  arma::mat mY = rmvt_mat(iJ, vMu, mSigma, dNu);
 
   return mY;
 
@@ -162,22 +162,18 @@ arma::vec MuScore_mvt(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, d
 arma::vec DScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, double dNu, int iN){
 
   arma::mat mU = zeros(iN,iN);
-
   arma::vec vD_s(iN);
 
   int i;
   arma::mat mR_i = mR.i();
   arma::mat mD_i = mD.i();
   arma::mat mSigma   = mD*mR*mD;
-
   arma::vec vX = vY-vMu;
 
   arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
 
   double dFoo = as_scalar(vZ.t()*vZ);
-
   double dConst = (dNu + iN*1.0)/(2.0*(1.0 + dFoo/dNu)*dNu);
-
   for(i = 0;i<iN;i++){
     mU(i,i)   = 1.0;
     vD_s(i) =  - mD_i(i,i) - dConst* as_scalar(vX.t() * (-mD_i * mU * mD_i * mR_i * mD_i - mD_i * mR_i * mD_i * mU * mD_i) * vX);
@@ -200,6 +196,7 @@ double NuScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, doub
   return dNu_s;
 
 }
+
 arma::vec mvt_Score(arma::vec vY,arma::vec vTheta,  int iN){
 
   int iL = 2*iN + iN*(iN-1)/2 + 1;
@@ -220,7 +217,6 @@ arma::vec mvt_Score(arma::vec vY,arma::vec vTheta,  int iN){
   arma::vec vSigma_s = DScore_mvt(mD, mR, vY, vMu,dNu, iN);
   arma::vec vRho_s   = RhoScore_mvt(vRho, mD, vY, vMu,dNu, iN) ;
   double dNu_s       = NuScore_mvt(mD, mR, vY, vMu, dNu, iN) ;
-
 
   vScore.subvec(0,iN-1)    = vMu_s;
   vScore.subvec(iN,2*iN-1) = vSigma_s;

@@ -1,6 +1,10 @@
 library(GAS)
 ## Simulate GAS process
 
+################################
+#         UNIVARIATE           #
+################################
+
 # norm
 
 iT = 1e4
@@ -15,41 +19,19 @@ plot.ts(lSim$vY)
 
 plot.ts(t(lSim$mTheta))
 
-GASSpec = UnivGASSpec("norm","Identity", GASPar = list(location = F, scale = T, skewness = F, shape = F, shape2 = F))
-
-vY = lSim$vY
-
-Fit     = UniGASFit(GASSpec,vY)
-
-lSim$dLLK
-
-Fit$Estimates$lParList
-
 # std
 
 iT = 1e3
 vKappa = c(0,0,log(15))
-mA = matrix(c(0.0 , 0.0 , 0.0 ,
-              0.0 , 0.0 , 0.0 ,
-              0.0 , 0.0 , 0.0),3,byrow = T)
+mA = matrix(c(0.001 , 0.0 , 0.0 ,
+              0.0 , 0.01 , 0.0 ,
+              0.0 , 0.0 , 0.004),3,byrow = T)
 
 mB = matrix(c(0.7 , 0.0 , 0.0 ,
               0.0 , 0.98, 0.0 ,
               0.0 , 0.0 , 0.9),3,byrow = T)
 
-GASSpec = UnivGASSpec("std","Identity", GASPar = list(location = F, scale = F, skewness = F, shape = F, shape2 = F))
-
-iB = 100
-mPar= matrix(,iB,5)
-
-for(i in 1:iB){
-  lSim = SimulateGAS_univ(iT, vKappa, mA, mB, Dist="std", ScalingType = "Identity")
-  vY = lSim$vY
-
-  Fit = UniGASFit(GASSpec,vY)
-
-  mPar[i,]=c(Fit$Estimates$lParList$vKappa,Fit$Estimates$lParList$mA[2,2],Fit$Estimates$lParList$mB[2,2])
-}
+lSim = SimulateGAS_univ(iT, vKappa, mA, mB, Dist="std", ScalingType = "Identity")
 
 ## ast
 
@@ -74,6 +56,45 @@ plot.ts(t(lSim$mTheta))
 
 
 
+################################
+#        MULTIVARIATE          #
+################################
+
+# Simulate 2x2 Normal random vector with time-varying means, variances and correlation
+
+iT = 1e3
+iN = 2
+vKappa = c(0.0 , 0.1 , 0.0 , 1.0 , 1.5)
+
+mA = matrix(c(0.001 , 0.0 , 0.0 , 0.0 , 0.0,
+              0.0 , 0.005, 0.0 , 0.0 , 0.0,
+              0.0 , 0.0 , 0.002, 0.0 , 0.0,
+              0.0 , 0.0 , 0.0 , 0.001 , 0.0,
+              0.0 , 0.0 , 0.0 , 0.0 , 0.2),5,byrow = T)
 
 
+mB = diag(5)*0.9
+lSim = SimulateGAS_multi(iT, iN, vKappa, mA, mB, Dist="mvnorm", ScalingType = "Identity") # only ScalingType = "Identity" supported right now
 
+plot.ts(t(lSim$mY))
+plot.ts(t(lSim$mTheta))
+
+# Simulate 2x2 Multi Student random vector with time-varying means, scales, correlation and df
+
+iT = 1e3
+iN = 2
+vKappa = c(0.0 , 0.1 , 0.0 , 1.0 , 1.5, log(7-2))
+
+mA = matrix(c(0.001 , 0.0 , 0.0 , 0.0 , 0.0, 0.0,
+              0.0 , 0.005, 0.0 , 0.0 , 0.0, 0.0,
+              0.0 , 0.0 , 0.002, 0.0 , 0.0, 0.0,
+              0.0 , 0.0 , 0.0 , 0.001 , 0.0, 0.0,
+              0.0 , 0.0 , 0.0 , 0.0 , 0.02,  0.0,
+              0.0 , 0.0 , 0.0 , 0.0 , 0.0,  0.1),6,byrow = T)
+
+
+mB = diag(6)*0.9
+lSim = SimulateGAS_multi(iT, iN, vKappa, mA, mB, Dist="mvt", ScalingType = "Identity") # only ScalingType = "Identity" supported right now
+
+plot.ts(t(lSim$mY))
+plot.ts(t(lSim$mTheta))

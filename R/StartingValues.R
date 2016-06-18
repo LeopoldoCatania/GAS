@@ -121,8 +121,8 @@ StartingValues_mvnorm<-function(mY,iN){
   iT = ncol(mY)
   iK = NumberParameters("mvnorm",iN)
 
-  vEmpRho    = build_vR(cor(t(mY)),N)
-  vEmpPhi    = UnMapR_C(vEmpRho, N)
+  vEmpRho    = build_vR(cor(t(mY)),iN)
+  vEmpPhi    = UnMapR_C(vEmpRho, iN)
 
   vEmpMu     = apply(mY,1,mean)
   vEmpSigma  = apply(mY,1,sd)
@@ -156,5 +156,12 @@ StartingValues_mvt<-function(mY,iN){
 
   pw = c(vKappa,vA,vB)
   return(pw)
+}
+
+MultiGAS_Starting<-function(mY,iN,Dist){
+  if(Dist=="mvnorm") vPw = StartingValues_mvnorm(mY,iN)
+  if(Dist=="mvt")    vPw = StartingValues_mvt(mY,iN)
+
+  return(vPw)
 }
 

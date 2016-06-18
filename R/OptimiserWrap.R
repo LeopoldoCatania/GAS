@@ -21,3 +21,18 @@ UnivGASOptimiser<-function(vPw, vY, Dist, ScalingType, iT, iK){
   }
   return(dMLLK)
 }
+MultiGASOptimiser<-function(vPw, mY, Dist, ScalingType, iT,iN, iK){
+
+  lParList = vPw2lPn_Multi(vPw,Dist,iK,iN)
+  lParList = AddFixedPar(lParList)
+
+  # print(vPw)
+  dLLK = try(GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$dLLK,silent = T)
+
+  if(!is(dLLK,"try-error")){
+    dMLLK = -dLLK
+  }else{
+    dMLLK = 1e50
+  }
+  return(dMLLK)
+}

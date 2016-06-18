@@ -108,6 +108,23 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// GASInnovation_multi
+arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_tilde, int iN, int iK, std::string Dist, std::string ScalingType);
+RcppExport SEXP GAS_GASInnovation_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP vTheta_tildeSEXP, SEXP iNSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta_tilde(vTheta_tildeSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< std::string >::type ScalingType(ScalingTypeSEXP);
+    __result = Rcpp::wrap(GASInnovation_multi(vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType));
+    return __result;
+END_RCPP
+}
 // IM_univ
 arma::mat IM_univ(arma::vec vTheta, std::string Dist);
 RcppExport SEXP GAS_IM_univ(SEXP vThetaSEXP, SEXP DistSEXP) {

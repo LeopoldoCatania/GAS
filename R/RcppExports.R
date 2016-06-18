@@ -29,6 +29,10 @@ GASFilter_multi <- function(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_multi', PACKAGE = 'GAS', mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)
 }
 
+GASInnovation_multi <- function(vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType) {
+    .Call('GAS_GASInnovation_multi', PACKAGE = 'GAS', vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType)
+}
+
 IM_univ <- function(vTheta, Dist) {
     .Call('GAS_IM_univ', PACKAGE = 'GAS', vTheta, Dist)
 }
