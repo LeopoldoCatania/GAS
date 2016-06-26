@@ -100,7 +100,6 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   return InfRemover_vec(vTheta);
 }
-
 //[[Rcpp::export]]
 arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
 
@@ -172,6 +171,7 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
 
   return vTheta_tilde;
 }
+
 arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   arma::mat mJ=zeros(iK,iK);
@@ -323,6 +323,48 @@ arma::vec mvtMap(arma::vec vTheta_tilde, int iN, int iK){
   return vTheta;
 }
 
+arma::vec mvnormUnmap(arma::vec vTheta, int iN, int iK){
+
+  arma::vec vTheta_tilde(iK);
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iK-1);
+
+  arma::vec vSigma_tilde = log(vSigma);
+
+  arma::vec vRho_tilde = UnMapR_C(vRho, iN);
+
+  vTheta_tilde.subvec(0,iN-1) = vMu;
+  vTheta_tilde.subvec(iN,2*iN-1) = vSigma_tilde;
+  vTheta_tilde.subvec(2*iN,iK-1) = vRho_tilde;
+
+  return vTheta_tilde;
+}
+
+arma::vec mvtUnmap(arma::vec vTheta, int iN, int iK){
+
+  arma::vec vTheta_tilde(iK);
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iK-2);
+  double dNu       = vTheta(iK-1);
+
+  arma::vec vSigma_tilde = log(vSigma);
+
+  double dNu_tilde       = log(dNu - 2.01);
+
+  arma::vec vRho_tilde = UnMapR_C(vRho, iN);
+
+  vTheta_tilde.subvec(0,iN-1)    = vMu;
+  vTheta_tilde.subvec(iN,2*iN-1) = vSigma_tilde;
+  vTheta_tilde.subvec(2*iN,iK-2) = vRho_tilde;
+  vTheta_tilde(iK-1)             = dNu_tilde;
+
+  return vTheta_tilde;
+}
+
 //[[Rcpp::export]]
 arma::vec MapParameters_multi(arma::vec vTheta_tilde, std::string Dist,int iN, int iK){
 
@@ -333,6 +375,19 @@ arma::vec MapParameters_multi(arma::vec vTheta_tilde, std::string Dist,int iN, i
   }
   if(Dist=="mvt"){
     vTheta = mvtMap(vTheta_tilde, iN, iK);
+  }
+  return InfRemover_vec(vTheta);
+}
+//[[Rcpp::export]]
+arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist,int iN, int iK){
+
+  arma::vec vTheta_tilde(iK);
+
+  if(Dist=="mvnorm"){
+    vTheta = mvnormUnmap(vTheta, iN, iK);
+  }
+  if(Dist=="mvt"){
+    vTheta = mvtUnmap(vTheta, iN, iK);
   }
   return InfRemover_vec(vTheta);
 }

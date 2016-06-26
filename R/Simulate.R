@@ -1,5 +1,5 @@
 
-uGASSim<-function(iT, vKappa, mA, mB, Dist, ScalingType){
+UniGASSim<-function(iT, vKappa, mA, mB, Dist, ScalingType){
   lSim = SimulateGAS_univ(iT, vKappa, mA, mB, Dist, ScalingType)
 
   iK = NumberParameters(Dist)
@@ -9,7 +9,7 @@ uGASSim<-function(iT, vKappa, mA, mB, Dist, ScalingType){
   return(Sim)
 }
 
-mGASSim<-function(iT, iN,vKappa, mA, mB, Dist, ScalingType){
+MultiGASSim<-function(iT, iN,vKappa, mA, mB, Dist, ScalingType){
   lSim = SimulateGAS_multi(iT, iN, vKappa, mA, mB, Dist, ScalingType)
 
   iK = NumberParameters(Dist,iN)

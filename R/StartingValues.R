@@ -3,8 +3,8 @@ StaticStarting_Uni<-function(vY,Dist,iK){
   if(Dist=="std"){
     mu=mean(vY)
     df=8
-    phi=sd(vY)*sqrt((df-2)/df)
-    vTheta=c(mu,phi,df)
+    phi2=var(vY)*(df-2)/df
+    vTheta=c(mu,phi2,df)
   }
 
   if(Dist=="norm"){
@@ -73,10 +73,10 @@ starting_vA<-function(vY, vKappa, mB, dA_foo, iT, iK, Dist,ScalingType){
   for(i in 1:iK){
     for(l in 1:length(seq_alpha)){
       dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK,silent = T)
-      if(is.numeric(dLLK_foo)){
+      if(is.numeric(dLLK_foo) & !is.nan(dLLK_foo)){
         mA[i,i]  = seq_alpha[l]
         dLLK_post = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK,silent = T)
-        if(is.numeric(dLLK_post)){
+        if(is.numeric(dLLK_post) & !is.nan(dLLK_post)){
           if(dLLK_post>dLLK_foo){
             dAlpha_best = seq_alpha[l]
           }
@@ -100,10 +100,10 @@ starting_vB<-function(vY, vKappa, dB_foo, mA, iT, iK, Dist,ScalingType){
   for(i in 1:iK){
     for(l in 1:length(seq_beta)){
       dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK,silent = T)
-      if(is.numeric(dLLK_foo)){
+      if(is.numeric(dLLK_foo) & !is.nan(dLLK_foo)){
         mB[i,i]  = seq_beta[l]
         dLLK_post = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK,silent = T)
-        if(is.numeric(dLLK_post)){
+        if(is.numeric(dLLK_post) & !is.nan(dLLK_post)){
           if(dLLK_post>dLLK_foo){
             dB_best = seq_beta[l]
           }

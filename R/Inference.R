@@ -45,3 +45,11 @@ InferenceFun_Multi<-function(mHessian,Dist,vPw, iK, iN){
 
   return(out)
 }
+
+ICfun<-function(llk, np, iT){
+  AIC <- -2*(llk -np)
+  BIC <- -2*llk+np*log(iT)
+
+  IC = c(AIC=AIC,BIC=BIC,np=np,llk=llk)
+  return(IC)
+}

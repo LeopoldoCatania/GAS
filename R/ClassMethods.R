@@ -61,6 +61,7 @@ setMethod("show", "uGASFit",
             Dist = getDist(object)
             iT   = object@ModelInfo$iT
             iK   = NumberParameters(Dist)
+            IC   = getIC(object)
 
             ParNames    = FullNamesUni(Dist)
 
@@ -90,6 +91,9 @@ setMethod("show", "uGASFit",
             cat(paste("\nUnconditional Parameters:\n"))
             print(vTheta_Unc)
             cat(paste("\n------------------------------------------"))
+            cat(paste("\nInformation Criteria:\n"))
+            print(IC)
+            cat(paste("\n------------------------------------------"))
             cat(paste("\n\nElapsed time\t:",round(as.double(elapsedTime,units = "mins"),2),"mins"))
           }
 )
@@ -101,6 +105,7 @@ setMethod("show", "mGASFit",
             iT   = object@ModelInfo$iT
             iN   = object@ModelInfo$iN
             iK   = object@ModelInfo$iK
+            IC   = getIC(object)
 
             Dist        = getDist(Spec)
             ScalingType = getScalingType(Spec)
@@ -128,6 +133,9 @@ setMethod("show", "mGASFit",
             cat(paste("\n------------------------------------------"))
             cat(paste("\nUnconditional Parameters:\n"))
             print(vTheta_Unc)
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\nInformation Criteria:\n"))
+            print(IC)
             cat(paste("\n------------------------------------------"))
             cat(paste("\n\nElapsed time\t:",round(as.double(elapsedTime,units = "mins"),2),"mins"))
           }
@@ -237,6 +245,7 @@ setMethod("plot", signature(x='uGASFit',y='missing'),
 setMethod("plot", signature(x='mGASFit',y='missing'),
           function(x,...) {
             iK = x@ModelInfo$iK
+            iN =x@ModelInfo$iN
             iT = x@ModelInfo$iT
             mY = t(x@Data$mY)
 

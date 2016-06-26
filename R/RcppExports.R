@@ -61,6 +61,10 @@ MapParameters_multi <- function(vTheta_tilde, Dist, iN, iK) {
     .Call('GAS_MapParameters_multi', PACKAGE = 'GAS', vTheta_tilde, Dist, iN, iK)
 }
 
+UnmapParameters_multi <- function(vTheta, Dist, iN, iK) {
+    .Call('GAS_UnmapParameters_multi', PACKAGE = 'GAS', vTheta, Dist, iN, iK)
+}
+
 StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
 }

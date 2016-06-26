@@ -215,6 +215,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// UnmapParameters_multi
+arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist, int iN, int iK);
+RcppExport SEXP GAS_UnmapParameters_multi(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP, SEXP iKSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
+    __result = Rcpp::wrap(UnmapParameters_multi(vTheta, Dist, iN, iK));
+    return __result;
+END_RCPP
+}
 // StaticLLK_Univ
 double StaticLLK_Univ(arma::vec vY, arma::vec vTheta, int iT, std::string Dist);
 RcppExport SEXP GAS_StaticLLK_Univ(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP DistSEXP) {

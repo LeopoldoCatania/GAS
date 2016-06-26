@@ -35,3 +35,6 @@ getObs<-function(object){
 
   return(Data)
 }
+getIC<-function(object){
+  return(object@Estimates$IC)
+}

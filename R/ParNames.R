@@ -29,7 +29,7 @@ RhoNames<-function(iN){
 FullNamesMulti<-function(iN,Dist){
   vRhoNames = RhoNames(iN)
   if(Dist == "mvnorm")  vNames = c(paste("mu",1:iN,sep=""),paste("sigma",1:iN,sep=""),vRhoNames)
-  if(Dist == "mvt")     vNames = c(paste("mu",1:iN,sep=""),paste("phi",1:iN,sep=""),vRhoNames)
+  if(Dist == "mvt")     vNames = c(paste("mu",1:iN,sep=""),paste("phi",1:iN,sep=""),vRhoNames,"nu")
   return(vNames)
 }
 

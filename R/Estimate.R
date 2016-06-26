@@ -50,12 +50,14 @@ UniGASFit<-function(GASSpec,vY){
 
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
+  IC = ICfun(-tail(optimiser$values,1),length(optimiser$pars),iT)
+
   elapsedTime =  Sys.time() - Start
 
   Out <- new("uGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iK = iK, elapsedTime = elapsedTime),
              GASDyn = GASDyn,
              Estimates = list(lParList=lParList, optimiser=optimiser, StaticFit=StaticFit,
-                                                                          Inference = Inference ),
+                                                                          Inference = Inference,IC=IC ),
              Data = list(vY = vY))
 
   return(Out)
@@ -95,12 +97,14 @@ MultiGASFit<-function(GASSpec,mY){
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 
+  IC = ICfun(-tail(optimiser$values,1),length(optimiser$pars),iT)
+
   elapsedTime =  Sys.time() - Start
 
   Out <- new("mGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iN = iN, iK = iK, elapsedTime = elapsedTime),
              GASDyn = GASDyn,
              Estimates = list(lParList=lParList, optimiser=optimiser,
-                              Inference = Inference ),
+                              Inference = Inference,IC = IC ),
              Data = list(mY = mY))
 
 }

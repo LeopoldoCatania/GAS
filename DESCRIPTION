@@ -2,14 +2,13 @@ Package: GAS
 Type: Package
 Title: Generalised Autoregressive Score Models
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Leopoldo Catania, Kris Boudt, David Ardia
+Maintainer: Leopolco Catania <leopoldo.catania@uniroma2.it>
+Description: Simulate, Estimate and Forecast using univariate and multivariate GAS models.
+License: GPL-3
 LazyData: TRUE
 Imports:
     Rcpp (>= 0.12.2)
 LinkingTo: Rcpp, RcppArmadillo
 Depends:
-    Rsolnp, methods, numDeriv, MASS
-RoxygenNote: 5.0.1
+    Rsolnp, methods, numDeriv, MASS, xts
