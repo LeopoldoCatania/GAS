@@ -14,7 +14,6 @@ PlotMenu<-function(object){
   return(vplotMenu)
 }
 
-
 PlotMultipleSeries<-function(mTheta,iK,iT,vDates){
   if(iK<=5){
     layout(matrix(1:iK,iK,1)
@@ -24,11 +23,14 @@ PlotMultipleSeries<-function(mTheta,iK,iT,vDates){
       if(i!=1 & i!=iK) par(mar = c(0,4,0  ,2))
       if(i==iK)        par(mar = c(3,4,0,  2))
 
-      vLim = c(min(mTheta[,i]),max(mTheta[,i]))
+
+        vLim = c(min(mTheta[,i]),max(mTheta[,i]))
+
 
       plot(vDates,mTheta[,i],type = "n", xaxt="n", xlab="",ylab="", las=1,
            ylim = vLim)
       grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
+
       lines(vDates, mTheta[,i], col = "black")
       axis(4,at = mean(vLim), labels = colnames(mTheta)[i],tick = F,padj = -1)
     }
@@ -113,6 +115,4 @@ PlotSingleSeries<-function(vTheta,iT,vDates){
   }
 
 }
-
-
 

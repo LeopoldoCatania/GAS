@@ -65,6 +65,10 @@ UnmapParameters_multi <- function(vTheta, Dist, iN, iK) {
     .Call('GAS_UnmapParameters_multi', PACKAGE = 'GAS', vTheta, Dist, iN, iK)
 }
 
+rmvnorm_mat <- function(iN, vMu, mSigma) {
+    .Call('GAS_rmvnorm_mat', PACKAGE = 'GAS', iN, vMu, mSigma)
+}
+
 StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
 }

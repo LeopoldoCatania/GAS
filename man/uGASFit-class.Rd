@@ -27,6 +27,9 @@ Class for the Univariate GAS fitted object.
 \itemize{
 \item show \code{signature(object = "uGASFit")}: Show summary.
 \item plot \code{ signature(x='uGASFit',y='missing')}: Plot filtered dynamic and other estimated quantities.
+\item getFilteredParameters \code{signature(object = "uGASFit")}: Extract filtered parameters
+\item getObs \code{signature(object = "uGASFit")}: Extract original observations
+\item coef \code{signature(object = "uGASFit")}: Extract estimated coefficients
 }
 }
 \author{ Leopoldo Catania}

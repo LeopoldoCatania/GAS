@@ -229,6 +229,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// rmvnorm_mat
+arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma);
+RcppExport SEXP GAS_rmvnorm_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vMu(vMuSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mSigma(mSigmaSEXP);
+    __result = Rcpp::wrap(rmvnorm_mat(iN, vMu, mSigma));
+    return __result;
+END_RCPP
+}
 // StaticLLK_Univ
 double StaticLLK_Univ(arma::vec vY, arma::vec vTheta, int iT, std::string Dist);
 RcppExport SEXP GAS_StaticLLK_Univ(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP DistSEXP) {

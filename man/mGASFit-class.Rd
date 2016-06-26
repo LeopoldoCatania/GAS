@@ -28,6 +28,9 @@ Class for the Multivariate GAS fitted object.
 \itemize{
 \item show \code{signature(object = "mGASFit")}: Show summary.
 \item plot \code{ signature(x='mGASFit',y='missing')}: Plot filtered dynamic and other estimated quantities.
+\item getFilteredParameters \code{signature(object = "mGASFit")}: Extract filtered parameters
+\item getObs \code{signature(object = "mGASFit")}: Extract original observations
+\item coef \code{signature(object = "mGASFit")}: Extract estimated coefficients
 }
 }
 \author{ Leopoldo Catania}

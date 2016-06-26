@@ -317,3 +317,54 @@ setMethod("plot", signature(x='mGASSim',y='missing'),
           }
 )
 
+getFilteredParameters = function(object)
+{
+  UseMethod("getFilteredParameters")
+}
+.getFilteredParameters<-function(object){
+  if(is(object,"uGASFit" ) | is(object,"mGASFit" )) mTheta = object@GASDyn$mTheta
+  if(is(object,"uGASSim" ) | is(object,"mGASSim" )) mTheta = object@GASDyn$mTheta
+
+  mTheta = t(mTheta)
+  parNames = getParNames(object)
+  colnames(mTheta) = parNames
+
+  return(mTheta)
+}
+setMethod("getFilteredParameters", signature(object = "uGASFit"), .getFilteredParameters)
+setMethod("getFilteredParameters", signature(object = "mGASFit"), .getFilteredParameters)
+setMethod("getFilteredParameters", signature(object = "uGASSim"), .getFilteredParameters)
+setMethod("getFilteredParameters", signature(object = "mGASSim"), .getFilteredParameters)
+
+getObs = function(object)
+{
+  UseMethod("getObs")
+}
+.getObs<-function(object){
+  if(is(object,"uGASFit" )) Data = object@Data$vY
+  if(is(object,"mGASFit" )) Data = object@Data$mY
+
+  if(is(object,"uGASSim" )) Data = object@Data$vY
+  if(is(object,"mGASSim" )) Data = object@Data$mY
+
+  return(Data)
+}
+setMethod("getObs", signature(object = "uGASFit"), .getObs)
+setMethod("getObs", signature(object = "mGASFit"), .getObs)
+setMethod("getObs", signature(object = "uGASSim"), .getObs)
+setMethod("getObs", signature(object = "mGASSim"), .getObs)
+
+.getCoef<-function(object){
+  if(is(object,"uGASFit" ) | is(object,"mGASFit" )) ans = list(lCoef = object@Estimates$lParList, mCoef = object@Estimates$Inference)
+  if(is(object,"uGASSim" ) | is(object,"mGASSim" )) ans = list(vKappa = object@ModelInfo$vKappa,
+                                                               mA = object@ModelInfo$mA,
+                                                               mB = object@ModelInfo$mB )
+  return(ans)
+
+}
+
+setMethod("coef", signature(object = "uGASFit"), .getCoef)
+setMethod("coef", signature(object = "mGASFit"), .getCoef)
+setMethod("coef", signature(object = "uGASSim"), .getCoef)
+setMethod("coef", signature(object = "mGASSim"), .getCoef)
+

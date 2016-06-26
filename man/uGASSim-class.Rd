@@ -31,6 +31,9 @@ Class for Univariate GAS model Simulation.
 \itemize{
 \item show \code{signature(object = "uGASSim")}: Show summary.
 \item plot \code{ signature(x='uGASSim',y='missing')}: Plot simulated data and parameters.
+\item getFilteredParameters \code{signature(object = "uGASSim")}: Extract simulated parameters
+\item getObs \code{signature(object = "uGASSim")}: Extract simulated observations
+\item coef \code{signature(object = "uGASSim")}: Extract delivered coefficients
 }
 }
 \author{ Leopoldo Catania}

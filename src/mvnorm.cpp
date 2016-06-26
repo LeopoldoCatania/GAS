@@ -4,6 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
+//[[Rcpp::export]]
 arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma) {
   int incols = mSigma.n_cols;
   arma::mat mY = arma::randn(iN, incols);

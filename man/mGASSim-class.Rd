@@ -33,6 +33,9 @@ Class for Multivariate GAS model Simulation.
 \itemize{
 \item show \code{signature(object = "mGASSim")}: Show summary.
 \item plot \code{ signature(x='mGASSim',y='missing')}: Plot simulated data and parameters.
+\item getFilteredParameters \code{signature(object = "mGASSim")}: Extract simulated parameters
+\item getObs \code{signature(object = "mGASSim")}: Extract simulated observations
+\item coef \code{signature(object = "mGASSim")}: Extract delivered coefficients
 }
 }
 \author{ Leopoldo Catania}
