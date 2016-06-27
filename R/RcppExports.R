@@ -21,6 +21,14 @@ rdist_multi <- function(vTheta, iN, Dist) {
     .Call('GAS_rdist_multi', PACKAGE = 'GAS', vTheta, iN, Dist)
 }
 
+pdist_univ <- function(dQ, vTheta, Dist) {
+    .Call('GAS_pdist_univ', PACKAGE = 'GAS', dQ, vTheta, Dist)
+}
+
+qdist_univ <- function(dP, vTheta, Dist) {
+    .Call('GAS_qdist_univ', PACKAGE = 'GAS', dP, vTheta, Dist)
+}
+
 GASFilter_univ <- function(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_univ', PACKAGE = 'GAS', vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)
 }
@@ -71,6 +79,10 @@ rmvnorm_mat <- function(iN, vMu, mSigma) {
 
 StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
+}
+
+Quantiles <- function(mTheta, Dist, vProbs) {
+    .Call('GAS_Quantiles', PACKAGE = 'GAS', mTheta, Dist, vProbs)
 }
 
 Score_univ <- function(dY, vTheta, Dist) {

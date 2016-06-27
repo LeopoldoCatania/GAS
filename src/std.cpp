@@ -11,6 +11,31 @@ double dSTD(double dY, double dMu, double dPhi2 , double dNu, bool bLog=false) {
   return dLPDF;
 
 }
+double pSTD(double dY, double dMu, double dPhi2 , double dNu) {
+
+  double dZ = (dY-dMu)/pow(dPhi2,0.5);
+
+  double dP = Rf_pt(dZ,dNu,1,0);
+
+  return dP;
+
+}
+double qSTD(double dP, double dMu, double dPhi2 , double dNu) {
+
+  double dQ = dMu + pow(dPhi2,0.5)* Rf_qt(dP,dNu,1,0);
+
+  return dQ;
+
+}
+
+arma::vec mSTD(double dMu, double dPhi2, double dNu){
+  arma::vec vMoments(4);
+  vMoments(0) = dMu;
+  vMoments(1) = dPhi2*dNu/(dNu-2.0);
+  vMoments(2) = 0.0;
+  vMoments(3) = 3.0*pow(dNu,2.0)/((dNu-2.0)*(dNu-4.0)) * pow(dPhi2,2.0);
+  return vMoments;
+}
 
 arma::vec std_Score(double dY, arma::vec vTheta){
 

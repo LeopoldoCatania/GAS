@@ -258,29 +258,73 @@ double rAST(double dMu, double dSigma,double dAlpha, double dNu1, double dNu2){
 
   return dY;
 }
-//
-// double past_C(double dY, double dMu, double dSigma, double dAlpha, double dV1, double dV2) {
-//
-//   double dLogK = 0.0;
-//   double dZ = 0.0;
-//   double dCdf = 0.0;
-//   double foo = 0.0;
-//
-//   if (dY <= dMu){
-//     dLogK = log(tgamma((dV1 + 1.0) / 2.0)) - log(tgamma(dV1 / 2.0)) - 0.5 * log(M_PI * dV1);
-//     dZ    = (dY - dMu) / (2.0 * dAlpha * (dSigma) * exp(dLogK));
-//     foo = R::pt(dZ, dV1, 1, 0);
-//     dCdf  = 2.0 * dAlpha * foo;
-//   }else{
-//     dLogK = log(tgamma((dV2 + 1.0) / 2.0)) - log(tgamma(dV2 / 2.0)) - 0.5 * log(M_PI * dV2);
-//     dZ    = (dY - dMu) / (2.0 * (1.0 - dAlpha) * (dSigma) * exp(dLogK));
-//     foo = R::pt(dZ, dV2, 1, 0);
-//     dCdf  = dAlpha + 2.0 * (1.0 - dAlpha) * (foo - 0.5);
-//   }
-//   return dCdf;
-// }
-//
-// double qast_C(double dP, double dMu, double dSigma, double dAlpha, double dV1, double dV2) {
+double pAST(double dY, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2) {
+
+  double dLogK = 0.0;
+  double dZ = 0.0;
+  double dCdf = 0.0;
+  double foo = 0.0;
+
+  if (dY <= dMu){
+    dLogK = log(tgamma((dNu1 + 1.0) / 2.0)) - log(tgamma(dNu1 / 2.0)) - 0.5 * log(M_PI * dNu1);
+    dZ    = (dY - dMu) / (2.0 * dAlpha * (dSigma) * exp(dLogK));
+    foo = R::pt(dZ, dNu1, 1, 0);
+    dCdf  = 2.0 * dAlpha * foo;
+  }else{
+    dLogK = log(tgamma((dNu2 + 1.0) / 2.0)) - log(tgamma(dNu2 / 2.0)) - 0.5 * log(M_PI * dNu2);
+    dZ    = (dY - dMu) / (2.0 * (1.0 - dAlpha) * (dSigma) * exp(dLogK));
+    foo = R::pt(dZ, dNu2, 1, 0);
+    dCdf  = dAlpha + 2.0 * (1.0 - dAlpha) * (foo - 0.5);
+  }
+  return dCdf;
+}
+
+double qAST(double dP, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2,
+                        double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
+  double a=lower;
+  double b=upper;
+
+  double x=lower;
+  double x1=upper;
+  int iter = 1;
+  double fa,fx;
+  //check
+  fa=pAST(a, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
+  fx=pAST(x1, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
+
+  if(fa*fx>0){
+    Rprintf("Bisection Error: upper and lower function evaluations have same sign");
+    return NA_LOGICAL;
+  }
+
+  do
+  {
+    fa=pAST(a, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
+    fx=pAST(x, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
+
+    if (fa*fx < 0){
+      b=x;
+    }else{
+      a=x;
+    }
+
+    x1=(a+b)/2.0;
+    iter++;
+
+    if (abs3(x1-x) < eps)
+    {
+      return x1;
+    }
+    x=x1;
+  }while(iter<maxiter);
+
+  Rprintf("Bisection Warning: Maximum numeber of iteration reached");
+  return NA_LOGICAL;
+}
+
+
+////[[Rcpp::export]]
+// double qAST(double dP, double dMu, double dSigma, double dAlpha, double dV1, double dV2) {
 //
 //   double dK1=Kast(dV1);
 //   double dK2=Kast(dV2);
@@ -299,47 +343,4 @@ double rAST(double dMu, double dSigma,double dAlpha, double dNu1, double dNu2){
 //   double x = 2.0 * dAlpha_star * F1_inv  + 2.0 * (1.0 - dAlpha_star) * F2_inv;
 //
 //   return x ;
-// }
-//
-// double qast_C_bisection(double dP, double dMu, double dSigma, double dAlpha, double dV1, double dV2,
-//                         double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
-//   double a=lower;
-//   double b=upper;
-//
-//   double x=lower;
-//   double x1=upper;
-//   int iter = 1;
-//   double fa,fx;
-//   //check
-//   fa=past_C(a, dMu, dSigma, dAlpha, dV1, dV2) - dP;
-//   fx=past_C(x1, dMu, dSigma, dAlpha, dV1, dV2) - dP;
-//
-//   if(fa*fx>0){
-//     Rprintf("Bisection Error: upper and lower function evaluations have same sign");
-//     return NA_LOGICAL;
-//   }
-//
-//   do
-//   {
-//     fa=past_C(a, dMu, dSigma, dAlpha, dV1, dV2) - dP;
-//     fx=past_C(x, dMu, dSigma, dAlpha, dV1, dV2) - dP;
-//
-//     if (fa*fx < 0){
-//       b=x;
-//     }else{
-//       a=x;
-//     }
-//
-//     x1=(a+b)/2.0;
-//     iter++;
-//
-//     if (abs3(x1-x) < eps)
-//     {
-//       return x1;
-//     }
-//     x=x1;
-//   }while(iter<maxiter);
-//
-//   Rprintf("Bisection Warning: Maximum numeber of iteration reached");
-//   return NA_LOGICAL;
 // }

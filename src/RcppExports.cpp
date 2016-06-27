@@ -71,6 +71,32 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// pdist_univ
+double pdist_univ(double dQ, arma::vec vTheta, std::string Dist);
+RcppExport SEXP GAS_pdist_univ(SEXP dQSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dQ(dQSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    __result = Rcpp::wrap(pdist_univ(dQ, vTheta, Dist));
+    return __result;
+END_RCPP
+}
+// qdist_univ
+double qdist_univ(double dP, arma::vec vTheta, std::string Dist);
+RcppExport SEXP GAS_qdist_univ(SEXP dPSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dP(dPSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    __result = Rcpp::wrap(qdist_univ(dP, vTheta, Dist));
+    return __result;
+END_RCPP
+}
 // GASFilter_univ
 List GASFilter_univ(arma::vec vY, arma::vec vKappa, arma::mat mA, arma::mat mB, int iT, int iK, std::string Dist, std::string ScalingType);
 RcppExport SEXP GAS_GASFilter_univ(SEXP vYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
@@ -253,6 +279,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type iT(iTSEXP);
     Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
     __result = Rcpp::wrap(StaticLLK_Univ(vY, vTheta, iT, Dist));
+    return __result;
+END_RCPP
+}
+// Quantiles
+arma::mat Quantiles(arma::mat mTheta, std::string Dist, arma::vec vProbs);
+RcppExport SEXP GAS_Quantiles(SEXP mThetaSEXP, SEXP DistSEXP, SEXP vProbsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vProbs(vProbsSEXP);
+    __result = Rcpp::wrap(Quantiles(mTheta, Dist, vProbs));
     return __result;
 END_RCPP
 }

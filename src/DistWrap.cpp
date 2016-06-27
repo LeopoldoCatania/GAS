@@ -44,3 +44,22 @@ arma::vec rdist_multi(arma::vec vTheta, int iN,std::string Dist){
   if(Dist == "mvt")    vY = arma::vectorise(rmvt_ThetaParam(vTheta,iN, 1));
   return vY;
 }
+
+//[[Rcpp::export]]
+double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
+  double dP=0.0;
+  if(Dist == "norm") dP = Rf_pnorm5(dQ, vTheta(0), pow(vTheta(1),2.0), 1,0);
+  if(Dist == "std")  dP = pSTD(dQ, vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "ast")  dP = pAST(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
+  if(Dist == "ast1") dP = pAST(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
+  return dP;
+}
+//[[Rcpp::export]]
+double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
+  double dQ=0.0;
+  if(Dist == "norm") dQ = Rf_qnorm5(dP, vTheta(0), pow(vTheta(1),2.0), 1,0);
+  if(Dist == "std")  dQ = qSTD(dP, vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "ast")  dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
+  if(Dist == "ast1") dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
+  return dQ;
+}
