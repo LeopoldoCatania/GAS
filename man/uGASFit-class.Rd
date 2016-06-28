@@ -30,6 +30,7 @@ Class for the Univariate GAS fitted object.
 \item getFilteredParameters \code{signature(object = "uGASFit")}: Extract filtered parameters
 \item getObs \code{signature(object = "uGASFit")}: Extract original observations
 \item coef \code{signature(object = "uGASFit")}: Extract estimated coefficients
+\item pit \code{signature(object = "uGASFit")}: Extract Probability Integral Transformation
 }
 }
 \author{ Leopoldo Catania}

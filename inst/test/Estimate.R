@@ -35,9 +35,11 @@ help(cpichg)
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = T, scale = T, shape = T))
 
-Fit = UniGASFit(GASSpec,cpichg)
+Fit     = UniGASFit(GASSpec,cpichg)
 
 Fit
 
 plot(Fit)
 
+Roll = UniGASRoll(cpichg,GASSpec,ForecastLength = 50, RefitEvery = 5, RefitWindow = c("moving"),
+                     cluster=NULL)

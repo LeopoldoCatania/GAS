@@ -12,5 +12,5 @@ UpperB<-function(){
   return(0.9999)
 }
 
-
+LowerNu<-function() return(2.01)
 

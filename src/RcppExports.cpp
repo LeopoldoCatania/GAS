@@ -282,6 +282,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// EvaluatePit_Univ
+arma::vec EvaluatePit_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
+RcppExport SEXP GAS_EvaluatePit_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iT(iTSEXP);
+    __result = Rcpp::wrap(EvaluatePit_Univ(mTheta, vY, Dist, iT));
+    return __result;
+END_RCPP
+}
 // Quantiles
 arma::mat Quantiles(arma::mat mTheta, std::string Dist, arma::vec vProbs);
 RcppExport SEXP GAS_Quantiles(SEXP mThetaSEXP, SEXP DistSEXP, SEXP vProbsSEXP) {

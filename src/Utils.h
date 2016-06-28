@@ -14,4 +14,5 @@ arma::mat FillUpperTriangular(arma::vec vX,int iN);
 arma::mat cumprodMat_removeLastRow(arma::mat Mat);
 arma::mat Up_rbind_C(arma::mat Mat, arma::vec Vec);
 arma::vec ZeroRemover_v(arma::vec vX);
+arma::vec NaN2Zero(arma::vec vX, double To=0);
 #endif

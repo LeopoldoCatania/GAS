@@ -368,3 +368,9 @@ setMethod("coef", signature(object = "mGASFit"), .getCoef)
 setMethod("coef", signature(object = "uGASSim"), .getCoef)
 setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
+pit = function(object)
+{
+  UseMethod("pit")
+}
+setMethod("pit", signature(object = "uGASFit"), function(object) object@Estimates$vU)
+

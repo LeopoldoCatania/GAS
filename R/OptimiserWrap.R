@@ -1,6 +1,7 @@
 StaticLLKoptimizer<-function(vTheta_tilde, vY,Dist, iT, iK){
   vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
   dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
+
   if(is.na(dLLK)){
     dLLK = -1e50
   }

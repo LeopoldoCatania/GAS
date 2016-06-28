@@ -81,6 +81,10 @@ StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
 }
 
+EvaluatePit_Univ <- function(mTheta, vY, Dist, iT) {
+    .Call('GAS_EvaluatePit_Univ', PACKAGE = 'GAS', mTheta, vY, Dist, iT)
+}
+
 Quantiles <- function(mTheta, Dist, vProbs) {
     .Call('GAS_Quantiles', PACKAGE = 'GAS', mTheta, Dist, vProbs)
 }

@@ -4,6 +4,8 @@
 using namespace Rcpp;
 using namespace arma;
 
+const double dLowerShape = 2.01;
+
 double Map(double dX, double dL,double dU) {
   double dMap =  dL + ( dU - dL ) / (1.0 + exp( - dX ));
   return dMap;
@@ -46,8 +48,8 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu    = dMu_tilde;
     double dSigma = exp(dSigma_tilde);
     double dAlpha = Map(dAlpha_tilde,0.01,0.99);
-    double dNu1   = exp(dNu1_tilde) + 4.01;
-    double dNu2   = exp(dNu2_tilde) + 4.01;
+    double dNu1   = exp(dNu1_tilde) + dLowerShape;
+    double dNu2   = exp(dNu2_tilde) + dLowerShape;
 
     vTheta(0) = dMu;
     vTheta(1) = dSigma;
@@ -65,7 +67,7 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu    = dMu_tilde;
     double dSigma = exp(dSigma_tilde);
     double dAlpha = Map(dAlpha_tilde,0.01,0.99);
-    double dNu1   = exp(dNu1_tilde) + 4.01;
+    double dNu1   = exp(dNu1_tilde) + dLowerShape;
 
     vTheta(0) = dMu;
     vTheta(1) = dSigma;
@@ -80,7 +82,7 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
 
     double dMu  = dMu_tilde;
     double dPhi = exp(dPhi_tilde);
-    double dNu  = exp(dNu_tilde) + 2.01;
+    double dNu  = exp(dNu_tilde) + dLowerShape;
 
     vTheta(0) = dMu;
     vTheta(1) = dPhi;
@@ -115,8 +117,8 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     double dMu_tilde    = dMu;
     double dSigma_tilde = log(dSigma);
     double dAlpha_tilde = Unmap(dAlpha,0.01,0.99);
-    double dNu1_tilde   = log(dNu1 - 4.01);
-    double dNu2_tilde   = log(dNu2 - 4.01);
+    double dNu1_tilde   = log(dNu1 - dLowerShape);
+    double dNu2_tilde   = log(dNu2 - dLowerShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma_tilde;
@@ -134,7 +136,7 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     double dMu_tilde    = dMu;
     double dSigma_tilde = log(dSigma);
     double dAlpha_tilde = Unmap(dAlpha,0.01,0.99);
-    double dNu1_tilde   = log(dNu1 - 4.01);
+    double dNu1_tilde   = log(dNu1 - dLowerShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma_tilde;
@@ -150,7 +152,7 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
 
     double dMu_tilde  = dMu;
     double dPhi_tilde = log(dPhi);
-    double dNu_tilde  = log(dNu - 2.01);
+    double dNu_tilde  = log(dNu - dLowerShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dPhi_tilde;
@@ -269,8 +271,8 @@ arma::vec UnMapR_C(arma::vec vRho, int iN){
     vPhi(1) = acos(vRho(1));
     vPhi(2) = acos((vRho(2)-vRho(0)*vRho(1))/(sin(vPhi(0))*sin(vPhi(1))));
     vPhi(3) = acos(vRho(3));
-    vPhi(4) = acos(  (vRho(4)-cos(vPhi(0))*cos(vPhi(3)))/(sin(vPhi(3))*sin(vPhi(0))));
-    vPhi(5) = acos( (vRho(5)-cos(vPhi(1))*cos(vPhi(3)) - cos(vPhi(2))*cos(vPhi(4))*sin(vPhi(1))*sin(vPhi(3)))/(sin(vPhi(1))*sin(vPhi(3))*sin(vPhi(2))*sin(vPhi(4))));
+    vPhi(4) = acos((vRho(4)-cos(vPhi(0))*cos(vPhi(3)))/(sin(vPhi(3))*sin(vPhi(0))));
+    vPhi(5) = acos((vRho(5)-cos(vPhi(1))*cos(vPhi(3)) - cos(vPhi(2))*cos(vPhi(4))*sin(vPhi(1))*sin(vPhi(3)))/(sin(vPhi(1))*sin(vPhi(3))*sin(vPhi(2))*sin(vPhi(4))));
   }
 
   return vPhi;
@@ -309,7 +311,7 @@ arma::vec mvtMap(arma::vec vTheta_tilde, int iN, int iK){
   vSigma = InfRemover_vec(vSigma);
   vSigma = ZeroRemover_v(vSigma);
 
-  double dNu       = exp(dNu_tilde) + 2.01;
+  double dNu       = exp(dNu_tilde) + dLowerShape;
 
   arma::mat mR = MapR_C(vRho_tilde, iN);
 
@@ -353,7 +355,7 @@ arma::vec mvtUnmap(arma::vec vTheta, int iN, int iK){
 
   arma::vec vSigma_tilde = log(vSigma);
 
-  double dNu_tilde       = log(dNu - 2.01);
+  double dNu_tilde       = log(dNu - dLowerShape);
 
   arma::vec vRho_tilde = UnMapR_C(vRho, iN);
 

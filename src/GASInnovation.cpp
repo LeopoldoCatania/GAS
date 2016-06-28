@@ -1,6 +1,7 @@
 #include <RcppArmadillo.h>
 #include "Mapping.h"
 #include "IMWrap.h"
+#include "Utils.h"
 #include "ScoreWrap.h"
 
 using namespace Rcpp;
@@ -37,7 +38,7 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
 
   }
   //
-  return vS_tilde;
+  return NaN2Zero(vS_tilde);
 }
 
 //[[Rcpp::export]]

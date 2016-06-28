@@ -22,19 +22,21 @@ StaticStarting_Uni<-function(vY,Dist,iK){
     df1=6
     if(Dist=="ast"){df2=8}else{df2=df1}
     alpha=0.5
+    mu = mean(vY)
+    sigma = sd(vY)
 
-    K1=Kast(df1)
-    K2=Kast(df2)
-
-    alpha_star=alpha*K1/(alpha*K1+(1-alpha)*K2)
-    B=alpha*K1/alpha_star
-
-    EY=4*B*(-alpha_star^2*(df1/(df1-1) + (1-alpha_star)^2*df2/(df2-1)))
-    VARY=4*(alpha*alpha_star^2*df1/(df1-2) + (1-alpha)*(1-alpha_star)^2*df2/(df2-2)) - 16*B^2*(-alpha_star^2*df1/(df1-1) +
-                                                                                                 (1-alpha_star)^2*df2/(df2-1))^2
-
-    sigma=empsd/sqrt(VARY)
-    mu=empmean-sigma*EY
+    # K1=Kast(df1)
+    # K2=Kast(df2)
+    #
+    # alpha_star=alpha*K1/(alpha*K1+(1-alpha)*K2)
+    # B=alpha*K1/alpha_star
+    #
+    # EY=4*B*(-alpha_star^2*(df1/(df1-1) + (1-alpha_star)^2*df2/(df2-1)))
+    # VARY=4*(alpha*alpha_star^2*df1/(df1-2) + (1-alpha)*(1-alpha_star)^2*df2/(df2-2)) - 16*B^2*(-alpha_star^2*df1/(df1-1) +
+    #                                                                                              (1-alpha_star)^2*df2/(df2-1))^2
+    #
+    # sigma=empsd/sqrt(VARY)
+    # mu=empmean-sigma*EY
 
     if(Dist=="ast"){
       vTheta=c(mu,sigma,alpha,df1,df2)
@@ -149,7 +151,7 @@ StartingValues_mvt<-function(mY,iN){
   vEmpMu     = apply(mY,1,mean)
   vEmpSigma  = apply(mY,1,sd)*sqrt((dNu-2.0)/dNu)
 
-  vKappa = c(vEmpMu,log(vEmpSigma),vEmpPhi, log(dNu - 2.01))                         ; names(vKappa) = paste("kappa.",mvtParNames(iN),sep="")
+  vKappa = c(vEmpMu,log(vEmpSigma),vEmpPhi, log(dNu - LowerNu()))                         ; names(vKappa) = paste("kappa.",mvtParNames(iN),sep="")
   vB     = c(unmapVec_C(rep(0.90,iK), LowerB(), UpperB()))                             ; names(vB) = paste("b.",mvtParNames(iN),sep="")
   vA     = c(unmapVec_C(c(rep(0.000001,iN),rep(0.001,iN),
                         rep(0.0001,iN*(iN-1)/2), 0.00001),

@@ -147,3 +147,10 @@ arma::mat Up_rbind_C(arma::mat Mat, arma::vec Vec){
   out.row(0)=Vec.t();
   return(out);
 }
+arma::vec NaN2Zero(arma::vec vX, double To=0){
+  int iN = vX.size();
+  for(int i=0;i<iN;i++){
+      if(R_IsNaN(vX(i)) ) vX(i) = To ;
+  }
+  return vX;
+}
