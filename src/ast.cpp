@@ -279,6 +279,31 @@ double pAST(double dY, double dMu, double dSigma, double dAlpha, double dNu1, do
   return dCdf;
 }
 
+arma::vec mAST(double dMu, double dSigma, double dAlpha, double dNu1, double dNu2){
+  arma::vec vMoments(4);
+
+  double dK1 = Kast(dNu1);
+  double dK2 = Kast(dNu2);
+
+  double dAlpha_star = dAlpha*dK1/(dAlpha*dK1+(1.0-dAlpha)*dK2);
+  double dB          = dAlpha*dK1 + (1.0-dAlpha)*dK2;
+
+  double dEY = 4.0 * dB* (-pow(dAlpha_star,2.0)*(dNu1/(dNu1-1.0))+ pow(1.0-dAlpha_star,2.0)*dNu2/(dNu2 - 1.0));
+
+  vMoments(0) = dMu + dSigma * dEY;
+
+
+  vMoments(1) = 4.0 * (dAlpha * pow(dAlpha_star,2.0)*dNu1/(dNu1-2.0) +
+                (1.0-dAlpha)*pow(1.0-dAlpha_star,2.0)*dNu2/(dNu2-2.0)) -
+                16.0*pow(dB,2.0)*pow(-pow(dAlpha_star,2.0)*dNu1/(dNu1-1.0) +
+                pow(1.0 - dAlpha_star,2.0)*dNu2/(dNu2-1.0),2.0);
+
+  // TODO
+  vMoments(2) = 0.0;
+  vMoments(3) = 0.0;
+  return vMoments;
+}
+
 double qAST(double dP, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2,
                         double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
   double a=lower;

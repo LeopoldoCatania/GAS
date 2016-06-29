@@ -33,7 +33,7 @@ arma::vec mSTD(double dMu, double dPhi2, double dNu){
   vMoments(0) = dMu;
   vMoments(1) = dPhi2*dNu/(dNu-2.0);
   vMoments(2) = 0.0;
-  vMoments(3) = 3.0*pow(dNu,2.0)/((dNu-2.0)*(dNu-4.0)) * pow(dPhi2,2.0);
+  vMoments(3) = (6.0 + 3.0*(dNu - 4.0))/(dNu - 4.0) * pow(vMoments(1),2.0);
   return vMoments;
 }
 
@@ -79,3 +79,5 @@ arma::mat std_IM( arma::vec vTheta){
 
   return mIM;
 }
+
+

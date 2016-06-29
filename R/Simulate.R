@@ -4,8 +4,10 @@ UniGASSim<-function(iT, vKappa, mA, mB, Dist, ScalingType){
 
   iK = NumberParameters(Dist)
 
+  mMoments = EvalMoments(lSim$mTheta,Dist)
+
   Sim <- new("uGASSim", ModelInfo=list(iT = iT, iK = iK,vKappa=vKappa, mA = mA, mB = mB, Dist = Dist,ScalingType=ScalingType),
-             GASDyn = lSim, Data = list(vY = lSim$vY))
+             GASDyn = lSim, Data = list(vY = lSim$vY, Moments=mMoments))
   return(Sim)
 }
 

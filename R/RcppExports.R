@@ -5,6 +5,14 @@ Kast <- function(dX) {
     .Call('GAS_Kast', PACKAGE = 'GAS', dX)
 }
 
+EvaluateLogScore_Univ <- function(mTheta, vY, Dist, iT) {
+    .Call('GAS_EvaluateLogScore_Univ', PACKAGE = 'GAS', mTheta, vY, Dist, iT)
+}
+
+EvaluateLogScore_Multi <- function(mTheta, mY, Dist, iT, iN) {
+    .Call('GAS_EvaluateLogScore_Multi', PACKAGE = 'GAS', mTheta, mY, Dist, iT, iN)
+}
+
 ddist_univ <- function(dY, vTheta, Dist, bLog) {
     .Call('GAS_ddist_univ', PACKAGE = 'GAS', dY, vTheta, Dist, bLog)
 }
@@ -29,12 +37,20 @@ qdist_univ <- function(dP, vTheta, Dist) {
     .Call('GAS_qdist_univ', PACKAGE = 'GAS', dP, vTheta, Dist)
 }
 
+mdist_univ <- function(vTheta, Dist) {
+    .Call('GAS_mdist_univ', PACKAGE = 'GAS', vTheta, Dist)
+}
+
 GASFilter_univ <- function(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_univ', PACKAGE = 'GAS', vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)
 }
 
 GASFilter_multi <- function(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_multi', PACKAGE = 'GAS', mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)
+}
+
+uGASMultiForcast <- function(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws) {
+    .Call('GAS_uGASMultiForcast', PACKAGE = 'GAS', vTheta_tp1, vKappa, mA, mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws)
 }
 
 GASInnovation_multi <- function(vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType) {
@@ -71,6 +87,10 @@ MapParameters_multi <- function(vTheta_tilde, Dist, iN, iK) {
 
 UnmapParameters_multi <- function(vTheta, Dist, iN, iK) {
     .Call('GAS_UnmapParameters_multi', PACKAGE = 'GAS', vTheta, Dist, iN, iK)
+}
+
+EvalMoments <- function(mTheta, Dist) {
+    .Call('GAS_EvalMoments', PACKAGE = 'GAS', mTheta, Dist)
 }
 
 rmvnorm_mat <- function(iN, vMu, mSigma) {

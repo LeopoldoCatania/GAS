@@ -63,3 +63,12 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   if(Dist == "ast1") dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   return dQ;
 }
+//[[Rcpp::export]]
+arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
+  arma::vec vMoments(4);
+  if(Dist == "norm") vMoments = mNORM(vTheta(0), vTheta(1));
+  if(Dist == "std")  vMoments = mSTD(vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "ast")  vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
+  if(Dist == "ast1") vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
+  return vMoments;
+}
