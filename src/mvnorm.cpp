@@ -163,3 +163,24 @@ arma::vec mvnorm_Score(arma::vec vY, arma::vec vTheta, int iN){
   return vScore;
 
 }
+
+arma::vec mMVNORM_mean(arma::vec vTheta, int iN){
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  return vMu;
+}
+
+arma::mat mMVNORM_cov(arma::vec vTheta, int iN){
+
+  int iK = NumberParameters("mvnorm", iN);
+
+  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
+  arma::vec vRho   = vTheta.subvec(2*iN,iK-1);
+
+  arma::mat mD = diagmat(vSigma);
+  arma::mat mR = build_mR(vRho, iN);
+
+  arma::mat mSigma = mD * mR * mD;
+
+  return mSigma;
+}

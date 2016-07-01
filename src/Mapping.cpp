@@ -245,6 +245,7 @@ arma::mat HalfR(arma::vec vPhi){
   return X;
 }
 
+//[[Rcpp::export]]
 arma::mat MapR_C(arma::vec vPhi, int iN){
 
   arma::mat X = HalfR(vPhi);
@@ -253,30 +254,72 @@ arma::mat MapR_C(arma::vec vPhi, int iN){
 
   return(R);
 }
+
 //[[Rcpp::export]]
 arma::vec UnMapR_C(arma::vec vRho, int iN){
 
-  arma::vec vPhi(iN*(iN-1)/2);
+  arma::mat mPhi = zeros(iN,iN);
+  arma::mat mX   = zeros(iN,iN);
+  arma::mat mR   = build_mR(vRho, iN);
 
-  if(iN==2){
-    vPhi(0) = acos(vRho(0));
+  mX(0,0) = 1.0;
+
+  int i,j,k,l;
+
+  double dFoo1 = 0.0;
+  double dFoo2 = 0.0;
+  double dFoo3 = 0.0;
+
+  for(i=1;i<iN;i++){
+    mPhi(i,0) = acos(mR(i,0));
+    mX(i,0)   = cos(mPhi(i,0));
   }
-  if(iN==3){
-    vPhi(0) = acos(vRho(0));
-    vPhi(1) = acos(vRho(1));
-    vPhi(2) = acos((vRho(2)-vRho(0)*vRho(1))/(sin(vPhi(0))*sin(vPhi(1))));
+
+  if(iN>2){
+    for(j=1;j<iN;j++){
+      for(i=1;i<=j;i++){
+        dFoo1 = 1.0;
+        for(k=0;k<=i-1;k++){
+          dFoo1 *= sin(mPhi(j,k));
+        }
+        if(i==j){
+          mX(j,j) = dFoo1;
+        }else{
+          dFoo2 = 0.0;
+          if(i>1){
+            for(k=1;k<=i-1;k++){
+              dFoo3 = 1.0;
+              for(l=0;l<=(k-1);l++){
+                dFoo3 *= sin(mPhi(i,l))*sin(mPhi(j,l));
+              }
+              dFoo2 += cos(mPhi(i,k))*cos(mPhi(j,k))*dFoo3;
+            }
+          }
+
+          dFoo3 = 1.0;
+          for(l=0;l<=(i-1);l++){
+            dFoo3 *= sin(mPhi(i,l))*sin(mPhi(j,l));
+          }
+          mPhi(j,i) = acos((mR(i,j) - cos(mPhi(i,0))*cos(mPhi(j,0)) - dFoo2)/dFoo3);
+          mX(i,j)   = cos(mPhi(j,i)) * dFoo1;
+        }
+      }
+    }
   }
-  if(iN==4){
-    vPhi(0) = acos(vRho(0));
-    vPhi(1) = acos(vRho(1));
-    vPhi(2) = acos((vRho(2)-vRho(0)*vRho(1))/(sin(vPhi(0))*sin(vPhi(1))));
-    vPhi(3) = acos(vRho(3));
-    vPhi(4) = acos((vRho(4)-cos(vPhi(0))*cos(vPhi(3)))/(sin(vPhi(3))*sin(vPhi(0))));
-    vPhi(5) = acos((vRho(5)-cos(vPhi(1))*cos(vPhi(3)) - cos(vPhi(2))*cos(vPhi(4))*sin(vPhi(1))*sin(vPhi(3)))/(sin(vPhi(1))*sin(vPhi(3))*sin(vPhi(2))*sin(vPhi(4))));
+
+  arma::vec vPhi(iN*(iN-1.0)/2.0);
+  int iC=0;
+
+  for(j=0;j<iN-1;j++){
+    for(i=j+1;i<iN;i++){
+      vPhi(iC) = mPhi(i,j);
+      iC++;
+    }
   }
 
   return vPhi;
 }
+
 arma::vec mvnormMap(arma::vec vTheta_tilde, int iN, int iK){
 
   arma::vec vTheta(iK);
@@ -394,6 +437,7 @@ arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist,int iN, int i
   return InfRemover_vec(vTheta);
 }
 
+//[[Rcpp::export]]
 arma::mat Jacobian_MapR(arma::vec vPhi, int iN){
 
   int i,j,iC=0,iK = iN*(iN-1)/2;
@@ -413,7 +457,8 @@ arma::mat Jacobian_MapR(arma::vec vPhi, int iN){
     }
   }
 
-
+  //
+  // int iK = iN*(iN-1)/2;
   arma::mat mJ = zeros(iK,iK);
 
   if(iN==2){
@@ -447,9 +492,82 @@ arma::mat Jacobian_MapR(arma::vec vPhi, int iN){
   }
 
   if(iN>4) mJ.diag().ones();
-
+  // mJ.diag().ones();
   return mJ;
 }
+
+
+//[[Rcpp::export]]
+arma::vec IndexesFinder(int iC, int iN){
+  int l,m,iC_c = 0;
+
+  arma::vec vIndexes(2);
+
+  for(l = 0; l<iN; l++){
+    for(m = 0; m<=l; m++){
+      if(l!=m){
+        if(iC_c == iC){
+          vIndexes(0) = l;
+          vIndexes(1) = m;
+        }
+        iC_c++;
+      }
+    }
+  }
+
+  return vIndexes;
+}
+
+
+// //[[Rcpp::export]]
+// arma::mat Jacobian_MapR2(arma::vec vPhi, int iN){
+//
+//   int i,j,iC=0,iK = iN*(iN-1)/2;
+//
+//   arma::mat mPhi = zeros(iN,iN);
+//   arma::mat mS   = zeros(iN,iN);
+//   arma::mat mJ   = zeros(iK,iK);
+//
+//   for(i = 0;i<iN;i++){
+//     for(j=0;j<=i;j++){
+//       if(i!=j){
+//         mPhi(i,j) = vPhi(iC);
+//         mS(i,j)   = sin(vPhi(iC));
+//         iC+=1;
+//       }
+//     }
+//   }
+//
+//   double dFoo = 1.0;
+//
+//   arma::vec vIndexes_num(2);
+//   arma::vec vIndexes_den(2);
+//
+//   //diagonal elements before
+//   for(i = 0;i<iN-1;i++){
+//     mJ(i,i) = -sin(vPhi(i));
+//   }
+//
+//   int l,m,h,k;
+//
+//   for(i = iN-1;i<iK;i++){
+//     for(j=0;j<=i;j++){
+//       vIndexes_num = IndexesFinder(i, iN);
+//       vIndexes_den = IndexesFinder(j, iN);
+//
+//       l = vIndexes_num(0);
+//       m = vIndexes_num(1);
+//       h = vIndexes_den(0);
+//       k = vIndexes_num(0);
+//
+//
+//     }
+//   }
+//
+//   return mJ;
+//
+// }
+
 arma::mat Jacobian_MapD(arma::vec vSigma_tilde, int iN){
 
   arma::mat mJ = zeros(iN,iN);

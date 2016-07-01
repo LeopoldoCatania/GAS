@@ -13,4 +13,6 @@ double dmvnorm_ThetaParam(arma::vec vY,
                           bool bLog = false);
 arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma);
 arma::mat rmvnorm_ThetaParam(arma::vec vTheta,int iN, int iJ) ;
+arma::vec mMVNORM_mean(arma::vec vTheta, int iN);
+arma::mat mMVNORM_cov(arma::vec vTheta, int iN);
 #endif

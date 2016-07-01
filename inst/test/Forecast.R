@@ -1,5 +1,9 @@
 library(GAS)
 
+########################
+#      UNIVARIATE      #
+########################
+
 # Inflation Forecast
 
 data("cpichg")
@@ -12,9 +16,11 @@ GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(loc
 Fit       = UniGASFit(GASSpec,cpichg)
 help(UniGASFor)
 
-Forecast  = UniGASFor(Fit, iH = 12)
+Forecast  = UniGASFor(Fit, iH = 100)
 
 Forecast
+
+plot(Forecast)
 
 # Perform 1-Step ahead rolling forecast
 
@@ -45,4 +51,46 @@ Roll = UniGASRoll(cpichg,GASSpec,ForecastLength = 50, RefitEvery = 2, RefitWindo
 Roll
 
 
+########################
+#    MULTIVARIATE      #
+########################
+
+data("StockIndex")
+
+mY = StockIndex[1:2,]
+
+## Specification mvt
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))
+
+# Perform H-step ahead forecast with confidence bands
+
+# estimation
+Fit = MultiGASFit(GASSpec, mY)
+
+#forecast
+
+Forecast  = MultiGASFor(Fit, iH = 50)
+
+Forecast
+
+# Perform 1-Step ahead rolling forecast
+
+InSampleData  = mY[,1:1000]
+OutSampleData = mY[,1001:2404]
+
+# estimation
+Fit = MultiGASFit(GASSpec, InSampleData)
+
+Forecast  = MultiGASFor(Fit, Roll = TRUE, mOut = OutSampleData)
+
+Forecast
+
+# Perform 1-step ahead rolling forecast with refit
+library(parallel)
+
+cluster = makeCluster(7)
+
+Roll    = MultiGASRoll(mY,GASSpec,ForecastLength = 500, RefitEvery = 100, RefitWindow = c("moving"), cluster = cluster)
+
+Roll
 

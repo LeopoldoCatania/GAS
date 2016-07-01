@@ -54,7 +54,7 @@ UniGASFit<-function(GASSpec,vY){
 
   vU = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
 
-  mMoments = EvalMoments(GASDyn$mTheta,Dist)
+  mMoments = EvalMoments_univ(GASDyn$mTheta,Dist)
 
   elapsedTime =  Sys.time() - Start
 
@@ -112,5 +112,5 @@ MultiGASFit<-function(GASSpec,mY){
              Estimates = list(lParList=lParList, optimiser=optimiser,
                               Inference = Inference,IC = IC ),
              Data = list(mY = mY))
-
+  return(Out)
 }

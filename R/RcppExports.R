@@ -41,6 +41,14 @@ mdist_univ <- function(vTheta, Dist) {
     .Call('GAS_mdist_univ', PACKAGE = 'GAS', vTheta, Dist)
 }
 
+mdist_multi_mean <- function(vTheta, Dist, iN) {
+    .Call('GAS_mdist_multi_mean', PACKAGE = 'GAS', vTheta, Dist, iN)
+}
+
+mdist_multi_cov <- function(vTheta, Dist, iN) {
+    .Call('GAS_mdist_multi_cov', PACKAGE = 'GAS', vTheta, Dist, iN)
+}
+
 GASFilter_univ <- function(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType) {
     .Call('GAS_GASFilter_univ', PACKAGE = 'GAS', vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)
 }
@@ -51,6 +59,10 @@ GASFilter_multi <- function(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType) {
 
 uGASMultiForcast <- function(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws) {
     .Call('GAS_uGASMultiForcast', PACKAGE = 'GAS', vTheta_tp1, vKappa, mA, mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws)
+}
+
+mGASMultiForcast <- function(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, iN, Dist, ScalingType, bReturnsDraws) {
+    .Call('GAS_mGASMultiForcast', PACKAGE = 'GAS', vTheta_tp1, vKappa, mA, mB, iH, iB, iK, iN, Dist, ScalingType, bReturnsDraws)
 }
 
 GASInnovation_multi <- function(vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType) {
@@ -77,6 +89,10 @@ UnmapParameters_univ <- function(vTheta, Dist, iK) {
     .Call('GAS_UnmapParameters_univ', PACKAGE = 'GAS', vTheta, Dist, iK)
 }
 
+MapR_C <- function(vPhi, iN) {
+    .Call('GAS_MapR_C', PACKAGE = 'GAS', vPhi, iN)
+}
+
 UnMapR_C <- function(vRho, iN) {
     .Call('GAS_UnMapR_C', PACKAGE = 'GAS', vRho, iN)
 }
@@ -89,8 +105,20 @@ UnmapParameters_multi <- function(vTheta, Dist, iN, iK) {
     .Call('GAS_UnmapParameters_multi', PACKAGE = 'GAS', vTheta, Dist, iN, iK)
 }
 
-EvalMoments <- function(mTheta, Dist) {
-    .Call('GAS_EvalMoments', PACKAGE = 'GAS', mTheta, Dist)
+Jacobian_MapR <- function(vPhi, iN) {
+    .Call('GAS_Jacobian_MapR', PACKAGE = 'GAS', vPhi, iN)
+}
+
+IndexesFinder <- function(iC, iN) {
+    .Call('GAS_IndexesFinder', PACKAGE = 'GAS', iC, iN)
+}
+
+EvalMoments_univ <- function(mTheta, Dist) {
+    .Call('GAS_EvalMoments_univ', PACKAGE = 'GAS', mTheta, Dist)
+}
+
+EvalMoments_multi <- function(mTheta, Dist, iN) {
+    .Call('GAS_EvalMoments_multi', PACKAGE = 'GAS', mTheta, Dist, iN)
 }
 
 rmvnorm_mat <- function(iN, vMu, mSigma) {

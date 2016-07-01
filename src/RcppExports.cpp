@@ -138,6 +138,32 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// mdist_multi_mean
+arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN);
+RcppExport SEXP GAS_mdist_multi_mean(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(mdist_multi_mean(vTheta, Dist, iN));
+    return __result;
+END_RCPP
+}
+// mdist_multi_cov
+arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN);
+RcppExport SEXP GAS_mdist_multi_cov(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(mdist_multi_cov(vTheta, Dist, iN));
+    return __result;
+END_RCPP
+}
 // GASFilter_univ
 List GASFilter_univ(arma::vec vY, arma::vec vKappa, arma::mat mA, arma::mat mB, int iT, int iK, std::string Dist, std::string ScalingType);
 RcppExport SEXP GAS_GASFilter_univ(SEXP vYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
@@ -192,6 +218,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type ScalingType(ScalingTypeSEXP);
     Rcpp::traits::input_parameter< bool >::type bReturnsDraws(bReturnsDrawsSEXP);
     __result = Rcpp::wrap(uGASMultiForcast(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws));
+    return __result;
+END_RCPP
+}
+// mGASMultiForcast
+List mGASMultiForcast(arma::vec vTheta_tp1, arma::vec vKappa, arma::mat mA, arma::mat mB, int iH, int iB, int iK, int iN, std::string Dist, std::string ScalingType, bool bReturnsDraws);
+RcppExport SEXP GAS_mGASMultiForcast(SEXP vTheta_tp1SEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iHSEXP, SEXP iBSEXP, SEXP iKSEXP, SEXP iNSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP, SEXP bReturnsDrawsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta_tp1(vTheta_tp1SEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vKappa(vKappaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mA(mASEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mB(mBSEXP);
+    Rcpp::traits::input_parameter< int >::type iH(iHSEXP);
+    Rcpp::traits::input_parameter< int >::type iB(iBSEXP);
+    Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< std::string >::type ScalingType(ScalingTypeSEXP);
+    Rcpp::traits::input_parameter< bool >::type bReturnsDraws(bReturnsDrawsSEXP);
+    __result = Rcpp::wrap(mGASMultiForcast(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, iN, Dist, ScalingType, bReturnsDraws));
     return __result;
 END_RCPP
 }
@@ -276,6 +323,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// MapR_C
+arma::mat MapR_C(arma::vec vPhi, int iN);
+RcppExport SEXP GAS_MapR_C(SEXP vPhiSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vPhi(vPhiSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(MapR_C(vPhi, iN));
+    return __result;
+END_RCPP
+}
 // UnMapR_C
 arma::vec UnMapR_C(arma::vec vRho, int iN);
 RcppExport SEXP GAS_UnMapR_C(SEXP vRhoSEXP, SEXP iNSEXP) {
@@ -316,15 +375,52 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// EvalMoments
-arma::mat EvalMoments(arma::mat mTheta, std::string Dist);
-RcppExport SEXP GAS_EvalMoments(SEXP mThetaSEXP, SEXP DistSEXP) {
+// Jacobian_MapR
+arma::mat Jacobian_MapR(arma::vec vPhi, int iN);
+RcppExport SEXP GAS_Jacobian_MapR(SEXP vPhiSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vPhi(vPhiSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(Jacobian_MapR(vPhi, iN));
+    return __result;
+END_RCPP
+}
+// IndexesFinder
+arma::vec IndexesFinder(int iC, int iN);
+RcppExport SEXP GAS_IndexesFinder(SEXP iCSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type iC(iCSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(IndexesFinder(iC, iN));
+    return __result;
+END_RCPP
+}
+// EvalMoments_univ
+arma::mat EvalMoments_univ(arma::mat mTheta, std::string Dist);
+RcppExport SEXP GAS_EvalMoments_univ(SEXP mThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
     Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
-    __result = Rcpp::wrap(EvalMoments(mTheta, Dist));
+    __result = Rcpp::wrap(EvalMoments_univ(mTheta, Dist));
+    return __result;
+END_RCPP
+}
+// EvalMoments_multi
+List EvalMoments_multi(arma::mat mTheta, std::string Dist, int iN);
+RcppExport SEXP GAS_EvalMoments_multi(SEXP mThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    __result = Rcpp::wrap(EvalMoments_multi(mTheta, Dist, iN));
     return __result;
 END_RCPP
 }

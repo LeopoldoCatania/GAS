@@ -72,3 +72,18 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "ast1") vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   return vMoments;
 }
+
+//[[Rcpp::export]]
+arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN){
+  arma::vec vMu(iN);
+  if(Dist == "mvnorm") vMu = mMVNORM_mean(vTheta, iN);
+  if(Dist == "mvt")    vMu = mMVT_mean(vTheta, iN);
+  return vMu;
+}
+//[[Rcpp::export]]
+arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN){
+  arma::mat mCov(iN,iN);
+  if(Dist == "mvnorm") mCov = mMVNORM_cov(vTheta, iN);
+  if(Dist == "mvt")    mCov = mMVT_cov(vTheta, iN);
+  return mCov;
+}

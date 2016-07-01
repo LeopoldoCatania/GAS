@@ -6,9 +6,10 @@ setClass("uGASSpec",representation(Spec="list"))
 setClass("mGASSpec",representation(Spec="list"))
 setClass("uGASFor",representation(Forecast = "list", Bands = "array", Draws = "matrix",
                                   Info = "list", Data = "list"))
-setClass("mGASFor",representation(Forecast = "list", Bands = "array", Draws = "matrix",
+setClass("mGASFor",representation(Forecast = "list", Bands = "array", Draws = "array",
                                   Info = "list", Data = "list"))
 setClass("uGASRoll",representation(Forecast = "list", Info = "list", Data = "list"))
+setClass("mGASRoll",representation(Forecast = "list", Info = "list", Data = "list"))
 
 setMethod("show", "uGASFit",
           function(object) {
@@ -206,6 +207,39 @@ setMethod("show", "uGASFor",
           }
 )
 
+setMethod("show", "mGASFor",
+          function(object) {
+
+            iH   = object@Info$iH
+            iN   = object@Info$iN
+
+            Dist          = getDist(object)
+            ScalingType   = getScalingType(object)
+            ParNames      = FullNamesMulti(iN,Dist)
+            iK            = NumberParameters(Dist)
+            Roll          = object@Info$Roll
+            PointForecast = getForecast(object)
+
+            if(Roll){
+              PointForecast = cbind(PointForecast, realized = object@Data$vOut)
+            }
+
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\n-      Multivariate GAS Forecast         -"))
+            cat(paste("\n------------------------------------------"))
+            cat("\n\nModel Specification")
+            cat(paste("\nConditional distribution : ",Dist))
+            cat(paste("\nScore scaling type : ",ScalingType))
+            cat(paste("\nHorizon : ",iH))
+            cat(paste("\nNumber of series : ",iN))
+            cat(paste("\nRolling forecast : ",Roll))
+            #
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\nParameters forecast:\n"))
+            print(PointForecast)
+          }
+)
+
 setMethod("show", "uGASRoll",
           function(object) {
 
@@ -220,6 +254,33 @@ setMethod("show", "uGASRoll",
 
             cat(paste("\n------------------------------------------"))
             cat(paste("\n-    Univariate GAS Rolling Forecast     -"))
+            cat(paste("\n------------------------------------------"))
+            cat("\n\nModel Specification")
+            cat(paste("\nConditional distribution : ",Dist))
+            cat(paste("\nScore scaling type : ",ScalingType))
+            #
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\nParameters forecast:\n"))
+            print(PointForecast)
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\n\nElapsed time\t:",round(as.double(elapsedTime,units = "mins"),2),"mins"))
+          }
+)
+
+setMethod("show", "mGASRoll",
+          function(object) {
+
+            ForecastLength = object@Info$ForecastLength
+
+            Dist          = getDist(object)
+            ScalingType   = getScalingType(object)
+            ParNames      = FullNamesUni(Dist)
+            iK            = NumberParameters(Dist)
+            PointForecast = getForecast(object)
+            elapsedTime   = object@Info$object
+
+            cat(paste("\n------------------------------------------"))
+            cat(paste("\n-   Multivariate GAS Rolling Forecast    -"))
             cat(paste("\n------------------------------------------"))
             cat("\n\nModel Specification")
             cat(paste("\nConditional distribution : ",Dist))
@@ -280,7 +341,6 @@ setMethod("plot", signature(x='mGASFit',y='missing'),
             }
           }
 )
-
 
 setMethod("plot", signature(x='uGASSim',y='missing'),
           function(x,...) {
@@ -345,39 +405,127 @@ setMethod("plot", signature(x='uGASFor',y='missing'),
             FilteredParameters = FilteredParameters[-nrow(FilteredParameters),] #remove one step ahead forecast
             ParametersForecast = getForecast(x)
             cBands             = x@Bands
-            Moments            = getMoments(x)
 
-            if(is(vY,"xts")) {
-              vDates_In = as.Date(index(vY))
+            Dist = getDist(x)
+
+            if(is(vY,"xts")){
+              vDates_is = as.Date(index(vY))
               if(Roll) {
-                vDates_Out = as.Date(index(vOut))
-                ParametersForecast = xts(ParametersForecast, vDates_Out)
+                vDates_os = as.Date(index(vOut))
+              }else{
+                DiffTime  = vDates_is[2] - vDates_is[1]
+                vDates_os = seq(tail(vDates_is,1) + DiffTime, tail(vDates_is,1) + DiffTime*iH, by = DiffTime)
               }
+              ParametersForecast = xts(ParametersForecast, vDates_os)
+              FilteredParameters = xts(FilteredParameters, vDates_is)
             }else{
-              vDates = 1:iT
-              if(Roll) vDates_Out = (iT+1):(iT+iH)
+              vDates_is = 1:iT
+              vDates_os = (iT+1):(iT+iH)
             }
 
             if(dev.cur() != 1) dev.off()
             PlotType=1
             while(PlotType>0){
-              if(Roll){
+              if(!Roll){
+                cat(paste("Print 1-7 or 0 to exit"))
+                PlotType=menu(PlotMenu(x))
+                if(PlotType == 1) PlotMultipleSeries(ParametersForecast,iK,iH,vDates_os)
+                if(PlotType == 2) PlotMultipleSeries_Bands(ParametersForecast,iK,iH,vDates_os, cBands)
+                if(PlotType == 3) PlotMultipleSeries_wis(FilteredParameters,ParametersForecast,iK,iH,vDates_os, vDates_is)
+                if(PlotType == 4) PlotMultipleSeries_Bands_wis(FilteredParameters,ParametersForecast,iK,iH,vDates_os, vDates_is,cBands)
+                if(PlotType == 5) {
+                  Moments_is =  getMoments(x)
+                  PlotMultipleSeries(Moments_is,4,iH,vDates_os)
+                  }
+                if(PlotType == 6) {
+                  Moments_os =  getMoments(x)
+                  Moments_is =  EvalMoments_univ(t(FilteredParameters),Dist) ; colnames(Moments_is) = paste("M",1:4,sep="")
+                  PlotMultipleSeries_wis(Moments_is,Moments_os,4,iH,vDates_os,vDates_is)
+                }
+              }else{
                 cat(paste("Print 1-3 or 0 to exit"))
                 PlotType=menu(PlotMenu(x))
-                if(PlotType == 1) PlotMultipleSeries(ParametersForecast,iK,iH,vDates_Out)
+                if(PlotType == 1) {
+                  PlotMultipleSeries(ParametersForecast,iK,iT,vDates_os)
+                }
                 if(PlotType == 2) {
-                  Mu              = Moments[,1]
+                  Moments_os =  getMoments(x)
+                  Mu         = Moments_os[,1]
                   mRealVsForecast = cbind(Mu, vOut)
-                  PlotForecastVsRealized_Univ(mRealVsForecast,vDates_Out)
+                  PlotForecastVsRealized_Univ(mRealVsForecast,vDates_os)
                 }
                 if(PlotType == 3) {
-                  PlotMultipleSeries(Moments,4,iH,vDates_Out)
+                  Moments_os =  getMoments(x)
+                  PlotMultipleSeries(Moments_os,4,iH,vDates_os)
                 }
               }
             }
           }
 )
 
+setMethod("plot", signature(x='mGASFor',y='missing'),
+          function(x,...) {
+            iK = x@Info$iK
+            iN = x@Info$iN
+            mY = x@Data$mY
+            iH = x@Info$iH
+            iT = ncol(mY)
+
+            Roll = x@Info$Roll
+            vOut = x@Data$vOut
+
+            FilteredParameters = x@Data$FilteredParameters
+            FilteredParameters = FilteredParameters[-nrow(FilteredParameters),] #remove one step ahead forecast
+            ParametersForecast = getForecast(x)
+            cBands             = x@Bands
+
+            Dist = getDist(x)
+
+            if(is(mY,"xts")){
+              vDates_is = as.Date(index(mY))
+              if(Roll) {
+                vDates_os = as.Date(index(vOut))
+              }else{
+                DiffTime  = vDates_is[2] - vDates_is[1]
+                vDates_os = seq(tail(vDates_is,1) + DiffTime, tail(vDates_is,1) + DiffTime*iH, by = DiffTime)
+              }
+              ParametersForecast = xts(ParametersForecast, vDates_os)
+              FilteredParameters = xts(FilteredParameters, vDates_is)
+            }else{
+              vDates_is = 1:iT
+              vDates_os = (iT+1):(iT+iH)
+            }
+
+            if(dev.cur() != 1) dev.off()
+            PlotType=1
+            while(PlotType>0){
+              if(!Roll){
+                cat(paste("Print 1-4 or 0 to exit"))
+                PlotType=menu(PlotMenu(x))
+                if(PlotType == 1) PlotMultipleSeries(ParametersForecast,iK,iH,vDates_os)
+                if(PlotType == 2) PlotMultipleSeries_Bands(ParametersForecast,iK,iH,vDates_os, cBands)
+                if(PlotType == 3) PlotMultipleSeries_wis(FilteredParameters,ParametersForecast,iK,iH,vDates_os, vDates_is)
+                if(PlotType == 4) PlotMultipleSeries_Bands_wis(FilteredParameters,ParametersForecast,iK,iH,vDates_os, vDates_is,cBands)
+              }else{
+                cat(paste("Print 1-2 or 0 to exit"))
+                PlotType=menu(PlotMenu(x))
+                if(PlotType == 1) {
+                  PlotMultipleSeries(ParametersForecast,iK,iT,vDates_os)
+                }
+                if(PlotType == 2) {
+                  Moments_os =  getMoments(x)
+                  Mu         = Moments_os[,1]
+                  mRealVsForecast = cbind(Mu, vOut)
+                  PlotForecastVsRealized_Univ(mRealVsForecast,vDates_os)
+                }
+                if(PlotType == 3) {
+                  Moments_os =  getMoments(x)
+                  PlotMultipleSeries(Moments_os,4,iH,vDates_os)
+                }
+              }
+            }
+          }
+)
 
 
 getFilteredParameters = function(object)
@@ -436,12 +584,14 @@ getMoments = function(object)
   if(is(object,"mGASSim" )) Moments = NULL
 
   if(is(object,"uGASFor" )) Moments = object@Forecast$Moments
-  if(is(object,"mGASFor" )) Moments = NULL
+  if(is(object,"mGASFor" )) Moments = object@Forecast$Moments
 
   if(is(object,"uGASRoll" )) Moments = object@Forecast$Moments
-  if(is(object,"mGASRoll" )) Moments = NULL
+  if(is(object,"mGASRoll" )) Moments = object@Forecast$Moments
 
-  if(!is.null(Moments)) colnames(Moments) = paste("M",1:4,sep = "")
+  Dist = getDist(object)
+
+  if(!is.null(Moments) & DistType(Dist) != "multivariate") colnames(Moments) = paste("M",1:4,sep = "")
 
   return(Moments)
 }
@@ -459,6 +609,8 @@ setMethod("getMoments", signature(object = "mGASRoll"), .getMoments)
   if(is(object,"uGASSim" ) | is(object,"mGASSim" )) ans = list(vKappa = object@ModelInfo$vKappa,
                                                                mA = object@ModelInfo$mA,
                                                                mB = object@ModelInfo$mB )
+  if(is(object,"uGASRoll" ) | is(object,"mGASRoll" )) ans = object@Forecast$Coef
+
   return(ans)
 
 }
@@ -475,7 +627,6 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
   if(is(x,"uGASFor" )) mTheta = getForecast(x)
   if(is(x,"uGASRoll" )) mTheta = getForecast(x)
 
-
   Dist = getDist(x)
 
   mQuantile = Quantiles(t(mTheta), Dist, probs)
@@ -489,7 +640,6 @@ setMethod("quantile", signature(x = "uGASFit"), .getQuantile)
 setMethod("quantile", signature(x = "uGASSim"), .getQuantile)
 setMethod("quantile", signature(x = "uGASFor"), .getQuantile)
 setMethod("quantile", signature(x = "uGASRoll"), .getQuantile)
-
 
 pit = function(object)
 {
@@ -507,7 +657,9 @@ LogScore = function(object)
 }
 
 setMethod("LogScore", signature(object = "uGASFor"), function(object) object@Forecast$vLS)
+setMethod("LogScore", signature(object = "mGASFor"), function(object) object@Forecast$vLS)
 setMethod("LogScore", signature(object = "uGASRoll"), function(object) object@Forecast$vLS)
+setMethod("LogScore", signature(object = "mGASRoll"), function(object) object@Forecast$vLS)
 
 
 getForecast = function(object)
@@ -517,4 +669,6 @@ getForecast = function(object)
 setMethod("getForecast", signature(object = "uGASFor"), function(object) return(object@Forecast$PointForecast))
 setMethod("getForecast", signature(object = "mGASFor"), function(object) return(object@Forecast$PointForecast))
 setMethod("getForecast", signature(object = "uGASRoll"), function(object) return(object@Forecast$PointForecast))
+setMethod("getForecast", signature(object = "mGASRoll"), function(object) return(object@Forecast$PointForecast))
+
 
