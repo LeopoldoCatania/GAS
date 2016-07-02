@@ -1,5 +1,5 @@
 #'@export
-BinTest<-function(pit,g=20,alpha=0.05,plot=F,...){
+BinTest<-function(pit,g=20,alpha=0.05,plot=F){
 
   h=hist(pit,nclass=g,plot=F)
   n_i=h$counts
@@ -9,7 +9,7 @@ BinTest<-function(pit,g=20,alpha=0.05,plot=F,...){
   confidence=mean(n_i)+c(-qnorm(1-alpha)*sqrt(mean(n_i)),+qnorm(1-alpha)*sqrt(mean(n_i)))
 
   if(plot) {
-    plot(h,col="blue",ylim=c(0,max(confidence*1.2,n_i*1.2)), nclass = g,...)
+    plot(h,col="blue",ylim=c(0,max(confidence*1.2,n_i*1.2)))
     abline(h=confidence,col="red",lwd=2,xlim=c(0,1))
   }
 
@@ -57,4 +57,14 @@ iidTest<-function(pit,alpha=0.05){
 
   out=list(test=c(test1=test1,test2=test2,test3=test3,test4=test4),crit=crit,pvalue=c(pvalue1,pvalue2,pvalue3,pvalue4))
   return(out)
+}
+
+PIT_test<-function(vU, iG=20, dAlpha=0.05, dBeta = 0.05, plot=F){
+
+  if(length(vU)<100) iG = 5
+
+  Hist = BinTest(pit = vU,g = iG, alpha = dAlpha, plot=plot)
+  IID  = iidTest(pit = vU, alpha = dBeta)
+
+  return(list(Hist = Hist, IID = IID))
 }

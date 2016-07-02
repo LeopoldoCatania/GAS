@@ -2,6 +2,10 @@
 #include "norm.h"
 #include "std.h"
 #include "ast.h"
+#include "poi.h"
+#include "gamma.h"
+#include "exp.h"
+#include "beta.h"
 #include "mvnorm.h"
 #include "mvt.h"
 
@@ -16,6 +20,10 @@ arma::vec Score_univ(double dY, arma::vec vTheta,std::string Dist){
   if(Dist == "std")  vScore = std_Score(dY,vTheta);
   if(Dist == "ast")  vScore = ast_Score(dY,vTheta);
   if(Dist == "ast1") vScore = ast1_Score(dY,vTheta);
+  if(Dist == "poi")  vScore = poi_Score(dY,vTheta(0));
+  if(Dist == "gamma") vScore = gamma_Score(dY,vTheta);
+  if(Dist == "exp")  vScore = exp_Score(dY,vTheta(0));
+  if(Dist == "beta") vScore = beta_Score(dY,vTheta);
   return vScore;
 }
 //[[Rcpp::export]]

@@ -25,24 +25,37 @@ StaticStarting_Uni<-function(vY,Dist,iK){
     mu = mean(vY)
     sigma = sd(vY)
 
-    # K1=Kast(df1)
-    # K2=Kast(df2)
-    #
-    # alpha_star=alpha*K1/(alpha*K1+(1-alpha)*K2)
-    # B=alpha*K1/alpha_star
-    #
-    # EY=4*B*(-alpha_star^2*(df1/(df1-1) + (1-alpha_star)^2*df2/(df2-1)))
-    # VARY=4*(alpha*alpha_star^2*df1/(df1-2) + (1-alpha)*(1-alpha_star)^2*df2/(df2-2)) - 16*B^2*(-alpha_star^2*df1/(df1-1) +
-    #                                                                                              (1-alpha_star)^2*df2/(df2-1))^2
-    #
-    # sigma=empsd/sqrt(VARY)
-    # mu=empmean-sigma*EY
-
     if(Dist=="ast"){
       vTheta=c(mu,sigma,alpha,df1,df2)
     }else{
       vTheta=c(mu,sigma,alpha,df1)
     }
+  }
+  if(Dist=="poi"){
+    mu=mean(vY)
+    vTheta=c(mu)
+  }
+  if(Dist=="gamma"){
+    dMean   = mean(vY)
+    dSigma2 = var(vY)
+
+    dBeta  = dMean/dSigma2
+    dAlpha = dMean^2 / dSigma2
+
+    vTheta=c(dAlpha, dBeta)
+  }
+
+  if(Dist=="exp"){
+    vTheta=c(1.0/mean(vY))
+  }
+  if(Dist=="beta"){
+    dMean   = mean(vY)
+    dSigma2 = var(vY)
+
+    dAlpha = dMean*(dMean*(1.0 - dMean)/dSigma2 - 1)
+    dBeta = (1.0 - dMean)*(dMean*(1.0 - dMean)/dSigma2 - 1)
+
+    vTheta=c(dAlpha, dBeta)
   }
 
   vTheta_tilde = as.numeric(UnmapParameters_univ(vTheta, Dist, iK = iK))
@@ -54,9 +67,13 @@ UniGAS_Starting<-function(vY,iT,iK,Dist,ScalingType){
   StaticFit = StaticMLFIT(vY,Dist)
   vKappa = StaticFit$optimiser$pars; names(vKappa) = paste("kappa",1:iK,sep="")
 
-  vA     = starting_vA(vY, vKappa, mB=diag(rep(9e-1,iK)), dA_foo=1e-15, iT, iK, Dist, ScalingType=ScalingType)
-  vB     = starting_vB(vY, vKappa, dB_foo=0.9, mA=diag(vA), iT, iK, Dist,ScalingType=ScalingType)
-
+  if(iK>1){
+    vA     = starting_vA(vY, vKappa, mB=diag(rep(9e-1,iK)), dA_foo=1e-15, iT, iK, Dist, ScalingType=ScalingType)
+    vB     = starting_vB(vY, vKappa, dB_foo=0.9, mA=diag(vA), iT, iK, Dist,ScalingType=ScalingType)
+  }else{
+    vA     = starting_vA(vY, vKappa, mB=matrix(9e-1,iK,iK), dA_foo=1e-15, iT, iK, Dist, ScalingType=ScalingType)
+    vB     = starting_vB(vY, vKappa, dB_foo=0.9, mA=matrix(vA,iK,iK), iT, iK, Dist,ScalingType=ScalingType)
+  }
   vA = unmapVec_C(vA, LowerA(), UpperA()); names(vA) = paste("a",1:iK,sep="")
   vB = unmapVec_C(vB, LowerB(), UpperB()); names(vB) = paste("b",1:iK,sep="")
 
@@ -65,7 +82,7 @@ UniGAS_Starting<-function(vY,iT,iK,Dist,ScalingType){
 }
 starting_vA<-function(vY, vKappa, mB, dA_foo, iT, iK, Dist,ScalingType){
 
-  seq_alpha = c(seq(1e-15,4.5,length.out = 30))
+  seq_alpha = c(seq(1e-5,8.5,length.out = 30))
 
   mA = matrix(0,iK,iK)
   diag(mA) = dA_foo

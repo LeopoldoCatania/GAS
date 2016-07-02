@@ -50,6 +50,6 @@ arma::vec mNORM(double dMu, double dSigma2){
   vMoments(0) = dMu;
   vMoments(1) = dSigma2;
   vMoments(2) = 0.0;
-  vMoments(3) = 3.0*pow(dSigma2,2.0);
+  vMoments(3) = 3.0;
   return vMoments;
 }

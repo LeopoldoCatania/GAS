@@ -41,3 +41,43 @@ Fit
 
 plot(Fit)
 
+
+## Integer valued model
+
+data("tqdata")
+help(tqdata)
+
+GASSpec = UniGASSpec(Dist = "poi", ScalingType = "Identity", GASPar = list(location = T))
+
+vY = abs(tqdata[,7] - tqdata[,8])  # absolute bid-ask spread
+
+Fit     = UniGASFit(GASSpec,vY)
+
+Fit
+
+plot(Fit)
+
+# Realised volatility
+
+data("sp500rv")
+help(sp500rv)
+
+GASSpec = UniGASSpec(Dist = "gamma", ScalingType = "Identity", GASPar = list(shape = T, scale = T))
+
+Fit     = UniGASFit(GASSpec,sp500rv[1:3000])
+
+Fit
+
+plot(Fit)
+
+data("sp500rv")
+help(sp500rv)
+
+GASSpec = UniGASSpec(Dist = "exp", ScalingType = "Identity", GASPar = list(location = T))
+
+Fit     = UniGASFit(GASSpec,sp500rv[1:3000])
+
+Fit
+
+plot(Fit)
+

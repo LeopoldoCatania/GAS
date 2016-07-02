@@ -28,12 +28,18 @@ double qSTD(double dP, double dMu, double dPhi2 , double dNu) {
 
 }
 
+double rSTD(double dMu, double dPhi2 , double dNu){
+  double dY = dMu + pow(dPhi2,0.5)*Rf_rt(dNu);
+
+  return dY;
+}
+
 arma::vec mSTD(double dMu, double dPhi2, double dNu){
   arma::vec vMoments(4);
   vMoments(0) = dMu;
   vMoments(1) = dPhi2*dNu/(dNu-2.0);
   vMoments(2) = 0.0;
-  vMoments(3) = (6.0 + 3.0*(dNu - 4.0))/(dNu - 4.0) * pow(vMoments(1),2.0);
+  vMoments(3) = 6.0/(dNu - 4.0) + 3.0;
   return vMoments;
 }
 

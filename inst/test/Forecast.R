@@ -69,9 +69,11 @@ Fit = MultiGASFit(GASSpec, mY)
 
 #forecast
 
-Forecast  = MultiGASFor(Fit, iH = 50)
+Forecast  = MultiGASFor(Fit, iH = 500)
 
 Forecast
+
+plot(Forecast)
 
 # Perform 1-Step ahead rolling forecast
 
@@ -85,6 +87,8 @@ Forecast  = MultiGASFor(Fit, Roll = TRUE, mOut = OutSampleData)
 
 Forecast
 
+plot(Forecast)
+
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
@@ -93,4 +97,23 @@ cluster = makeCluster(7)
 Roll    = MultiGASRoll(mY,GASSpec,ForecastLength = 500, RefitEvery = 100, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
+
+
+
+## Realised Volatility
+
+data("sp500rv")
+help(sp500rv)
+
+GASSpec = UniGASSpec(Dist = "gamma", ScalingType = "Identity", GASPar = list(shape = T, scale = T))
+
+Fit     = UniGASFit(GASSpec,sp500rv[1:3000])
+
+# Forecast  = UniGASFor(Fit, iH = 500, iB = 10000)
+
+Forecast  = UniGASFor(Fit, Roll = TRUE, vOut = sp500rv[3001:4310])
+
+Forecast_Gamma = getMoments(Forecast)[,1]
+
+plot(Forecast)
 

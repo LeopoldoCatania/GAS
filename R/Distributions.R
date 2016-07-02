@@ -1,12 +1,29 @@
-DistLabels<-function(){return(c("norm","std","ast","ast1","mvnorm","mvt"))}
+DistLabels<-function(){return(c("norm","std","ast","ast1","poi","mvnorm","mvt"))}
 
 DistName<-function(DistLabel){
   if(DistLabel=="norm") return("Gaussian")
   if(DistLabel=="std")  return("Student-t")
   if(DistLabel=="ast")  return("Asymmetric Student-t with two tail decay parameters")
   if(DistLabel=="ast1") return("Asymmetric Student-t with two one decay parameter")
+  if(DistLabel=="poi") return("Poisson")
+  if(DistLabel=="gamma") return("Gamma")
+  if(DistLabel=="exp") return("Exponential")
+  if(DistLabel=="beta") return("Beta")
   if(DistLabel=="mvnorm") return("Multivariate Gaussian")
   if(DistLabel=="mvt") return("Multivariate Student-t")
+}
+
+DistNote<-function(DistLabel){
+  if(DistLabel=="norm") return("")
+  if(DistLabel=="std")  return("The standard Student--t distribution (not reparametrised in terms of the variance parameter)")
+  if(DistLabel=="ast")  return("")
+  if(DistLabel=="ast1") return("Constraint version of ast")
+  if(DistLabel=="poi") return("For the Poisson distribution 'location' means the usual intensity parameter")
+  if(DistLabel=="gamma") return("")
+  if(DistLabel=="beta") return("For the Beta distribution 'shape' means the usual alpha parameter and 'scale' means the usual beta parameter")
+  if(DistLabel=="exp") return("For the Poisson distribution 'location' means the usual rate parameter")
+  if(DistLabel=="mvnorm") return("")
+  if(DistLabel=="mvt") return("")
 }
 
 DistReference<-function(DistLabel){
@@ -14,17 +31,25 @@ DistReference<-function(DistLabel){
   if(DistLabel=="std")  return("")
   if(DistLabel=="ast")  return("Zhu, D., & Galbraith, J. W. (2010). A generalized asymmetric Student-t distribution with application to financial econometrics. Journal of Econometrics, 157(2), 297-305.")
   if(DistLabel=="ast1")  return("Zhu, D., & Galbraith, J. W. (2010). A generalized asymmetric Student-t distribution with application to financial econometrics. Journal of Econometrics, 157(2), 297-305.")
+  if(DistLabel=="poi")  return("")
+  if(DistLabel=="exp")  return("")
+  if(DistLabel=="beta")  return("")
+  if(DistLabel=="gamma")  return("")
   if(DistLabel=="mvnorm") return("")
   if(DistLabel=="mvt") return("")
 }
 
 DistParameters<-function(DistLabel){
-  if(DistLabel=="norm") return("location, scale")
-  if(DistLabel=="std")  return("location, scale, shape")
-  if(DistLabel=="ast")  return("location, scale, skewness, shape, shape2")
-  if(DistLabel=="ast1") return("location, scale, skewness, shape")
+  if(DistLabel=="norm")   return("location, scale")
+  if(DistLabel=="std")    return("location, scale, shape")
+  if(DistLabel=="ast")    return("location, scale, skewness, shape, shape2")
+  if(DistLabel=="ast1")   return("location, scale, skewness, shape")
+  if(DistLabel=="poi")    return("location")
+  if(DistLabel=="gamma")  return("scale", "shape")
+  if(DistLabel=="exp")  return("location")
+  if(DistLabel=="beta")  return("scale", "shape")
   if(DistLabel=="mvnorm") return("locations, scales, correlations")
-  if(DistLabel=="mvt") return("locations, scales, correlations, shape")
+  if(DistLabel=="mvt")    return("locations, scales, correlations, shape")
 }
 
 DistType<-function(DistLabel){
@@ -32,6 +57,10 @@ DistType<-function(DistLabel){
   if(DistLabel=="std")  return("univariate")
   if(DistLabel=="ast")  return("univariate")
   if(DistLabel=="ast1") return("univariate")
+  if(DistLabel=="poi") return("univariate")
+  if(DistLabel=="gamma") return("univariate")
+  if(DistLabel=="exp") return("univariate")
+  if(DistLabel=="beta") return("univariate")
   if(DistLabel=="mvnorm") return("multivariate")
   if(DistLabel=="mvt") return("multivariate")
 }
@@ -41,6 +70,10 @@ DistScalingType<-function(DistLabel){
     if(DistLabel=="std")  return("Identity, Inv, Inv.Sqrt")
     if(DistLabel=="ast")  return("Identity, Inv, Inv.Sqrt")
     if(DistLabel=="ast1") return("Identity, Inv, Inv.Sqrt")
+    if(DistLabel=="poi") return("Identity, Inv, Inv.Sqrt")
+    if(DistLabel=="gamma") return("Identity, Inv, Inv.Sqrt")
+    if(DistLabel=="exp") return("Identity, Inv, Inv.Sqrt")
+  if(DistLabel=="beta") return("Identity, Inv, Inv.Sqrt")
     if(DistLabel=="mvnorm") return("Identity")
     if(DistLabel=="mvt") return("Identity")
   }
@@ -56,6 +89,7 @@ DistInfo<-function(DistLabel = NULL, N = 2){
     if(DistType(DistLabel[i])=="univariate") cat(paste("\nNumber of Parameters:\t",NumberParameters(DistLabel[i]),sep=""))
     if(DistType(DistLabel[i])=="multivariate") cat(paste("\nNumber of Parameters:\t",NumberParameters(DistLabel[i],N)," with N = ",N,sep=""))
     cat(paste("\nScaling Type:\t",DistScalingType(DistLabel[i])))
+    cat(paste("\nNote:\t",DistNote(DistLabel[i])))
     cat(paste("\nReferences:\t",DistReference(DistLabel[i]),sep = ""))
     cat("\n-------------------------------------------------------")
   }

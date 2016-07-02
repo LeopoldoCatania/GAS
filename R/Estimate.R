@@ -52,7 +52,8 @@ UniGASFit<-function(GASSpec,vY){
 
   IC = ICfun(-tail(optimiser$values,1),length(optimiser$pars),iT)
 
-  vU = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
+  vU      = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
+  PitTest = PIT_test(vU, iG=20, dAlpha=0.05, dBeta = 0.05, plot=F)
 
   mMoments = EvalMoments_univ(GASDyn$mTheta,Dist)
 
@@ -64,6 +65,7 @@ UniGASFit<-function(GASSpec,vY){
                               StaticFit=StaticFit,
                               Inference = Inference,IC=IC,vU=vU,
                               Moments   = mMoments),
+             Testing  = list(PitTest = PitTest),
              Data = list(vY = vY))
 
   return(Out)

@@ -99,7 +99,38 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(0) = dMu;
     vTheta(1) = dSigma2;
   }
+  if(Dist == "poi"){
+    double dMu_tilde = vTheta_tilde(0);
+    double dMu       = exp(dMu_tilde);
 
+    vTheta(0) = dMu;
+  }
+  if(Dist == "gamma"){
+    double dAlpha_tilde = vTheta_tilde(0);
+    double dBeta_tilde  = vTheta_tilde(1);
+
+    double dAlpha       = exp(dAlpha_tilde);
+    double dBeta        = exp(dBeta_tilde);
+
+    vTheta(0) = dAlpha;
+    vTheta(1) = dBeta;
+  }
+  if(Dist == "exp"){
+    double dMu_tilde = vTheta_tilde(0);
+    double dMu       = exp(dMu_tilde);
+
+    vTheta(0) = dMu;
+  }
+  if(Dist == "beta"){
+    double dAlpha_tilde = vTheta_tilde(0);
+    double dBeta_tilde  = vTheta_tilde(1);
+
+    double dAlpha       = exp(dAlpha_tilde);
+    double dBeta        = exp(dBeta_tilde);
+
+    vTheta(0) = dAlpha;
+    vTheta(1) = dBeta;
+  }
   return InfRemover_vec(vTheta);
 }
 //[[Rcpp::export]]
@@ -170,10 +201,42 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma2_tilde;
   }
+  if(Dist == "poi"){
+    double dMu       = vTheta(0);
+    double dMu_tilde = log(dMu);
 
+    vTheta_tilde(0) = dMu_tilde;
+  }
+  if(Dist == "gamma"){
+    double dAlpha = vTheta(0);
+    double dBeta  = vTheta(1);
+
+    double dAlpha_tilde = log(dAlpha);
+    double dBeta_tilde  = log(dBeta);
+
+    vTheta_tilde(0) = dAlpha_tilde;
+    vTheta_tilde(1) = dBeta_tilde;
+  }
+  if(Dist == "exp"){
+    double dMu       = vTheta(0);
+    double dMu_tilde = log(dMu);
+
+    vTheta_tilde(0) = dMu_tilde;
+  }
+  if(Dist == "beta"){
+    double dAlpha = vTheta(0);
+    double dBeta  = vTheta(1);
+
+    double dAlpha_tilde = log(dAlpha);
+    double dBeta_tilde  = log(dBeta);
+
+    vTheta_tilde(0) = dAlpha_tilde;
+    vTheta_tilde(1) = dBeta_tilde;
+  }
   return vTheta_tilde;
 }
 
+//[[Rcpp::export]]
 arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   arma::mat mJ=zeros(iK,iK);
@@ -217,6 +280,36 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
 
     mJ(0,0) = 1;
     mJ(1,1) = exp(dSigma2_tilde);
+  }
+  if(Dist=="poi"){
+
+    double dMu_tilde = vTheta_tilde(0);
+
+    mJ(0,0) = exp(dMu_tilde);
+  }
+  if(Dist=="gamma"){
+
+    double dAlpha_tilde = vTheta_tilde(0);
+    double dBeta_tilde  = vTheta_tilde(1);
+
+    mJ(0,0) = exp(dAlpha_tilde);
+    mJ(1,1) = exp(dBeta_tilde);
+
+  }
+  if(Dist=="exp"){
+
+    double dMu_tilde = vTheta_tilde(0);
+
+    mJ(0,0) = exp(dMu_tilde);
+  }
+  if(Dist=="beta"){
+
+    double dAlpha_tilde = vTheta_tilde(0);
+    double dBeta_tilde  = vTheta_tilde(1);
+
+    mJ(0,0) = exp(dAlpha_tilde);
+    mJ(1,1) = exp(dBeta_tilde);
+
   }
   arma::vec vJ_safe =  InfRemover_vec(mJ.diag());
   mJ.diag() = vJ_safe;

@@ -67,7 +67,3 @@ grad(function(vTheta,dY){
 
 Score_univ(dY, vTheta, "ast1")
 
-
-
-
-

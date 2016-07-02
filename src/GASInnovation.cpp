@@ -7,6 +7,7 @@
 using namespace Rcpp;
 using namespace arma;
 
+//[[Rcpp::export]]
 arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde, int iK, std::string Dist, std::string ScalingType){
 
   arma::vec vS_tilde(iK);

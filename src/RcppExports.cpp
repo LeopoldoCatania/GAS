@@ -242,6 +242,36 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// dGAMMA
+double dGAMMA(double dY, double dAlpha, double dBeta, bool bLog);
+RcppExport SEXP GAS_dGAMMA(SEXP dYSEXP, SEXP dAlphaSEXP, SEXP dBetaSEXP, SEXP bLogSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< double >::type dAlpha(dAlphaSEXP);
+    Rcpp::traits::input_parameter< double >::type dBeta(dBetaSEXP);
+    Rcpp::traits::input_parameter< bool >::type bLog(bLogSEXP);
+    __result = Rcpp::wrap(dGAMMA(dY, dAlpha, dBeta, bLog));
+    return __result;
+END_RCPP
+}
+// GASInnovation_univ
+arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde, int iK, std::string Dist, std::string ScalingType);
+RcppExport SEXP GAS_GASInnovation_univ(SEXP dYSEXP, SEXP vThetaSEXP, SEXP vTheta_tildeSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta_tilde(vTheta_tildeSEXP);
+    Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< std::string >::type ScalingType(ScalingTypeSEXP);
+    __result = Rcpp::wrap(GASInnovation_univ(dY, vTheta, vTheta_tilde, iK, Dist, ScalingType));
+    return __result;
+END_RCPP
+}
 // GASInnovation_multi
 arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_tilde, int iN, int iK, std::string Dist, std::string ScalingType);
 RcppExport SEXP GAS_GASInnovation_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP vTheta_tildeSEXP, SEXP iNSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
@@ -320,6 +350,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
     Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
     __result = Rcpp::wrap(UnmapParameters_univ(vTheta, Dist, iK));
+    return __result;
+END_RCPP
+}
+// MapParametersJacobian_univ
+arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, int iK);
+RcppExport SEXP GAS_MapParametersJacobian_univ(SEXP vTheta_tildeSEXP, SEXP DistSEXP, SEXP iKSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta_tilde(vTheta_tildeSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iK(iKSEXP);
+    __result = Rcpp::wrap(MapParametersJacobian_univ(vTheta_tilde, Dist, iK));
     return __result;
 END_RCPP
 }

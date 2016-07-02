@@ -40,7 +40,10 @@ FullNamesUni<-function(Dist){
   if(Dist == "std")   vNames = vNames[c(1,2,4)]
   if(Dist == "ast")   vNames = vNames
   if(Dist == "ast1")  vNames = vNames[c(1,2,3,4)]
-
+  if(Dist == "poi")   vNames = vNames[1]
+  if(Dist == "gamma") vNames = vNames[c(2, 4)]
+  if(Dist == "exp")   vNames = vNames[1]
+  if(Dist == "beta") vNames = vNames[c(2, 4)]
   return(vNames)
 }
 

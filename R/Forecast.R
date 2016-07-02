@@ -1,4 +1,4 @@
-UniGASFor<-function(uGASFit, iH, Roll = F, vOut = NULL,iB = 10000,
+UniGASFor<-function(uGASFit, iH, Roll = F, vOut = NULL,iB = 1000,
                      vBands = c(0.1,0.15,0.85,0.9), bReturnsDraws = F){
 
   iK          = uGASFit@ModelInfo$iK
@@ -206,9 +206,11 @@ UniGASRoll<-function(vY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEvery 
 
     mForc = do.call(rbind,lapply(lForecasts, getForecast))
     vU    = do.call(rbind,lapply(lForecasts, pit))
-    vLS   = do.call(rbind,lapply(lForecasts, LogScore))
+    vLS   = do.call(rbind,lapply(lForecasts, LogScore)) ; colnames(vLS) = "LogScore"
     Moments = do.call(rbind,lapply(lForecasts, getMoments))
   }
+
+  PitTest = PIT_test(vU, iG=20, dAlpha=0.05, dBeta = 0.05, plot=F)
 
   elapsedTime =  Sys.time() - StartTime
 
@@ -217,7 +219,8 @@ UniGASRoll<-function(vY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEvery 
              Info = list(GASSpec = GASSpec, ForecastLength = ForecastLength,
                          RefitEvery = RefitEvery, RefitWindow = RefitWindow[1],
                          iT = iT, iK = iK, elapsedTime = elapsedTime),
-             Data = list(vY = vY))
+             Testing = list(PitTest = PitTest),
+             Data    = list(vY = vY))
   return(Out)
 
 }
@@ -233,7 +236,7 @@ MultiGASRoll<-function(mY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEver
   Dist        = getDist(GASSpec)
   ScalingType = getScalingType(GASSpec)
   GASPar      = getGASPar(GASSpec)
-  iK          = NumberParameters(Dist)
+  iK          = NumberParameters(Dist, iN)
 
   if(!is.null(cluster)) clusterEvalQ(cluster,{library(GAS)})
   if(!is.null(Nstart)) {
@@ -293,7 +296,7 @@ MultiGASRoll<-function(mY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEver
     mForc = do.call(rbind,lapply(lForecasts, getForecast))
     vU    = NULL
     vLS   = do.call(rbind,lapply(lForecasts, LogScore))
-    Moments = do.call(rbind,lapply(lForecasts, getMoments))
+    Moments = EvalMoments_multi(t(mForc), Dist, iN)
   }
 
   elapsedTime =  Sys.time() - StartTime

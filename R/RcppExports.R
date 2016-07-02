@@ -65,6 +65,14 @@ mGASMultiForcast <- function(vTheta_tp1, vKappa, mA, mB, iH, iB, iK, iN, Dist, S
     .Call('GAS_mGASMultiForcast', PACKAGE = 'GAS', vTheta_tp1, vKappa, mA, mB, iH, iB, iK, iN, Dist, ScalingType, bReturnsDraws)
 }
 
+dGAMMA <- function(dY, dAlpha, dBeta, bLog = FALSE) {
+    .Call('GAS_dGAMMA', PACKAGE = 'GAS', dY, dAlpha, dBeta, bLog)
+}
+
+GASInnovation_univ <- function(dY, vTheta, vTheta_tilde, iK, Dist, ScalingType) {
+    .Call('GAS_GASInnovation_univ', PACKAGE = 'GAS', dY, vTheta, vTheta_tilde, iK, Dist, ScalingType)
+}
+
 GASInnovation_multi <- function(vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType) {
     .Call('GAS_GASInnovation_multi', PACKAGE = 'GAS', vY, vTheta, vTheta_tilde, iN, iK, Dist, ScalingType)
 }
@@ -87,6 +95,10 @@ MapParameters_univ <- function(vTheta_tilde, Dist, iK) {
 
 UnmapParameters_univ <- function(vTheta, Dist, iK) {
     .Call('GAS_UnmapParameters_univ', PACKAGE = 'GAS', vTheta, Dist, iK)
+}
+
+MapParametersJacobian_univ <- function(vTheta_tilde, Dist, iK) {
+    .Call('GAS_MapParametersJacobian_univ', PACKAGE = 'GAS', vTheta_tilde, Dist, iK)
 }
 
 MapR_C <- function(vPhi, iN) {
