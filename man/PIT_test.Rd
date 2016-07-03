@@ -1,7 +1,7 @@
 \name{PIT_test}
 \alias{PIT_test}
 \title{
-	Backtest Value at Risk (VaR)
+	Goodness of Fit for Conditional Densitites
 }
 \description{
 	This function implements density goodness of fit procedure of Diebold et al. (1998).
