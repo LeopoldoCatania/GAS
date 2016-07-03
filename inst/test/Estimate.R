@@ -42,6 +42,19 @@ Fit
 plot(Fit)
 
 
+###
+data("StockIndex")
+help(StockIndex)
+
+vY = StockIndex["DAX",]
+
+GASSpec = UniGASSpec(Dist = "ald", ScalingType = "Identity", GASPar = list(location = F, scale = T, skewness = T))
+Fit     = UniGASFit(GASSpec,vY)
+
+Fit
+plot(Fit)
+
+
 ## Integer valued model
 
 data("tqdata")
@@ -96,5 +109,5 @@ Fit     = UniGASFit(GASSpec,unp)
 
 Fit
 
-
+plot(Fit)
 

@@ -131,6 +131,20 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(0) = dAlpha;
     vTheta(1) = dBeta;
   }
+  if(Dist=="ald"){
+
+    double dTheta_tilde  = vTheta_tilde(0);
+    double dSigma_tilde  = vTheta_tilde(1);
+    double dKappa_tilde  = vTheta_tilde(2);
+
+    double dTheta = dTheta_tilde;
+    double dSigma = exp(dSigma_tilde);
+    double dKappa = exp(dKappa_tilde);
+
+    vTheta(0) = dTheta;
+    vTheta(1) = dSigma;
+    vTheta(2) = dKappa;
+  }
   return InfRemover_vec(vTheta);
 }
 //[[Rcpp::export]]
@@ -233,6 +247,22 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     vTheta_tilde(0) = dAlpha_tilde;
     vTheta_tilde(1) = dBeta_tilde;
   }
+
+  if(Dist=="ald"){
+
+    double dTheta  = vTheta(0);
+    double dSigma  = vTheta(1);
+    double dKappa  = vTheta(2);
+
+    double dTheta_tilde = dTheta;
+    double dSigma_tilde = log(dSigma);
+    double dKappa_tilde = log(dKappa);
+
+    vTheta_tilde(0) = dTheta_tilde;
+    vTheta_tilde(1) = dSigma_tilde;
+    vTheta_tilde(2) = dKappa_tilde;
+  }
+
   return vTheta_tilde;
 }
 
@@ -311,6 +341,16 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(1,1) = exp(dBeta_tilde);
 
   }
+  if(Dist=="ald"){
+
+    double dSigma_tilde = vTheta_tilde(1);
+    double dKappa_tilde  = vTheta_tilde(2);
+
+    mJ(0,0) = 1;
+    mJ(1,1) = exp(dSigma_tilde);
+    mJ(2,2) = exp(dKappa_tilde);
+  }
+
   arma::vec vJ_safe =  InfRemover_vec(mJ.diag());
   mJ.diag() = vJ_safe;
   return mJ;

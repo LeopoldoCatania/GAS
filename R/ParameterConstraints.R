@@ -23,6 +23,11 @@ GetFixedPar_Uni<-function(Dist,GASPar){
     if(!GASPar$skewness) FixedPar = c(FixedPar, a3=0,b3=0)
     if(!GASPar$shape)    FixedPar = c(FixedPar, a4=0,b4=0)
   }
+  if(Dist=="ald"){
+    if(!GASPar$location) FixedPar = c(FixedPar, a1=0,b1=0)
+    if(!GASPar$scale)    FixedPar = c(FixedPar, a2=0,b2=0)
+    if(!GASPar$skewness) FixedPar = c(FixedPar, a3=0,b3=0)
+  }
   if(Dist == "poi"){
     if(!GASPar$location) FixedPar = c(FixedPar, a1=0,b1=0)
   }

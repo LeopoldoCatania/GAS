@@ -58,7 +58,7 @@ arma::vec ast_Score(double dY, arma::vec vTheta){
     dsigma = -1.0/sigma + (df1+1.0)/A1 * (pow((dY-mu)/(2.0*alpha*K1),2.0))/(df1*pow(sigma,3.0));
     dalpha = (df1+1.0)/A1 * pow((dY-mu)/(2.0*sigma*K1),2.0)/(df1*pow(alpha,3.0));
     ddf1= -(  0.5*log(A1) + (df1+1.0)/(2.0*A1)*((-1.0/pow(df1,2.0) * pow((dY-mu)/(2.0*alpha*sigma*K1),2.0) + 1.0/df1 * pow((dY-mu)/(2.0*alpha*sigma),2.0)/pow(K1,3.0)
-                                                 *(-2.0*dK1))  ));
+                                                   *(-2.0*dK1))  ));
 
   }else{
 
@@ -66,7 +66,7 @@ arma::vec ast_Score(double dY, arma::vec vTheta){
     dsigma = -1.0/sigma + (df2+1.0)/A2 * (pow((dY-mu)/(2.0*(1.0-alpha)*K2),2.0))/(df2*pow(sigma,3.0));
     dalpha = -(df2+1.0)/A2 * pow((dY-mu)/(2.0*sigma*K2),2.0)/(df2*pow(1.0-alpha,3.0));
     ddf2= -(  0.5*log(A2) + (df2+1.0)/(2.0*A2)*((-1.0/pow(df2,2.0) * pow((dY-mu)/(2.0*(1.0-alpha)*sigma*K2),2.0) +
-                                                   1.0/df2 * pow((dY-mu)/(2.0*(1.0-alpha)*sigma),2.0)/pow(K2,3.0)  *(-2.0*dK2))  ));
+      1.0/df2 * pow((dY-mu)/(2.0*(1.0-alpha)*sigma),2.0)/pow(K2,3.0)  *(-2.0*dK2))  ));
   }
 
 
@@ -107,7 +107,7 @@ arma::vec ast1_Score(double dY, arma::vec vTheta){
     dsigma = -1.0/sigma + (df1+1.0)/A1 * (pow((dY-mu)/(2.0*alpha*K1),2.0))/(df1*pow(sigma,3.0));
     dalpha = (df1+1.0)/A1 * pow((dY-mu)/(2.0*sigma*K1),2.0)/(df1*pow(alpha,3.0));
     ddf1= -(  0.5*log(A1) + (df1+1.0)/(2.0*A1)*((-1.0/pow(df1,2.0) * pow((dY-mu)/(2.0*alpha*sigma*K1),2.0) +
-                                                   1.0/df1 * pow((dY-mu)/(2.0*alpha*sigma),2.0)/pow(K1,3.0)  *(-2.0*dK1))  ));
+      1.0/df1 * pow((dY-mu)/(2.0*alpha*sigma),2.0)/pow(K1,3.0)  *(-2.0*dK1))  ));
 
   }else{
 
@@ -115,7 +115,7 @@ arma::vec ast1_Score(double dY, arma::vec vTheta){
     dsigma = -1.0/sigma + (df1+1.0)/A2 * (pow((dY-mu)/(2.0*(1.0-alpha)*K1),2.0))/(df1*pow(sigma,3.0));
     dalpha = -(df1+1.0)/A2 * pow((dY-mu)/(2.0*sigma*K1),2.0)/(df1*pow(1.0-alpha,3.0));
     ddf1= -(  0.5*log(A2) + (df1+1.0)/(2.0*A2)*((-1.0/pow(df1,2.0) * pow((dY-mu)/(2.0*(1.0-alpha)*sigma*K1),2.0) +
-                                                   1.0/df1 * pow((dY-mu)/(2.0*(1.0-alpha)*sigma),2.0)/pow(K1,3.0)  *(-2.0*dK1))  ));
+      1.0/df1 * pow((dY-mu)/(2.0*(1.0-alpha)*sigma),2.0)/pow(K1,3.0)  *(-2.0*dK1))  ));
   }
 
 
@@ -254,7 +254,7 @@ double rAST(double dMu, double dSigma,double dAlpha, double dNu1, double dNu2){
   double dSign = sign_C(dU-dAlpha);
 
   double dY = dMu + dSigma * (dAlpha_star * abs3(dT1)* (dSign-1) +
-                       (1-dAlpha_star)*abs3(dT2) * (dSign+1) );
+                              (1-dAlpha_star)*abs3(dT2) * (dSign+1) );
 
   return dY;
 }

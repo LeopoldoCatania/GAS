@@ -30,13 +30,13 @@ UniGASFit<-function(GASSpec,vY){
   iK          = NumberParameters(Dist)
 
   # starting par
-  lStarting = UniGAS_Starting(vY,iT,iK,Dist,ScalingType)
+  lStarting = UniGAS_Starting(vY,iT,iK,Dist,ScalingType,GASPar)
   vPw       = lStarting$vPw
   StaticFit = lStarting$StaticFit
 
   # fixed par
   FixedPar = GetFixedPar_Uni(Dist,GASPar)
-  vPw = RemoveFixedPar(vPw, FixedPar)
+  vPw      = RemoveFixedPar(vPw, FixedPar)
 
   #optimise
   optimiser = solnp(vPw, UniGASOptimiser, vY=vY, Dist=Dist, ScalingType=ScalingType, iT=iT, iK=iK)
