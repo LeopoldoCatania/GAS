@@ -77,9 +77,9 @@ iT = 1e4
 vKappa = c(log(0.1) , log(0.4))
 
 mA = matrix(c(0.1,0.0,
-              0.0,0.4),2)*0.1
-mB = matrix(c(0.9,0.0,
-              0.0,0.95),2)
+              0.0,0.4),2)*0.01
+mB = matrix(c(0.98,0.0,
+              0.0,0.99),2)
 
 Sim = UniGASSim(iT, vKappa, mA, mB, Dist="beta", ScalingType = "Identity")
 

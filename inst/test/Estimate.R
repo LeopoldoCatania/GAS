@@ -59,6 +59,8 @@ plot(Fit)
 
 # Realised volatility
 
+#with gamma distribution
+
 data("sp500rv")
 help(sp500rv)
 
@@ -70,6 +72,7 @@ Fit
 
 plot(Fit)
 
+# with exponential distribution
 data("sp500rv")
 help(sp500rv)
 
@@ -80,4 +83,18 @@ Fit     = UniGASFit(GASSpec,sp500rv[1:3000])
 Fit
 
 plot(Fit)
+
+
+# unemploiment with BETA - GAS
+
+data(usunp)
+help(usunp)
+
+GASSpec = UniGASSpec(Dist = "beta", ScalingType = "Identity", GASPar = list(scale = T, shape = T))
+
+Fit     = UniGASFit(GASSpec,unp)
+
+Fit
+
+
 

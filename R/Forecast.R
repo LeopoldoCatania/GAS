@@ -58,10 +58,10 @@ UniGASFor<-function(uGASFit, iH, Roll = F, vOut = NULL,iB = 1000,
              Bands    = cBands,
              Draws    = mY,
              Info     = list(iH = iH, Roll = Roll, iB = iB, vBands = vBands,
-                              bReturnsDraws = bReturnsDraws, GASPar=GASPar,
-                              Dist = Dist, ScalingType = ScalingType, iK = iK),
+                             bReturnsDraws = bReturnsDraws, GASPar=GASPar,
+                             Dist = Dist, ScalingType = ScalingType, iK = iK),
              Data     = list(vY=vY, FilteredParameters = FilteredParameters, vOut=vOut)
-             )
+  )
 
   return(Out)
 
@@ -210,7 +210,7 @@ UniGASRoll<-function(vY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEvery 
     Moments = do.call(rbind,lapply(lForecasts, getMoments))
   }
 
-  PitTest = PIT_test(vU, iG=20, dAlpha=0.05, dBeta = 0.05, plot=F)
+  PitTest = PIT_test(vU, iG=20, dAlpha=0.05, plot=F)
 
   elapsedTime =  Sys.time() - StartTime
 
