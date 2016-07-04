@@ -24,7 +24,7 @@ The data contains 3080 rows and eight columns - in order:
 7.	30-second change of the ask quote in number of ticks
 8.	30-second change of the bid quote in number of ticks.
 }
-\usage{data(cpichg)}
+\usage{data(tqdata)}
 \format{A \link{data.frame} object containing 3080 observations.}
 \references{
 Katarzyna Bien, Ingmar Nolte, and Winfried Pohlmeier, "An Inflated Multivariate Integer Count Hurdle Model: An Application to Bid and Ask Quote Dynamics", Journal of Applied Econometrics, Vol. 26, No. 4, 2011, pp. 669-707

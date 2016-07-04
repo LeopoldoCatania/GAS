@@ -1,4 +1,4 @@
-DistLabels<-function(){return(c("norm","std","ast","ast1","poi","mvnorm","mvt"))}
+DistLabels<-function(){return(c("norm","std","ast","ast1","ald","poi","gamma","exp","beta","mvnorm","mvt"))}
 
 DistName<-function(DistLabel){
   if(DistLabel=="norm") return("Gaussian")

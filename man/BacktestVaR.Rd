@@ -4,7 +4,7 @@
 	Backtest Value at Risk (VaR)
 }
 \description{
-	This function implements several backtesting procedure for the Value at Risk. These are: (i) The statistical tests of Kupiec (1995), Christoffesen (1998) and Engle and Manganelli (2004), (ii) The tick loss function detailed in Gonz\'{a}lez-Rivera et al. (2004), the mean and max absolute loss used by McAleer and Da Veiga (2008) and the actual over expected exceedence ratio.
+	This function implements several backtesting procedure for the Value at Risk. These are: (i) The statistical tests of Kupiec (1995), Christoffesen (1998) and Engle and Manganelli (2004), (ii) The tick loss function detailed in Gonz\'{a}lez-Rivera et al. (2004), the mean and max absolute loss used by McAleer and Da Veiga (2008) and the actual over expected exceedance  ratio.
 }
 \usage{
 BacktestVaR(vY, vVaR, dTau, alphaTest=0.95, cLags=4)
@@ -36,7 +36,7 @@ BacktestVaR(vY, vVaR, dTau, alphaTest=0.95, cLags=4)
       \itemize{
     \item \code{AD}: mean and maximum absolute deviation between the observations and the quantiles as in McAleer and Da Veiga (2008).
     \item \code{Loss}: Average quantile loss and quantile loss series as in Gonz\'{a}lez-Rivera et al. (2004).
-    \item \code{AE}: Actual over Expected exceedence ratio.
+    \item \code{AE}: Actual over Expected exceedance  ratio.
     }
 }
 \value{A \code{list} with elements: LRuc, LRcc, DQ, AD, AE.}

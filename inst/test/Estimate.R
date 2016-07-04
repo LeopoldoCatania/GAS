@@ -43,6 +43,7 @@ plot(Fit)
 
 
 ###
+library(GAS)
 data("StockIndex")
 help(StockIndex)
 

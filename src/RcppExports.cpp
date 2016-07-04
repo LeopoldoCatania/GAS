@@ -581,6 +581,21 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// dSTD
+double dSTD(double dY, double dMu, double dPhi2, double dNu, bool bLog);
+RcppExport SEXP GAS_dSTD(SEXP dYSEXP, SEXP dMuSEXP, SEXP dPhi2SEXP, SEXP dNuSEXP, SEXP bLogSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dPhi2(dPhi2SEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    Rcpp::traits::input_parameter< bool >::type bLog(bLogSEXP);
+    __result = Rcpp::wrap(dSTD(dY, dMu, dPhi2, dNu, bLog));
+    return __result;
+END_RCPP
+}
 // NumberParameters
 int NumberParameters(std::string Dist, int iN);
 RcppExport SEXP GAS_NumberParameters(SEXP DistSEXP, SEXP iNSEXP) {

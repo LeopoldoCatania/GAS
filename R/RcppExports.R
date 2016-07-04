@@ -165,6 +165,10 @@ SimulateGAS_multi <- function(iT, iN, vKappa, mA, mB, Dist, ScalingType) {
     .Call('GAS_SimulateGAS_multi', PACKAGE = 'GAS', iT, iN, vKappa, mA, mB, Dist, ScalingType)
 }
 
+dSTD <- function(dY, dMu, dPhi2, dNu, bLog = FALSE) {
+    .Call('GAS_dSTD', PACKAGE = 'GAS', dY, dMu, dPhi2, dNu, bLog)
+}
+
 NumberParameters <- function(Dist, iN = 1L) {
     .Call('GAS_NumberParameters', PACKAGE = 'GAS', Dist, iN)
 }
