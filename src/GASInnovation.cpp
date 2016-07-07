@@ -39,7 +39,11 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
 
   }
   //
-  return NaN2Zero(vS_tilde);
+  vS_tilde = Thresholding_vec(vS_tilde, 1e5);
+  vS_tilde = NaN2Zero(vS_tilde);
+  vS_tilde = InfRemover_vec(vS_tilde, 1e5);
+
+  return vS_tilde;
 }
 
 //[[Rcpp::export]]
@@ -48,6 +52,10 @@ arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_t
   arma::vec vScore   = Score_multi(vY, vTheta, iN, Dist);
   arma::mat mJ       = MapParametersJacobian_multi(vTheta_tilde, Dist, iN, iK);
   arma::vec vS_tilde = mJ.t() * vScore ;
+
+  vS_tilde = Thresholding_vec(vS_tilde, 1e5);
+  vS_tilde = NaN2Zero(vS_tilde);
+  vS_tilde = InfRemover_vec(vS_tilde, 1e5);
 
   return vS_tilde;
 }

@@ -7,14 +7,14 @@
 	Forecast with multivariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are perfomed by simulation as detailed in Blasques et al. (2016).
 }
 \usage{
-MultiGASFor(mGASFit, iH, Roll = F, vOut = NULL,iB = 1000,
+MultiGASFor(mGASFit, iH, Roll = F, mOut = NULL,iB = 1000,
                      vBands = c(0.1,0.15,0.85,0.9), bReturnsDraws = F)
 }
 \arguments{
 \item{mGASFit}{ An object of the class \link{mGASFit} created using the function \link{MultiGASFit}}
 %
 \item{iH}{ \code{numeric} Forecast horizon. Ignored if \code{Roll = TRUE}}
-\item{Roll}{ \code{boolean} Forecast should be made using a rolling procedure ? Note that if \code{Roll = TRUE}, then \code{vOut} has to be specified.}
+\item{Roll}{ \code{boolean} Forecast should be made using a rolling procedure ? Note that if \code{Roll = TRUE}, then \code{mOut} has to be specified.}
 \item{mOut}{ \code{matrix} of out of sample observation of dimension iN x iH for rolling forecast. iN refers to the cross sectional dimension.}
 \item{iB}{ \code{numeric} Number of draws from the iH-step ahead distribution if \code{Roll = TRUE}.}
 \item{vBands}{ \code{numeric} Vector of probabilities representing the confidence band levels for multistep ahead parameters forecasts. Only if \code{Roll = TRUE}.}

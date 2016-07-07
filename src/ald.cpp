@@ -123,7 +123,6 @@ arma::mat ald_IM(arma::vec vTheta){
 
   arma::mat mIM=zeros(3,3);
 
-  double dTheta = vTheta(0);
   double dSigma = vTheta(1);
   double dKappa = vTheta(2);
 

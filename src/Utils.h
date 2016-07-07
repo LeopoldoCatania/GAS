@@ -15,4 +15,5 @@ arma::mat cumprodMat_removeLastRow(arma::mat Mat);
 arma::mat Up_rbind_C(arma::mat Mat, arma::vec Vec);
 arma::vec ZeroRemover_v(arma::vec vX);
 arma::vec NaN2Zero(arma::vec vX, double To=0);
+arma::vec Thresholding_vec(arma::vec vX, double dTol=1e50);
 #endif

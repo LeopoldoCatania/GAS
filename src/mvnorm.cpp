@@ -1,5 +1,6 @@
 #include <RcppArmadillo.h>
 #include "Utils.h"
+#include "SafeFun.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -8,7 +9,7 @@ using namespace arma;
 arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma) {
   int incols = mSigma.n_cols;
   arma::mat mY = arma::randn(iN, incols);
-  return arma::repmat(vMu, 1, iN).t() + mY * chol(mSigma);
+  return arma::repmat(vMu, 1, iN).t() + mY * chol_safe(mSigma);
 }
 arma::mat rmvnorm_ThetaParam(arma::vec vTheta,int iN, int iJ) { //iJ = # of draws
 
@@ -36,7 +37,7 @@ double dmvnorm(arma::vec vY,
                bool bLog = false) {
   int iN = vY.size();
   double dOut=0;
-  arma::mat mrooti = arma::trans(arma::inv(trimatu(chol(mSigma))));
+  arma::mat mrooti = arma::trans(arma::inv(trimatu(chol_safe(mSigma))));
   double drootisum = arma::sum(log(mrooti.diag()));
   double dconstants = -(static_cast<double>(iN)/2.0) * log2pi;
 
@@ -68,6 +69,7 @@ double dmvnorm_ThetaParam(arma::vec vY,
   return dPDF;
 
 }
+//[[Rcpp::export]]
 arma::vec RhoScore(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, int iN){
 
   arma::mat mRho_S = zeros(iN,iN);
@@ -96,6 +98,7 @@ arma::vec RhoScore(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, int 
   return vR_s;
 
 }
+//[[Rcpp::export]]
 arma::vec DScore(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, int iN){
 
   arma::mat mU = zeros(iN,iN);
@@ -117,6 +120,7 @@ arma::vec DScore(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, int iN
   return vD_s;
 
 }
+//[[Rcpp::export]]
 arma::vec MuScore(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, int iN){
 
   arma::vec vU(iN);
@@ -163,7 +167,6 @@ arma::vec mvnorm_Score(arma::vec vY, arma::vec vTheta, int iN){
   return vScore;
 
 }
-
 arma::vec mMVNORM_mean(arma::vec vTheta, int iN){
   arma::vec vMu    = vTheta.subvec(0,iN-1);
   return vMu;

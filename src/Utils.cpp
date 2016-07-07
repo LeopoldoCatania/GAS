@@ -52,17 +52,24 @@ double InfRemover(double dX, double dTol=1e50){
   return dX;
 }
 arma::vec InfRemover_vec(arma::vec vX, double dTol=1e50){
-  double INF= arma::datum::inf ;
+  double INF = arma::datum::inf ;
   int i,iZ = vX.size();
   for(i=0;i<iZ;i++){
-    if(vX(i)==INF)    vX(i)=dTol;
-    if(vX(i)==-1*INF) vX(i)=-dTol;
+    if(vX(i) == INF)    vX(i) =  dTol;
+    if(vX(i) == -1*INF) vX(i) = -dTol;
+  }
+  return vX;
+}
+arma::vec Thresholding_vec(arma::vec vX, double dTol=1e50){
+  int i,iZ = vX.size();
+  for(i=0;i<iZ;i++){
+    if(vX(i) > dTol)    vX(i) =  dTol;
   }
   return vX;
 }
 double ZeroRemover(double dX){
-  if(dX<1e-50){
-    dX = 1e-50;
+  if(dX<1e-10){
+    dX = 1e-10;
   }
   return dX;
 }
@@ -75,6 +82,7 @@ arma::vec ZeroRemover_v(arma::vec vX){
   return vX;
 }
 
+//[[Rcpp::export]]
 arma::mat build_mR(arma::vec vR, int iN){
 
   arma::mat mR = eye(iN,iN);

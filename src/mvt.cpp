@@ -1,10 +1,12 @@
 #include <RcppArmadillo.h>
 #include "mvnorm.h"
 #include "Utils.h"
+#include "SafeFun.h"
 
 using namespace Rcpp;
 using namespace arma;
 
+//[[Rcpp::export]]
 double dmvt(arma::vec vY,
             arma::vec vMu,
             arma::mat mSigma,
@@ -17,7 +19,7 @@ double dmvt(arma::vec vY,
   }
   double dN = vMu.size()*1.0;
 
-  arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
 
   double dFoo = as_scalar(vZ.t()*vZ);
 
@@ -30,6 +32,7 @@ double dmvt(arma::vec vY,
   return dLLK;
 
 }
+//[[Rcpp::export]]
 double dmvt_ThetaParam(arma::vec vY,
                        arma::vec vTheta,
                        int iN,
@@ -97,7 +100,7 @@ arma::mat rmvt_ThetaParam(arma::vec vTheta, int iN, int iJ) {//iJ = # of draws
 
 }
 
-
+//[[Rcpp::export]]
 arma::vec RhoScore_mvt(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, double dNu, int iN){
 
   arma::mat mRho_S = zeros(iN,iN);
@@ -111,7 +114,7 @@ arma::vec RhoScore_mvt(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, 
 
   arma::mat mSigma = mD*mR*mD;
 
-  arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
 
   double dFoo = as_scalar(vZ.t()*vZ);
 
@@ -134,6 +137,7 @@ arma::vec RhoScore_mvt(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, 
   return vR_s;
 
 }
+//[[Rcpp::export]]
 arma::vec MuScore_mvt(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, double dNu,int iN){
 
   arma::vec vU(iN);
@@ -143,7 +147,7 @@ arma::vec MuScore_mvt(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, d
   arma::mat mSigma_i = mSigma.i();
   arma::vec vX       = vY - vMu;
 
-  arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
 
   double dFoo = as_scalar(vZ.t()*vZ);
 
@@ -159,6 +163,7 @@ arma::vec MuScore_mvt(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, d
   return vMu_s*dConst*2.0;
 
 }
+//[[Rcpp::export]]
 arma::vec DScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, double dNu, int iN){
 
   arma::mat mU = zeros(iN,iN);
@@ -170,7 +175,7 @@ arma::vec DScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, do
   arma::mat mSigma   = mD*mR*mD;
   arma::vec vX = vY-vMu;
 
-  arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
 
   double dFoo = as_scalar(vZ.t()*vZ);
   double dConst = (dNu + iN*1.0)/(2.0*(1.0 + dFoo/dNu)*dNu);
@@ -183,10 +188,11 @@ arma::vec DScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, do
   return vD_s;
 
 }
+//[[Rcpp::export]]
 double NuScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, double dNu, int iN){
 
   arma::mat mSigma   = mD*mR*mD;
-  arma::vec vZ = arma::inv(arma::trans(chol(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
 
   double dK = as_scalar(vZ.t()*vZ);
 
@@ -196,7 +202,7 @@ double NuScore_mvt(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, doub
   return dNu_s;
 
 }
-
+//[[Rcpp::export]]
 arma::vec mvt_Score(arma::vec vY,arma::vec vTheta,  int iN){
 
   int iL = 2*iN + iN*(iN-1)/2 + 1;

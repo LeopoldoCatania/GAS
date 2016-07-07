@@ -1,6 +1,15 @@
-StaticLLKoptimizer<-function(vTheta_tilde, vY,Dist, iT, iK){
+StaticLLKoptimizer_Uni<-function(vTheta_tilde, vY,Dist, iT, iK){
   vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
   dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
+
+  if(is.na(dLLK)){
+    dLLK = -1e50
+  }
+  return(-dLLK)
+}
+StaticLLKoptimizer_Multi<-function(vTheta_tilde, mY,Dist, iT, iN, iK){
+  vTheta = MapParameters_multi(vTheta_tilde, Dist, iN, iK)
+  dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
 
   if(is.na(dLLK)){
     dLLK = -1e50
@@ -29,6 +38,7 @@ MultiGASOptimiser<-function(vPw, mY, Dist, ScalingType, iT,iN, iK){
 
   # print(vPw)
   dLLK = try(GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$dLLK,silent = T)
+  # dLLK = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$dLLK
 
   if(!is(dLLK,"try-error")){
     dMLLK = -dLLK

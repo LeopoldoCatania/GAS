@@ -6,12 +6,32 @@ StaticMLFIT<-function(vY,Dist){
 
   vTheta_tilde  = StaticStarting_Uni(vY,Dist,iK)
 
-  optimiser     = solnp(vTheta_tilde, StaticLLKoptimizer,vY=vY,Dist=Dist, iT=iT,iK = iK, control = list(trace=0))
+  optimiser     = solnp(vTheta_tilde, StaticLLKoptimizer_Uni,vY=vY,Dist=Dist, iT=iT,iK = iK, control = list(trace=0))
 
   vTheta_tilde  = optimiser$pars
 
   vTheta        = as.numeric(MapParameters_univ(vTheta_tilde, Dist, iK))
   names(vTheta) = FullNamesUni(Dist)
+
+  out=list(vTheta=vTheta,dLLK=-tail(optimiser$values,1),optimiser=optimiser)
+
+  return(out)
+}
+
+StaticMLFIT_Multiv<-function(mY,Dist){
+
+  iT = ncol(mY)
+  iN = nrow(mY)
+  iK = NumberParameters(Dist, iN)
+
+  vTheta_tilde = StaticStarting_Multi(mY, Dist, iN)
+
+  optimiser    = solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist=Dist, iT=iT,iK = iK, iN=iN, control = list(trace=0))
+
+  vTheta_tilde  = optimiser$pars
+
+  vTheta        = as.numeric(MapParameters_multi(vTheta_tilde, Dist, iN, iK))
+  names(vTheta) = FullNamesMulti(iN, Dist)
 
   out=list(vTheta=vTheta,dLLK=-tail(optimiser$values,1),optimiser=optimiser)
 
@@ -87,7 +107,7 @@ MultiGASFit<-function(GASSpec,mY){
   if(is.null(rownames(mY))) rownames(mY) = paste("Series",1:iN)
 
   # starting par
-  vPw = MultiGAS_Starting(mY,iN,Dist)
+  vPw = MultiGAS_Starting(mY,iT, iN,iK,Dist, GASPar, ScalingType)
 
   # fixed par
   FixedPar = GetFixedPar_Multi(Dist,GASPar,iN)
@@ -107,12 +127,15 @@ MultiGASFit<-function(GASSpec,mY){
 
   IC = ICfun(-tail(optimiser$values,1),length(optimiser$pars),iT)
 
+  ## Moments
+  mMoments = EvalMoments_multi(GASDyn$mTheta,Dist,iN)
+
   elapsedTime =  Sys.time() - Start
 
   Out <- new("mGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iN = iN, iK = iK, elapsedTime = elapsedTime),
              GASDyn = GASDyn,
              Estimates = list(lParList=lParList, optimiser=optimiser,
-                              Inference = Inference,IC = IC ),
+                              Inference = Inference,IC = IC, Moments=mMoments ),
              Data = list(mY = mY))
   return(Out)
 }

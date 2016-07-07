@@ -1,5 +1,5 @@
 UniGASFor<-function(uGASFit, iH, Roll = F, vOut = NULL,iB = 1000,
-                     vBands = c(0.1,0.15,0.85,0.9), bReturnsDraws = F){
+                    vBands = c(0.1,0.15,0.85,0.9), bReturnsDraws = F){
 
   iK          = uGASFit@ModelInfo$iK
   ScalingType = getScalingType(uGASFit)
@@ -17,13 +17,13 @@ UniGASFor<-function(uGASFit, iH, Roll = F, vOut = NULL,iB = 1000,
     vYf = c(vY, vOut)
     iT  = iT + iH
 
-    mTheta  = GASFilter_univ(vYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)$mTheta
+    GASDyn  = GASFilter_univ(vYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
-    PointForecast = t(mTheta[,(iT-iH+1):(iT)])
+    PointForecast = t(GASDyn$mTheta[,(iT-iH+1):(iT)])
     cBands        = array(0,dim = c(1,1,1))
     mY            = matrix(0,1,1)
     vU            = EvaluatePit_Univ(t(PointForecast), vOut, Dist, iH)
-    vLS           = EvaluateLogScore_Univ(t(PointForecast), vOut, Dist, iH)
+    vLS           = GASDyn$vLLK[(iT-iH+1):(iT)]
   }else{
 
     vTheta_tp1 = tail(getFilteredParameters(uGASFit),1)
@@ -87,12 +87,12 @@ MultiGASFor<-function(mGASFit, iH, Roll = F, mOut = NULL,iB = 10000,
     mYf = cbind(mY, mOut)
     iT  = iT + iH
 
-    mTheta  = GASFilter_multi(mYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$mTheta
+    GASDyn  = GASFilter_multi(mYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 
-    PointForecast = t(mTheta[,(iT-iH+1):(iT)])
+    PointForecast = t(GASDyn$mTheta[,(iT-iH+1):(iT)])
     cBands        = array(0,dim = c(1,1,1))
     cY            = array(0,dim = c(1,1,1))
-    vLS           = EvaluateLogScore_Multi(t(PointForecast), mOut, Dist, iH , iN)
+    vLS           = GASDyn$vLLK[(iT-iH+1):(iT)]
   }else{
 
     vTheta_tp1 = tail(getFilteredParameters(mGASFit),1)
@@ -205,8 +205,8 @@ UniGASRoll<-function(vY,GASSpec,ForecastLength = 500, Nstart = NULL, RefitEvery 
     }, lFits = lFits, lOut = lOut)
 
     mForc = do.call(rbind,lapply(lForecasts, getForecast))
-    vU    = do.call(rbind,lapply(lForecasts, pit))
-    vLS   = do.call(rbind,lapply(lForecasts, LogScore)) ; colnames(vLS) = "LogScore"
+    vU    = do.call(c,lapply(lForecasts, pit))
+    vLS   = do.call(c,lapply(lForecasts, LogScore))
     Moments = do.call(rbind,lapply(lForecasts, getMoments))
   }
 

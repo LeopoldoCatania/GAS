@@ -125,6 +125,10 @@ IndexesFinder <- function(iC, iN) {
     .Call('GAS_IndexesFinder', PACKAGE = 'GAS', iC, iN)
 }
 
+MapParametersJacobian_multi <- function(vTheta_tilde, Dist, iN, iK) {
+    .Call('GAS_MapParametersJacobian_multi', PACKAGE = 'GAS', vTheta_tilde, Dist, iN, iK)
+}
+
 EvalMoments_univ <- function(mTheta, Dist) {
     .Call('GAS_EvalMoments_univ', PACKAGE = 'GAS', mTheta, Dist)
 }
@@ -137,8 +141,52 @@ rmvnorm_mat <- function(iN, vMu, mSigma) {
     .Call('GAS_rmvnorm_mat', PACKAGE = 'GAS', iN, vMu, mSigma)
 }
 
+RhoScore <- function(vR, mD, vY, vMu, iN) {
+    .Call('GAS_RhoScore', PACKAGE = 'GAS', vR, mD, vY, vMu, iN)
+}
+
+DScore <- function(mD, mR, vY, vMu, iN) {
+    .Call('GAS_DScore', PACKAGE = 'GAS', mD, mR, vY, vMu, iN)
+}
+
+MuScore <- function(vMu, mD, mR, vY, iN) {
+    .Call('GAS_MuScore', PACKAGE = 'GAS', vMu, mD, mR, vY, iN)
+}
+
+dmvt <- function(vY, vMu, mSigma, dNu, bLog = FALSE) {
+    .Call('GAS_dmvt', PACKAGE = 'GAS', vY, vMu, mSigma, dNu, bLog)
+}
+
+dmvt_ThetaParam <- function(vY, vTheta, iN, bLog = FALSE) {
+    .Call('GAS_dmvt_ThetaParam', PACKAGE = 'GAS', vY, vTheta, iN, bLog)
+}
+
+RhoScore_mvt <- function(vR, mD, vY, vMu, dNu, iN) {
+    .Call('GAS_RhoScore_mvt', PACKAGE = 'GAS', vR, mD, vY, vMu, dNu, iN)
+}
+
+MuScore_mvt <- function(vMu, mD, mR, vY, dNu, iN) {
+    .Call('GAS_MuScore_mvt', PACKAGE = 'GAS', vMu, mD, mR, vY, dNu, iN)
+}
+
+DScore_mvt <- function(mD, mR, vY, vMu, dNu, iN) {
+    .Call('GAS_DScore_mvt', PACKAGE = 'GAS', mD, mR, vY, vMu, dNu, iN)
+}
+
+NuScore_mvt <- function(mD, mR, vY, vMu, dNu, iN) {
+    .Call('GAS_NuScore_mvt', PACKAGE = 'GAS', mD, mR, vY, vMu, dNu, iN)
+}
+
+mvt_Score <- function(vY, vTheta, iN) {
+    .Call('GAS_mvt_Score', PACKAGE = 'GAS', vY, vTheta, iN)
+}
+
 StaticLLK_Univ <- function(vY, vTheta, iT, Dist) {
     .Call('GAS_StaticLLK_Univ', PACKAGE = 'GAS', vY, vTheta, iT, Dist)
+}
+
+StaticLLK_Multi <- function(mY, vTheta, iT, iN, Dist) {
+    .Call('GAS_StaticLLK_Multi', PACKAGE = 'GAS', mY, vTheta, iT, iN, Dist)
 }
 
 EvaluatePit_Univ <- function(mTheta, vY, Dist, iT) {
@@ -171,6 +219,10 @@ dSTD <- function(dY, dMu, dPhi2, dNu, bLog = FALSE) {
 
 NumberParameters <- function(Dist, iN = 1L) {
     .Call('GAS_NumberParameters', PACKAGE = 'GAS', Dist, iN)
+}
+
+build_mR <- function(vR, iN) {
+    .Call('GAS_build_mR', PACKAGE = 'GAS', vR, iN)
 }
 
 build_vR <- function(mR, iN) {

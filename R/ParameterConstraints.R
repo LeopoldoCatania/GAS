@@ -90,3 +90,18 @@ AddFixedPar<-function(lParList){
   }
   return(lParList)
 }
+
+
+FixedDynamicPar_Multi<-function(Dist, iN, GASPar){
+
+  ParNames     = FullNamesMulti(iN, Dist)
+  vBool        = rep(FALSE,length(ParNames))
+  names(vBool) = ParNames
+
+  if(GASPar$location)    vBool[1:iN] = TRUE
+  if(GASPar$scale)       vBool[(iN+1):(2*iN)] = TRUE
+  if(GASPar$correlation) vBool[(2*iN+1):(2*iN+iN*(iN-1)/2)] = TRUE
+  if(GASPar$shape)       vBool[2*iN+iN*(iN-1)/2 + 1] = TRUE
+
+  return(vBool)
+}

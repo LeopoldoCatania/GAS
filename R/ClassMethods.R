@@ -743,7 +743,7 @@ getMoments = function(object)
 }
 .getMoments<-function(object){
   if(is(object,"uGASFit" )) Moments = object@Estimates$Moments
-  if(is(object,"mGASFit" )) Moments = NULL
+  if(is(object,"mGASFit" )) Moments = object@Estimates$Moments
 
   if(is(object,"uGASSim" )) Moments = object@Data$Moments
   if(is(object,"mGASSim" )) Moments = NULL

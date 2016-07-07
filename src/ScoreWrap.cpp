@@ -26,7 +26,9 @@ arma::vec Score_univ(double dY, arma::vec vTheta,std::string Dist){
   if(Dist == "gamma") vScore = gamma_Score(dY,vTheta);
   if(Dist == "exp")  vScore = exp_Score(dY,vTheta(0));
   if(Dist == "beta") vScore = beta_Score(dY,vTheta);
+
   return vScore;
+
 }
 //[[Rcpp::export]]
 arma::vec Score_multi(arma::vec vY, arma::vec vTheta, int iN,std::string Dist){

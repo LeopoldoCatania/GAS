@@ -13,6 +13,8 @@ UniGASRoll(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, Re
 \arguments{
 \item{vY}{ \code{numeric} vector containing the time series of observations.}
 %
+\item{GASSpec}{ An object of the class \link{uGASSpec} created using the function \link{UniGASSpec}}
+%
 \item{ForecastLength}{ \code{numeric} Length of the out of sample}
 \item{Nstart}{ \code{numeric} Period when perform the first forecast. Ignored if \code{ForecastLength} is supplied.}
 \item{RefitEvery}{ \code{numeric} Number of periods before model coefficients re-estimation.}

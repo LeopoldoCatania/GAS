@@ -13,6 +13,8 @@ MultiGASRoll(mY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, 
 \arguments{
 \item{mY}{ \code{matrix} of dimension iN x (iT + ForecastLength) containing the time series of observations. }
 %
+\item{GASSpec}{ An object of the class \link{mGASSpec} created using the function \link{MultiGASSpec}}
+%
 \item{ForecastLength}{ \code{numeric} Length of the out of sample}
 \item{Nstart}{ \code{numeric} Period when perform the first forecast. Ignored if \code{ForecastLength} is supplied.}
 \item{RefitEvery}{ \code{numeric} Number of periods before model coefficients re-estimation.}

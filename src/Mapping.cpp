@@ -462,6 +462,8 @@ arma::vec mvnormMap(arma::vec vTheta_tilde, int iN, int iK){
   arma::vec vRho_tilde   = vTheta_tilde.subvec(2*iN,iK-1);
 
   arma::vec vSigma = exp(vSigma_tilde);
+  vSigma           = Thresholding_vec(vSigma, 1e10);
+  vSigma           = ZeroRemover_v(vSigma);
 
   arma::mat mR = MapR_C(vRho_tilde, iN);
 
@@ -484,7 +486,7 @@ arma::vec mvtMap(arma::vec vTheta_tilde, int iN, int iK){
 
   arma::vec vSigma = exp(vSigma_tilde);
 
-  vSigma = InfRemover_vec(vSigma);
+  vSigma = Thresholding_vec(vSigma, 1e10);
   vSigma = ZeroRemover_v(vSigma);
 
   double dNu       = exp(dNu_tilde) + dLowerShape;
@@ -609,17 +611,17 @@ arma::mat Jacobian_MapR(arma::vec vPhi, int iN){
   if(iN==4){
     mJ(0,0) = -sin(mPhi(0,1));
     mJ(1,1) = -sin(mPhi(0,2));
-    mJ(2,0) = -mC(0,2) * sin(mPhi(0,1)) + mS(0,2)*mC(1,2)*cos(mPhi(0,1));
-    mJ(2,1) = -mC(0,1) * sin(mPhi(0,2)) + mS(0,1)*mC(1,2)*cos(mPhi(0,2));
+    mJ(3,0) = -mC(0,2) * sin(mPhi(0,1)) + mS(0,2)*mC(1,2)*cos(mPhi(0,1));
+    mJ(3,1) = -mC(0,1) * sin(mPhi(0,2)) + mS(0,1)*mC(1,2)*cos(mPhi(0,2));
     mJ(2,2) = -mS(0,1)*mS(0,2)*sin(mPhi(1,2));
     //
     mJ(3,3) = -sin(mPhi(0,3));
     mJ(4,0) = -mC(0,3)*sin(mPhi(0,1)) + mC(1,3)*mS(0,1)*cos(mPhi(0,1));
-    mJ(4,3) = -sin(mPhi(0,3))*mC(0,1) + mC(1,3)*cos(mPhi(0,3))*mS(0,1);
+    mJ(4,2) = -sin(mPhi(0,3))*mC(0,1) + mC(1,3)*cos(mPhi(0,3))*mS(0,1);
     mJ(4,4) = sin(mPhi(1,3))*mS(0,3)*mS(0,1);
     mJ(5,1) = -sin(mPhi(0,2))*mC(0,3) + mC(1,2)*mC(1,3)*cos(mPhi(0,2))*mS(0,3) + mS(1,2)*cos(mPhi(0,2))*mS(0,3)*mS(1,3)*mC(2,3);
-    mJ(5,2) = -sin(mPhi(1,2))*mC(1,3)*mS(0,2)*mS(0,3) + cos(mPhi(1,2))*mS(0,2)*mS(0,3)*mS(1,3)*mC(2,3);
-    mJ(5,3) = -sin(mPhi(0,3))*mC(0,2) + cos(mPhi(0,3))*mC(1,2)*mC(1,3)*mS(0,2) + cos(mPhi(0,3))*mS(1,2)*mS(0,2)*mS(1,3)*mC(2,3);
+    mJ(5,3) = -sin(mPhi(1,2))*mC(1,3)*mS(0,2)*mS(0,3) + cos(mPhi(1,2))*mS(0,2)*mS(0,3)*mS(1,3)*mC(2,3);
+    mJ(5,2) = -sin(mPhi(0,3))*mC(0,2) + cos(mPhi(0,3))*mC(1,2)*mC(1,3)*mS(0,2) + cos(mPhi(0,3))*mS(1,2)*mS(0,2)*mS(1,3)*mC(2,3);
     mJ(5,4) = -sin(mPhi(1,3))*mC(1,2)*mS(0,2)*mS(0,3) + cos(mPhi(1,3))*mS(1,2)*mS(0,2)*mS(0,3)*mC(2,3);
     mJ(5,5) = -sin(mPhi(2,3))*mS(1,2)*mS(0,2)*mS(0,3)*mS(1,3);
   }
@@ -726,18 +728,19 @@ arma::mat Jacobian_mvtMap(arma::vec vTheta_tilde, int iN, int iK){
 
   arma::vec vSigma_tilde = vTheta_tilde.subvec(iN,2*iN-1);
   arma::vec vRho_tilde   = vTheta_tilde.subvec(2*iN,iK - 2);
-  double dNu             = vTheta_tilde(iK-1);
+  double dNu_tilde       = vTheta_tilde(iK-1);
 
   arma::mat mJ=eye(iK,iK);
 
   mJ.submat(iN,iN,2*iN-1,2*iN-1) = Jacobian_MapD(vSigma_tilde, iN);
   mJ.submat(2*iN,2*iN,iK-2,iK-2)     = Jacobian_MapR(vRho_tilde, iN);
-  mJ(iK-1,iK-1) = dNu;
+  mJ(iK-1,iK-1) = exp(dNu_tilde);
 
   return mJ;
 
 }
 
+//[[Rcpp::export]]
 arma::mat MapParametersJacobian_multi(arma::vec vTheta_tilde, std::string Dist, int iN, int iK){
 
   arma::mat mJ(iK,iK);

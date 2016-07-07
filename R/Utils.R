@@ -9,7 +9,7 @@ LowerB<-function(){
   return(0)
 }
 UpperB<-function(){
-  return(0.9999)
+  return(0.9999999)
 }
 
 LowerNu<-function() return(2.01)

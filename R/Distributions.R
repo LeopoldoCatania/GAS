@@ -23,7 +23,7 @@ DistNote<-function(DistLabel){
   if(DistLabel=="poi") return("For the Poisson distribution 'location' means the usual intensity parameter")
   if(DistLabel=="gamma") return("")
   if(DistLabel=="beta") return("For the Beta distribution 'shape' means the usual alpha parameter and 'scale' means the usual beta parameter")
-  if(DistLabel=="exp") return("For the Poisson distribution 'location' means the usual rate parameter")
+  if(DistLabel=="exp") return("For the Exponential distribution 'location' means the usual rate parameter")
   if(DistLabel=="mvnorm") return("")
   if(DistLabel=="mvt") return("")
 }
