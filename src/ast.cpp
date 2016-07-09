@@ -293,10 +293,10 @@ arma::vec mAST(double dMu, double dSigma, double dAlpha, double dNu1, double dNu
   vMoments(0) = dMu + dSigma * dEY;
 
 
-  vMoments(1) = 4.0 * (dAlpha * pow(dAlpha_star,2.0)*dNu1/(dNu1-2.0) +
+  vMoments(1) = (4.0 * (dAlpha * pow(dAlpha_star,2.0)*dNu1/(dNu1-2.0) +
                 (1.0-dAlpha)*pow(1.0-dAlpha_star,2.0)*dNu2/(dNu2-2.0)) -
                 16.0*pow(dB,2.0)*pow(-pow(dAlpha_star,2.0)*dNu1/(dNu1-1.0) +
-                pow(1.0 - dAlpha_star,2.0)*dNu2/(dNu2-1.0),2.0);
+                pow(1.0 - dAlpha_star,2.0)*dNu2/(dNu2-1.0),2.0) ) * pow(dSigma, 2.0);
 
   // TODO
   vMoments(2) = 0.0;

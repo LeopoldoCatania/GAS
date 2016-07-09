@@ -23,14 +23,14 @@ InferenceFun_Uni<-function(mHessian,vPw, iK){
 }
 
 #'@export
-InferenceFun_Multi<-function(mHessian,Dist,vPw, iK, iN){
+InferenceFun_Multi<-function(mHessian,Dist,vPw, iK, iN, ScalarParameters){
 
-  vPn  = vPw2vPn_Multi(vPw,Dist,iK,iN)
+  vPn  = vPw2vPn_Multi(vPw,Dist,iK,iN, ScalarParameters)
   iK_s = length(vPn)
 
   out =matrix(NA,iK_s,4,dimnames=list(names(vPn),c("Estimates","Standard Errors","Test","p-value")))
 
-  mJacob      = jacobian(vPw2vPn_Multi,vPw,iK=iK,iN=iN,Dist=Dist)
+  mJacob      = jacobian(vPw2vPn_Multi,vPw,iK=iK,iN=iN,Dist=Dist, ScalarParameters=ScalarParameters)
   mInvHessian = ginv(mHessian)
   mSandwitch  = t(mJacob)%*%mInvHessian%*%mJacob
 

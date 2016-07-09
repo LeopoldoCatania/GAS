@@ -3,7 +3,7 @@ setClass("mGASFit",representation(ModelInfo="list",GASDyn="list",Estimates="list
 setClass("uGASSim",representation(ModelInfo="list",GASDyn="list", Data = "list"))
 setClass("mGASSim",representation(ModelInfo="list",GASDyn="list", Data = "list"))
 setClass("uGASSpec",representation(Spec="list"))
-setClass("mGASSpec",representation(Spec="list"))
+setClass("mGASSpec",representation(Spec="list", ScalarParameters = "logical"))
 setClass("uGASFor",representation(Forecast = "list", Bands = "array", Draws = "matrix",
                                   Info = "list", Data = "list"))
 setClass("mGASFor",representation(Forecast = "list", Bands = "array", Draws = "array",
@@ -41,13 +41,11 @@ setMethod("show", "mGASSpec",
           function(object) {
 
             Dist = getDist(object)
-            iK   = NumberParameters(Dist)
-
-            ParNames    = FullNamesUni(Dist)
 
             ScalingType = getScalingType(object)
             GASPar      = unlist(getGASPar(object))
             GASPar      = names(GASPar[GASPar])
+            ScalarParameters = object@Spec$ScalarParameters
 
             cat("\n-------------------------------------------------------")
             cat("\n-           Multivariate GAS Specification            -")
@@ -58,6 +56,8 @@ setMethod("show", "mGASSpec",
             cat("\n-------------------------------------------------------")
             cat(paste("\nScore scaling type : ",ScalingType))
             cat(paste("\nTime varying parameres : ", paste(GASPar, collapse = ", ")))
+            cat(paste("\nScalar Parameters  : ", paste(TypeOfParameters(ScalarParameters))))
+
             #
             cat("\n-------------------------------------------------------")
           }

@@ -7,7 +7,8 @@
 	Specify the conditional distribution, scaling mechanism and time--varying parameters for univariate GAS models.
 }
 \usage{
-UniGASSpec(Dist = "norm", ScalingType = "Identity", GASPar = list(location = F, scale = T, skewness = F, shape = F, shape2 = F))
+UniGASSpec(Dist = "norm", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE,
+                                                                  skewness = FALSE, shape = FALSE, shape2 = FALSE))
 }
 \arguments{
 \item{Dist}{
@@ -40,7 +41,7 @@ Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applic
 # Specify an univariate GAS model with Student-t conditional distribution and time-varying location, scale and shape parameter
 library(GAS)
 
-GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = T, scale = T, shape = T))
+GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = TRUE, scale = TRUE, shape = TRUE))
 
 }
 }

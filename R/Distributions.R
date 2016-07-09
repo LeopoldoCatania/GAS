@@ -1,4 +1,4 @@
-DistLabels<-function(){return(c("norm","std","ast","ast1","ald","poi","gamma","exp","beta","mvnorm","mvt"))}
+DistLabels<-function(){return(c("norm","std","ast","ast1","ald","poi","ber","gamma","exp","beta","mvnorm","mvt"))}
 
 DistName<-function(DistLabel){
   if(DistLabel=="norm") return("Gaussian")
@@ -7,6 +7,7 @@ DistName<-function(DistLabel){
   if(DistLabel=="ast1") return("Asymmetric Student-t with two one decay parameter")
   if(DistLabel=="ald") return("Asymmetric Laplace Distribution")
   if(DistLabel=="poi") return("Poisson")
+  if(DistLabel=="ber") return("Bernoulli")
   if(DistLabel=="gamma") return("Gamma")
   if(DistLabel=="exp") return("Exponential")
   if(DistLabel=="beta") return("Beta")
@@ -21,6 +22,7 @@ DistNote<-function(DistLabel){
   if(DistLabel=="ast1") return("Constraint version of ast")
   if(DistLabel=="ald") return("The theta, sigma, kappa reparametrisation is used, see Kotz et al. (2001)")
   if(DistLabel=="poi") return("For the Poisson distribution 'location' means the usual intensity parameter")
+  if(DistLabel=="ber") return("For the Bernoulli distribution 'location' means the probability of success parameter")
   if(DistLabel=="gamma") return("")
   if(DistLabel=="beta") return("For the Beta distribution 'shape' means the usual alpha parameter and 'scale' means the usual beta parameter")
   if(DistLabel=="exp") return("For the Exponential distribution 'location' means the usual rate parameter")
@@ -35,6 +37,7 @@ DistReference<-function(DistLabel){
   if(DistLabel=="ast1")  return("Zhu, D., & Galbraith, J. W. (2010). A generalized asymmetric Student-t distribution with application to financial econometrics. Journal of Econometrics, 157(2), 297-305.")
   if(DistLabel=="ald")  return("Kotz, S., Kozubowski, T., & Podgorski, K. (2001). The Laplace distribution and generalizations: a revisit with applications to communications, economics, engineering, and finance. Springer Science & Business Media.")
   if(DistLabel=="poi")  return("")
+  if(DistLabel=="ber")  return("")
   if(DistLabel=="exp")  return("")
   if(DistLabel=="beta")  return("")
   if(DistLabel=="gamma")  return("")
@@ -49,11 +52,12 @@ DistParameters<-function(DistLabel){
   if(DistLabel=="ast1")   return(c("location", "scale", "skewness", "shape"))
   if(DistLabel=="ald")   return(c("location", "scale", "skewness"))
   if(DistLabel=="poi")    return(c("location"))
+  if(DistLabel=="ber")    return(c("location"))
   if(DistLabel=="gamma")  return(c("scale", "shape"))
   if(DistLabel=="exp")  return(c("location"))
   if(DistLabel=="beta")  return(c("scale", "shape"))
-  if(DistLabel=="mvnorm") return(c("locations", "scales", "correlations"))
-  if(DistLabel=="mvt")    return(c("locations", "scales", "correlations", "shape"))
+  if(DistLabel=="mvnorm") return(c("location", "scale", "correlation"))
+  if(DistLabel=="mvt")    return(c("location", "scale", "correlation", "shape"))
 }
 
 DistType<-function(DistLabel){
@@ -63,6 +67,7 @@ DistType<-function(DistLabel){
   if(DistLabel=="ast1") return("univariate")
   if(DistLabel=="ald") return("univariate")
   if(DistLabel=="poi") return("univariate")
+  if(DistLabel=="ber") return("univariate")
   if(DistLabel=="gamma") return("univariate")
   if(DistLabel=="exp") return("univariate")
   if(DistLabel=="beta") return("univariate")
@@ -77,6 +82,7 @@ DistScalingType<-function(DistLabel){
   if(DistLabel=="ast1") return("Identity, Inv, Inv.Sqrt")
   if(DistLabel=="ald") return("Identity, Inv, Inv.Sqrt")
   if(DistLabel=="poi") return("Identity, Inv, Inv.Sqrt")
+  if(DistLabel=="ber") return("Identity, Inv, Inv.Sqrt")
   if(DistLabel=="gamma") return("Identity, Inv, Inv.Sqrt")
   if(DistLabel=="exp") return("Identity, Inv, Inv.Sqrt")
   if(DistLabel=="beta") return("Identity, Inv, Inv.Sqrt")

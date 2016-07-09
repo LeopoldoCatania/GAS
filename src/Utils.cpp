@@ -12,6 +12,7 @@ int NumberParameters(std::string Dist, int iN = 1){
   if(Dist == "ast1") iK = 4;
   if(Dist == "ald")  iK = 3;
   if(Dist == "poi")  iK = 1;
+  if(Dist == "ber")  iK = 1;
   if(Dist == "gamma")  iK = 2;
   if(Dist == "exp")  iK = 1;
   if(Dist == "beta")  iK = 2;

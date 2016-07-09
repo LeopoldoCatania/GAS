@@ -17,6 +17,7 @@ Class for the Multivariate GAS model specification.
 \item Dist: \code{character} containing the conditional distribution assumption.
 \item ScalingType: \code{character} indicating the scaling mechanism for the conditional score.
 \item GASPar \code{list} with elements: location, scale, correlation, shape.
+\item ScalarParameters \code{logical} indicates if the parameters of the locations, scalea and correlations dynamic have to be scalars or a diagonal matrices.
 }
     }
   }

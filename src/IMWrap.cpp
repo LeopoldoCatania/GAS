@@ -4,6 +4,7 @@
 #include "ast.h"
 #include "ald.h"
 #include "poi.h"
+#include "ber.h"
 #include "gamma.h"
 #include "exp.h"
 #include "beta.h"
@@ -22,6 +23,7 @@ arma::mat IM_univ(arma::vec vTheta,std::string Dist){
   if(Dist == "ast1") mIM = ast1_IM(vTheta);
   if(Dist == "ald") mIM = ald_IM(vTheta);
   if(Dist == "poi")  mIM = poi_IM(vTheta(0));
+  if(Dist == "ber")  mIM = ber_IM(vTheta(0));
   if(Dist == "gamma") mIM = gamma_IM(vTheta);
   if(Dist == "exp")  mIM = exp_IM(vTheta(0));
   if(Dist == "beta") mIM = beta_IM(vTheta);

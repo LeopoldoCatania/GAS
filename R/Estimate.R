@@ -93,11 +93,13 @@ UniGASFit<-function(GASSpec,vY){
 
 # mY is NxT
 MultiGASFit<-function(GASSpec,mY){
+
   Start = Sys.time()
   # getInfo
   Dist        = getDist(GASSpec)
   ScalingType = getScalingType(GASSpec)
   GASPar      = getGASPar(GASSpec)
+  ScalarParameters = GASSpec@Spec$ScalarParameters
 
   #dimension par
   iT = ncol(mY)
@@ -107,21 +109,22 @@ MultiGASFit<-function(GASSpec,mY){
   if(is.null(rownames(mY))) rownames(mY) = paste("Series",1:iN)
 
   # starting par
-  vPw = MultiGAS_Starting(mY,iT, iN,iK,Dist, GASPar, ScalingType)
+  vPw = MultiGAS_Starting(mY,iT, iN,iK,Dist, GASPar, ScalingType, ScalarParameters)
 
   # fixed par
-  FixedPar = GetFixedPar_Multi(Dist,GASPar,iN)
+  FixedPar = GetFixedPar_Multi(Dist,GASPar,iN, ScalarParameters)
   vPw      = RemoveFixedPar(vPw, FixedPar)
 
   #optimise
-  optimiser = solnp(vPw, MultiGASOptimiser, mY=mY, Dist=Dist, ScalingType=ScalingType, iT=iT, iN=iN, iK=iK)
+  optimiser = solnp(vPw, MultiGASOptimiser, mY=mY, Dist=Dist, ScalingType=ScalingType,
+                    iT=iT, iN=iN, iK=iK, ScalarParameters = ScalarParameters)
 
   vPw = optimiser$pars
 
-  lParList = vPw2lPn_Multi(vPw,Dist,iK,iN)
+  lParList = vPw2lPn_Multi(vPw,Dist,iK,iN, ScalarParameters)
   lParList = AddFixedPar(lParList)
 
-  Inference = InferenceFun_Multi(optimiser$hessian, Dist, vPw, iK, iN)
+  Inference = InferenceFun_Multi(optimiser$hessian, Dist, vPw, iK, iN, ScalarParameters)
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 

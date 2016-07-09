@@ -4,6 +4,7 @@
 #include "ast.h"
 #include "ald.h"
 #include "poi.h"
+#include "ber.h"
 #include "gamma.h"
 #include "exp.h"
 #include "beta.h"
@@ -23,6 +24,7 @@ double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog){
   if(Dist == "ast1")  dLPDF = dAST(dY, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3), bLog);
   if(Dist == "ald")   dLPDF = dALD(dY, vTheta(0), vTheta(1), vTheta(2), bLog);
   if(Dist == "poi")   dLPDF = dPOI(dY, vTheta(0), bLog);
+  if(Dist == "ber")   dLPDF = dBER(dY, vTheta(0), bLog);
   if(Dist == "gamma") dLPDF = dGAMMA(dY, vTheta(0), vTheta(1), bLog);
   if(Dist == "exp")   dLPDF = dEXP(dY, vTheta(0), bLog);
   if(Dist == "beta")  dLPDF = dBETA(dY, vTheta(0), vTheta(1), bLog);
@@ -46,6 +48,7 @@ double rdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "ast1") dY = rAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  dY = rALD(vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "poi")  dY = rPOI(vTheta(0));
+  if(Dist == "ber")  dY = rBER(vTheta(0));
   if(Dist == "gamma") dY = rGAMMA(vTheta(0), vTheta(1));
   if(Dist == "exp")  dY = rEXP(vTheta(0));
   if(Dist == "beta") dY = rBETA(vTheta(0), vTheta(1));
@@ -70,6 +73,7 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
   if(Dist == "ast1") dP = pAST(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  dP = pALD(dQ, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "poi")  dP = pPOI(dQ, vTheta(0));
+  if(Dist == "ber")  dP = pBER(dQ, vTheta(0));
   if(Dist == "gamma") dP = pGAMMA(dQ, vTheta(0), vTheta(1));
   if(Dist == "exp")  dP = pEXP(dQ, vTheta(0));
   if(Dist == "beta") dP = pBETA(dQ, vTheta(0), vTheta(1));
@@ -84,6 +88,7 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   if(Dist == "ast1")  dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")   dQ = qALD(dP, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "poi")   dQ = qPOI(dP, vTheta(0));
+  if(Dist == "ber")   dQ = qBER(dP, vTheta(0));
   if(Dist == "gamma") dQ = qGAMMA(dP, vTheta(0), vTheta(1));
   if(Dist == "exp")   dQ = qEXP(dP, vTheta(0));
   if(Dist == "beta")  dQ = qBETA(dP, vTheta(0), vTheta(1));
@@ -98,6 +103,7 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "ast1") vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  vMoments = mALD(vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "poi")  vMoments = mPOI(vTheta(0));
+  if(Dist == "ber")  vMoments = mBER(vTheta(0));
   if(Dist == "gamma") vMoments = mGAMMA(vTheta(0), vTheta(1));
   if(Dist == "exp")  vMoments = mEXP(vTheta(0));
   if(Dist == "beta") vMoments = mBETA(vTheta(0), vTheta(1));

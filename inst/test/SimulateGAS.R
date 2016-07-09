@@ -85,6 +85,21 @@ Sim = UniGASSim(iT, vKappa, mA, mB, Dist="beta", ScalingType = "Identity")
 
 plot(Sim)
 
+
+# Bernoulli
+
+iT = 1e4
+
+vKappa = UnmapParameters_univ(0.01,"ber",1)
+
+mA = matrix(c(0.1),1)
+mB = matrix(c(0.94),1)
+
+Sim = UniGASSim(iT, vKappa, mA, mB, Dist="ber", ScalingType = "Identity")
+
+plot(Sim)
+
+
 ################################
 #        MULTIVARIATE          #
 ################################
@@ -124,3 +139,4 @@ Sim = MultiGASSim(iT,iN, vKappa, mA, mB, Dist, ScalingType = "Identity")
 Sim
 
 plot(Sim)
+

@@ -1,14 +1,32 @@
-mvnormParNames<-function(iN){
-  foo = c(paste("mu",1:iN,sep=""),paste("sigma",1:iN,sep=""))
-  baz = RhoNames(iN)
-  foo = c(foo,baz)
+mvnormParNames<-function(iN, ScalarParameters = FALSE){
+  if(ScalarParameters){
+
+    foo = c("mu","sigma","rho")
+
+  }else{
+
+    foo = c(paste("mu",1:iN,sep=""),paste("sigma",1:iN,sep=""))
+    baz = RhoNames(iN)
+    foo = c(foo,baz)
+
+  }
   return(foo)
 }
 
-mvtParNames<-function(iN){
-  foo = c(paste("mu",1:iN,sep=""),paste("phi",1:iN,sep=""))
-  baz = RhoNames(iN)
-  foo = c(foo,baz,"nu")
+mvtParNames<-function(iN, ScalarParameters = FALSE){
+
+  if(ScalarParameters){
+
+    foo = c("mu","phi","rho","nu")
+
+  }else{
+
+    foo = c(paste("mu",1:iN,sep=""),paste("phi",1:iN,sep=""))
+    baz = RhoNames(iN)
+    foo = c(foo,baz,"nu")
+
+  }
+
   return(foo)
 }
 
@@ -24,6 +42,23 @@ RhoNames<-function(iN){
     }
   }
   return(baz)
+}
+
+FullNamesCoefMulti<-function(iN,Dist, CoefName, ScalarParameters){
+  if(ScalarParameters){
+
+    if(Dist == "mvnorm")  vNames = c("mu", "sigma" ,"rho")
+    if(Dist == "mvt")     vNames = c("mu", "phi" ,"rho", "nu")
+
+  }else{
+
+    vNames = FullNamesMulti(iN, Dist)
+
+  }
+
+  vOut = paste(CoefName, vNames, sep = ".")
+  return(vOut)
+
 }
 
 FullNamesMulti<-function(iN,Dist){
@@ -42,6 +77,7 @@ FullNamesUni<-function(Dist){
   if(Dist == "ast1")  vNames = vNames[c(1,2,3,4)]
   if(Dist == "ald")   vNames = vNames[c(1,2,3)]
   if(Dist == "poi")   vNames = vNames[1]
+  if(Dist == "ber")   vNames = vNames[1]
   if(Dist == "gamma") vNames = vNames[c(2, 4)]
   if(Dist == "exp")   vNames = vNames[1]
   if(Dist == "beta")  vNames = vNames[c(2, 4)]
@@ -66,4 +102,7 @@ getParNames<-function(object){
   return(parNames)
 }
 
-
+TypeOfParameters<-function(ScalarParameters){
+  if(ScalarParameters) return("Scalars")
+  if(!ScalarParameters) return("Diagonals")
+}

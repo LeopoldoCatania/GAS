@@ -5,6 +5,9 @@ using namespace Rcpp;
 using namespace arma;
 
 const double dLowerShape = 2.01;
+const double dUpperShape = 50.0;
+
+
 
 double Map(double dX, double dL,double dU) {
   double dMap =  dL + ( dU - dL ) / (1.0 + exp( - dX ));
@@ -48,8 +51,8 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu    = dMu_tilde;
     double dSigma = exp(dSigma_tilde);
     double dAlpha = Map(dAlpha_tilde,0.01,0.99);
-    double dNu1   = exp(dNu1_tilde) + dLowerShape;
-    double dNu2   = exp(dNu2_tilde) + dLowerShape;
+    double dNu1   = Map(dNu1_tilde,dLowerShape,dUpperShape);//exp(dNu1_tilde) + dLowerShape;
+    double dNu2   = Map(dNu2_tilde,dLowerShape,dUpperShape);//exp(dNu2_tilde) + dLowerShape;
 
     vTheta(0) = dMu;
     vTheta(1) = dSigma;
@@ -67,7 +70,7 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu    = dMu_tilde;
     double dSigma = exp(dSigma_tilde);
     double dAlpha = Map(dAlpha_tilde,0.01,0.99);
-    double dNu1   = exp(dNu1_tilde) + dLowerShape;
+    double dNu1   = Map(dNu1_tilde,dLowerShape,dUpperShape);//exp(dNu1_tilde) + dLowerShape;
 
     vTheta(0) = dMu;
     vTheta(1) = dSigma;
@@ -104,6 +107,12 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu       = exp(dMu_tilde);
 
     vTheta(0) = dMu;
+  }
+  if(Dist == "ber"){
+    double dPi_tilde = vTheta_tilde(0);
+    double dPi       = 1.0/(1.0 + exp(-dPi_tilde));
+
+    vTheta(0) = dPi;
   }
   if(Dist == "gamma"){
     double dAlpha_tilde = vTheta_tilde(0);
@@ -162,8 +171,8 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     double dMu_tilde    = dMu;
     double dSigma_tilde = log(dSigma);
     double dAlpha_tilde = Unmap(dAlpha,0.01,0.99);
-    double dNu1_tilde   = log(dNu1 - dLowerShape);
-    double dNu2_tilde   = log(dNu2 - dLowerShape);
+    double dNu1_tilde   = Unmap(dNu1,dLowerShape,dUpperShape);// log(dNu1 - dLowerShape);
+    double dNu2_tilde   = Unmap(dNu2,dLowerShape,dUpperShape);// log(dNu2 - dLowerShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma_tilde;
@@ -181,7 +190,7 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     double dMu_tilde    = dMu;
     double dSigma_tilde = log(dSigma);
     double dAlpha_tilde = Unmap(dAlpha,0.01,0.99);
-    double dNu1_tilde   = log(dNu1 - dLowerShape);
+    double dNu1_tilde   = Unmap(dNu1,dLowerShape,dUpperShape);// log(dNu1 - dLowerShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma_tilde;
@@ -220,6 +229,12 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     double dMu_tilde = log(dMu);
 
     vTheta_tilde(0) = dMu_tilde;
+  }
+  if(Dist == "ber"){
+    double dPi       = vTheta(0);
+    double dPi_tilde = log(dPi / (1.0 - dPi));
+
+    vTheta_tilde(0) = dPi_tilde;
   }
   if(Dist == "gamma"){
     double dAlpha = vTheta(0);
@@ -280,8 +295,8 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1;
     mJ(1,1) = exp(dSigma_tilde);;
     mJ(2,2) = MapDeriv(dAlpha_tilde,0.01,0.99);;
-    mJ(3,3) = exp(dNu1_tilde);
-    mJ(4,4) = exp(dNu2_tilde);
+    mJ(3,3) = MapDeriv(dNu1_tilde,dLowerShape,dUpperShape);; //exp(dNu1_tilde);
+    mJ(4,4) = MapDeriv(dNu2_tilde,dLowerShape,dUpperShape);; //exp(dNu2_tilde);
 
   }
   if(Dist=="ast1"){
@@ -292,7 +307,7 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1;
     mJ(1,1) = exp(dSigma_tilde);;
     mJ(2,2) = MapDeriv(dAlpha_tilde,0.01,0.99);;
-    mJ(3,3) = exp(dNu1_tilde);
+    mJ(3,3) = MapDeriv(dNu1_tilde,dLowerShape,dUpperShape);; //exp(dNu1_tilde);
   }
   if(Dist=="std"){
 
@@ -316,6 +331,12 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     double dMu_tilde = vTheta_tilde(0);
 
     mJ(0,0) = exp(dMu_tilde);
+  }
+  if(Dist=="ber"){
+
+    double dPi_tilde = vTheta_tilde(0);
+
+    mJ(0,0) = exp(-dPi_tilde)/pow(1.0 + exp(-dPi_tilde),2.0);
   }
   if(Dist=="gamma"){
 

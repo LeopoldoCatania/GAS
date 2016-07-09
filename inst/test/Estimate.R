@@ -17,17 +17,32 @@ Fit
 plot(Fit)
 
 # Multivariate Example
-data("StockIndex")
-help(StockIndex)
+data("StockIndexs")
+help(StockIndexs)
 
 ## Specification mvt
 help(MultiGASSpec)
-GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location    = FALSE, scale = TRUE,
+                                                                             correlation = TRUE,  shape = FALSE),
+                       ScalarParameters = FALSE)
 
 help(MultiGASFit)
-Fit = MultiGASFit(GASSpec,StockIndex)
+Fit = MultiGASFit(GASSpec,StockIndexs)
 
 Fit
+
+## Specification mvt with scalar parameters
+data("StockIndexs")
+help(StockIndexs)
+
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE,
+                                                                             correlation = TRUE, shape = FALSE),
+                       ScalarParameters = TRUE)
+
+Fit = MultiGASFit(GASSpec,StockIndexs)
+
+Fit_FULL = MultiGASFit(GASSpec,StockIndexs)
+
 
 ### CPI
 data("cpichg")
@@ -111,4 +126,7 @@ Fit     = UniGASFit(GASSpec,unp)
 Fit
 
 plot(Fit)
+
+
+
 

@@ -31,9 +31,9 @@ UniGASOptimiser<-function(vPw, vY, Dist, ScalingType, iT, iK){
   }
   return(dMLLK)
 }
-MultiGASOptimiser<-function(vPw, mY, Dist, ScalingType, iT,iN, iK){
+MultiGASOptimiser<-function(vPw, mY, Dist, ScalingType, iT,iN, iK, ScalarParameters){
 
-  lParList = vPw2lPn_Multi(vPw,Dist,iK,iN)
+  lParList = vPw2lPn_Multi(vPw,Dist,iK,iN, ScalarParameters)
   lParList = AddFixedPar(lParList)
 
   # print(vPw)
