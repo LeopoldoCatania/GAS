@@ -55,9 +55,9 @@ Roll
 #    MULTIVARIATE      #
 ########################
 
-data("StockIndex")
+data("StockIndices")
 
-mY = StockIndex[1:2,]
+mY = StockIndices[1:2,]
 
 ## Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))

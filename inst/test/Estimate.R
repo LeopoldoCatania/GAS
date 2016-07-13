@@ -17,8 +17,8 @@ Fit
 plot(Fit)
 
 # Multivariate Example
-data("StockIndexs")
-help(StockIndexs)
+data("StockIndices")
+help(StockIndices)
 
 ## Specification mvt
 help(MultiGASSpec)
@@ -32,8 +32,8 @@ Fit = MultiGASFit(GASSpec,StockIndexs)
 Fit
 
 ## Specification mvt with scalar parameters
-data("StockIndexs")
-help(StockIndexs)
+data("StockIndices")
+help(StockIndices)
 
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE,
                                                                              correlation = TRUE, shape = FALSE),
@@ -59,10 +59,10 @@ plot(Fit)
 
 ###
 library(GAS)
-data("StockIndex")
-help(StockIndex)
+data("StockIndices")
+help(StockIndices)
 
-vY = StockIndex["DAX",]
+vY = StockIndices["DAX",]
 
 GASSpec = UniGASSpec(Dist = "ald", ScalingType = "Identity", GASPar = list(location = F, scale = T, skewness = T))
 Fit     = UniGASFit(GASSpec,vY)

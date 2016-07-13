@@ -34,9 +34,9 @@ An object of the class \link{mGASRoll}
 # Specify a GAS model with Multivariate Student-t conditional distribution and time-varying scale and correlation parameters
 # stock returns Forecast
 
-data("StockIndex")
+data("StockIndices")
 
-mY = StockIndex[1:2,]
+mY = StockIndices[1:2,]
 
 ## Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))

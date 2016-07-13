@@ -32,14 +32,15 @@ Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applic
 \note{}
 \examples{
 \dontrun{
-# Specify an univariate GAS model with Student-t conditional distribution and time-varying location, scale and shape parameter
+# Specify an GAS model with multivariate Student-t conditional distribution and time-varying scales and correlations
+
 library(GAS)
 
-load(sp500ret)
+load(StockIndices)
 
-GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = T, scale = T, shape = T))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(scale = TRUE, correlation = TRUE))
 
-Fit = UniGASFit(sp500ret, GASSpec)
+Fit = MultiGASFit(StockIndices, GASSpec)
 
 Fit
 
