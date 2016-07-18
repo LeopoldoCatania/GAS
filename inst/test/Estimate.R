@@ -27,7 +27,7 @@ GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(loc
                        ScalarParameters = FALSE)
 
 help(MultiGASFit)
-Fit = MultiGASFit(GASSpec,StockIndexs)
+Fit = MultiGASFit(GASSpec,StockIndices)
 
 Fit
 
@@ -39,9 +39,9 @@ GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(loc
                                                                              correlation = TRUE, shape = FALSE),
                        ScalarParameters = TRUE)
 
-Fit = MultiGASFit(GASSpec,StockIndexs)
+Fit = MultiGASFit(GASSpec,StockIndices)
 
-Fit_FULL = MultiGASFit(GASSpec,StockIndexs)
+Fit_FULL = MultiGASFit(GASSpec,StockIndices)
 
 
 ### CPI

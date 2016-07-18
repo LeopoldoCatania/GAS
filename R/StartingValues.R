@@ -7,10 +7,10 @@ StartingNu <- function(vY) {
     if (is(dNu, "try-error"))
         dNu = 7
 
-    if (dNu > 50)
-        dNu = 49
-    if (dNu <= 2.01)
-        dNu = 3
+    if (dNu > UpperNu())
+        dNu = UpperNu() - 1.0
+    if (dNu <= LowerNu())
+        dNu = LowerNu() + 0.02
 
     return(dNu)
 }
@@ -139,7 +139,7 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
     }
     if (Dist == "mvt") {
 
-        dNu = StartingNu(c(mY[3, ]))
+        dNu = StartingNu(c(mY))
 
         vMu_tilde = vEmpMu
         vSigma_tilde = log(vEmpSigma * (dNu - 2)/dNu)
@@ -151,16 +151,20 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
 }
 
 UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar) {
-    StaticFit = StaticMLFIT(vY, Dist)
-    vKappa = StaticFit$optimiser$pars
-    names(vKappa) = paste("kappa", 1:iK, sep = "")
+    StaticFit  = StaticMLFIT(vY, Dist)
+    vUncValues = StaticFit$optimiser$pars
+    names(vUncValues) = paste("kappa", 1:iK, sep = "")
 
     if (iK > 1) {
-        vA = starting_vA_Uni(vY, vKappa, mB = diag(rep(0.9, iK)), dA_foo = 1e-06, iT, iK, Dist, ScalingType = ScalingType, GASPar)
-        vB = starting_vB_Uni(vY, vKappa, dB_foo = 0.9, mA = diag(vA), iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vA = starting_vA_Uni(vY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 1e-06, iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vB = starting_vB_Uni(vY, vUncValues, dB_foo = 0.9, mA = diag(vA), iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vKappa = (diag(iK) - diag(vB)) %*% vUncValues
+        names(vKappa) = paste("kappa", 1:iK, sep = "")
     } else {
-        vA = starting_vA_Uni(vY, vKappa, mB = matrix(0.9, iK, iK), dA_foo = 1e-06, iT, iK, Dist, ScalingType = ScalingType, GASPar)
-        vB = starting_vB_Uni(vY, vKappa, dB_foo = 0.9, mA = matrix(vA, iK, iK), iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vA = starting_vA_Uni(vY, vUncValues, mB = matrix(0.9, iK, iK), dA_foo = 1e-06, iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vB = starting_vB_Uni(vY, vUncValues, dB_foo = 0.9, mA = matrix(vA, iK, iK), iT, iK, Dist, ScalingType = ScalingType, GASPar)
+        vKappa = (1.0 - vB) * vUncValues
+        names(vKappa) = paste("kappa", 1:iK, sep = "")
     }
     vA = unmapVec_C(vA, LowerA(), UpperA())
     names(vA) = paste("a", 1:iK, sep = "")
@@ -170,9 +174,11 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar) {
     return(list(vPw = c(vKappa, vA, vB), StaticFit = StaticFit))
 
 }
-starting_vA_Uni <- function(vY, vKappa, mB, dA_foo, iT, iK, Dist, ScalingType, GASPar) {
+starting_vA_Uni <- function(vY, vUncValues, mB, dA_foo, iT, iK, Dist, ScalingType, GASPar) {
 
     seq_alpha = c(seq(1e-04, 1.5, length.out = 30))
+
+    vKappa = (diag(iK) - mB) %*% vUncValues
 
     mA = matrix(0, iK, iK)
 
@@ -181,24 +187,15 @@ starting_vA_Uni <- function(vY, vKappa, mB, dA_foo, iT, iK, Dist, ScalingType, G
     dAlpha_best = dA_foo
 
     for (i in 1:iK) {
-
         if (GASPar[[i]]) {
-
             for (l in 1:length(seq_alpha)) {
-
                 dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                 if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
-
                   mA[i, i] = seq_alpha[l]
-
                   dLLK_post = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                   if (is.numeric(dLLK_post) & !is.nan(dLLK_post)) {
-
                     if (dLLK_post > dLLK_foo)
                       dAlpha_best = seq_alpha[l]
-
                   }
                   mA[i, i] = dAlpha_best
                 }
@@ -208,7 +205,7 @@ starting_vA_Uni <- function(vY, vKappa, mB, dA_foo, iT, iK, Dist, ScalingType, G
 
     return(diag(mA))
 }
-starting_vB_Uni <- function(vY, vKappa, dB_foo, mA, iT, iK, Dist, ScalingType, GASPar) {
+starting_vB_Uni <- function(vY, vUncValues, dB_foo, mA, iT, iK, Dist, ScalingType, GASPar) {
 
     seq_beta = c(seq(0.5, 0.98, length.out = 30))
 
@@ -216,31 +213,24 @@ starting_vB_Uni <- function(vY, vKappa, dB_foo, mA, iT, iK, Dist, ScalingType, G
 
     diag(mB) = dB_foo
 
+    vKappa = (diag(iK) - mB) %*% vUncValues
+
     dB_best = dB_foo
 
     for (i in 1:iK) {
-
         if (GASPar[[i]]) {
-
             for (l in 1:length(seq_beta)) {
-
                 dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                 if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
-
-                  mB[i, i] = seq_beta[l]
-
+                  mB[i, i]  = seq_beta[l]
+                  vKappa    = (diag(iK) - mB) %*% vUncValues
                   dLLK_post = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                   if (is.numeric(dLLK_post) & !is.nan(dLLK_post)) {
-
                     if (dLLK_post > dLLK_foo)
                       dB_best = seq_beta[l]
-
                   }
-
                   mB[i, i] = dB_best
-
+                  vKappa   = (diag(iK) - mB) %*% vUncValues
                 }
             }
         }
@@ -258,14 +248,17 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
     vEmpMu = apply(mY, 1, mean)
     vEmpSigma = apply(mY, 1, sd)
 
-    vKappa = c(vEmpMu, log(vEmpSigma), vEmpPhi)
-    names(vKappa) = paste("kappa.", mvnormParNames(iN), sep = "")
+    vUncValues = c(vEmpMu, log(vEmpSigma), vEmpPhi)
+    names(vUncValues) = paste("kappa.", mvnormParNames(iN), sep = "")
     #
 
     if (ScalarParameters) {
 
-        mA = starting_mA_Multi_Scalars(mY, vKappa, mB = diag(rep(0.9, iK)), dA_foo = 0.001, iT, iK, iN, "mvnorm", ScalingType, GASPar)
-        mB = starting_mB_Multi_Scalars(mY, vKappa, dB_foo = 0.9, mA, iT, iK, iN, "mvnorm", ScalingType, GASPar)
+        mA = starting_mA_Multi_Scalars(mY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 0.001, iT, iK, iN, "mvnorm", ScalingType, GASPar)
+        mB = starting_mB_Multi_Scalars(mY, vUncValues, dB_foo = 0.9, mA, iT, iK, iN, "mvnorm", ScalingType, GASPar)
+
+        vKappa = (diag(iK) - mB) %*% vUncValues
+        names(vKappa) = paste("kappa.", mvnormParNames(iN), sep = "")
 
         vA = diag(mA)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
         vB = diag(mB)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
@@ -275,9 +268,11 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
 
     } else {
 
-        vA = starting_vA_Multi(mY, vKappa, mB = diag(rep(0.9, iK)), dA_foo = 0.01, iT, iK, iN, "mvnorm", ScalingType, GASPar)
-        vB = starting_vB_Multi(mY, vKappa, dB_foo = 0.9, mA = diag(vA), iT, iK, iN, "mvnorm", ScalingType, GASPar)
+        vA = starting_vA_Multi(mY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 0.01, iT, iK, iN, "mvnorm", ScalingType, GASPar)
+        vB = starting_vB_Multi(mY, vUncValues, dB_foo = 0.9, mA = diag(vA), iT, iK, iN, "mvnorm", ScalingType, GASPar)
 
+        vKappa = (diag(iK) - diag(vB)) %*% vUncValues
+        names(vKappa) = paste("kappa.", mvnormParNames(iN), sep = "")
     }
 
     pw = c(vKappa, vA, vB)
@@ -288,13 +283,16 @@ StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParame
 
     StaticFit = StaticMLFIT_Multiv(mY, "mvt")
 
-    vKappa = StaticFit$optimiser$pars
-    names(vKappa) = paste("kappa.", mvtParNames(iN), sep = "")
+    vUncValues = StaticFit$optimiser$pars
+    names(vUncValues) = paste("kappa.", mvtParNames(iN), sep = "")
 
     if (ScalarParameters) {
 
-        mA = starting_mA_Multi_Scalars(mY, vKappa, mB = diag(rep(0.9, iK)), dA_foo = 0.001, iT, iK, iN, "mvt", ScalingType, GASPar)
-        mB = starting_mB_Multi_Scalars(mY, vKappa, dB_foo = 0.9, mA, iT, iK, iN, "mvt", ScalingType, GASPar)
+        mA = starting_mA_Multi_Scalars(mY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 0.001, iT, iK, iN, "mvt", ScalingType, GASPar)
+        mB = starting_mB_Multi_Scalars(mY, vUncValues, dB_foo = 0.9, mA, iT, iK, iN, "mvt", ScalingType, GASPar)
+
+        vKappa = (diag(iK) - mB) %*% vUncValues
+        names(vKappa) = paste("kappa.", mvtParNames(iN), sep = "")
 
         vA = diag(mA)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
         vB = diag(mB)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
@@ -304,9 +302,11 @@ StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParame
 
     } else {
 
-        vA = starting_vA_Multi(mY, vKappa, mB = diag(rep(0.9, iK)), dA_foo = 0.01, iT, iK, iN, "mvt", ScalingType, GASPar)
-        vB = starting_vB_Multi(mY, vKappa, dB_foo = 0.9, mA = diag(vA), iT, iK, iN, "mvt", ScalingType, GASPar)
+        vA = starting_vA_Multi(mY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 0.01, iT, iK, iN, "mvt", ScalingType, GASPar)
+        vB = starting_vB_Multi(mY, vUncValues, dB_foo = 0.9, mA = diag(vA), iT, iK, iN, "mvt", ScalingType, GASPar)
 
+        vKappa = (diag(iK) - diag(vB)) %*% vUncValues
+        names(vKappa) = paste("kappa.", mvtParNames(iN), sep = "")
     }
 
     vA = unmapVec_C(vA, LowerA(), UpperA())
@@ -330,9 +330,11 @@ MultiGAS_Starting <- function(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarP
 }
 
 
-starting_vA_Multi <- function(mY, vKappa, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
+starting_vA_Multi <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
 
     seq_alpha = c(seq(1e-04, 0.5, length.out = 30))
+
+    vKappa = (diag(iK) - mB) %*% vUncValues
 
     vBool = FixedDynamicPar_Multi(Dist, iN, GASPar)
 
@@ -372,9 +374,11 @@ starting_vA_Multi <- function(mY, vKappa, mB, dA_foo, iT, iK, iN, Dist, ScalingT
     return(diag(mA))
 }
 
-starting_mA_Multi_Scalars <- function(mY, vKappa, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
+starting_mA_Multi_Scalars <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
 
     seq_alpha = c(seq(1e-04, 0.5, length.out = 30))
+
+    vKappa = (diag(iK) - mB) %*% vUncValues
 
     vBool = unlist(GASPar)
     iK2 = length(GASPar)
@@ -387,28 +391,17 @@ starting_mA_Multi_Scalars <- function(mY, vKappa, mB, dA_foo, iT, iK, iN, Dist, 
     lStructure = MatrixCoefficientStructure_Multi(Dist, iN, iK, GASPar)
 
     for (i in 1:iK2) {
-
         if (vBool[i]) {
-
             for (l in 1:length(seq_alpha)) {
-
                 dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                 if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
-
                   mA[lStructure[[i]]] = seq_alpha[l]
-
                   dLLK_post = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                   if (is.numeric(dLLK_post) & !is.nan(dLLK_post)) {
-
                     if (dLLK_post > dLLK_foo)
                       dAlpha_best = seq_alpha[l]
-
                   }
-
                   mA[lStructure[[i]]] = dAlpha_best
-
                 }
             }
         }
@@ -419,7 +412,7 @@ starting_mA_Multi_Scalars <- function(mY, vKappa, mB, dA_foo, iT, iK, iN, Dist, 
     return(mA)
 }
 
-starting_vB_Multi <- function(mY, vKappa, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
+starting_vB_Multi <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
 
     seq_beta = c(seq(0.5, 0.98, length.out = 30))
     vBool = FixedDynamicPar_Multi(Dist, iN, GASPar)
@@ -427,31 +420,24 @@ starting_vB_Multi <- function(mY, vKappa, dB_foo, mA, iT, iK, iN, Dist, ScalingT
     mB = matrix(0, iK, iK)
     diag(mB) = dB_foo
 
+    vKappa = (diag(iK) - mB) %*% vUncValues
+
     dB_best = dB_foo
 
     for (i in 1:iK) {
-
         if (vBool[i]) {
-
             for (l in 1:length(seq_beta)) {
-
                 dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                 if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
-
                   mB[i, i] = seq_beta[l]
-
+                  vKappa   = (diag(iK) - mB) %*% vUncValues
                   dLLK_post = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                   if (is.numeric(dLLK_post) & !is.nan(dLLK_post)) {
-
                     if (dLLK_post > dLLK_foo)
                       dB_best = seq_beta[l]
-
                   }
-
                   mB[i, i] = dB_best
-
+                  vKappa   = (diag(iK) - mB) %*% vUncValues
                 }
             }
         }
@@ -460,7 +446,7 @@ starting_vB_Multi <- function(mY, vKappa, dB_foo, mA, iT, iK, iN, Dist, ScalingT
     return(diag(mB))
 }
 
-starting_mB_Multi_Scalars <- function(mY, vKappa, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
+starting_mB_Multi_Scalars <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
 
     seq_beta = c(seq(0.5, 0.98, length.out = 30))
 
@@ -470,33 +456,26 @@ starting_mB_Multi_Scalars <- function(mY, vKappa, dB_foo, mA, iT, iK, iN, Dist, 
     mB = matrix(0, iK, iK)
     diag(mB)[FixedDynamicPar_Multi(Dist, iN, GASPar)] = dB_foo
 
+    vKappa = (diag(iK) - mB) %*% vUncValues
+
     dBeta_best = dB_foo
 
     lStructure = MatrixCoefficientStructure_Multi(Dist, iN, iK, GASPar)
 
     for (i in 1:iK2) {
-
         if (vBool[i]) {
-
             for (l in 1:length(seq_beta)) {
-
                 dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                 if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
-
                   mB[lStructure[[i]]] = seq_beta[l]
-
+                  vKappa = (diag(iK) - mB) %*% vUncValues
                   dLLK_post = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = TRUE)
-
                   if (is.numeric(dLLK_post) & !is.nan(dLLK_post)) {
-
                     if (dLLK_post > dLLK_foo)
                       dBeta_best = seq_beta[l]
-
                   }
-
                   mB[lStructure[[i]]] = dBeta_best
-
+                  vKappa = (diag(iK) - mB) %*% vUncValues
                 }
             }
         }

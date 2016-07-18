@@ -11,4 +11,4 @@ Imports:
     Rcpp (>= 0.12.2)
 LinkingTo: Rcpp, RcppArmadillo
 Depends:
-    Rsolnp, methods, MASS, xts
+    Rsolnp, methods, MASS, xts, numDeriv
