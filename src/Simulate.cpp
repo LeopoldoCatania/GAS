@@ -22,9 +22,8 @@ List SimulateGAS_univ(int iT, arma::vec vKappa, arma::mat mA, arma::mat mB, std:
   arma::mat mInnovations(iK,iT);
 
   //initialise Dynamics
-  arma::vec vIntercept = ( eye(iK,iK) - mB) * vKappa;
 
-  mTheta_tilde.col(0) = vKappa;
+  mTheta_tilde.col(0) = arma::inv( eye(iK,iK) - mB) * vKappa;
   mTheta.col(0) = MapParameters_univ(mTheta_tilde.col(0),Dist, iK);
 
   //initialise observables
@@ -37,7 +36,7 @@ List SimulateGAS_univ(int iT, arma::vec vKappa, arma::mat mA, arma::mat mB, std:
   // Dynamics
   for(i=1;i<iT+1;i++){
     mInnovations.col(i-1) = GASInnovation_univ(vY(i-1), mTheta.col(i-1), mTheta_tilde.col(i-1), iK, Dist, ScalingType);
-    mTheta_tilde.col(i)   = vIntercept + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
+    mTheta_tilde.col(i)   = vKappa + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
     mTheta.col(i)         = MapParameters_univ(mTheta_tilde.col(i),Dist, iK);
     if(i<iT){
       vY(i)   = rdist_univ(mTheta.col(i),Dist);
@@ -73,9 +72,7 @@ List SimulateGAS_multi(int iT, int iN, arma::vec vKappa, arma::mat mA, arma::mat
   arma::mat mInnovations(iK,iT);
 
   //initialise Dynamics
-  arma::vec vIntercept = ( eye(iK,iK) - mB) * vKappa;
-
-  mTheta_tilde.col(0) = vKappa;
+  mTheta_tilde.col(0) =  arma::inv( eye(iK,iK) - mB) * vKappa;
   mTheta.col(0) = MapParameters_multi(mTheta_tilde.col(0),Dist, iN, iK);
 
   //initialise observables
@@ -87,7 +84,7 @@ List SimulateGAS_multi(int iT, int iN, arma::vec vKappa, arma::mat mA, arma::mat
   // Dynamics
   for(i=1;i<iT+1;i++){
     mInnovations.col(i-1) = GASInnovation_multi(mY.col(i-1), mTheta.col(i-1), mTheta_tilde.col(i-1),iN, iK, Dist, ScalingType);
-    mTheta_tilde.col(i)   = vIntercept + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
+    mTheta_tilde.col(i)   = vKappa + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
     mTheta.col(i)         = MapParameters_multi(mTheta_tilde.col(i),Dist, iN, iK);
     if(i<iT){
       mY.col(i) = rdist_multi(mTheta.col(i),iN,Dist);

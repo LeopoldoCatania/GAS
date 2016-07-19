@@ -16,6 +16,7 @@ Version: \tab 0.1\cr
 Date: \tab 2016-06-06\cr
 License: \tab GPL (>= 2)\cr
 }
+The authors acknowledge Google for financial support via the Google Summer of Code 2016 project "GAS"; see \url{https://summerofcode.withgoogle.com/projects/#4717600793690112}.
 }
 \author{
 Leopoldo Catania, Kris Boudt and David Ardia
