@@ -27,6 +27,17 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
 
     }
 
+  if (Dist == "sstd") {
+
+    dMu = mean(vY)
+    dNu = 8
+    dSigma = sd(vY)
+    dXi = 1.0
+
+    vTheta = c(dMu, dSigma, dXi, dNu)
+
+  }
+
     if (Dist == "norm") {
 
         dMu = mean(vY)

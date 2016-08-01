@@ -17,6 +17,43 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// wCRPS_series
+arma::vec wCRPS_series(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper, std::string sType, int iB, double dA, double dB);
+RcppExport SEXP GAS_wCRPS_series(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP sTypeSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< double >::type dLower(dLowerSEXP);
+    Rcpp::traits::input_parameter< double >::type dUpper(dUpperSEXP);
+    Rcpp::traits::input_parameter< std::string >::type sType(sTypeSEXP);
+    Rcpp::traits::input_parameter< int >::type iB(iBSEXP);
+    Rcpp::traits::input_parameter< double >::type dA(dASEXP);
+    Rcpp::traits::input_parameter< double >::type dB(dBSEXP);
+    __result = Rcpp::wrap(wCRPS_series(vY, mTheta, Dist, dLower, dUpper, sType, iB, dA, dB));
+    return __result;
+END_RCPP
+}
+// mWCRPS_backtest
+arma::mat mWCRPS_backtest(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper, int iB, double dA, double dB);
+RcppExport SEXP GAS_mWCRPS_backtest(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< double >::type dLower(dLowerSEXP);
+    Rcpp::traits::input_parameter< double >::type dUpper(dUpperSEXP);
+    Rcpp::traits::input_parameter< int >::type iB(iBSEXP);
+    Rcpp::traits::input_parameter< double >::type dA(dASEXP);
+    Rcpp::traits::input_parameter< double >::type dB(dBSEXP);
+    __result = Rcpp::wrap(mWCRPS_backtest(vY, mTheta, Dist, dLower, dUpper, iB, dA, dB));
+    return __result;
+END_RCPP
+}
 // EvaluateLogScore_Univ
 arma::vec EvaluateLogScore_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
 RcppExport SEXP GAS_EvaluateLogScore_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
@@ -758,6 +795,92 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
     Rcpp::traits::input_parameter< std::string >::type ScalingType(ScalingTypeSEXP);
     __result = Rcpp::wrap(SimulateGAS_multi(iT, iN, vKappa, mA, mB, Dist, ScalingType));
+    return __result;
+END_RCPP
+}
+// dSSTD
+double dSSTD(double dY, double dMu, double dSigma, double dXi, double dNu, bool bLog);
+RcppExport SEXP GAS_dSSTD(SEXP dYSEXP, SEXP dMuSEXP, SEXP dSigmaSEXP, SEXP dXiSEXP, SEXP dNuSEXP, SEXP bLogSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dXi(dXiSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    Rcpp::traits::input_parameter< bool >::type bLog(bLogSEXP);
+    __result = Rcpp::wrap(dSSTD(dY, dMu, dSigma, dXi, dNu, bLog));
+    return __result;
+END_RCPP
+}
+// pSSTD
+double pSSTD(double dY, double dMu, double dSigma, double dXi, double dNu);
+RcppExport SEXP GAS_pSSTD(SEXP dYSEXP, SEXP dMuSEXP, SEXP dSigmaSEXP, SEXP dXiSEXP, SEXP dNuSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dXi(dXiSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    __result = Rcpp::wrap(pSSTD(dY, dMu, dSigma, dXi, dNu));
+    return __result;
+END_RCPP
+}
+// rSSTD
+double rSSTD(double dMu, double dSigma, double dXi, double dNu);
+RcppExport SEXP GAS_rSSTD(SEXP dMuSEXP, SEXP dSigmaSEXP, SEXP dXiSEXP, SEXP dNuSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dXi(dXiSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    __result = Rcpp::wrap(rSSTD(dMu, dSigma, dXi, dNu));
+    return __result;
+END_RCPP
+}
+// qSSTD
+double qSSTD(double dP, double dMu, double dSigma, double dXi, double dNu);
+RcppExport SEXP GAS_qSSTD(SEXP dPSEXP, SEXP dMuSEXP, SEXP dSigmaSEXP, SEXP dXiSEXP, SEXP dNuSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dP(dPSEXP);
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dXi(dXiSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    __result = Rcpp::wrap(qSSTD(dP, dMu, dSigma, dXi, dNu));
+    return __result;
+END_RCPP
+}
+// mSSTD
+arma::vec mSSTD(double dMu, double dSigma, double dXi, double dNu);
+RcppExport SEXP GAS_mSSTD(SEXP dMuSEXP, SEXP dSigmaSEXP, SEXP dXiSEXP, SEXP dNuSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dMu(dMuSEXP);
+    Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dXi(dXiSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    __result = Rcpp::wrap(mSSTD(dMu, dSigma, dXi, dNu));
+    return __result;
+END_RCPP
+}
+// sstd_Score
+arma::vec sstd_Score(double dY, arma::vec vTheta);
+RcppExport SEXP GAS_sstd_Score(SEXP dYSEXP, SEXP vThetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type dY(dYSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    __result = Rcpp::wrap(sstd_Score(dY, vTheta));
     return __result;
 END_RCPP
 }

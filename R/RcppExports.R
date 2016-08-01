@@ -5,6 +5,14 @@ Kast <- function(dX) {
     .Call('GAS_Kast', PACKAGE = 'GAS', dX)
 }
 
+wCRPS_series <- function(vY, mTheta, Dist, dLower, dUpper, sType = "uniform", iB = 1000L, dA = 0.0, dB = 1.0) {
+    .Call('GAS_wCRPS_series', PACKAGE = 'GAS', vY, mTheta, Dist, dLower, dUpper, sType, iB, dA, dB)
+}
+
+mWCRPS_backtest <- function(vY, mTheta, Dist, dLower, dUpper, iB = 1000L, dA = 0.0, dB = 1.0) {
+    .Call('GAS_mWCRPS_backtest', PACKAGE = 'GAS', vY, mTheta, Dist, dLower, dUpper, iB, dA, dB)
+}
+
 EvaluateLogScore_Univ <- function(mTheta, vY, Dist, iT) {
     .Call('GAS_EvaluateLogScore_Univ', PACKAGE = 'GAS', mTheta, vY, Dist, iT)
 }
@@ -93,7 +101,7 @@ MapParameters_univ <- function(vTheta_tilde, Dist, iK) {
     .Call('GAS_MapParameters_univ', PACKAGE = 'GAS', vTheta_tilde, Dist, iK)
 }
 
-UnmapParameters_univ <- function(vTheta, Dist, iK) {
+UnmapParameters_univ <- function(vTheta, Dist, iK = -9999L) {
     .Call('GAS_UnmapParameters_univ', PACKAGE = 'GAS', vTheta, Dist, iK)
 }
 
@@ -211,6 +219,30 @@ SimulateGAS_univ <- function(iT, vKappa, mA, mB, Dist, ScalingType) {
 
 SimulateGAS_multi <- function(iT, iN, vKappa, mA, mB, Dist, ScalingType) {
     .Call('GAS_SimulateGAS_multi', PACKAGE = 'GAS', iT, iN, vKappa, mA, mB, Dist, ScalingType)
+}
+
+dSSTD <- function(dY, dMu, dSigma, dXi, dNu, bLog = FALSE) {
+    .Call('GAS_dSSTD', PACKAGE = 'GAS', dY, dMu, dSigma, dXi, dNu, bLog)
+}
+
+pSSTD <- function(dY, dMu, dSigma, dXi, dNu) {
+    .Call('GAS_pSSTD', PACKAGE = 'GAS', dY, dMu, dSigma, dXi, dNu)
+}
+
+rSSTD <- function(dMu, dSigma, dXi, dNu) {
+    .Call('GAS_rSSTD', PACKAGE = 'GAS', dMu, dSigma, dXi, dNu)
+}
+
+qSSTD <- function(dP, dMu, dSigma, dXi, dNu) {
+    .Call('GAS_qSSTD', PACKAGE = 'GAS', dP, dMu, dSigma, dXi, dNu)
+}
+
+mSSTD <- function(dMu, dSigma, dXi, dNu) {
+    .Call('GAS_mSSTD', PACKAGE = 'GAS', dMu, dSigma, dXi, dNu)
+}
+
+sstd_Score <- function(dY, vTheta) {
+    .Call('GAS_sstd_Score', PACKAGE = 'GAS', dY, vTheta)
 }
 
 dSTD <- function(dY, dMu, dPhi2, dNu, bLog = FALSE) {

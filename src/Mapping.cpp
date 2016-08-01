@@ -7,7 +7,8 @@ using namespace arma;
 const double dLowerShape = 4.00;
 const double dUpperShape = 50.0;
 
-
+const double dLowerSkewFS = 0.10;
+const double dUpperSkewFS = 2.00;
 
 double Map(double dX, double dL,double dU) {
   double dMap =  dL + ( dU - dL ) / (1.0 + exp( - dX ));
@@ -91,6 +92,24 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(1) = dPhi;
     vTheta(2) = dNu;
   }
+  if(Dist=="sstd"){
+
+    double dMu_tilde    = vTheta_tilde(0);
+    double dSigma_tilde = vTheta_tilde(1);
+    double dXi_tilde    = vTheta_tilde(2);
+    double dNu_tilde    = vTheta_tilde(3);
+
+
+    double dMu    = dMu_tilde;
+    double dSigma = exp(dSigma_tilde);
+    double dXi    = Map(dXi_tilde, dLowerSkewFS, dUpperSkewFS);
+    double dNu    = exp(dNu_tilde) + dLowerShape;
+
+    vTheta(0) = dMu;
+    vTheta(1) = dSigma;
+    vTheta(2) = dXi;
+    vTheta(3) = dNu;
+  }
   if(Dist=="norm"){
 
     double dMu_tilde     = vTheta_tilde(0);
@@ -157,7 +176,9 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
   return InfRemover_vec(vTheta);
 }
 //[[Rcpp::export]]
-arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
+arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -9999){
+
+  if(iK == -9999) iK = vTheta.size();
 
   arma::vec vTheta_tilde(iK);
 
@@ -211,6 +232,24 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK){
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dPhi_tilde;
     vTheta_tilde(2) = dNu_tilde;
+  }
+  if(Dist=="sstd"){
+
+    double dMu    = vTheta(0);
+    double dSigma = vTheta(1);
+    double dXi    = vTheta(2);
+    double dNu    = vTheta(3);
+
+
+    double dMu_tilde    = dMu;
+    double dSigma_tilde = log(dSigma);
+    double dXi_tilde    = Unmap(dXi, dLowerSkewFS, dUpperSkewFS);
+    double dNu_tilde    = log(dNu - dLowerShape);
+
+    vTheta_tilde(0) = dMu_tilde;
+    vTheta_tilde(1) = dSigma_tilde;
+    vTheta_tilde(2) = dXi_tilde;
+    vTheta_tilde(3) = dNu_tilde;
   }
 
   if(Dist=="norm"){
@@ -317,6 +356,17 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1;
     mJ(1,1) = exp(dPhi_tilde);
     mJ(2,2) = exp(dNu_tilde);
+  }
+  if(Dist=="sstd"){
+
+    double dSigma_tilde = vTheta_tilde(1);
+    double dXi_tilde    = vTheta_tilde(2);
+    double dNu_tilde    = vTheta_tilde(3);
+
+    mJ(0,0) = 1;
+    mJ(1,1) = exp(dSigma_tilde);
+    mJ(2,2) = MapDeriv(dXi_tilde,dLowerSkewFS, dUpperSkewFS);
+    mJ(3,3) = exp(dNu_tilde);
   }
 
   if(Dist=="norm"){

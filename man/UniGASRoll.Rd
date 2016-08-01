@@ -7,7 +7,7 @@
  One step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
 }
 \usage{
-UniGASRoll(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("recursive", "moving"),
+UniGASRoll(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"),
                      cluster=NULL)
 }
 \arguments{

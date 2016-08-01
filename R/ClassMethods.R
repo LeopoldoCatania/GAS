@@ -438,11 +438,15 @@ setMethod("plot", signature(x = "uGASSim", y = "missing"), function(x, ...) {
         PlotType = menu(PlotMenu(x))
         if (PlotType == 1)
             series2plot = getFilteredParameters(x)[1:iT, , drop = F]
+        if (PlotType == 2)
+          series2plot = getMoments(x)[1:iT, , drop = F]
         if (PlotType == 3)
             series2plot = vY
 
         if (PlotType == 1)
             PlotMultipleSeries(series2plot, iK, iT, vDates)
+        if (PlotType == 2)
+          PlotMultipleSeries(series2plot, iK, iT, vDates)
         if (PlotType == 3)
             PlotSingleSeries(series2plot, iT, vDates)
 

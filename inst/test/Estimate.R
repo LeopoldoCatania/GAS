@@ -16,6 +16,12 @@ Fit = UniGASFit(GASSpec,sp500ret)
 Fit
 plot(Fit)
 
+
+GASSpec = UniGASSpec(Dist = "sstd", ScalingType = "Identity", GASPar = list(location = F, scale = T))
+
+Fit = UniGASFit(GASSpec,vY)
+
+
 # Multivariate Example
 data("StockIndices")
 help(StockIndices)

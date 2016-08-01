@@ -38,6 +38,26 @@ Sim = UniGASSim(iT, vKappa, mA, mB, Dist="std", ScalingType = "Identity")
 
 plot(Sim)
 
+# sstd
+
+iT = 1e3
+
+mA = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
+              0.0 , 0.1 , 0.0 , 0.0,
+              0.0 , 0.0 , 0.00,  0.0,
+              0.0 , 0.0 , 0.00,  0.0),4,byrow = T)
+
+mB = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
+              0.0 , 0.98, 0.0 , 0.0,
+              0.0 , 0.0 , 0.00, 0.0,
+              0.0 , 0.0 , 0.00, 0.0),4,byrow = T)
+
+vKappa = (diag(4) - mB) %*%UnmapParameters_univ(c(0,0.1,1.1,8),"sstd")
+
+Sim = UniGASSim(iT, vKappa, mA, mB, Dist="sstd", ScalingType = "Identity")
+
+plot(Sim)
+
 ## ast
 
 iT = 1e3

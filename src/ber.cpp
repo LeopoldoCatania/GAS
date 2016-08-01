@@ -31,6 +31,7 @@ double qBER(double dP, double dPi){
   return dQ;
 
 }
+
 double rBER(double dPi){
 
   double dU = Rf_runif(0,1);
@@ -70,5 +71,4 @@ arma::mat ber_IM(double dPi){
 
   return mIM;
 }
-
 

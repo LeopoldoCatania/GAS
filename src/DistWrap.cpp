@@ -1,6 +1,7 @@
 #include <RcppArmadillo.h>
 #include "norm.h"
 #include "std.h"
+#include "sstd.h"
 #include "ast.h"
 #include "ald.h"
 #include "poi.h"
@@ -20,6 +21,7 @@ double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog){
   double dLPDF=0.0;
   if(Dist == "norm")  dLPDF = dNORM(dY, vTheta(0), vTheta(1), bLog );
   if(Dist == "std")   dLPDF = dSTD(dY, vTheta(0), vTheta(1), vTheta(2), bLog);
+  if(Dist == "sstd")  dLPDF = dSSTD(dY, vTheta(0), vTheta(1), vTheta(2), vTheta(3), bLog);
   if(Dist == "ast")   dLPDF = dAST(dY, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4), bLog);
   if(Dist == "ast1")  dLPDF = dAST(dY, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3), bLog);
   if(Dist == "ald")   dLPDF = dALD(dY, vTheta(0), vTheta(1), vTheta(2), bLog);
@@ -44,6 +46,7 @@ double rdist_univ(arma::vec vTheta, std::string Dist){
   double dY = 0.0;
   if(Dist == "norm") dY = vTheta(0) + pow(vTheta(1),0.5)*Rf_rnorm(0.0,1.0);
   if(Dist == "std")  dY = rSTD(vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "sstd") dY = rSSTD(vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   if(Dist == "ast")  dY = rAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
   if(Dist == "ast1") dY = rAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  dY = rALD(vTheta(0), vTheta(1), vTheta(2));
@@ -69,6 +72,7 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
   double dP=0.0;
   if(Dist == "norm") dP = Rf_pnorm5(dQ, vTheta(0), pow(vTheta(1),2.0), 1,0);
   if(Dist == "std")  dP = pSTD(dQ, vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "sstd") dP = pSSTD(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3));
   if(Dist == "ast")  dP = pAST(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
   if(Dist == "ast1") dP = pAST(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  dP = pALD(dQ, vTheta(0), vTheta(1), vTheta(2));
@@ -84,6 +88,7 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   double dQ=0.0;
   if(Dist == "norm")  dQ = Rf_qnorm5(dP, vTheta(0), pow(vTheta(1),2.0), 1,0);
   if(Dist == "std")   dQ = qSTD(dP, vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "sstd")  dQ = qSSTD(dP, vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   if(Dist == "ast")   dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
   if(Dist == "ast1")  dQ = qAST(dP, vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")   dQ = qALD(dP, vTheta(0), vTheta(1), vTheta(2));
@@ -99,6 +104,7 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   arma::vec vMoments(4);
   if(Dist == "norm") vMoments = mNORM(vTheta(0), vTheta(1));
   if(Dist == "std")  vMoments = mSTD(vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "sstd") vMoments = mSSTD(vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   if(Dist == "ast")  vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
   if(Dist == "ast1") vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  vMoments = mALD(vTheta(0), vTheta(1), vTheta(2));

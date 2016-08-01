@@ -8,6 +8,7 @@ int NumberParameters(std::string Dist, int iN = 1){
   int iK = 0;
   if(Dist == "norm") iK = 2;
   if(Dist == "std")  iK = 3;
+  if(Dist == "sstd") iK = 4;
   if(Dist == "ast")  iK = 5;
   if(Dist == "ast1") iK = 4;
   if(Dist == "ald")  iK = 3;
@@ -168,3 +169,10 @@ arma::vec NaN2Zero(arma::vec vX, double To=0){
   }
   return vX;
 }
+
+double IndicatorLess(double dX, double dXBar){
+  double dI = 0.0;
+  if (dX <= dXBar) dI = 1.0;
+  return dI;
+}
+

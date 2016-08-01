@@ -1,5 +1,5 @@
 DistLabels <- function() {
-    return(c("norm", "std", "ast", "ast1", "ald", "poi", "ber", "gamma", "exp", "beta", "mvnorm", "mvt"))
+    return(c("norm", "std", "ast", "ast1", "sstd","ald", "poi", "ber", "gamma", "exp", "beta", "mvnorm", "mvt"))
 }
 
 DistName <- function(DistLabel) {
@@ -7,6 +7,8 @@ DistName <- function(DistLabel) {
         return("Gaussian")
     if (DistLabel == "std")
         return("Student-t")
+    if (DistLabel == "sstd")
+        return("Skew-Student-t")
     if (DistLabel == "ast")
         return("Asymmetric Student-t with two tail decay parameters")
     if (DistLabel == "ast1")
@@ -34,6 +36,9 @@ DistNote <- function(DistLabel) {
         return("")
     if (DistLabel == "std")
         return("The Student--t distribution (not reparametrised in terms of the variance parameter)")
+    if (DistLabel == "sstd")
+        return("This is the Skew-Student-t distribution of Fernandez and Steel (1998). It is reparametrised as in
+               fGARCH and rugarch such that the location is the mean and the scale is the standard deviation.")
     if (DistLabel == "ast")
         return("")
     if (DistLabel == "ast1")
@@ -61,6 +66,8 @@ DistReference <- function(DistLabel) {
         return("")
     if (DistLabel == "std")
         return("")
+    if (DistLabel == "sstd")
+        return("Fernández, Carmen, and Mark FJ Steel. 'On Bayesian modeling of fat tails and skewness.' Journal of the American Statistical Association 93.441 (1998): 359-371.")
     if (DistLabel == "ast")
         return("Zhu, D., & Galbraith, J. W. (2010). A generalized asymmetric Student-t distribution with application to financial econometrics. Journal of Econometrics, 157(2), 297-305.")
     if (DistLabel == "ast1")
@@ -88,6 +95,8 @@ DistParameters <- function(DistLabel) {
         return(c("location", "scale"))
     if (DistLabel == "std")
         return(c("location", "scale", "shape"))
+    if (DistLabel == "sstd")
+        return(c("location", "scale", "skewness", "shape"))
     if (DistLabel == "ast")
         return(c("location", "scale", "skewness", "shape", "shape2"))
     if (DistLabel == "ast1")
@@ -115,6 +124,8 @@ DistType <- function(DistLabel) {
         return("univariate")
     if (DistLabel == "std")
         return("univariate")
+    if (DistLabel == "sstd")
+       return("univariate")
     if (DistLabel == "ast")
         return("univariate")
     if (DistLabel == "ast1")
@@ -142,6 +153,8 @@ DistScalingType <- function(DistLabel) {
         return("Identity, Inv, Inv.Sqrt")
     if (DistLabel == "std")
         return("Identity, Inv, Inv.Sqrt")
+    if (DistLabel == "sstd")
+       return("Identity")
     if (DistLabel == "ast")
         return("Identity, Inv, Inv.Sqrt")
     if (DistLabel == "ast1")

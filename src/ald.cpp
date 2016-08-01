@@ -147,3 +147,5 @@ arma::mat ald_IM(arma::vec vTheta){
   return mIM;
 
 }
+
+
