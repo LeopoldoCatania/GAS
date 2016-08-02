@@ -1,5 +1,6 @@
 #include <RcppArmadillo.h>
 #include "norm.h"
+#include "snorm.h"
 #include "std.h"
 #include "sstd.h"
 #include "ast.h"
@@ -20,6 +21,7 @@ using namespace arma;
 arma::vec Score_univ(double dY, arma::vec vTheta,std::string Dist){
   arma::vec vScore;
   if(Dist == "norm") vScore = norm_Score(dY,vTheta);
+  if(Dist == "snorm") vScore = snorm_Score(dY,vTheta);
   if(Dist == "std")  vScore = std_Score(dY,vTheta);
   if(Dist == "sstd") vScore = sstd_Score(dY,vTheta);
   if(Dist == "ast")  vScore = ast_Score(dY,vTheta);

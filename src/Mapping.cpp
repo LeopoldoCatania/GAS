@@ -121,6 +121,21 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(0) = dMu;
     vTheta(1) = dSigma2;
   }
+  if(Dist=="snorm"){
+
+    double dMu_tilde     = vTheta_tilde(0);
+    double dSigma2_tilde = vTheta_tilde(1);
+    double dDelta_tilde  = vTheta_tilde(2);
+
+    double dMu     = dMu_tilde;
+    double dSigma2 = exp(dSigma2_tilde);
+    double dDelta  = Map(dDelta_tilde, dLowerSkewFS, dUpperSkewFS);
+
+    vTheta(0) = dMu;
+    vTheta(1) = dSigma2;
+    vTheta(2) = dDelta;
+
+  }
   if(Dist == "poi"){
     double dMu_tilde = vTheta_tilde(0);
     double dMu       = exp(dMu_tilde);
@@ -263,6 +278,23 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma2_tilde;
   }
+
+  if(Dist=="snorm"){
+
+    double dMu     = vTheta(0);
+    double dSigma2 = vTheta(1);
+    double dDelta  = vTheta(2);
+
+    double dMu_tilde     = dMu;
+    double dSigma2_tilde = exp(dSigma2);
+    double dDelta_tilde  = Unmap(dDelta, dLowerSkewFS, dUpperSkewFS);
+
+    vTheta_tilde(0) = dMu_tilde;
+    vTheta_tilde(1) = dSigma2_tilde;
+    vTheta_tilde(2) = dDelta_tilde;
+
+  }
+
   if(Dist == "poi"){
     double dMu       = vTheta(0);
     double dMu_tilde = log(dMu);
@@ -375,6 +407,16 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
 
     mJ(0,0) = 1;
     mJ(1,1) = exp(dSigma2_tilde);
+  }
+  if(Dist=="snorm"){
+
+    double dSigma2_tilde = vTheta_tilde(1);
+    double dDelta_tilde  = vTheta_tilde(2);
+
+    mJ(0,0) = 1;
+    mJ(1,1) = exp(dSigma2_tilde);
+    mJ(2,2) = MapDeriv(dDelta_tilde, dLowerSkewFS, dUpperSkewFS);;
+
   }
   if(Dist=="poi"){
 

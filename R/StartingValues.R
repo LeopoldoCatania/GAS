@@ -46,6 +46,15 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
         vTheta = c(dMu, dSigma2)
 
     }
+  if (Dist == "snorm") {
+
+    dMu = mean(vY)
+    dSigma2 = var(vY)
+    dDelta = 1.0
+
+    vTheta = c(dMu, dSigma2, dDelta)
+
+  }
     if (Dist == "ast" | Dist == "ast1") {
 
         dEmpmean = mean(vY)

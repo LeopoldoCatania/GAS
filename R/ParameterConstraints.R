@@ -7,6 +7,14 @@ GetFixedPar_Uni <- function(Dist, GASPar) {
         if (!GASPar$scale)
             FixedPar = c(FixedPar, a2 = 0, b2 = 0)
     }
+    if (Dist == "snorm") {
+      if (!GASPar$location)
+        FixedPar = c(FixedPar, a1 = 0, b1 = 0)
+      if (!GASPar$scale)
+        FixedPar = c(FixedPar, a2 = 0, b2 = 0)
+      if (!GASPar$skewness)
+        FixedPar = c(FixedPar, a3 = 0, b3 = 0)
+    }
     if (Dist == "std") {
         if (!GASPar$location)
             FixedPar = c(FixedPar, a1 = 0, b1 = 0)

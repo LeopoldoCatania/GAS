@@ -7,6 +7,7 @@ using namespace arma;
 int NumberParameters(std::string Dist, int iN = 1){
   int iK = 0;
   if(Dist == "norm") iK = 2;
+  if(Dist == "snorm") iK = 3;
   if(Dist == "std")  iK = 3;
   if(Dist == "sstd") iK = 4;
   if(Dist == "ast")  iK = 5;

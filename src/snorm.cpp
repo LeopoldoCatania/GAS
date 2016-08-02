@@ -19,7 +19,7 @@ double dSNORM(double dY, double dMu, double dSigma2, double dDelta, bool bLog = 
 
   dLPDF += Rf_dnorm4(dZ, 0.0, 1.0, 1);
 
-  if(!bLog) dLPDF = exp(dY);
+  if(!bLog) dLPDF = exp(dLPDF);
 
   return dLPDF;
 
@@ -127,7 +127,11 @@ arma::vec mSNORM(double dMu, double dSigma2, double dDelta){
 
 }
 
-arma::vec snorm_Score(double dY, double dMu, double dSigma2, double dDelta){
+arma::vec snorm_Score(double dY, arma::vec vTheta){
+
+  double dMu     = vTheta(0);
+  double dSigma2 = vTheta(1);
+  double dDelta  = vTheta(2);
 
   double dDelta2 = pow(dDelta, 2.0);
 
@@ -140,7 +144,7 @@ arma::vec snorm_Score(double dY, double dMu, double dSigma2, double dDelta){
 
   double ddMu     = dDelta2/dSigma2 * (dY - dMu)*dI + dI_c*(dY - dMu)/(dDelta2*dSigma2);
   double ddSigma2 = -1.0/(2.0*dSigma2) + dDelta2*pow(dY - dMu, 2.0)/(2.0*pow(dSigma2, 2.0)) * dI + dI_c*pow(dY - dMu, 2.0)/(2.0*dDelta2*pow(dSigma2, 2.0));
-  double ddDelta  = 1.0/dDelta - 2.0*dDelta/(1.0 + dDelta2) - dDelta/dSigma2 * (dY - dMu)*dI + dI_c * pow(dY - dMu, 2.0)/(pow(dDelta, 3.0)*dSigma2);
+  double ddDelta  = 1.0/dDelta - 2.0*dDelta/(1.0 + dDelta2) - dDelta/dSigma2 * pow(dY - dMu, 2.0)*dI + dI_c * pow(dY - dMu, 2.0)/(pow(dDelta, 3.0)*dSigma2);
 
   vScore(0) = ddMu;
   vScore(1) = ddSigma2;
@@ -149,3 +153,29 @@ arma::vec snorm_Score(double dY, double dMu, double dSigma2, double dDelta){
   return vScore;
 }
 
+arma::mat snorm_IM(arma::vec vTheta){
+
+  double dMu     = vTheta(0);
+  double dSigma2 = vTheta(1);
+  double dDelta  = vTheta(2);
+  double dDelta2 = pow(dDelta, 2.0);
+
+  arma::mat mIM = zeros(3,3);
+
+  double uu = 1.0/dSigma2;
+  double tu = 8.0/(pow(2.0*M_PI*dSigma2, 0.5)*(1.0 + dDelta2));
+  double dd = 1.0/(2.0*pow(dSigma2, 2.0));
+  double td = (dDelta2 - 1.0)/(dDelta*(1.0 + dDelta2)*dSigma2);
+  double tt = 2.0/dDelta2 + 4.0/pow(1.0 + dDelta2 , 2.0);
+
+  mIM(0,0) = uu;
+  mIM(2,0) = tu;
+  mIM(0,2) = tu;
+  mIM(1,1) = dd;
+  mIM(2,1) = td;
+  mIM(1,2) = td;
+  mIM(2,2) = tt;
+
+  return mIM;
+
+}

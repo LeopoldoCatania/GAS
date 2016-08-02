@@ -63,5 +63,20 @@ round(matrix(adaptIntegrate(function(dY,vTheta){
 
 IM_univ(vTheta, "ast1")
 
+## snorm
+
+dMu  = 1
+dSigma2 = 4
+dDelta  = 1.1
+
+vTheta = c(dMu,dSigma2,dDelta)
+
+round(matrix(adaptIntegrate(function(dY,vTheta){
+  vScore = Score_univ(dY, vTheta, "snorm")
+  vScore%*%t(vScore) * ddist_univ(dY, vTheta, "snorm", bLog=FALSE)
+},lowerLimit = -15, upperLimit = 15, vTheta = vTheta, fDim = length(vTheta)^2)$integral,length(vTheta)),4)
+
+IM_univ(vTheta, "snorm")
+
 
 

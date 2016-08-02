@@ -77,6 +77,8 @@ FullNamesUni <- function(Dist) {
 
     if (Dist == "norm")
         vNames = vNames[c(1, 2)]
+    if (Dist == "snorm")
+      vNames = vNames[c(1, 2, 3)]
     if (Dist == "std")
         vNames = vNames[c(1, 2, 4)]
     if (Dist == "sstd")

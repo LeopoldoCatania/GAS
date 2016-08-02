@@ -22,6 +22,24 @@ Sim = UniGASSim(iT, vKappa, mA, mB, Dist="norm", ScalingType = "Identity")
 
 plot(Sim)
 
+# snorm
+
+iT = 1e3
+
+mA = matrix(c(0.001 , 0.0 , 0.0 ,
+              0.0 , 0.01 , 0.0 ,
+              0.0 , 0.0 , 0.04),3,byrow = T)
+
+mB = matrix(c(0.7 , 0.0 , 0.0 ,
+              0.0 , 0.98, 0.0 ,
+              0.0 , 0.0 , 0.97),3,byrow = T)
+
+vKappa = (diag(3) - mB) %*% UnmapParameters_univ(c(0,0.1,1.1),"snorm",3)
+
+Sim = UniGASSim(iT, vKappa, mA, mB, Dist="snorm", ScalingType = "Inv")
+
+plot(Sim)
+
 # std
 
 iT = 1e3

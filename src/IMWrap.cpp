@@ -1,5 +1,6 @@
 #include <RcppArmadillo.h>
 #include "norm.h"
+#include "snorm.h"
 #include "std.h"
 #include "ast.h"
 #include "ald.h"
@@ -18,6 +19,7 @@ using namespace arma;
 arma::mat IM_univ(arma::vec vTheta,std::string Dist){
   arma::mat mIM;
   if(Dist == "norm") mIM = norm_IM(vTheta);
+  if(Dist == "snorm") mIM = snorm_IM(vTheta);
   if(Dist == "std")  mIM = std_IM(vTheta);
   if(Dist == "ast")  mIM = ast_IM(vTheta);
   if(Dist == "ast1") mIM = ast1_IM(vTheta);

@@ -5,6 +5,8 @@ DistLabels <- function() {
 DistName <- function(DistLabel) {
     if (DistLabel == "norm")
         return("Gaussian")
+  if (DistLabel == "snorm")
+    return("Skew-Gaussian")
     if (DistLabel == "std")
         return("Student-t")
     if (DistLabel == "sstd")
@@ -34,6 +36,8 @@ DistName <- function(DistLabel) {
 DistNote <- function(DistLabel) {
     if (DistLabel == "norm")
         return("")
+  if (DistLabel == "snorm")
+    return("Skew Gaussian distribution as in Fernandez and Steel (1998)")
     if (DistLabel == "std")
         return("The Student--t distribution (not reparametrised in terms of the variance parameter)")
     if (DistLabel == "sstd")
@@ -64,6 +68,8 @@ DistNote <- function(DistLabel) {
 DistReference <- function(DistLabel) {
     if (DistLabel == "norm")
         return("")
+  if (DistLabel == "snorm")
+    return("Fernández, Carmen, and Mark FJ Steel. 'On Bayesian modeling of fat tails and skewness.' Journal of the American Statistical Association 93.441 (1998): 359-371.")
     if (DistLabel == "std")
         return("")
     if (DistLabel == "sstd")
@@ -93,6 +99,8 @@ DistReference <- function(DistLabel) {
 DistParameters <- function(DistLabel) {
     if (DistLabel == "norm")
         return(c("location", "scale"))
+  if (DistLabel == "snorm")
+    return(c("location", "scale","skewness"))
     if (DistLabel == "std")
         return(c("location", "scale", "shape"))
     if (DistLabel == "sstd")
@@ -122,6 +130,8 @@ DistParameters <- function(DistLabel) {
 DistType <- function(DistLabel) {
     if (DistLabel == "norm")
         return("univariate")
+  if (DistLabel == "snorm")
+    return("univariate")
     if (DistLabel == "std")
         return("univariate")
     if (DistLabel == "sstd")
@@ -151,6 +161,8 @@ DistType <- function(DistLabel) {
 DistScalingType <- function(DistLabel) {
     if (DistLabel == "norm")
         return("Identity, Inv, Inv.Sqrt")
+  if (DistLabel == "snorm")
+    return("Identity, Inv, Inv.Sqrt")
     if (DistLabel == "std")
         return("Identity, Inv, Inv.Sqrt")
     if (DistLabel == "sstd")
