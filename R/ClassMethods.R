@@ -3,7 +3,7 @@ setClass("mGASFit", representation(ModelInfo = "list", GASDyn = "list", Estimate
 setClass("uGASSim", representation(ModelInfo = "list", GASDyn = "list", Data = "list"))
 setClass("mGASSim", representation(ModelInfo = "list", GASDyn = "list", Data = "list"))
 setClass("uGASSpec", representation(Spec = "list"))
-setClass("mGASSpec", representation(Spec = "list", ScalarParameters = "logical"))
+setClass("mGASSpec", representation(Spec = "list"))
 setClass("uGASFor", representation(Forecast = "list", Bands = "array", Draws = "matrix", Info = "list", Data = "list"))
 setClass("mGASFor", representation(Forecast = "list", Bands = "array", Draws = "array", Info = "list", Data = "list"))
 setClass("uGASRoll", representation(Forecast = "list", Info = "list", Testing = "list", Data = "list"))
@@ -342,7 +342,6 @@ setMethod("show", "mGASRoll", function(object) {
     cat(paste("\n\nElapsed time\t:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
 })
 
-
 setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, ...) {
     iK = x@ModelInfo$iK
     iT = x@ModelInfo$iT
@@ -457,6 +456,7 @@ setMethod("plot", signature(x = "uGASSim", y = "missing"), function(x, ...) {
 setMethod("plot", signature(x = "mGASSim", y = "missing"), function(x, ...) {
     iK = x@ModelInfo$iK
     iT = x@ModelInfo$iT
+    iN = x@ModelInfo$iN
     mY = t(x@Data$mY)
 
     if (is(mY, "xts")) {
@@ -586,7 +586,7 @@ setMethod("plot", signature(x = "mGASFor", y = "missing"), function(x, ...) {
     if (is(mY, "xts")) {
         vDates_is = as.Date(index(mY))
         if (Roll) {
-            vDates_os = as.Date(index(vOut))
+            vDates_os = as.Date(index(mOut))
         } else {
             DiffTime = vDates_is[2] - vDates_is[1]
             vDates_os = seq(tail(vDates_is, 1) + DiffTime, tail(vDates_is, 1) + DiffTime * iH, by = DiffTime)

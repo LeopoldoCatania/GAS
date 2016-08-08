@@ -68,6 +68,7 @@ arma::vec rigamma_vec(int iN, double dA, double dB){
   return vOut;
 }
 
+//[[Rcpp::export]]
 arma::mat rmvt_mat(int iN, arma::vec vMu, arma::mat mSigma, double dNu) {
   int dD=vMu.size();
   arma::mat mZ = rmvnorm_mat(iN, vMu, mSigma);

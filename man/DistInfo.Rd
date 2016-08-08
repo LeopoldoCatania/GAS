@@ -20,9 +20,7 @@ DistInfo(DistLabel = NULL, N = 2)
 \details{
 	The information are printed in the console.
 }
-\value{}
 \author{Leopoldo Catania}
-\note{}
 \examples{
 \dontrun{
 # show the information of all the supported distributions

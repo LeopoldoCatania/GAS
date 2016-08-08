@@ -7,11 +7,12 @@
  One step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
 }
 \usage{
-MultiGASRoll(mY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"),
-                     cluster=NULL)
+MultiGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
+             RefitEvery = 23, RefitWindow = c("moving", "recursive"),
+             cluster=NULL)
 }
 \arguments{
-\item{mY}{ \code{matrix} of dimension iN x (iT + ForecastLength) containing the time series of observations. }
+\item{data}{ \code{matrix} of dimension (T + ForecastLength) x N containing the time series of observations. }
 %
 \item{GASSpec}{ An object of the class \link{mGASSpec} created using the function \link{MultiGASSpec}}
 %
@@ -22,31 +23,34 @@ MultiGASRoll(mY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, 
 \item{cluster}{ A \code{cluster} object created calling using the \code{paralell} package. If supplied parallel processing is used to speed up the computations.}
 %
 }
-\details{
-}
 \value{
 An object of the class \link{mGASRoll}
 }
 \author{Leopoldo Catania}
-\note{}
 \examples{
 \dontrun{
-# Specify a GAS model with Multivariate Student-t conditional distribution and time-varying scale and correlation parameters
+# Specify a GAS model with Multivariate Student-t conditional
+# distribution and time-varying scale and correlation parameters
+
 # stock returns Forecast
 
 data("StockIndices")
 
-mY = StockIndices[1:2,]
+mY = StockIndices[, 1:2]
 
 ## Specification mvt
-GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
+                       GASPar = list(location = F, scale = T,
+                                     correlation = T, shape = F))
 
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
 cluster = makeCluster(5)
 
-Roll    = MultiGASRoll(mY,GASSpec,ForecastLength = 500, RefitEvery = 100, RefitWindow = c("moving"), cluster = cluster)
+Roll    = MultiGASRoll(mY, GASSpec,ForecastLength = 500,
+                       RefitEvery = 100, RefitWindow = c("moving"),
+                       cluster = cluster)
 
 Roll
 

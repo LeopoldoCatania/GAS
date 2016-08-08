@@ -66,7 +66,11 @@ iidTest <- function(pit, alpha = 0.05) {
     return(out)
 }
 
-PIT_test <- function(vU, iG = 20, dAlpha = 0.05, plot = F) {
+PIT_test <- function(U, G = 20, alpha = 0.05, plot = F) {
+
+  iG = G
+  dAlpha = alpha
+  vU = U
 
     if (length(vU) < 100)
         iG = 5
@@ -118,7 +122,8 @@ Kupiec <- function(Hit, tau, alphaTest = 0.95) {
     N = length(Hit)
     x = sum(Hit)
     rate = x/N
-    test = -2 * log(((1 - tau)^(N - x) * tau^x)/((1 - rate)^(N - x) * rate^x))
+    test = -2 * log( ( (1 - tau)^(N - x) * tau^x) / ((1 - rate)^(N - x) * rate^x)  )
+    if(is.nan(test)) test = -2*( (N - x)*log(1 - tau) + x*log(tau) - (N - x)*log(1 - rate) - x*log(rate)  )
     threshold = qchisq(alphaTest, df = 1)
     pvalue = 1 - pchisq(test, df = 1)
 
@@ -144,6 +149,7 @@ Christoffersen <- function(Hit, tau, alphaTest = 0.95) {
     pi1 = n11/(n10 + n11)
     pi = (n01 + n11)/(n00 + n01 + n10 + n11)
     LRind = -2 * log(((1 - pi)^(n00 + n10) * pi^(n01 + n11))/((1 - pi0)^n00 * pi0^n01 * (1 - pi1)^n10 * pi1^n11))
+    if(is.nan(LRind))  LRind = -2*(  (n00 + n10)*log(1 - pi) + (n01 + n11)*log(pi) - n00*log(1 - pi0) - n01*log(pi0) - n10*log(1 - pi1) - n11*log(pi1))
     LRpof = Kupiec(Hit, tau, alphaTest = alphaTest)["Test"]
     LRcc = LRpof + LRind
     threshold = qchisq(alphaTest, df = 2)

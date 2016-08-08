@@ -7,13 +7,13 @@
 	Estimate multivariate GAS models by Maximum Likelihood.
 }
 \usage{
-MultiGASFit(GASSpec,mY)
+MultiGASFit(GASSpec,data)
 }
 \arguments{
 \item{GASSpec}{
 An object of the class \link{mGASSpec} created using the function \link{MultiGASSpec}}
 %
-\item{mY}{ \code{matrix} of dimension NxT containing the multivariate time series of observations.}
+\item{data}{ \code{matrix} (or something coercible to that using \code{as.matrix()}) of dimension TxN containing the multivariate time series of observations. It can also be an object of the class \code{ts}, \code{xts} or \code{zoo}.}
 %
 }
 \details{
@@ -29,16 +29,17 @@ Creal, D., Koopman, S. J., & Lucas, A. (2013). Generalized autoregressive score 
 Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applications to financial and economic time series (Vol. 52). Cambridge University Press.\cr
 }
 \author{Leopoldo Catania}
-\note{}
 \examples{
 \dontrun{
-# Specify an GAS model with multivariate Student-t conditional distribution and time-varying scales and correlations
+# Specify an GAS model with multivariate Student-t
+# conditional distribution and time-varying scales and correlations
 
 library(GAS)
 
 load(StockIndices)
 
-GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(scale = TRUE, correlation = TRUE))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
+                       GASPar = list(scale = TRUE, correlation = TRUE))
 
 Fit = MultiGASFit(StockIndices, GASSpec)
 

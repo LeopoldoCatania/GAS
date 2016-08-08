@@ -91,7 +91,7 @@ GetFixedPar_Uni <- function(Dist, GASPar) {
     return(FixedPar)
 }
 
-MultiFixedScale <- function(iN, Dist) {
+MultiFixedScale <- function(iN, Dist, ScalarParameters) {
 
     if (ScalarParameters) {
 
@@ -128,7 +128,7 @@ MultiFixedLocation <- function(iN, ScalarParameters) {
 
     return(FixedPar)
 }
-MultiFixedCorrelation <- function(iN) {
+MultiFixedCorrelation <- function(iN, ScalarParameters) {
     if (ScalarParameters) {
 
         FixedPar = c(0, 0)

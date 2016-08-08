@@ -7,22 +7,22 @@
 	This function implements several backtesting procedure for the Value at Risk. These are: (i) The statistical tests of Kupiec (1995), Christoffesen (1998) and Engle and Manganelli (2004), (ii) The tick loss function detailed in Gonz\'{a}lez-Rivera et al. (2004), the mean and max absolute loss used by McAleer and Da Veiga (2008) and the actual over expected exceedance  ratio.
 }
 \usage{
-BacktestVaR(vY, vVaR, dTau, alphaTest=0.95, cLags=4)
+BacktestVaR(data, VaR, tau, alphaTest=0.95, Lags=4)
 }
 \arguments{
-\item{vY}{
+\item{data}{
 \code{numeric} vector of observations.}
 %
-\item{vVaR}{
+\item{VaR}{
 \code{numeric} vector containing the Value at Risk series.}
 %
-\item{dTau}{
+\item{tau}{
 \code{numeric}. The VaR confidence level.}
 %
 \item{alphaTest}{
 \code{numeric}. Confidece level used in the statistical tests.}
 %
-\item{cLags}{
+\item{Lags}{
 \code{numeric}. Lags used in the Dynamic Quantile test of Engle and Manganelli (2004).}
 }
 \details{
@@ -50,13 +50,14 @@ Gonz\'{a}lez-Rivera, G., Lee, T. H., & Mishra, S. (2004). Forecasting volatility
 
 Kupiec, P. H. (1995). Techniques for verifying the accuracy of risk measurement models. The J. of Derivatives, 3(2).\cr
 
-McAleer, M., & Da Veiga, B. (2008). Forecasting value‐at‐risk with a parsimonious portfolio spillover GARCH (PS‐GARCH) model. Journal of Forecasting, 27(1), 1-19.\cr
+McAleer, M., & Da Veiga, B. (2008). Forecasting value-at-risk with a parsimonious portfolio spillover GARCH (PS-GARCH) model. Journal of Forecasting, 27(1), 1-19.\cr
 }
 \examples{
 \dontrun{
 data("StockIndex")
 
-GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = F, scale = T, shape = F))
+GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
+                     GASPar = list(location = F, scale = T, shape = F))
 
 FTSEMIB = StockIndex["FTSEMIB",]
 

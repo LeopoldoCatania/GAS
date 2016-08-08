@@ -1,11 +1,16 @@
-BacktestVaR <- function(vY, vVaR, dTau, alphaTest = 0.95, cLags = 4) {
+BacktestVaR <- function(data, VaR, tau, alphaTest = 0.95, Lags = 4) {
+
+  vY = data
+  vVaR = VaR
+  dTau = tau
+
   vY = as.numeric(vY)
   vVaR = as.numeric(vVaR)
 
   Hit = HitSequence(vY, vVaR)
   LRuc = Kupiec(Hit, dTau, alphaTest = alphaTest)
   LRcc = Christoffersen(Hit, dTau, alphaTest = alphaTest)
-  DQ = DQOOStest(vY, vVaR, dTau, cLags)
+  DQ = DQOOStest(vY, vVaR, dTau, Lags)
   AE = ActualOverExpected(Hit, dTau)
   AD = AbsoluteDeviation(Hit, vY, vVaR)
   Loss = QLoss(vY, vVaR, dTau)
@@ -15,7 +20,13 @@ BacktestVaR <- function(vY, vVaR, dTau, alphaTest = 0.95, cLags = 4) {
   return(lOut)
 }
 
-BacktestDensity <- function(Roll, dLower, dUpper, iK = 1000L, dA = 0.0, dB = 1.0){
+BacktestDensity <- function(Roll, lower, upper, K = 1000, a = 0.0, b = 1.0){
+
+  dLower = lower
+  dUpper = upper
+  iK = K
+  dA = a
+  dB = b
 
   iH = Roll@Info$ForecastLength
   vY = tail(getObs(Roll), iH)

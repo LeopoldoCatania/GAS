@@ -1,4 +1,16 @@
-UniGASFor <- function(uGASFit, iH, Roll = F, vOut = NULL, iB = 1000, vBands = c(0.1, 0.15, 0.85, 0.9), bReturnsDraws = F) {
+UniGASFor <- function(uGASFit, H, Roll = F, out = NULL, B = 1000, Bands = c(0.1, 0.15, 0.85, 0.9), ReturnDraws = FALSE) {
+
+
+  vOut = out
+  if (Roll) {
+    H = length(vOut)
+  }
+
+  iH = H
+  iB = B
+
+  vBands = Bands
+  bReturnDraws = ReturnDraws
 
     iK = uGASFit@ModelInfo$iK
     ScalingType = getScalingType(uGASFit)
@@ -11,8 +23,7 @@ UniGASFor <- function(uGASFit, iH, Roll = F, vOut = NULL, iB = 1000, vBands = c(
 
     if (Roll) {
 
-        iH = length(vOut)
-        iT = length(vY)
+      iT = length(vY)
         vYf = c(vY, vOut)
         iT = iT + iH
 
@@ -26,7 +37,7 @@ UniGASFor <- function(uGASFit, iH, Roll = F, vOut = NULL, iB = 1000, vBands = c(
     } else {
 
         vTheta_tp1 = tail(getFilteredParameters(uGASFit), 1)
-        Forc = uGASMultiForcast(vTheta_tp1, lParList$vKappa, lParList$mA, lParList$mB, iH, iB, iK, Dist, ScalingType, bReturnsDraws)
+        Forc = uGASMultiForcast(vTheta_tp1, lParList$vKappa, lParList$mA, lParList$mB, iH, iB, iK, Dist, ScalingType, bReturnDraws)
 
         PointForecast = matrix(0, iH, iK)
         cBands = array(0, dim = c(iH, length(vBands), iK), dimnames = list(1:iH, paste("q.", vBands, sep = ""), colnames(vTheta_tp1)))
@@ -42,7 +53,7 @@ UniGASFor <- function(uGASFit, iH, Roll = F, vOut = NULL, iB = 1000, vBands = c(
             PointForecast[1, ] = vTheta_tp1
             for (k in 1:iK) cBands[, , k] = vTheta_tp1[k]
         }
-        if (bReturnsDraws) {
+        if (bReturnDraws) {
             mY = Forc$mY
         } else {
             mY = matrix(0, 1, 1)
@@ -57,14 +68,27 @@ UniGASFor <- function(uGASFit, iH, Roll = F, vOut = NULL, iB = 1000, vBands = c(
     mMoments = EvalMoments_univ(t(PointForecast), Dist)
 
     Out <- new("uGASFor", Forecast = list(PointForecast = PointForecast, Moments = mMoments, vU = vU, vLS = vLS), Bands = cBands, Draws = mY,
-        Info = list(iH = iH, Roll = Roll, iB = iB, vBands = vBands, bReturnsDraws = bReturnsDraws, GASPar = GASPar, Dist = Dist, ScalingType = ScalingType,
+        Info = list(iH = iH, Roll = Roll, iB = iB, vBands = vBands, bReturnDraws = bReturnDraws, GASPar = GASPar, Dist = Dist, ScalingType = ScalingType,
             iK = iK), Data = list(vY = vY, FilteredParameters = FilteredParameters, vOut = vOut))
 
     return(Out)
 
 }
 
-MultiGASFor <- function(mGASFit, iH, Roll = F, mOut = NULL, iB = 10000, vBands = c(0.1, 0.15, 0.85, 0.9), bReturnsDraws = F) {
+MultiGASFor <- function(mGASFit, H, Roll = F, out = NULL, B = 10000, Bands = c(0.1, 0.15, 0.85, 0.9), ReturnDraws = FALSE) {
+
+  if (Roll) {
+    mOut = t(out)
+    H = ncol(mOut)
+  } else {
+    mOut = NULL
+  }
+
+  iH = H
+  iB = B
+
+  vBands = Bands
+  bReturnDraws = ReturnDraws
 
     iK = mGASFit@ModelInfo$iK
     iN = mGASFit@ModelInfo$iN
@@ -92,7 +116,7 @@ MultiGASFor <- function(mGASFit, iH, Roll = F, mOut = NULL, iB = 10000, vBands =
     } else {
 
         vTheta_tp1 = tail(getFilteredParameters(mGASFit), 1)
-        Forc = mGASMultiForcast(vTheta_tp1, lParList$vKappa, lParList$mA, lParList$mB, iH, iB, iK, iN, Dist, ScalingType, bReturnsDraws)
+        Forc = mGASMultiForcast(vTheta_tp1, lParList$vKappa, lParList$mA, lParList$mB, iH, iB, iK, iN, Dist, ScalingType, bReturnDraws)
 
         PointForecast = matrix(0, iH, iK)
         cBands = array(0, dim = c(iH, length(vBands), iK), dimnames = list(1:iH, paste("q.", vBands, sep = ""), colnames(vTheta_tp1)))
@@ -109,7 +133,7 @@ MultiGASFor <- function(mGASFit, iH, Roll = F, mOut = NULL, iB = 10000, vBands =
             for (k in 1:iK) cBands[, , k] = vTheta_tp1[k]
         }
 
-        if (bReturnsDraws) {
+        if (bReturnDraws) {
             cY = Forc$cY
         } else {
             cY = array(0, dim = c(1, 1, 1))
@@ -124,16 +148,18 @@ MultiGASFor <- function(mGASFit, iH, Roll = F, mOut = NULL, iB = 10000, vBands =
     lMoments = EvalMoments_multi(t(PointForecast), Dist, iN)
 
     Out <- new("mGASFor", Forecast = list(PointForecast = PointForecast, Moments = lMoments, vLS = vLS), Bands = cBands, Draws = cY, Info = list(iH = iH,
-        iN = iN, Roll = Roll, iB = iB, vBands = vBands, bReturnsDraws = bReturnsDraws, GASPar = GASPar, Dist = Dist, ScalingType = ScalingType,
+        iN = iN, Roll = Roll, iB = iB, vBands = vBands, bReturnDraws = bReturnDraws, GASPar = GASPar, Dist = Dist, ScalingType = ScalingType,
         iK = iK), Data = list(mY = mY, FilteredParameters = FilteredParameters, mOut = mOut))
 
     return(Out)
 
 }
 
-UniGASRoll <- function(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"), cluster = NULL) {
+UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"), cluster = NULL) {
 
     StartTime = Sys.time()
+
+    vY = data
 
     iT = length(vY)
 
@@ -198,7 +224,7 @@ UniGASRoll <- function(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEv
 
         lForecasts = lapply(1:length(lOut), function(i, lFits, lOut) {
 
-            UniGASFor(uGASFit = lFits[[i]], vOut = lOut[[i]], Roll = T)
+            UniGASFor(uGASFit = lFits[[i]], out = lOut[[i]], Roll = T)
 
         }, lFits = lFits, lOut = lOut)
 
@@ -208,7 +234,7 @@ UniGASRoll <- function(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEv
         Moments = do.call(rbind, lapply(lForecasts, getMoments))
     }
 
-    PitTest = PIT_test(vU, iG = 20, dAlpha = 0.05, plot = F)
+    PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = F)
 
     elapsedTime = Sys.time() - StartTime
 
@@ -219,9 +245,11 @@ UniGASRoll <- function(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEv
 
 }
 
-MultiGASRoll <- function(mY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"), cluster = NULL) {
+MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"), cluster = NULL) {
 
     StartTime = Sys.time()
+
+    mY = t(data)
 
     iT = ncol(mY)
     iN = nrow(mY)
@@ -252,12 +280,12 @@ MultiGASRoll <- function(mY, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
 
     if (RefitWindow[1] == "recursive") {
         for (i in 1:length(FitIndex)) {
-            lData[[i]] = mY[, 1:FitIndex[i]]
+            lData[[i]] = t(mY[, 1:FitIndex[i]])
         }
     }
     if (RefitWindow[1] == "moving") {
         for (i in 1:length(FitIndex)) {
-            lData[[i]] = mY[, (FitIndex[i] - iStart + 1):FitIndex[i]]
+            lData[[i]] = t(mY[, (FitIndex[i] - iStart + 1):FitIndex[i]])
         }
     }
     # fits
@@ -273,21 +301,21 @@ MultiGASRoll <- function(mY, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
 
         mForc = do.call(rbind, lapply(lFits, function(x) tail(getFilteredParameters(x), 1)))
         vU = NULL
-        vLS = EvaluateLogScore_Multi(t(mForc), tail(vY, ForecastLength), Dist, ForecastLength, iN)
+        vLS = EvaluateLogScore_Multi(t(mForc), t(tail(t(mY), ForecastLength)), Dist, ForecastLength, iN)
         Moments = EvalMoments_multi(t(mForc), Dist, iN)
     } else {
 
         for (i in 1:length(FitIndex)) {
             if (i != length(FitIndex)) {
-                lOut[[i]] = mY[, (FitIndex[i] + 1):(FitIndex[i + 1])]
+                lOut[[i]] = t(mY[, (FitIndex[i] + 1):(FitIndex[i + 1])])
             } else {
-                lOut[[i]] = mY[, (FitIndex[i] + 1):iT]
+                lOut[[i]] = t(mY[, (FitIndex[i] + 1):iT])
             }
         }
 
         lForecasts = lapply(1:length(lOut), function(i, lFits, lOut) {
 
-            MultiGASFor(mGASFit = lFits[[i]], mOut = lOut[[i]], Roll = T)
+            MultiGASFor(mGASFit = lFits[[i]], out = lOut[[i]], Roll = T)
 
         }, lFits = lFits, lOut = lOut)
 

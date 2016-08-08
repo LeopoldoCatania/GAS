@@ -7,11 +7,12 @@
  One step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
 }
 \usage{
-UniGASRoll(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving", "recursive"),
-                     cluster=NULL)
+UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
+           RefitEvery = 23, RefitWindow = c("moving", "recursive"),
+           cluster=NULL)
 }
 \arguments{
-\item{vY}{ \code{numeric} vector containing the time series of observations.}
+\item{data}{ \code{numeric} vector containing the time series of observations.}
 %
 \item{GASSpec}{ An object of the class \link{uGASSpec} created using the function \link{UniGASSpec}}
 %
@@ -22,29 +23,30 @@ UniGASRoll(vY, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, Re
 \item{cluster}{ A \code{cluster} object created calling using the \code{paralell} package. If supplied parallel processing is used to speed up the computations.}
 %
 }
-\details{
-}
 \value{
 An object of the class \link{uGASRoll}
 }
 \author{Leopoldo Catania}
-\note{}
 \examples{
 \dontrun{
-# Specify an univariate GAS model with Student-t conditional distribution and time-varying location, scale and shape parameter
+# Specify an univariate GAS model with Student-t
+# conditional distribution and time-varying location, scale and shape parameter
+
 # Inflation Forecast
 
 data("cpichg")
 help(cpichg)
 
-GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = T, scale = T, shape = F))
+GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity",
+                       GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
 
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
 cluster = makeCluster(4)
 
-Roll = UniGASRoll(cpichg,GASSpec,ForecastLength = 50, RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
+Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
+                  RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
 

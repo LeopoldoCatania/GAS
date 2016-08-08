@@ -605,6 +605,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// rmvt_mat
+arma::mat rmvt_mat(int iN, arma::vec vMu, arma::mat mSigma, double dNu);
+RcppExport SEXP GAS_rmvt_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP, SEXP dNuSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vMu(vMuSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mSigma(mSigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dNu(dNuSEXP);
+    __result = Rcpp::wrap(rmvt_mat(iN, vMu, mSigma, dNu));
+    return __result;
+END_RCPP
+}
 // RhoScore_mvt
 arma::vec RhoScore_mvt(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, double dNu, int iN);
 RcppExport SEXP GAS_RhoScore_mvt(SEXP vRSEXP, SEXP mDSEXP, SEXP vYSEXP, SEXP vMuSEXP, SEXP dNuSEXP, SEXP iNSEXP) {

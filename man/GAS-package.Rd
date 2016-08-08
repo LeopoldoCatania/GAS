@@ -30,8 +30,3 @@ Creal, D., Koopman, S. J., & Lucas, A. (2013). Generalized autoregressive score 
 Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applications to financial and economic time series (Vol. 52). Cambridge University Press.\cr
 }
 \keyword{ package }
-\seealso{
-}
-\examples{
-%% ~~ simple examples of the most important functions ~~
-}

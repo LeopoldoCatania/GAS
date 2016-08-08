@@ -82,3 +82,35 @@ vPw2vPn_Multi <- function(vPw, Dist, iK, iN, ScalarParameters) {
 
     return(vParList)
 }
+
+
+MultiMapParameters <- function(Theta_tilde, Dist, N){
+  iN = N
+  iK = NumberParameters(Dist, iN)
+  vTheta = MapParameters_multi(Theta_tilde, Dist, iN, iK)
+  return(vTheta)
+}
+
+MultiUnmapParameters <- function(Theta, Dist, N){
+  iN = N
+  iK = NumberParameters(Dist, iN)
+  vTheta_tilde =  UnmapParameters_multi(Theta, Dist, iN, iK)
+  return(vTheta_tilde)
+}
+
+UniMapParameters <- function(Theta_tilde, Dist){
+  iK = NumberParameters(Dist)
+  vTheta = MapParameters_univ(Theta_tilde, Dist, iK)
+  return(vTheta)
+}
+
+UniUnmapParameters <- function(Theta, Dist){
+  iK = NumberParameters(Dist)
+  vTheta_tilde = UnmapParameters_univ(Theta, Dist, iK)
+  return(vTheta_tilde)
+}
+
+
+
+
+

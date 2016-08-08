@@ -169,6 +169,10 @@ dmvt_ThetaParam <- function(vY, vTheta, iN, bLog = FALSE) {
     .Call('GAS_dmvt_ThetaParam', PACKAGE = 'GAS', vY, vTheta, iN, bLog)
 }
 
+rmvt_mat <- function(iN, vMu, mSigma, dNu) {
+    .Call('GAS_rmvt_mat', PACKAGE = 'GAS', iN, vMu, mSigma, dNu)
+}
+
 RhoScore_mvt <- function(vR, mD, vY, vMu, dNu, iN) {
     .Call('GAS_RhoScore_mvt', PACKAGE = 'GAS', vR, mD, vY, vMu, dNu, iN)
 }

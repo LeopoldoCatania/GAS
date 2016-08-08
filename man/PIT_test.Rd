@@ -7,16 +7,16 @@
 	This function implements density goodness of fit procedure of Diebold et al. (1998).
 }
 \usage{
-PIT_test(vU, iG=20, dAlpha=0.05, plot=F)
+PIT_test(U, G=20, alpha=0.05, plot=F)
 }
 \arguments{
-\item{vU}{
-\code{numeric} vector of Probability Integral Transformation, see \link{pit}.}
+\item{U}{
+\code{numeric} vector of Probability Integral Transformation.}
 %
-\item{iG}{
+\item{G}{
 \code{numeric} number of bins of the empirical cumulative density function of the PIT.}
 %
-\item{dAlpha}{
+\item{alpha}{
 \code{numeric}. test confidence level.}
 %
 \item{plot}{
@@ -52,15 +52,16 @@ Vlaar, P. J., & Palm, F. C. (1993). The message in weekly exchange rates in the 
 \dontrun{
 data("StockIndex")
 
-GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity", GASPar = list(location = F, scale = T, shape = F))
+GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
+                     GASPar = list(location = F, scale = T, shape = F))
 
 FTSEMIB = StockIndex["FTSEMIB",]
 
 Fit = UniGASFit(GASSpec, FTSEMIB)
 
-vU = pit(Fit)
+U = pit(Fit)
 
-Test = PIT_test(vU, iG=20, dAlpha=0.05, plot=T)
+Test = PIT_test(U, G=20, alpha=0.05, plot=T)
 
 }
 }

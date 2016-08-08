@@ -2,28 +2,35 @@
 \Rdversion{0.1}
 \docType{class}
 \alias{uGASFor}
+\alias{uGASFor-class}
+\alias{LogScore,uGASFor-method}
+\alias{getForecast,uGASFor-method}
+\alias{getMoments,uGASFor-method}
+\alias{getObs,uGASFor-method}
+\alias{pit,uGASFor-method}
+\alias{quantile,uGASFor-method}
+\alias{plot,uGASFor,missing-method}
+\alias{show,uGASFor-method}
 \title{class: Class for the Univariate GAS Forecast object}
 \description{
 Class for the Univariate GAS Forecast object.
 }
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
-\section{Extends}{
-
-}
 \section{Slots}{
-  \itemize{
-    \item \code{Forecast} Object of class \code{"list"}. Contains forecasts:
+  \describe{
+    \item{\code{Forecast}:}{Object of class \code{"list"}. Contains forecasts:
     \itemize{
 \item PointForecast : \code{matrix} with parameters forecasts.
 \item Moments : \code{matrix} with centered moments forecasts.
 \item vLS : \code{numeric} Log Score (Predictive Log Likelihood)
 \item vU  : \code{numeric} Out of sample Probability Integral Transformation
 }
- \item \code{Bands}: \code{array} with confidece bands parameters forecasts. Available only if \code{Roll = TRUE}.
+}
+ \item{\code{Bands}:}{\code{array} with confidece bands parameters forecasts. Available only if \code{Roll = TRUE}.}
 %
-\item \code{Draws}: If \code{bReturnsDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.
-\item \code{Info}: \code{list} with forecast information.
-\item \code{Data}: \code{list} with original data.
+\item{\code{Draws}:}{If \code{bReturnsDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.}
+\item{\code{Info}:}{\code{list} with forecast information.}
+\item{\code{Data}:}{\code{list} with original data.}
 }
 }
 \section{Methods}{
@@ -39,5 +46,4 @@ Class for the Univariate GAS Forecast object.
 }
 }
 \author{ Leopoldo Catania}
-\note{ }
 \keyword{classes}

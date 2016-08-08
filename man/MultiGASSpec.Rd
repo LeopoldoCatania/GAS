@@ -7,8 +7,9 @@
 	Specify the conditional distribution, scaling mechanism and time-varying parameters for multivariate GAS models.
 }
 \usage{
-MultiGASSpec(Dist = "mvnorm", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE,
-                                                                      correlation = TRUE, shape = FALSE),
+MultiGASSpec(Dist = "mvnorm", ScalingType = "Identity",
+             GASPar = list(location = FALSE, scale = TRUE,
+                           correlation = FALSE, shape = FALSE),
              ScalarParameters = TRUE)
 }
 \arguments{
@@ -41,14 +42,17 @@ Creal, D., Koopman, S. J., & Lucas, A. (2013). Generalized autoregressive score 
 Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applications to financial and economic time series (Vol. 52). Cambridge University Press.\cr
 }
 \author{Leopoldo Catania}
-\note{}
 \examples{
 \dontrun{
-# Specify a GAS model with Multivariate Student-t conditional distribution and time-varying locations, scales and correlations  parameters but constant shape parameter.
+# Specify a GAS model with Multivariate Student-t
+# conditional distribution and time-varying locations,
+# scales and correlations  parameters but constant shape parameter.
+
 library(GAS)
 
-GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = TRUE, scale = TRUE,
-                                                                             correlation = TRUE, shape = FALSE))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
+                       GASPar = list(location = TRUE, scale = TRUE,
+                                     correlation = TRUE, shape = FALSE))
 
 }
 }

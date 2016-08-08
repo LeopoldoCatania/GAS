@@ -1,4 +1,4 @@
-#'@export
+
 InferenceFun_Uni <- function(mHessian, vPw, iK) {
 
     vPn = vPw2vPn_Uni(vPw, iK)
@@ -22,7 +22,6 @@ InferenceFun_Uni <- function(mHessian, vPw, iK) {
     return(out)
 }
 
-#'@export
 InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters) {
 
     vPn = vPw2vPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
