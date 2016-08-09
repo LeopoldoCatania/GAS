@@ -17,7 +17,7 @@ MultiGASSim(iT, N, kappa, A, B, Dist, ScalingType)
 \code{numeric} Cross sectional dimension (Only N<5 supported for now).}
 %
 \item{kappa}{
-\code{numeric} vector of unconditional level for the reparametrised vector of parameters.}
+\code{numeric} vector of unconditional level for the reparametrized vector of parameters.}
 %
 \item{A}{
 \code{matrix} of coefficients of dimension K x K that premultiply the conditional score in the GAS updating recursion, see Details.}
@@ -33,7 +33,7 @@ MultiGASSim(iT, N, kappa, A, B, Dist, ScalingType)
 %
 }
 \details{
-	All the information regarding the supported multivariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as \deqn{y_{t}~p(y|\theta_{t})}, where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = h(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}, where \eqn{h(.)} is the mapping function (this is hard codeded in the package, see \link{MultiMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialised at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{Kappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
+	All the information regarding the supported multivariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as: \deqn{y_{t}\sim p(y|\theta_{t})} where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is: \deqn{\theta_{t} = h(\tilde{\theta}_{t})}\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}} where \eqn{h(.)} is the mapping function (see \link{MultiMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{Kappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
 }
 \value{
 An object of the class \link{mGASSim}
@@ -46,7 +46,6 @@ Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applic
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Simulate from a GAS process with Multivariate Student-t conditional
 # distribution, time-varying locations, scales, correlations
 # and fixed shape parameter.
@@ -83,5 +82,5 @@ diag(B) = c(0, 0, 0, 0.7, 0.7, 0.5, 0.94, 0.97, 0.92, 0)
 Sim = MultiGASSim(iT,N, kappa, A, B, Dist, ScalingType = "Identity")
 
 Sim
-}
+
 }

@@ -33,7 +33,7 @@ UniGASSim(iT, kappa, A, B, Dist, ScalingType)
 %
 }
 \details{
-	All the information regarding the supported univariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as \deqn{y_{t}~p(y|\theta_{t})}, where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = h(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}, where \eqn{h(.)} is the mapping function (this is hard codeded in the package, see \link{UniMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialised at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{vKappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
+	All the information regarding the supported univariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as \deqn{y_{t}\sim p(y|\theta_{t})}, where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = h(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}, where \eqn{h(.)} is the mapping function (see \link{UniMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{vKappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
 }
 \value{
 An object of the class \link{uGASSim}
@@ -46,7 +46,6 @@ Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applic
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Simulate from a GAS process with Student-t conditional
 # distribution, time-varying location, scale and fixed shape parameter.
 
@@ -79,5 +78,5 @@ B = matrix(c(0.7 , 0.0 , 0.0 ,
 Sim = UniGASSim(iT, kappa, A, B, Dist, ScalingType = "Identity")
 
 Sim
-}
+
 }

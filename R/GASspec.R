@@ -1,6 +1,6 @@
 
-UniGASSpec <- function(Dist = "norm", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE, skewness = FALSE, shape = FALSE, 
-    shape2 = FALSE)) {
+UniGASSpec <- function(Dist = "norm", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE, 
+    skewness = FALSE, shape = FALSE, shape2 = FALSE)) {
     
     iK = NumberParameters(Dist)
     
@@ -23,8 +23,8 @@ UniGASSpec <- function(Dist = "norm", ScalingType = "Identity", GASPar = list(lo
     return(Spec)
 }
 
-MultiGASSpec <- function(Dist = "mvnorm", ScalingType = "Identity", GASPar = list(location = FALSE, scale = TRUE, correlation = FALSE, shape = FALSE), 
-    ScalarParameters = TRUE) {
+MultiGASSpec <- function(Dist = "mvnorm", ScalingType = "Identity", GASPar = list(location = FALSE, 
+    scale = TRUE, correlation = FALSE, shape = FALSE), ScalarParameters = TRUE) {
     
     if (is.null(GASPar$location)) 
         GASPar$location = FALSE

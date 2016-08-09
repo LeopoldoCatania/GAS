@@ -20,7 +20,7 @@ BacktestVaR(data, VaR, tau, alphaTest=0.95, Lags=4)
 \code{numeric}. The VaR confidence level.}
 %
 \item{alphaTest}{
-\code{numeric}. Confidece level used in the statistical tests.}
+\code{numeric}. Confidence level used in the statistical tests.}
 %
 \item{Lags}{
 \code{numeric}. Lags used in the Dynamic Quantile test of Engle and Manganelli (2004).}
@@ -28,8 +28,8 @@ BacktestVaR(data, VaR, tau, alphaTest=0.95, Lags=4)
 \details{
 		This function implements several backtesting procedure for the Value at Risk. The implemented statistical tests are:
   \itemize{
-    \item \code{LRuc}: The unconditioanl coverage test of Kupiec (1995).
-    \item \code{LRcc}: The conditioanl coverage test of Christoffesen (1998).
+    \item \code{LRuc}: The unconditional coverage test of Kupiec (1995).
+    \item \code{LRcc}: The conditional coverage test of Christoffesen (1998).
     \item \code{DQ}: The Dynamic Quantile test of Engle and Manganelli (2004).
     }
     The implemented VaR backtesting quantities are:
@@ -53,26 +53,26 @@ Kupiec, P. H. (1995). Techniques for verifying the accuracy of risk measurement 
 McAleer, M., & Da Veiga, B. (2008). Forecasting value-at-risk with a parsimonious portfolio spillover GARCH (PS-GARCH) model. Journal of Forecasting, 27(1), 1-19.\cr
 }
 \examples{
-\dontrun{
-data("StockIndex")
+
+data("StockIndices")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                     GASPar = list(location = F, scale = T, shape = F))
+                     GASPar = list(location = FALSE, scale = TRUE,
+                                   shape = FALSE))
 
-FTSEMIB = StockIndex["FTSEMIB",]
+FTSEMIB = StockIndices[, "FTSEMIB"]
 
 InSampleData  = FTSEMIB[1:1500]
 OutSampleData = FTSEMIB[1501:2404]
 
 Fit = UniGASFit(GASSpec, InSampleData)
 
-Forecast = UniGASFor(Fit, Roll = TRUE, vOut = OutSampleData)
+Forecast = UniGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
-dTau = 0.05
+tau = 0.05
 
-vVaR = quantile(Forecast, dTau)
+VaR = quantile(Forecast, tau)
 
-BackTest = BacktestVaR(OutSampleData, vVaR, dTau)
+BackTest = BacktestVaR(OutSampleData, VaR, tau)
 
-}
 }

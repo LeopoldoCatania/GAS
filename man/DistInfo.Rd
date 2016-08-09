@@ -1,5 +1,6 @@
 \name{DistInfo}
 \alias{DistInfo}
+\alias{DistLabels}
 \title{
 	Information for the supported distributions
 }
@@ -14,7 +15,7 @@ DistInfo(DistLabel = NULL, N = 2)
 \code{character} indicating the label of the conditional distribution. if \code{DistLabel = NULL} all the supported distributions are printed. Default \code{DistLabel = NULL}}. Run \code{DistLabels()} to see the labels of the currently implemented distributions.
 %
 \item{N}{
-\code{numeric} indicating the number of asset if DistLabel link to a multivariate distribution. Default \code{iN = 2}.}
+\code{numeric} indicating the number of asset if \code{DistLabel} link to a multivariate distribution. Default \code{iN = 2}.}
 %
 }
 \details{
@@ -22,10 +23,8 @@ DistInfo(DistLabel = NULL, N = 2)
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # show the information of all the supported distributions
 library(GAS)
 
 DistInfo()
-}
 }

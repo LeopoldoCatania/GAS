@@ -22,7 +22,7 @@ Class for the Multivariate GAS Forecast object.
 \item vLS : \code{numeric} Log Score (Predictive Log Likelihood)
 }
 }
- \item{\code{Bands}:}{\code{array} with confidece bands parameters forecasts. Available only if \code{Roll = TRUE}.}
+ \item{\code{Bands}:}{\code{array} with confidence bands parameters forecasts. Available only if \code{Roll = TRUE}.}
 %
 \item{\code{Draws}:}{If \code{bReturnsDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.}
 \item{\code{Info}:}{\code{list} with forecast information.}

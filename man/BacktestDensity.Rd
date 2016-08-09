@@ -49,12 +49,12 @@ and standard deviation \eqn{b}, respectively. The label "Uniform" represents the
 Gneiting T, Ranjan R (2012). "Comparing density forecasts using threshold- and quantile-weighted scoring rules."Journal of Business & Economic Statistics. \doi{doi:10.1198/jbes.2010.08110}.\cr
 }
 \examples{
-\dontrun{
 
 data("cpichg")
 
 GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                       GASPar = list(location = T, scale = T, shape = F))
+                       GASPar = list(location = TRUE, scale = TRUE,
+                                      shape = FALSE))
 
 Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
                   RefitEvery = 10, RefitWindow = c("moving"))
@@ -63,5 +63,4 @@ BackTest =  BacktestDensity(Roll, lower = -100, upper = 100)
 
 BackTest$average
 
-}
 }

@@ -28,7 +28,6 @@ An object of the class \link{mGASRoll}
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Specify a GAS model with Multivariate Student-t conditional
 # distribution and time-varying scale and correlation parameters
 
@@ -40,19 +39,15 @@ mY = StockIndices[, 1:2]
 
 ## Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
-                       GASPar = list(location = F, scale = T,
-                                     correlation = T, shape = F))
+                       GASPar = list(location = FALSE, scale = TRUE,
+                                     correlation = TRUE, shape = FALSE))
 
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-cluster = makeCluster(5)
-
-Roll    = MultiGASRoll(mY, GASSpec,ForecastLength = 500,
-                       RefitEvery = 100, RefitWindow = c("moving"),
-                       cluster = cluster)
+Roll    = MultiGASRoll(mY, GASSpec, ForecastLength = 250,
+                       RefitEvery = 100, RefitWindow = c("moving"))
 
 Roll
 
-}
 }

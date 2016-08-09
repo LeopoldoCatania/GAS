@@ -28,7 +28,6 @@ An object of the class \link{uGASRoll}
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 
@@ -43,13 +42,10 @@ GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity",
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-cluster = makeCluster(4)
-
 Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
-                  RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
+                  RefitEvery = 10, RefitWindow = c("moving"))
+
 
 Roll
 
-
-}
 }

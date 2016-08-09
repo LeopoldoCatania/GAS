@@ -1,7 +1,7 @@
 PlotMenu <- function(object) {
     if (is(object, "uGASFit")) {
-        vplotMenu = c("Filtered Parameters", "Filtered Parameters with confidence bands", "Conditional Moments", "Probability Integral Transformation", 
-            "Data", "Data + Filtered Mean")
+        vplotMenu = c("Filtered Parameters", "Filtered Parameters with confidence bands", "Conditional Moments", 
+            "Probability Integral Transformation", "Data", "Data + Filtered Mean")
     }
     if (is(object, "mGASFit")) {
         vplotMenu = c("Filtered Parameters", "Conditional Moments", "Data")
@@ -15,15 +15,17 @@ PlotMenu <- function(object) {
     if (is(object, "uGASFor")) {
         Roll = object@Info$Roll
         if (!Roll) 
-            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values", "Parameters Forecast with confidence bands + Filtered Values", 
-                "Conditional Moments Forecast", "Conditional Moments Forecast + In Sample Moments")
+            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values", 
+                "Parameters Forecast with confidence bands + Filtered Values", "Conditional Moments Forecast", 
+                "Conditional Moments Forecast + In Sample Moments")
         if (Roll) 
             vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments", "Log scores")
     }
     if (is(object, "mGASFor")) {
         Roll = object@Info$Roll
         if (!Roll) 
-            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values", "Parameters Forecast with confidence bands + Filtered Values")
+            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values", 
+                "Parameters Forecast with confidence bands + Filtered Values")
         if (Roll) 
             vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments", "Log scores")
     }
@@ -88,7 +90,8 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
                     
                     vLim = c(min(mTheta[, i]), max(mTheta[, i]))
                     
-                    plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+                    plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, 
+                      ylim = vLim)
                     
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
                     lines(vDates, mTheta[, i], col = "black")
@@ -98,7 +101,8 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
                       
                       if (!is(vDates, "integer")) {
                         axis.Date(1, at = seq(min(vDates), max(vDates), "year"))
-                        axis.Date(1, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, tcl = -0.2)
+                        axis.Date(1, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, 
+                          tcl = -0.2)
                       } else {
                         foo = vDates[c(1, seq(0, iT, ceiling((iT)/20))[-1])]
                         axis(1, at = foo, labels = foo)
@@ -139,7 +143,8 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
             
             vLim = c(min(mTheta_os[, i], mTheta_is[, i]), max(mTheta_os[, i], mTheta_is[, i]))
             
-            plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+            plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", 
+                las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
             
             lines(vDates_is, mTheta_is[, i], col = "black")
@@ -150,7 +155,8 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
         }
         if (!is(vDateFull, "integer")) {
             axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2] - vDateFull[1]))
-            axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), labels = FALSE, tcl = -0.2)
+            axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), 
+                labels = FALSE, tcl = -0.2)
         } else {
             foo = vDateFull[c(1, seq(0, iS + iH, ceiling((iS + iH)/20))[-1])]
             axis(1, at = foo, labels = foo)
@@ -177,7 +183,8 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
                     
                     vLim = c(min(mTheta_os[, i], mTheta_is[, i]), max(mTheta_os[, i], mTheta_is[, i]))
                     
-                    plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+                    plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", 
+                      las = 1, ylim = vLim)
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
                     
                     lines(vDates_is, mTheta_is[, i], col = "black")
@@ -190,8 +197,8 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
                       
                       if (!is(vDateFull, "integer")) {
                         axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2] - vDateFull[1]))
-                        axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), labels = FALSE, 
-                          tcl = -0.2)
+                        axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - 
+                          vDateFull[1])), labels = FALSE, tcl = -0.2)
                       } else {
                         foo = vDateFull[c(1, seq(0, (iS + iH), ceiling((iS + iH)/20))[-1])]
                         axis(1, at = foo, labels = foo)
@@ -248,13 +255,15 @@ PlotForecastVsRealized_Univ <- function(mRealVsForecast, vDates_os, object) {
     lines(vDates_os, mRealVsForecast[, 1], col = "red")
     
     if (is(object, "uGASFor") | is(object, "uGASRoll")) 
-        legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1, 1))
+        legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1, 
+            1))
     if (is(object, "uGASFit")) 
         legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1, 1))
     
     if (!is(vDates_os, "integer")) {
         axis.Date(1, at = seq(min(vDates_os), max(vDates_os), vDates_os[2] - vDates_os[1]))
-        axis.Date(1, at = seq(min(vDates_os), max(vDates_os), 0.25 * (vDates_os[2] - vDates_os[1])), labels = FALSE, tcl = -0.2)
+        axis.Date(1, at = seq(min(vDates_os), max(vDates_os), 0.25 * (vDates_os[2] - vDates_os[1])), 
+            labels = FALSE, tcl = -0.2)
     } else {
         foo = vDates_os[c(1, seq(0, iH, ceiling((iH)/20))[-1])]
         axis(1, at = foo, labels = foo)
@@ -288,9 +297,11 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
             
             if (i == 1) {
                 if (is(object, "mGASFor") | is(object, "mGASRoll")) 
-                  legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1, 1))
+                  legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1, 
+                    1))
                 if (is(object, "mGASFit")) 
-                  legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1, 1))
+                  legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1, 
+                    1))
             }
         }
         if (!is(vDates_os, "integer")) {
@@ -322,7 +333,8 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
                     
                     vLim = c(min(mReal[, i], mForcasted[, i]), max(mReal[, i], mForcasted[, i]))
                     
-                    plot(vDates_os, mReal[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+                    plot(vDates_os, mReal[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, 
+                      ylim = vLim)
                     
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
                     lines(vDates_os, mReal[, i], col = "black")
@@ -332,15 +344,18 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
                     
                     if (any(i == plotSeq)) {
                       if (is(object, "mGASFor") | is(object, "mGASRoll")) 
-                        legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1, 1))
+                        legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), 
+                          lty = c(1, 1))
                       if (is(object, "mGASFit")) 
-                        legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1, 1))
+                        legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), 
+                          lty = c(1, 1))
                     }
                   }
                 }
                 if (!is(vDates_os, "integer")) {
                   axis.Date(1, at = seq(min(vDates_os), max(vDates_os), "year"))
-                  axis.Date(1, at = seq(min(vDates_os), max(vDates_os), "quarter"), labels = FALSE, tcl = -0.2)
+                  axis.Date(1, at = seq(min(vDates_os), max(vDates_os), "quarter"), labels = FALSE, 
+                    tcl = -0.2)
                 } else {
                   foo = vDates_os[c(1, seq(0, iH, ceiling((iH)/20))[-1])]
                   axis(1, at = foo, labels = foo)
@@ -406,7 +421,8 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
                     
                     vLim = c(min(cBands[, , i]), max(cBands[, , i]))
                     
-                    plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+                    plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, 
+                      ylim = vLim)
                     
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
                     lines(vDates, mTheta[, i], col = "black")
@@ -417,7 +433,8 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
                       
                       if (!is(vDates, "integer")) {
                         axis.Date(1, at = seq(min(vDates), max(vDates), "year"))
-                        axis.Date(1, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, tcl = -0.2)
+                        axis.Date(1, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, 
+                          tcl = -0.2)
                       } else {
                         foo = vDates[c(1, seq(0, iT, ceiling((iT)/20))[-1])]
                         axis(1, at = foo, labels = foo)
@@ -459,7 +476,8 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
             
             vLim = c(min(cBands[, , i], mTheta_is[, i]), max(cBands[, , i], mTheta_is[, i]))
             
-            plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+            plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", 
+                las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
             
             lines(vDates_is, mTheta_is[, i], col = "black")
@@ -471,7 +489,8 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
         }
         if (!is(vDateFull, "integer")) {
             axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2] - vDateFull[1]))
-            axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), labels = FALSE, tcl = -0.2)
+            axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), 
+                labels = FALSE, tcl = -0.2)
         } else {
             foo = vDateFull[c(1, seq(0, iH + iS, ceiling((iH + iS)/20))[-1])]
             axis(1, at = foo, labels = foo)
@@ -498,7 +517,8 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
                     
                     vLim = c(min(cBands[, , i], mTheta_is[, i]), max(cBands[, , i], mTheta_is[, i]))
                     
-                    plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
+                    plot(vDateFull, rep(0, length(vDateFull)), type = "n", xaxt = "n", xlab = "", ylab = "", 
+                      las = 1, ylim = vLim)
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
                     
                     lines(vDates_is, mTheta_is[, i], col = "black")
@@ -513,8 +533,8 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
                       
                       if (!is(vDateFull, "integer")) {
                         axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2] - vDateFull[1]))
-                        axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - vDateFull[1])), labels = FALSE, 
-                          tcl = -0.2)
+                        axis.Date(1, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2] - 
+                          vDateFull[1])), labels = FALSE, tcl = -0.2)
                       } else {
                         foo = vDateFull[c(1, seq(0, (iH + iS), ceiling((iH + iS)/20))[-1])]
                         axis(1, at = foo, labels = foo)

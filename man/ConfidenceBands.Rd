@@ -1,10 +1,10 @@
 \name{ConfidenceBands}
 \alias{ConfidenceBands}
 \title{
-	Build confidece bands for the filtered parameters
+	Build confidence bands for the filtered parameters
 }
 \description{
-	Build confidece bands for the filtered parameters sampling the coefficients from the asymptotic distribution as in Blasques et al. (2016).
+	Build confidence bands for the filtered parameters sampling the coefficients from the asymptotic distribution as in Blasques et al. (2016).
 }
 \usage{
 ConfidenceBands(object, B = 10000, probs = c(0.01,0.1,0.9,0.99), ...)
@@ -31,18 +31,17 @@ Additional arguments.}
 Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidence bands and out-of-sample forecast bands for time-varying parameters in observation-driven models. International Journal of Forecasting, 32(3), 875-887.
 }
 \examples{
-\dontrun{
 # show the information of all the supported distributions
 library(GAS)
 
 data("cpichg")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                     GASPar = list(location = T, scale = T, shape = F))
+                     GASPar = list(location = TRUE, scale = TRUE,
+                                   shape = FALSE))
 
-Fit = UniGASFit(GASSpec,cpichg)
+Fit = UniGASFit(GASSpec, cpichg)
 
 Bands = ConfidenceBands(Fit)
 
-}
 }

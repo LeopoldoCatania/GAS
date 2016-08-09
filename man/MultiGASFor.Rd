@@ -4,7 +4,7 @@
 	Forecast with multivariate GAS models
 }
 \description{
-	Forecast with multivariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are perfomed by simulation as detailed in Blasques et al. (2016).
+	Forecast with multivariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are performed by simulation as detailed in Blasques et al. (2016).
 }
 \usage{
 MultiGASFor(mGASFit, H, Roll = F, out = NULL, B = 10000,
@@ -29,20 +29,19 @@ Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidenc
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
-# Specify an univariate GAS model with Student-t conditional
-# distribution and time-varying location, scale and shape parameter
+# Specify a GAS model with multivatiate  Student-t conditional
+# distribution and time-varying scales and correlations.
 
 # Stock returns forecast
 
-data("StockIndex")
+data("StockIndices")
 
-mY = StockIndex[1:2,]
+mY = StockIndices[, 1:2]
 
 ## Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
-                       GASPar = list(location = F, scale = T,
-                                     correlation = T, shape = F))
+                       GASPar = list(location = FALSE, scale = TRUE,
+                                     correlation = TRUE, shape = FALSE))
 
 # Perform H-step ahead forecast with confidence bands
 
@@ -66,5 +65,4 @@ Fit = MultiGASFit(GASSpec, InSampleData)
 Forecast  = MultiGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
-}
 }

@@ -30,20 +30,18 @@ Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applic
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Specify an GAS model with multivariate Student-t
 # conditional distribution and time-varying scales and correlations
 
 library(GAS)
 
-load(StockIndices)
+data("StockIndices")
 
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
                        GASPar = list(scale = TRUE, correlation = TRUE))
 
-Fit = MultiGASFit(StockIndices, GASSpec)
+Fit = MultiGASFit(GASSpec, StockIndices)
 
 Fit
 
-}
 }

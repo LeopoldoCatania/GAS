@@ -1,4 +1,5 @@
 \name{MultiUnmapParameters}
+\alias{UnMapR_C}
 \alias{MultiUnmapParameters}
 \title{
 	Inverse of \link{MultiMapParameters}
@@ -26,7 +27,6 @@ MultiUnmapParameters(Theta, Dist, N)
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # unmap parameters for the Multivariate Student-t distribution with N=3
 library(GAS)
 
@@ -50,5 +50,7 @@ Theta_tilde = MultiUnmapParameters(Theta, Dist, N)
 
 Theta_tilde
 
-}
+# it works
+all(abs(MultiMapParameters(Theta_tilde, Dist, N) - Theta) < 1e-16)
+
 }

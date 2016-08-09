@@ -21,7 +21,8 @@ UniGASOptimiser <- function(vPw, vY, Dist, ScalingType, iT, iK) {
     
     lParList = AddFixedPar(lParList)
     
-    dLLK = try(GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)$dLLK, silent = T)
+    dLLK = try(GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)$dLLK, 
+        silent = T)
     
     if (!is(dLLK, "try-error")) {
         dMLLK = -dLLK
@@ -35,7 +36,8 @@ MultiGASOptimiser <- function(vPw, mY, Dist, ScalingType, iT, iN, iK, ScalarPara
     lParList = vPw2lPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
     lParList = AddFixedPar(lParList)
     
-    dLLK = try(GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$dLLK, silent = T)
+    dLLK = try(GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)$dLLK, 
+        silent = T)
     
     if (!is(dLLK, "try-error")) {
         dMLLK = -dLLK

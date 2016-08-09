@@ -4,7 +4,7 @@
 	Forecast with univariate GAS models
 }
 \description{
-	Forecast with univariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are perfomed by simulation as detailed in Blasques et al. (2016).
+	Forecast with univariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are performed by simulation as detailed in Blasques et al. (2016).
 }
 \usage{
 UniGASFor(uGASFit, H, Roll = F, out = NULL,B = 1000,
@@ -29,14 +29,12 @@ Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidenc
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 
 # Inflation Forecast
 
 data("cpichg")
-help(cpichg)
 
 GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity",
                        GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
@@ -59,6 +57,4 @@ Forecast  = UniGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
 
-
-}
 }

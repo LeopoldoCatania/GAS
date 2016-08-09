@@ -26,7 +26,6 @@ MultiMapParameters(Theta_tilde, Dist, N)
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # map unrestricted parameters for the Multivariate Student-t distribution with N=3
 library(GAS)
 
@@ -49,15 +48,19 @@ Phi_tilde = c(log(1.0), log(1.2), log(0.3))
 # The function UnMapR_C transforms vec(R) in a vector of unrestricted parameters. It is
 # the inverse of the hyperspherical coordinates transformration.
 
-Rho_tilde = UnMapR_C(c(0.1,0.2,0.3), iN)
+Rho_tilde = UnMapR_C(c(0.1,0.2,0.3), N)
 
 # vector of unconditional reparametrised parameters such that the
 # degrees of freedom are 7.
-Theta_tilde = c(Mu_tilde, Phi_tilde , Rho_tilde, log(7 - 2.01))
+#
+# LowerNu() prints the lower bound numerical parameter for the degree
+# of freedom, see help(LowerNu)
+#
+
+Theta_tilde = c(Mu_tilde, Phi_tilde , Rho_tilde, log(7 - LowerNu()))
 
 Theta = MultiMapParameters(Theta_tilde, Dist, N)
 
 Theta
 
-}
 }

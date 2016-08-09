@@ -23,7 +23,6 @@ UniUnmapParameters(Theta, Dist)
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
 # unmap parameters for the Student-t distribution
 library(GAS)
 
@@ -39,5 +38,7 @@ Theta_tilde = UniUnmapParameters(Theta, Dist)
 
 Theta_tilde
 
-}
+# it works
+all(abs(UniMapParameters(Theta_tilde, Dist) - Theta) < 1e-16)
+
 }

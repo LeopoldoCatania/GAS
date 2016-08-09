@@ -3,10 +3,10 @@
 \alias{GAS}
 \docType{package}
 \title{
-Generalised Autoregressive Score models in R
+Generalized Autoregressive Score models in R
 }
 \description{
-The GAS package allows to simulate, estimate and forecast using univariate and multivariate Generalised Autoregressive Score (GAS) models (also known as Dynamic Conditional Score (DCS) models), see e.g. Creal et. al. (2013) and Harvey (2013).
+The GAS package allows to simulate, estimate and forecast using univariate and multivariate Generalized Autoregressive Score (GAS) models (also known as Dynamic Conditional Score (DCS) models), see e.g. Creal et. al. (2013) and Harvey (2013).
 }
 \details{
 \tabular{ll}{
@@ -16,7 +16,14 @@ Version: \tab 0.1\cr
 Date: \tab 2016-06-06\cr
 License: \tab GPL (>= 2)\cr
 }
-The authors acknowledge Google for financial support via the Google Summer of Code 2016 project "GAS"; see \url{https://summerofcode.withgoogle.com/projects/#4717600793690112}.
+The authors acknowledge Google for financial support via the Google Summer of Code 2016 project "GAS"; see \url{https://summerofcode.withgoogle.com/projects/#4717600793690112}.\cr
+%
+
+Known bugs and limitations:
+\itemize{
+\item The Multivariate GAS model for N>4 does not report the exact update for the correlation parameters since the jacobian of the hypersherical coordinate transformation needs to be coded for the case N>4.
+\item The update of the shape and skewness parameters for the Skew Student-t distribution, \code{sstd}, have to be revised.
+}
 }
 \author{
 Leopoldo Catania, Kris Boudt and David Ardia

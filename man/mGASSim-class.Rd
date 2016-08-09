@@ -16,12 +16,12 @@ Class for Multivariate GAS model Simulation.
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
 \section{Slots}{
   \describe{
-    \item{\code{ModelInfo}:}{Object of class \code{"list"}. Contains information abount the multivariate GAS specification:
+    \item{\code{ModelInfo}:}{Object of class \code{"list"}. Contains information about the multivariate GAS specification:
     \itemize{
 \item iT: \code{numeric} Time length of simulated observations.
 \item iN: \code{numeric} Cross sectional dimension.
 \item iK : \code{numeric} number of (possibly) time--varying parameters implied by the distributional assumption.
-\item vKappa \code{numeric} vector of unconditional level for the reparametrised vector of parameters.
+\item vKappa \code{numeric} vector of unconditional level for the reparametrized vector of parameters.
 \item mA \code{matrix} of coefficients of dimension iK x iK that premultiply the conditional score in the GAS updating recursion.
 \item mB \code{matrix} of autoregressive coefficients of dimension iK x iK.
 \item Dist \code{character} label of the conditional distribution, see \link{DistInfo}
@@ -40,6 +40,7 @@ Class for Multivariate GAS model Simulation.
 \item getFilteredParameters \code{signature(object = "mGASSim")}: Extract simulated parameters
 \item getObs \code{signature(object = "mGASSim")}: Extract simulated observations
 \item coef \code{signature(object = "mGASSim")}: Extract delivered coefficients
+\item getMoments \code{signature(object = "uGASFor")}: Extract simulated moments.
 }
 }
 \author{ Leopoldo Catania}

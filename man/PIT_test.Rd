@@ -1,7 +1,7 @@
 \name{PIT_test}
 \alias{PIT_test}
 \title{
-	Goodness of Fit for Conditional Densitites
+	Goodness of Fit for Conditional Densities
 }
 \description{
 	This function implements density goodness of fit procedure of Diebold et al. (1998).
@@ -23,14 +23,14 @@ PIT_test(U, G=20, alpha=0.05, plot=F)
 \code{boolean}. Plot the result ?.}
 }
 \details{
- This function implements density goodness of fit procedure of Diebold et al. (1998). The test relays on the result that, if the series of estimated conditional distributions is the true one, then the PIT series evaluated accordingly are iid Unif(0, 1) distributed.  The test of the iid Uniform(0, 1) assumption consists of two parts. The first part concerns the independent assumption, and it tests if all the conditional moments of the data, up to the fourth one, have been accounted for by the model, while the second part checks if the conditional distribution assumption is reliable by testing if the PITs are Uniform over the inverval (0, 1). See also Jondeau and Rockinger (2006) and Vlaar and Palm (1993).
+ This function implements density goodness of fit procedure of Diebold et al. (1998). The test relays on the result that, if the series of estimated conditional distributions is the true one, then the PIT series evaluated accordingly are iid Unif(0, 1) distributed.  The test of the iid Uniform(0, 1) assumption consists of two parts. The first part concerns the independent assumption, and it tests if all the conditional moments of the data, up to the fourth one, have been accounted for by the model, while the second part checks if the conditional distribution assumption is reliable by testing if the PITs are Uniform over the interval (0, 1). See also Jondeau and Rockinger (2006) and Vlaar and Palm (1993).
 }
 \value{A \code{list} with elements: (i) Hist and (ii) IID. The fist element Hist concerns the test of the unconditional assumption of uniformity of the PIT, it is a \code{list} with elements:
   \itemize{
     \item \code{test}: statistic test.
     \item \code{crit}: The critical value of the test.
     \item \code{pvalue}: the pvalue of the test.
-    \item \code{hist} : the histogram, evaluated using the \link{hist} function
+    \item \code{hist} : the histogram, evaluated using the \link{hist} function.
     \item \code{confidence} : approximated asymptotic confidence level.
     }
 The second element \code{IID} concerns the iid assumption, it is a \code{list} with elements:
@@ -49,19 +49,18 @@ Jondeau, E., & Rockinger, M. (2006). The copula-garch model of conditional depen
 Vlaar, P. J., & Palm, F. C. (1993). The message in weekly exchange rates in the European monetary system: mean reversion, conditional heteroscedasticity, and jumps. Journal of Business & Economic Statistics, 11(3), 351-360.\cr
 }
 \examples{
-\dontrun{
-data("StockIndex")
+data("StockIndices")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                     GASPar = list(location = F, scale = T, shape = F))
+                     GASPar = list(location = FALSE, scale = TRUE,
+                                   shape = FALSE))
 
-FTSEMIB = StockIndex["FTSEMIB",]
+FTSEMIB = StockIndices[, "FTSEMIB"]
 
 Fit = UniGASFit(GASSpec, FTSEMIB)
 
 U = pit(Fit)
 
-Test = PIT_test(U, G=20, alpha=0.05, plot=T)
+Test = PIT_test(U, G=20, alpha=0.05, plot=TRUE)
 
-}
 }

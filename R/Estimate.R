@@ -6,7 +6,8 @@ StaticMLFIT <- function(vY, Dist) {
 
     vTheta_tilde = StaticStarting_Uni(vY, Dist, iK)
 
-    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Uni, vY = vY, Dist = Dist, iT = iT, iK = iK, control = list(trace = 0))
+    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Uni, vY = vY, Dist = Dist, iT = iT, iK = iK,
+        control = list(trace = 0))
 
     vTheta_tilde = optimiser$pars
 
@@ -26,7 +27,8 @@ StaticMLFIT_Multiv <- function(mY, Dist) {
 
     vTheta_tilde = StaticStarting_Multi(mY, Dist, iN)
 
-    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist = Dist, iT = iT, iK = iK, iN = iN, control = list(trace = 0))
+    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist = Dist, iT = iT, iK = iK,
+        iN = iN, control = list(trace = 0))
 
     vTheta_tilde = optimiser$pars
 
@@ -40,7 +42,7 @@ StaticMLFIT_Multiv <- function(mY, Dist) {
 
 UniGASFit <- function(GASSpec, data) {
 
-  vY = data
+    vY = data
 
     Start = Sys.time()
 
@@ -61,7 +63,8 @@ UniGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = solnp(vPw, UniGASOptimiser, vY = vY, Dist = Dist, ScalingType = ScalingType, iT = iT, iK = iK)
+    optimiser = solnp(vPw, UniGASOptimiser, vY = vY, Dist = Dist, ScalingType = ScalingType, iT = iT,
+        iK = iK, control = list(trace = 0))
 
     vPw = optimiser$pars
 
@@ -81,8 +84,9 @@ UniGASFit <- function(GASSpec, data) {
 
     elapsedTime = Sys.time() - Start
 
-    Out <- new("uGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iK = iK, elapsedTime = elapsedTime), GASDyn = GASDyn, Estimates = list(lParList = lParList,
-        optimiser = optimiser, StaticFit = StaticFit, Inference = Inference, IC = IC, vU = vU, Moments = mMoments), Testing = list(PitTest = PitTest),
+    Out <- new("uGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iK = iK, elapsedTime = elapsedTime),
+        GASDyn = GASDyn, Estimates = list(lParList = lParList, optimiser = optimiser, StaticFit = StaticFit,
+            Inference = Inference, IC = IC, vU = vU, Moments = mMoments), Testing = list(PitTest = PitTest),
         Data = list(vY = vY))
 
     return(Out)
@@ -91,7 +95,7 @@ UniGASFit <- function(GASSpec, data) {
 # mY is NxT
 MultiGASFit <- function(GASSpec, data) {
 
-  mY = t(data)
+    mY = t(data)
 
     Start = Sys.time()
     # getInfo
@@ -116,7 +120,8 @@ MultiGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = solnp(vPw, MultiGASOptimiser, mY = mY, Dist = Dist, ScalingType = ScalingType, iT = iT, iN = iN, iK = iK, ScalarParameters = ScalarParameters)
+    optimiser = solnp(vPw, MultiGASOptimiser, mY = mY, Dist = Dist, ScalingType = ScalingType, iT = iT,
+        iN = iN, iK = iK, ScalarParameters = ScalarParameters, control = list(trace = 0))
 
     vPw = optimiser$pars
 
@@ -134,7 +139,8 @@ MultiGASFit <- function(GASSpec, data) {
 
     elapsedTime = Sys.time() - Start
 
-    Out <- new("mGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iN = iN, iK = iK, elapsedTime = elapsedTime), GASDyn = GASDyn, Estimates = list(lParList = lParList,
-        optimiser = optimiser, Inference = Inference, IC = IC, Moments = mMoments), Data = list(mY = mY))
+    Out <- new("mGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iN = iN, iK = iK, elapsedTime = elapsedTime),
+        GASDyn = GASDyn, Estimates = list(lParList = lParList, optimiser = optimiser, Inference = Inference,
+            IC = IC, Moments = mMoments), Data = list(mY = mY))
     return(Out)
 }

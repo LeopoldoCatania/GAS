@@ -11,7 +11,7 @@ Class for the Univariate GAS model specification.
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
 \section{Slots}{
   \describe{
-    \item{\code{Spec}:}{Object of class \code{"list"}. Contains information abount the univariate GAS specification:
+    \item{\code{Spec}:}{Object of class \code{"list"}. Contains information about the univariate GAS specification:
     \itemize{
 \item Dist: \code{character} containing the conditional distribution assumption.
 \item ScalingType: \code{character} indicating the scaling mechanism for the conditional score.

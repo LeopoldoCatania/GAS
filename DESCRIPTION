@@ -1,6 +1,6 @@
 Package: GAS
 Type: Package
-Title: Generalised Autoregressive Score Models
+Title: Generalized Autoregressive Score Models
 Version: 0.1.0
 Author: Leopoldo Catania, Kris Boudt, David Ardia
 Maintainer: Leopolco Catania <leopoldo.catania@uniroma2.it>
@@ -10,5 +10,4 @@ LazyData: TRUE
 Imports:
     Rcpp (>= 0.12.2)
 LinkingTo: Rcpp, RcppArmadillo
-Depends:
-    Rsolnp, methods, MASS, xts, numDeriv, zoo
+Depends: R (>= 2.10), Rsolnp, methods, MASS, xts, numDeriv, zoo

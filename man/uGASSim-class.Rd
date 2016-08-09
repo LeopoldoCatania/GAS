@@ -17,7 +17,7 @@ Class for Univariate GAS model Simulation.
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
 \section{Slots}{
   \describe{
-    \item{\code{ModelInfo}:}{Object of class \code{"list"}. Contains information abount the univariate GAS specification:
+    \item{\code{ModelInfo}:}{Object of class \code{"list"}. Contains information about the univariate GAS specification:
     \itemize{
 \item iT: \code{numeric} Time length of simulated observations.
 \item iK : \code{numeric} number of (possibly) time--varying parameters implied by the distributional assumption.

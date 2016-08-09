@@ -26,7 +26,7 @@ Class for the Univariate GAS Forecast object.
 \item vU  : \code{numeric} Out of sample Probability Integral Transformation
 }
 }
- \item{\code{Bands}:}{\code{array} with confidece bands parameters forecasts. Available only if \code{Roll = TRUE}.}
+ \item{\code{Bands}:}{\code{array} with confidence bands parameters forecasts. Available only if \code{Roll = TRUE}.}
 %
 \item{\code{Draws}:}{If \code{bReturnsDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.}
 \item{\code{Info}:}{\code{list} with forecast information.}
@@ -40,7 +40,7 @@ Class for the Univariate GAS Forecast object.
 \item getForecast \code{signature(object = "uGASFor")}: Extract parameters forecast.
 \item getObs \code{signature(object = "uGASFor")}: Extract original observations
 \item pit \code{signature(object = "uGASFor")}: Extract Probability Integral Transformation, only if \code{Roll = TRUE}
-\item quantile \code{signature(object = "uGASFor")}: Extract quantile forecasts. It accepts the addional argument \code{probs} representing the vector of probabilities
+\item quantile \code{signature(object = "uGASFor")}: Extract quantile forecasts. It accepts the additional argument \code{probs} representing the vector of probabilities
 \item getMoments \code{signature(object = "uGASFor")}: Extract moments forecasts.
 \item LogScore \code{signature(object = "uGASFor")}: Extract Log Scores.
 }
