@@ -21,7 +21,7 @@ The authors acknowledge Google for financial support via the Google Summer of Co
 
 Known bugs and limitations:
 \itemize{
-\item The Multivariate GAS model for N>4 does not report the exact update for the correlation parameters since the jacobian of the hypersherical coordinate transformation needs to be coded for the case N>4.
+\item The Multivariate GAS model for N>4 does not report the exact update for the correlation parameters since the jacobian of the hyperspherical coordinate transformation needs to be coded for the case N>4. The jacobian for N>4 is replaced by the identity matrix.
 \item The update of the shape and skewness parameters for the Skew Student-t distribution, \code{sstd}, have to be revised.
 }
 }
