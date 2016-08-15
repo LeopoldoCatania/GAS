@@ -239,28 +239,29 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
   double dZ = (dY - dMu)/dSigma * dSigma_tilde + dMu_tilde;
 
   double dXi_star  = dXi;
-  double ddXi_star = 1.0;
+  double ddXi_star2 = 2.0 * dXi;
+
   if (dZ == 0.0){
     dXi_star = 1.0;
+    ddXi_star2 = 0;
   }
   if (dZ < 0.0) {
     dXi_star = 1.0/dXi;
-    ddXi_star = -1.0/pow(dXi, 2.0);
+    ddXi_star2 = -2.0/pow(dXi, 3.0);
   }
 
   double dL = dZ;
   double dC = 1.0 + pow(dL, 2.0)/(pow(dXi_star, 2.0) * (dNu - 2.0));
-  double dG = 2.0/(dXi + 1.0/dXi);
+  // double dG = 2.0/(dXi + 1.0/dXi);
 
 
   double dA = 0.5*Rf_gammafn(0.5*(dNu + 1.0)) * ( pow(dNu - 2.0, -0.5) + pow(dNu - 2.0, 0.5)*Rf_digamma(0.5*(dNu + 1.0)));
   double dB = Rf_gammafn(0.5 * dNu) + (dNu - 1.0)*Rf_digamma(0.5*dNu)*Rf_gammafn(0.5*dNu) * 0.5;
   double ddMu1_nu = (dA*(dNu - 1.0)*Rf_gammafn(0.5*dNu) - dB*pow(dNu-2.0, 0.5)*Rf_gammafn(0.5*(dNu+1.0)))/pow( (dNu - 1.0)*Rf_gammafn(0.5*dNu), 2.0)*2.0/Rf_gammafn(0.5);
 
-  double ddSigma_tilde_xi = (1.0 + pow(dMu1, 2.0))*(dXi - pow(dXi, -3.0))/dSigma_tilde;
+
   double ddSigma_tilde_nu = (ddMu1_nu*( -(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0 )*dMu1)/dSigma_tilde;
 
-  double ddL_xi = dMu1*(1.0 + pow(dXi, -2.0)) + (dY - dMu)*ddSigma_tilde_xi/dSigma;
   double ddL_nu = ddSigma_tilde_nu*(dY - dMu)/dSigma + (dXi - 1.0/dXi)*ddMu1_nu;
 
   // score
@@ -269,11 +270,22 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double ddSigma = -1.0/dSigma + (dNu + 1.0)/dC * dSigma_tilde/pow(dSigma, 2.0) * dZ*(dY - dMu)/( pow(dXi_star, 2.0)*(dNu - 2.0) );
 
-  double ddXi    = 1.0/dG * (1.0 - pow(dXi, -2.0)) + (1.0 + pow(dMu1, 2.0))*(dXi - pow(dXi, -3.0))/pow(dSigma_tilde, 2.0) -
-                   (dNu + 1.0)/(2.0*dC) * 2.0*dL/(dNu-2.0) * ( pow(dXi_star, 2.0)*ddL_xi - dL*dXi_star*ddXi_star)/pow(dXi_star, 4.0);
-
   double ddNu     = ddSigma_tilde_nu/dSigma_tilde + 0.5*(1.0/dNu - 1.0/(dNu-2.0)) + Rf_digamma(0.5*(dNu+1.0))*0.5 -
-                    0.5*Rf_digamma(0.5*dNu) - 1.0/dNu - 0.5*(log(dC) + dL*(dNu + 1.0)*(2.0*(dNu-2.0)*ddL_nu - dL)/(dC*pow(dXi_star*(dNu-2.0),2.0)));
+                    0.5*Rf_digamma(0.5*dNu) - 1.0/(2.0 * dNu) - 0.5*(log(dC) + dL*(dNu + 1.0)*(2.0*(dNu-2.0)*ddL_nu - dL)/(dC*pow(dXi_star*(dNu-2.0),2.0)));
+
+
+  double ddLogSigma_tilde_xi = (1.0 + pow(dMu1, 2.0))*(dXi - pow(dXi, -3.0))/((1.0 + pow(dMu1, 2.0))*(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0*pow(dMu1, 2.0) - 1.0 );
+  double ddSigma_tilde_xi = ddLogSigma_tilde_xi * dSigma_tilde;
+
+  double ddLogG_xi = -(1.0 - 1.0/pow(dXi, 2.0))/(dXi + 1.0/dXi);
+
+  double dL1 = pow(dL, 2.0);
+  double dL2 = (dNu - 2.0) * pow(dXi_star, 2.0);
+
+  double ddL1 = 2.0 * dL * ( (dY - dMu)/dSigma *ddSigma_tilde_xi + dMu1*(1.0 + 1.0/pow(dXi, 2.0)) );
+  double ddL2 = (dNu - 2.0)*ddXi_star2;
+
+  double ddXi    = ddLogG_xi + ddLogSigma_tilde_xi - 0.5 * (dNu + 1.0) *  1.0 / dC * ( ddL1*dL2 -  dL1* ddL2 )/pow(dL2, 2.0);
 
   arma::vec vScore(4);
 

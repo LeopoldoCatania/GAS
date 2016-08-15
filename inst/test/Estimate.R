@@ -134,5 +134,14 @@ Fit
 plot(Fit)
 
 
+###
 
+data("dji30ret")
 
+GASSpec = UniGASSpec(Dist = "sstd", ScalingType = "Identity", GASPar = list(scale = T, shape = T, skewness = F))
+
+Fit     = UniGASFit(GASSpec,dji30ret[,1])
+
+Fit
+
+plot(Fit)

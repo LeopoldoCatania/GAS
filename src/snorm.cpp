@@ -155,7 +155,6 @@ arma::vec snorm_Score(double dY, arma::vec vTheta){
 
 arma::mat snorm_IM(arma::vec vTheta){
 
-  double dMu     = vTheta(0);
   double dSigma2 = vTheta(1);
   double dDelta  = vTheta(2);
   double dDelta2 = pow(dDelta, 2.0);

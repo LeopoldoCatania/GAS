@@ -1,6 +1,11 @@
 \name{DistInfo}
 \alias{DistInfo}
 \alias{DistLabels}
+\alias{DistName}
+\alias{DistType}
+\alias{DistParameters}
+\alias{DistScalingType}
+\alias{NumberParameters}
 \title{
 	Information for the supported distributions
 }
@@ -8,7 +13,7 @@
 	Print the information regarding the one or more distribution supported in the GAS package.
 }
 \usage{
-DistInfo(DistLabel = NULL, N = 2)
+DistInfo(DistLabel = NULL, N = 2, FULL = TRUE)
 }
 \arguments{
 \item{DistLabel}{
@@ -16,6 +21,9 @@ DistInfo(DistLabel = NULL, N = 2)
 %
 \item{N}{
 \code{numeric} indicating the number of asset if \code{DistLabel} link to a multivariate distribution. Default \code{iN = 2}.}
+%
+\item{FULL}{
+\code{logical} if \code{TRUE} the function prints all the the information.}
 %
 }
 \details{

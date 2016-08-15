@@ -83,6 +83,21 @@ grad(function(vTheta,dY){
 
 Score_univ(dY, vTheta, "snorm")
 
+# sstd
+
+dY      =  0.8
+dMu     = 1
+dSigma  = 4
+dXi     = 1.2
+dNu     = 7
+
+vTheta = c(dMu, dSigma, dXi, dNu)
+
+grad(function(vTheta,dY){
+  ddist_univ(dY, vTheta, "sstd", bLog=TRUE)
+},vTheta, dY = dY, method = "simple")
+
+Score_univ(dY, vTheta, "sstd")
 
 ## multivariate
 

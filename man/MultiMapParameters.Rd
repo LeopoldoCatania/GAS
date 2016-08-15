@@ -1,5 +1,6 @@
 \name{MultiMapParameters}
 \alias{MultiMapParameters}
+\alias{build_mR}
 \title{
 	Mapping function for univariate distributions
 }
