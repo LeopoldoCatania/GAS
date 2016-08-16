@@ -392,24 +392,26 @@ setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, ...) {
     PlotType = 1
     while (PlotType > 0) {
 
-        cat(paste("Print 1-3 or 0 to exit"))
-        PlotType = menu(PlotMenu(x))
+      vMenu = PlotMenu(x)
+
+        cat(paste("Print 1-",length(vMenu)," or 0 to exit", sep = ""))
+        PlotType = menu(vMenu)
 
         if (PlotType == 1)
             PlotMultipleSeries(FilteredParameters, iK, iT, vDates)
-        if (PlotType == 2) {
-            cBands = ConfidenceBands(x, ...)
-            PlotMultipleSeries_Bands(FilteredParameters, iK, iT, vDates, cBands[1:iT, , , drop = F])
-        }
+        # if (PlotType == 2) {
+        #     cBands = ConfidenceBands(x, ...)
+        #     PlotMultipleSeries_Bands(FilteredParameters, iK, iT, vDates, cBands[1:iT, , , drop = F])
+        # }
 
-        if (PlotType == 3)
+        if (PlotType == 2)
             PlotMultipleSeries(Moments, 4, iT, vDates)
-        if (PlotType == 4) {
+        if (PlotType == 3) {
             PlotPit(vU, x@Testing$PitTest$Hist)
         }
-        if (PlotType == 5)
+        if (PlotType == 4)
             PlotSingleSeries(vY, iT, vDates)
-        if (PlotType == 6) {
+        if (PlotType == 5) {
             mRealVsFiltered = cbind(Moments[, 1], vY)
             PlotForecastVsRealized_Univ(mRealVsFiltered, vDates, x)
         }
