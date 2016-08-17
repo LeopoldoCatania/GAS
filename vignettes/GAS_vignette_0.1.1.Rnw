@@ -852,7 +852,7 @@ Catania L, {Bill{\'e}} AG (2016).
 Catania L, Boudt K, Ardia D (2016).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
 \newblock \proglang{R}~package version 0.1.1,
-  \urlprefix\url{https://github.com/LeopoldoCatania/GAS}.
+  \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}
 Creal D, Koopman SJ, Lucas A (2011).

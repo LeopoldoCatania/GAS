@@ -31,6 +31,7 @@ Additional arguments.}
 Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidence bands and out-of-sample forecast bands for time-varying parameters in observation-driven models. International Journal of Forecasting, 32(3), 875-887.
 }
 \examples{
+\dontrun{
 # show the information of all the supported distributions
 library(GAS)
 
@@ -44,4 +45,5 @@ Fit = UniGASFit(GASSpec, cpichg)
 
 Bands = ConfidenceBands(Fit)
 
+}
 }
