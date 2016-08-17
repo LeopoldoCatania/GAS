@@ -29,7 +29,9 @@ Creal, D., Koopman, S. J., & Lucas, A. (2013). Generalized autoregressive score 
 Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applications to financial and economic time series (Vol. 52). Cambridge University Press.\cr
 }
 \author{Leopoldo Catania}
+%
 \examples{
+\dontrun{
 # Specify an GAS model with multivariate Student-t
 # conditional distribution and time-varying scales and correlations
 
@@ -44,4 +46,5 @@ Fit = MultiGASFit(GASSpec, StockIndices)
 
 Fit
 
+}
 }

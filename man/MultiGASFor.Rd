@@ -29,6 +29,7 @@ Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidenc
 }
 \author{Leopoldo Catania}
 \examples{
+\dontrun{
 # Specify a GAS model with multivatiate  Student-t conditional
 # distribution and time-varying scales and correlations.
 
@@ -65,4 +66,5 @@ Fit = MultiGASFit(GASSpec, InSampleData)
 Forecast  = MultiGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
+}
 }
