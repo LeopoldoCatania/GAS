@@ -7,7 +7,7 @@
 	Forecast with multivariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are performed by simulation as detailed in Blasques et al. (2016).
 }
 \usage{
-MultiGASFor(mGASFit, H, Roll = F, out = NULL, B = 10000,
+MultiGASFor(mGASFit, H, Roll = FALSE, out = NULL, B = 10000,
                      Bands = c(0.1, 0.15, 0.85, 0.9), ReturnDraws = FALSE)
 }
 \arguments{

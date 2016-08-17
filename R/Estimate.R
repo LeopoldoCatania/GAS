@@ -6,8 +6,8 @@ StaticMLFIT <- function(vY, Dist) {
 
     vTheta_tilde = StaticStarting_Uni(vY, Dist, iK)
 
-    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Uni, vY = vY, Dist = Dist, iT = iT, iK = iK,
-        control = list(trace = 0))
+    optimiser = suppressWarnings(solnp(vTheta_tilde, StaticLLKoptimizer_Uni, vY = vY, Dist = Dist, iT = iT, iK = iK,
+        control = list(trace = 0)))
 
     vTheta_tilde = optimiser$pars
 
@@ -27,8 +27,8 @@ StaticMLFIT_Multiv <- function(mY, Dist) {
 
     vTheta_tilde = StaticStarting_Multi(mY, Dist, iN)
 
-    optimiser = solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist = Dist, iT = iT, iK = iK,
-        iN = iN, control = list(trace = 0))
+    optimiser = suppressWarnings(solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist = Dist, iT = iT, iK = iK,
+        iN = iN, control = list(trace = 0)))
 
     vTheta_tilde = optimiser$pars
 
@@ -63,8 +63,8 @@ UniGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = solnp(vPw, UniGASOptimiser, vY = vY, Dist = Dist, ScalingType = ScalingType, iT = iT,
-        iK = iK, control = list(trace = 0))
+    optimiser = suppressWarnings(solnp(vPw, UniGASOptimiser, vY = vY, Dist = Dist, ScalingType = ScalingType, iT = iT,
+        iK = iK, control = list(trace = 0)))
 
     vPw = optimiser$pars
 
@@ -120,8 +120,8 @@ MultiGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = solnp(vPw, MultiGASOptimiser, mY = mY, Dist = Dist, ScalingType = ScalingType, iT = iT,
-        iN = iN, iK = iK, ScalarParameters = ScalarParameters, control = list(trace = 0))
+    optimiser = suppressWarnings(solnp(vPw, MultiGASOptimiser, mY = mY, Dist = Dist, ScalingType = ScalingType, iT = iT,
+        iN = iN, iK = iK, ScalarParameters = ScalarParameters, control = list(trace = 0)))
 
     vPw = optimiser$pars
 

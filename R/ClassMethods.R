@@ -263,8 +263,7 @@ setMethod("show", "uGASFor", function(object) {
     cat(paste("\nParameters forecast:\n"))
     if (nrow(PointForecast) > 10 ) {
       print(head(PointForecast, 5))
-      cat(paste("\n...................."))
-      cat(paste("\n...................."))
+      cat(paste("\n....................\n"))
       print(tail(PointForecast, 5))
     } else {
       print(PointForecast)
@@ -301,8 +300,7 @@ setMethod("show", "mGASFor", function(object) {
     cat(paste("\nParameters forecast:\n"))
     if (nrow(PointForecast) > 10 ) {
       print(head(PointForecast, 5))
-      cat(paste("\n...................."))
-      cat(paste("\n...................."))
+      cat(paste("\n....................\n"))
       print(tail(PointForecast, 5))
     } else {
       print(PointForecast)
@@ -331,8 +329,7 @@ setMethod("show", "uGASRoll", function(object) {
     cat(paste("\nParameters forecast:\n"))
     if (nrow(PointForecast) > 10 ) {
       print(head(PointForecast, 5))
-      cat(paste("\n...................."))
-      cat(paste("\n...................."))
+      cat(paste("\n....................\n"))
       print(tail(PointForecast, 5))
     } else {
       print(PointForecast)
@@ -363,8 +360,7 @@ setMethod("show", "mGASRoll", function(object) {
     cat(paste("\nParameters forecast:\n"))
     if (nrow(PointForecast) > 10 ) {
       print(head(PointForecast, 5))
-      cat(paste("\n...................."))
-      cat(paste("\n...................."))
+      cat(paste("\n....................\n"))
       print(tail(PointForecast, 5))
     } else {
       print(PointForecast)
