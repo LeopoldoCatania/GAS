@@ -119,8 +119,8 @@ List FFBS(arma::mat allprobs, arma::vec delta, arma::mat mGamma, int iJ, int iT)
   for(i=0;i<iJ;i++) {
     foo(i)=1.0/iJ;
   }
-  lscale = log(iJ);
-  for(i=iT-2;i>=0;i--){
+  lscale = log(double(iJ));
+  for(i = iT-2; i >= 0; i--){
     foo          = mGamma * (allprobs.row(i+1).t() % foo);
     lbeta.col(i) = log(foo)+lscale;
     sumfoo       = sum(foo);

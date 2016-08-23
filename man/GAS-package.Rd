@@ -12,8 +12,8 @@ The GAS package allows to simulate, estimate and forecast using univariate and m
 \tabular{ll}{
 Package: \tab GAS\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2016-06-06\cr
+Version: \tab 0.1.2\cr
+Date: \tab 2016-08-23\cr
 License: \tab GPL (>= 2)\cr
 }
 The authors acknowledge Google for financial support via the Google Summer of Code 2016 project "GAS"; see \url{https://summerofcode.withgoogle.com/projects/#4717600793690112}.\cr
@@ -25,7 +25,7 @@ Known bugs and limitations:
 }
 }
 \author{
-Leopoldo Catania, Kris Boudt and David Ardia
+Leopoldo Catania [aut,cre], Kris Boudt [ctb], David Ardia [ctb]
 
 Maintainer: Leopoldo Catania <leopoldo.catania@uniroma2.it>
 }
