@@ -459,7 +459,7 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     double dSigma_tilde = vTheta_tilde(1);
     double dKappa_tilde  = vTheta_tilde(2);
 
-    mJ(0,0) = 1;
+    mJ(0,0) = 1.0;
     mJ(1,1) = exp(dSigma_tilde);
     mJ(2,2) = exp(dKappa_tilde);
   }
@@ -474,7 +474,7 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
 arma::mat HalfR(arma::vec vPhi){
   int k = vPhi.size();
 
-  int n=(1+sqrt(1+8*k))/2;
+  int n=(1.0 + sqrt(double(1.0 + 8.0 * k)))/2.0;
 
   arma::mat phi=FillUpperTriangular(vPhi,n);
 
