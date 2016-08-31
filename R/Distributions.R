@@ -1,5 +1,5 @@
 DistLabels <- function() {
-    return(c("norm", "std", "ast", "ast1", "sstd", "ald", "poi", "ber", "gamma", "exp", "beta", "mvnorm",
+    return(c("norm","snorm", "std", "ast", "ast1", "sstd", "ald", "poi", "ber", "gamma", "exp", "beta", "mvnorm",
         "mvt"))
 }
 

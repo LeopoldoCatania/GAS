@@ -4,12 +4,12 @@
 	Rolling forecast with multivariate GAS models
 }
 \description{
- One step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
+ One-step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
 }
 \usage{
 MultiGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
              RefitEvery = 23, RefitWindow = c("moving", "recursive"),
-             cluster=NULL)
+             cluster = NULL)
 }
 \arguments{
 \item{data}{ \code{matrix} of dimension (T + ForecastLength) x N containing the time series of observations. }
@@ -38,7 +38,7 @@ data("StockIndices")
 
 mY = StockIndices[, 1:2]
 
-## Specification mvt
+# Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
                        GASPar = list(location = FALSE, scale = TRUE,
                                      correlation = TRUE, shape = FALSE))
@@ -46,7 +46,7 @@ GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-Roll    = MultiGASRoll(mY, GASSpec, ForecastLength = 250,
+Roll = MultiGASRoll(mY, GASSpec, ForecastLength = 250,
                        RefitEvery = 100, RefitWindow = c("moving"))
 
 Roll

@@ -7,42 +7,44 @@
 	Simulate Univariate GAS processes.
 }
 \usage{
-UniGASSim(iT, kappa, A, B, Dist, ScalingType)
+UniGASSim(T.sim, kappa, A, B, Dist, ScalingType)
 }
 \arguments{
-\item{iT}{
+\item{T.sim}{
 \code{numeric} Length of the simulated time series.}
 %
 \item{kappa}{
-\code{numeric} vector of unconditional level for the reparametrised vector of parameters.}
+\code{numeric} Vector of unconditional level for the reparametrised vector of parameters.}
 %
 
 \item{A}{
-\code{matrix} of coefficients of dimension K x K that premultiply the conditional score in the GAS updating recursion, see Details.}
+\code{matrix} Of coefficients of dimension K x K that premultiply the conditional score in the GAS updating recursion, see Details.}
 %
 
 \item{B}{
-\code{matrix} of autoregressive coefficients of dimension K x K, see Details.}
+\code{matrix} Of autoregressive coefficients of dimension K x K, see Details.}
 %
 \item{Dist}{
-\code{character}label of the conditional distribution, see \link{DistInfo}.}
+\code{character} Label of the conditional distribution, see \link{DistInfo}.}
 %
 \item{ScalingType}{
-\code{character} indicating the scaling mechanism for the conditional score. Possible choices are \code{"Identity"}, \code{"Inv"},
- \code{"InvSqrt"}. Note that for some distribution only \code{ScalingType = "Identity"} is supported, see the function \link{DistInfo}. When  \code{ScalingType = "InvSqrt"} the inverse of the cholesky decomposition of the information matrix is used. Default value \code{ScalingType = "Identity"}}
+\code{character} Indicating the scaling mechanism for the conditional score. Possible choices are \code{"Identity"}, \code{"Inv"}, \code{"InvSqrt"}. Note that, for some distribution only \code{ScalingType = "Identity"} is supported, see the function \link{DistInfo}. When \code{ScalingType = "InvSqrt"} the inverse of the Cholesky decomposition of the information matrix is used. Default value \code{ScalingType = "Identity"}.}
 %
 }
 \details{
-	All the information regarding the supported univariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as \deqn{y_{t}\sim p(y|\theta_{t})}, where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = h(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}, where \eqn{h(.)} is the mapping function (see \link{UniMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{vKappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
+	All the information regarding the supported univariate conditional distributions can be investigated using the \link{DistInfo} function. The model is specified as \deqn{y_{t}\sim p(y|\theta_{t})}, where \eqn{\theta_{t}} is the vector of parameters for the density \eqn{p(y|.)}. Note that, \eqn{\theta_{t}} includes also those parameters that are not time-varying. The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = \Lambda(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}, where \eqn{\Lambda(.)} is the mapping function (see \link{UniMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is the \code{vKappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}. See Ardia et. al. (2016) for further details.
 }
 \value{
-An object of the class \link{uGASSim}
+An object of the class \link{uGASSim}.
 }
 \references{
-Creal, D., Koopman, S. J., & Lucas, A. (2013). Generalized autoregressive score models with applications. Journal of Applied Econometrics, 28(5), 777-795.\cr
+Ardia D, Boudt K and Catania L (2016). "Generalized Autoregressive Score Models in R: The GAS Package." Available at SSRN: \url{http://ssrn.com/abstract=2825380}.\cr
 %
 
-Harvey, A. C. (2013). Dynamic models for volatility and heavy tails: with applications to financial and economic time series (Vol. 52). Cambridge University Press.\cr
+Creal D, Koopman SJ, Lucas A (2013). "Generalized Autoregressive Score Models with Applications." Journal of Applied Econometrics, 28(5), 777-795. \doi{10.1002/jae.1279}.\cr
+%
+
+Harvey AC (2013). Dynamic Models for Volatility and Heavy Tails: With Applications to Financial and Economic Time Series. Cambridge University Press.\cr
 }
 \author{Leopoldo Catania}
 \examples{
@@ -53,7 +55,7 @@ library(GAS)
 
 set.seed(786)
 
-iT     = 1000 # number of observations to simulate
+T.sim  = 1000 # number of observations to simulate
 Dist   = "std" # conditional Studen-t distribution
 
 
@@ -75,7 +77,7 @@ B = matrix(c(0.7 , 0.0 , 0.0 ,
               0.0 , 0.98, 0.0 ,
               0.0 , 0.0 , 0.0),3,byrow = TRUE) # Matrix of autoregressive parameters.
 
-Sim = UniGASSim(iT, kappa, A, B, Dist, ScalingType = "Identity")
+Sim = UniGASSim(T.sim, kappa, A, B, Dist, ScalingType = "Identity")
 
 Sim
 

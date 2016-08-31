@@ -56,12 +56,15 @@ Roll
 #    MULTIVARIATE      #
 ########################
 
-data("StockIndices")
+# data("StockIndices")
+data("dji30ret", package = "GAS")
 
-mY = t(StockIndices[1:2,])
+# mY = StockIndices[, 1:2]
+mY = dji30ret[, 1:2]
 
 ## Specification mvt
-GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity", GASPar = list(location = F, scale = T, correlation = T, shape = F))
+GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
+                       GASPar = list(location = FALSE, scale = TRUE, correlation = TRUE, shape = FALSE))
 
 # Perform H-step ahead forecast with confidence bands
 
@@ -70,7 +73,7 @@ Fit = MultiGASFit(GASSpec, mY)
 
 #forecast
 
-Forecast  = MultiGASFor(Fit, H = 500)
+Forecast  = MultiGASFor(Fit, H = 50)
 
 Forecast
 
@@ -78,8 +81,11 @@ plot(Forecast)
 
 # Perform 1-Step ahead rolling forecast
 
-InSampleData  = mY[1:1000, ]
-OutSampleData = mY[1001:2404, ]
+# InSampleData  = mY[1:1000, ]
+# OutSampleData = mY[1001:2404, ]
+
+InSampleData  = mY[1:2521, ]
+OutSampleData = mY[2522:5521, ]
 
 # estimation
 Fit = MultiGASFit(GASSpec, InSampleData)
@@ -89,6 +95,29 @@ Forecast  = MultiGASFor(Fit, Roll = TRUE, out = OutSampleData)
 Forecast
 
 plot(Forecast)
+
+
+DCCRoll = dccroll(spec = mDCCSpec, data = mY, forecast.length = 3000,
+                  refit.every = 2998)
+
+aCov = rcov(DCCRoll)
+mMu = fitted(DCCRoll)
+
+vShapes = c(sapply(DCCRoll@mforecast, function(x) rep(x@model$pars["mshape", "Level"], ceiling(iH/length(DCCRoll@mforecast)))))
+
+vLLK = numeric(iH)
+
+for (i in 1:iH) {
+
+  dNu = vShapes[i]
+
+  vLLK[i] = dmvt(t(as.numeric(dji30ret_Out[i, vAsset_Multi])),
+                     t(as.numeric(mMu[i, ])), aCov[, , i] * (dNu - 2)/dNu, dNu, bLog = TRUE)
+}
+
+###
+
+
 
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)

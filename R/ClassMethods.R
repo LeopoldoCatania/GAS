@@ -30,8 +30,8 @@ setMethod("show", "uGASSpec", function(object) {
     DistInfo(Dist, FULL = FALSE)
     cat(paste("\nGAS specification"))
     cat("\n-------------------------------------------------------")
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nTime varying parameters : ", paste(GASPar, collapse = ", ")))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nTime varying parameters: ", paste(GASPar, collapse = ", ")))
     #
     cat("\n-------------------------------------------------------")
 })
@@ -52,9 +52,9 @@ setMethod("show", "mGASSpec", function(object) {
     DistInfo(Dist, FULL = FALSE)
     cat(paste("\nGAS specification"))
     cat("\n-------------------------------------------------------")
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nTime varying parameres : ", paste(GASPar, collapse = ", ")))
-    cat(paste("\nScalar Parameters  : ", paste(TypeOfParameters(ScalarParameters))))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nTime varying parameters: ", paste(GASPar, collapse = ", ")))
+    cat(paste("\nScalar Parameters: ", paste(TypeOfParameters(ScalarParameters))))
 
     #
     cat("\n-------------------------------------------------------")
@@ -88,11 +88,11 @@ setMethod("show", "uGASFit", function(object) {
     cat(paste("\n------------------------------------------"))
     cat(paste("\n-          Univariate GAS Fit            -"))
     cat(paste("\n------------------------------------------"))
-    cat("\n\nModel Specification\t:\t")
+    cat("\n\nModel Specification:\t")
     cat(paste("\nT = ", iT))
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nTime varying parameres : ", paste(GASPar, collapse = ", ")))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nTime varying parameters: ", paste(GASPar, collapse = ", ")))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nEstimates:\n"))
@@ -104,7 +104,7 @@ setMethod("show", "uGASFit", function(object) {
     cat(paste("\nInformation Criteria:\n"))
     print(IC)
     cat(paste("\n------------------------------------------"))
-    cat(paste("\n\nElapsed time\t:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+    cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
 })
 
 setMethod("show", "mGASFit", function(object) {
@@ -134,11 +134,11 @@ setMethod("show", "mGASFit", function(object) {
     cat(paste("\n------------------------------------------"))
     cat(paste("\n-        Multivariate GAS Fit            -"))
     cat(paste("\n------------------------------------------"))
-    cat("\n\nModel Specification\t:\t")
+    cat("\n\nModel Specification:\t")
     cat(paste("\nT = ", iT))
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nTime varying parameres : ", paste(GASPar, collapse = ", ")))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nTime varying parameters: ", paste(GASPar, collapse = ", ")))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nEstimates:\n"))
@@ -150,7 +150,7 @@ setMethod("show", "mGASFit", function(object) {
     cat(paste("\nInformation Criteria:\n"))
     print(IC)
     cat(paste("\n------------------------------------------"))
-    cat(paste("\n\nElapsed time\t:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+    cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
 })
 
 setMethod("show", "uGASSim", function(object) {
@@ -175,10 +175,10 @@ setMethod("show", "uGASSim", function(object) {
     cat(paste("\n------------------------------------------"))
     cat(paste("\n-          Univariate GAS Sim            -"))
     cat(paste("\n------------------------------------------"))
-    cat("\n\nModel Specification\t:\t")
+    cat("\n\nModel Specification:\t")
     cat(paste("\nT = ", iT))
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters:\n"))
@@ -216,11 +216,11 @@ setMethod("show", "mGASSim", function(object) {
     cat(paste("\n------------------------------------------"))
     cat(paste("\n-          Univariate GAS Sim            -"))
     cat(paste("\n------------------------------------------"))
-    cat("\n\nModel Specification\t:\t")
+    cat("\n\nModel Specification:\t")
     cat(paste("\nT = ", iT))
     cat(paste("\nN = ", iN))
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters:\n"))
@@ -254,10 +254,10 @@ setMethod("show", "uGASFor", function(object) {
     cat(paste("\n-        Univariate GAS Forecast         -"))
     cat(paste("\n------------------------------------------"))
     cat("\n\nModel Specification")
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nHorizon : ", iH))
-    cat(paste("\nRolling forecast : ", Roll))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nHorizon: ", iH))
+    cat(paste("\nRolling forecast: ", Roll))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters forecast:\n"))
@@ -290,11 +290,11 @@ setMethod("show", "mGASFor", function(object) {
     cat(paste("\n-      Multivariate GAS Forecast         -"))
     cat(paste("\n------------------------------------------"))
     cat("\n\nModel Specification")
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
-    cat(paste("\nHorizon : ", iH))
-    cat(paste("\nNumber of series : ", iN))
-    cat(paste("\nRolling forecast : ", Roll))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
+    cat(paste("\nHorizon: ", iH))
+    cat(paste("\nNumber of series: ", iN))
+    cat(paste("\nRolling forecast: ", Roll))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters forecast:\n"))
@@ -322,8 +322,8 @@ setMethod("show", "uGASRoll", function(object) {
     cat(paste("\n-    Univariate GAS Rolling Forecast     -"))
     cat(paste("\n------------------------------------------"))
     cat("\n\nModel Specification")
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters forecast:\n"))
@@ -335,7 +335,7 @@ setMethod("show", "uGASRoll", function(object) {
       print(PointForecast)
     }
     cat(paste("\n------------------------------------------"))
-    cat(paste("\n\nElapsed time\t:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+    cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
 })
 
 setMethod("show", "mGASRoll", function(object) {
@@ -353,8 +353,8 @@ setMethod("show", "mGASRoll", function(object) {
     cat(paste("\n-   Multivariate GAS Rolling Forecast    -"))
     cat(paste("\n------------------------------------------"))
     cat("\n\nModel Specification")
-    cat(paste("\nConditional distribution : ", Dist))
-    cat(paste("\nScore scaling type : ", ScalingType))
+    cat(paste("\nConditional distribution: ", Dist))
+    cat(paste("\nScore scaling type: ", ScalingType))
     #
     cat(paste("\n------------------------------------------"))
     cat(paste("\nParameters forecast:\n"))
@@ -366,7 +366,7 @@ setMethod("show", "mGASRoll", function(object) {
       print(PointForecast)
     }
     cat(paste("\n------------------------------------------"))
-    cat(paste("\n\nElapsed time\t:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+    cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
 })
 
 setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, ...) {

@@ -18,25 +18,24 @@ UniMapParameters(Theta_tilde, Dist)
 %
 }
 \details{
-	The order of the parameters is generally: location, scale, skewness, shape, shape2. When the distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.
+	The order of the parameters is generally: \code{location}, \code{scale}, \code{skewness}, \code{shape}, \code{shape2}. When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.
 }
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-# map unrestricted parameters for the Student-t distribution
-library(GAS)
+# Map unrestricted parameters for the Student-t distribution.
+library("GAS")
 
 Dist = "std"
 
-# vector of unconditional reparametrised parameters such that,
-# \eqn{\theta = (0, 1.5 ,7)'}, i.e. location = 0, scale = 1.5,
-# degrees of freedom = 7
+# Vector of unconditional reparametrised parameters such that,
+# Theta = c(0, 1.5 ,7), i.e., location = 0, scale = 1.5,
+# degrees of freedom = 7.
 
 # LowerNu() prints the lower bound numerical parameter for the degree
-# of freedom, see help(LowerNu)
-#
+# of freedom, see help(LowerNu).
 
-Theta_tilde = c(0.1, log(1.5) , log(7 - LowerNu()))
+Theta_tilde = c(0.1, log(1.5), log(7 - LowerNu()))
 
 Theta = UniMapParameters(Theta_tilde, Dist)
 

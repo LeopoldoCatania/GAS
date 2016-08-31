@@ -9,14 +9,14 @@
 \alias{plot,mGASSim,missing-method}
 \alias{show,mGASSim-method}
 \alias{getFilteredParameters,mGASSim-method}
-\title{class: Class for Multivariate GAS Simulation}
+\title{Class for Multivariate GAS Simulation}
 \description{
-Class for Multivariate GAS model Simulation.
+Class for multivariate GAS model simulation.
 }
 \section{Objects from the Class}{A virtual Class: No objects may be created from it.}
 \section{Slots}{
   \describe{
-    \item{\code{ModelInfo}:}{Object of class \code{"list"}. Contains information about the multivariate GAS specification:
+    \item{\code{ModelInfo}:}{Object of class \code{list}. Contains information about the multivariate GAS specification:
     \itemize{
 \item iT: \code{numeric} Time length of simulated observations.
 \item iN: \code{numeric} Cross sectional dimension.
@@ -29,18 +29,18 @@ Class for Multivariate GAS model Simulation.
 }
 }
 %
-\item{\code{GASDyn}:}{Object of class \code{"list"}. Contains: The series of simulated parameters (\code{GASDyn$mTheta}), The series of scaled scores (\code{GASDyn$mInnovation}), the series of unrestricted simulated parameters (\code{GASDyn$mTheta_tilde}), The series of log densities (\code{GASDyn$vLLK}), the log likelihood evaluated at its optimum value (\code{GASDyn$dLLK})}
+\item{\code{GASDyn}:}{Object of class \code{list}. Contains: the series of simulated parameters (\code{GASDyn$mTheta}), the series of scaled scores (\code{GASDyn$mInnovation}), the series of unrestricted simulated parameters (\code{GASDyn$mTheta_tilde}), the series of log densities (\code{GASDyn$vLLK}), the log likelihood evaluated at its optimum value (\code{GASDyn$dLLK})}
 %
-\item{\code{Data}:}{Object of class \code{"matrix"}. Matrix of dimension iN x iT of simulated data}}
+\item{\code{Data}:}{Object of class \code{matrix}. Matrix of dimension iN x iT of simulated data}}
   }
 \section{Methods}{
 \itemize{
-\item show \code{signature(object = "mGASSim")}: Show summary.
-\item plot \code{ signature(x='mGASSim',y='missing')}: Plot simulated data and parameters.
-\item getFilteredParameters \code{signature(object = "mGASSim")}: Extract simulated parameters
-\item getObs \code{signature(object = "mGASSim")}: Extract simulated observations
-\item coef \code{signature(object = "mGASSim")}: Extract delivered coefficients
-\item getMoments \code{signature(object = "uGASFor")}: Extract simulated moments.
+\item \code{show} \code{signature(object = 'mGASSim')}: Show summary.
+\item \code{plot} \code{signature(x = 'mGASSim',y = 'missing')}: Plot simulated data and parameters.
+\item \code{getFilteredParameters} \code{signature(object = 'mGASSim')}: Extract simulated parameters.
+\item \code{getObs} \code{signature(object = 'mGASSim')}: Extract simulated observations
+\item \code{coef} \code{signature(object = 'mGASSim')}: Extract delivered coefficients
+\item \code{getMoments} \code{signature(object = 'uGASFor')}: Extract simulated moments.
 }
 }
 \author{ Leopoldo Catania}

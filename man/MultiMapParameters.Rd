@@ -27,17 +27,17 @@ MultiMapParameters(Theta_tilde, Dist, N)
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-# map unrestricted parameters for the Multivariate Student-t distribution with N=3
-library(GAS)
+# Map unrestricted parameters for the Multivariate Student-t distribution with N=3
+library("GAS")
 
 N = 3
 
 Dist = "mvt"
 
-# vector of location parameters (this is not transformed)
+# Vector of location parameters (this is not transformed).
 Mu_tilde  = c(0.1,0.2,0.3)
 
-# vector of unrestricted scales parameters such that
+# Vector of unrestricted scales parameters such that
 # the scales will be equal to 1.0, 1.2 and 0.3, for the first, second and
 # third variables, respectively.
 Phi_tilde = c(log(1.0), log(1.2), log(0.3))
@@ -51,7 +51,7 @@ Phi_tilde = c(log(1.0), log(1.2), log(0.3))
 
 Rho_tilde = UnMapR_C(c(0.1,0.2,0.3), N)
 
-# vector of unconditional reparametrised parameters such that the
+# Vector of unconditional reparametrised parameters such that the
 # degrees of freedom are 7.
 #
 # LowerNu() prints the lower bound numerical parameter for the degree

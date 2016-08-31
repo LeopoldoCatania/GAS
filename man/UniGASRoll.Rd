@@ -4,7 +4,7 @@
 	Rolling forecast with univariate GAS models
 }
 \description{
- One step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
+One-step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
 }
 \usage{
 UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
@@ -12,11 +12,11 @@ UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
            cluster=NULL)
 }
 \arguments{
-\item{data}{ \code{numeric} vector containing the time series of observations.}
+\item{data}{\code{numeric} vector containing the time series of observations.}
 %
-\item{GASSpec}{ An object of the class \link{uGASSpec} created using the function \link{UniGASSpec}}
+\item{GASSpec}{An object of the class \link{uGASSpec} created using the function \link{UniGASSpec}.}
 %
-\item{ForecastLength}{ \code{numeric} Length of the out of sample}
+\item{ForecastLength}{\code{numeric} Length of the out-of-sample.}
 \item{Nstart}{ \code{numeric} Period when perform the first forecast. Ignored if \code{ForecastLength} is supplied.}
 \item{RefitEvery}{ \code{numeric} Number of periods before model coefficients re-estimation.}
 \item{RefitWindow}{ \code{character} Type of window. If \code{RefitWindow = "recursive"} all the observations are used when the model is re-estimated. If \code{RefitWindow = "moving"} old observations are eliminated.}
@@ -24,7 +24,7 @@ UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
 %
 }
 \value{
-An object of the class \link{uGASRoll}
+An object of the class \link{uGASRoll}.
 }
 \author{Leopoldo Catania}
 \examples{
@@ -36,11 +36,11 @@ An object of the class \link{uGASRoll}
 data("cpichg")
 help(cpichg)
 
-GASSpec   = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                       GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
+GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
+                     GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
 
 # Perform 1-step ahead rolling forecast with refit
-library(parallel)
+library("parallel")
 
 Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
                   RefitEvery = 10, RefitWindow = c("moving"))

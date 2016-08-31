@@ -1,4 +1,4 @@
-UniGASFor <- function(uGASFit, H, Roll = F, out = NULL, B = 1000, Bands = c(0.1, 0.15, 0.85, 0.9), ReturnDraws = FALSE) {
+UniGASFor <- function(uGASFit, H, Roll = FALSE, out = NULL, B = 10000, Bands = c(0.1, 0.15, 0.85, 0.9), ReturnDraws = FALSE) {
 
     vOut = out
     if (Roll) {
@@ -140,6 +140,7 @@ MultiGASFor <- function(mGASFit, H, Roll = FALSE, out = NULL, B = 10000, Bands =
         cBands = array(0, dim = c(1, 1, 1))
         cY = array(0, dim = c(1, 1, 1))
         vLS = GASDyn$vLLK[(iT - iH + 1):(iT)]
+
     } else {
 
         vTheta_tp1 = tail(getFilteredParameters(mGASFit), 1)
@@ -358,7 +359,7 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Ref
 
         mForc = do.call(rbind, lapply(lForecasts, getForecast))
         vU = NULL
-        vLS = do.call(rbind, lapply(lForecasts, LogScore))
+        vLS = do.call(c, lapply(lForecasts, LogScore))
         Moments = EvalMoments_multi(t(mForc), Dist, iN)
     }
 

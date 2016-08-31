@@ -10,7 +10,7 @@
 	Information for the supported distributions
 }
 \description{
-	Print the information regarding the one or more distribution supported in the GAS package.
+	Print the information regarding distributions supported in the GAS package.
 }
 \usage{
 DistInfo(DistLabel = NULL, N = 2, FULL = TRUE)
@@ -20,10 +20,10 @@ DistInfo(DistLabel = NULL, N = 2, FULL = TRUE)
 \code{character} indicating the label of the conditional distribution. if \code{DistLabel = NULL} all the supported distributions are printed. Default \code{DistLabel = NULL}}. Run \code{DistLabels()} to see the labels of the currently implemented distributions.
 %
 \item{N}{
-\code{numeric} indicating the number of asset if \code{DistLabel} link to a multivariate distribution. Default \code{iN = 2}.}
+\code{numeric} Indicating the number of asset if \code{DistLabel} link to a multivariate distribution. Default \code{N = 2}.}
 %
 \item{FULL}{
-\code{logical} if \code{TRUE} the function prints all the the information.}
+\code{logical} If \code{TRUE} the function prints all the the information. Default \code{FULL = TRUE}}
 %
 }
 \details{
@@ -32,7 +32,7 @@ DistInfo(DistLabel = NULL, N = 2, FULL = TRUE)
 \author{Leopoldo Catania}
 \examples{
 # show the information of all the supported distributions
-library(GAS)
+library("GAS")
 
 DistInfo()
 }

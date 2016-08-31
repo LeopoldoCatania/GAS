@@ -4,7 +4,7 @@
 	Forecast with multivariate GAS models
 }
 \description{
-	Forecast with multivariate GAS models. One step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are performed by simulation as detailed in Blasques et al. (2016).
+	Forecast with multivariate GAS models. One-step ahead prediction of the conditional density is available in closed form. Multistep ahead prediction are performed by simulation as detailed in Blasques et al. (2016).
 }
 \usage{
 MultiGASFor(mGASFit, H, Roll = FALSE, out = NULL, B = 10000,
@@ -25,7 +25,7 @@ MultiGASFor(mGASFit, H, Roll = FALSE, out = NULL, B = 10000,
 An object of the class \link{mGASFor}
 }
 \references{
-Blasques, F., Koopman, S. J., Lasak, K., & Lucas, A. (2016). In-sample confidence bands and out-of-sample forecast bands for time-varying parameters in observation-driven models. International Journal of Forecasting, 32(3), 875-887.
+Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016). "In-sample Confidence Bands and Out-of-Sample Forecast Bands for Time-Varying Parameters in Observation-Driven Models." International Journal of Forecasting, 32(3), 875-887. \doi{10.1016/j.ijforecast.2016.04.002}.
 }
 \author{Leopoldo Catania}
 \examples{
@@ -39,18 +39,17 @@ data("StockIndices")
 
 mY = StockIndices[, 1:2]
 
-## Specification mvt
+# Specification mvt
 GASSpec = MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
                        GASPar = list(location = FALSE, scale = TRUE,
                                      correlation = TRUE, shape = FALSE))
 
 # Perform H-step ahead forecast with confidence bands
 
-# estimation
+# Estimation
 Fit = MultiGASFit(GASSpec, mY)
 
-#forecast
-
+# Forecast
 Forecast  = MultiGASFor(Fit, H = 50)
 
 Forecast
@@ -60,7 +59,7 @@ Forecast
 InSampleData  = mY[1:1000, ]
 OutSampleData = mY[1001:2404, ]
 
-# estimation
+# Estimation
 Fit = MultiGASFit(GASSpec, InSampleData)
 
 Forecast  = MultiGASFor(Fit, Roll = TRUE, out = OutSampleData)
