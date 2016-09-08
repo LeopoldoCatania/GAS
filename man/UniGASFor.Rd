@@ -1,5 +1,6 @@
 \name{UniGASFor}
 \alias{UniGASFor}
+\alias{uGASMultiForcast}
 \title{
 	Forecast with univariate GAS models
 }
@@ -33,6 +34,8 @@ Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016). "In-sample Confidence Band
 # conditional distribution and time-varying location, scale and shape parameter
 
 # Inflation Forecast
+
+set.seed(123)
 
 data("cpichg")
 

@@ -1,5 +1,6 @@
 \name{MultiGASFor}
 \alias{MultiGASFor}
+\alias{mGASMultiForcast}
 \title{
 	Forecast with multivariate GAS models
 }
@@ -34,6 +35,8 @@ Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016). "In-sample Confidence Band
 # distribution and time-varying scales and correlations.
 
 # Stock returns forecast
+
+set.seed(123)
 
 data("StockIndices")
 
