@@ -27,19 +27,21 @@ plot(Sim)
 
 iT = 1e3
 
-A = matrix(c(0.001 , 0.0 , 0.0 ,
-              0.0 , 0.01 , 0.0 ,
-              0.0 , 0.0 , 0.04),3,byrow = T)
+A = matrix(c(0.0 , 0.0 , 0.0 ,
+              0.0 , 0.1 , 0.0 ,
+              0.0 , 0.0 , 0.0),3,byrow = T)
 
 B = matrix(c(0.7 , 0.0 , 0.0 ,
               0.0 , 0.98, 0.0 ,
               0.0 , 0.0 , 0.97),3,byrow = T)
 
-Kappa = (diag(3) - B) %*% UnivUnmapParameters(c(0,0.1,1.1),"snorm")
+Kappa = (diag(3) - B) %*% UniUnmapParameters(c(0,0.1,1.1),"snorm")
 
-Sim = UniGASSim(iT, vKappa, mA, mB, Dist="snorm", ScalingType = "Inv")
+Sim = UniGASSim(iT, Kappa, A, B, Dist="snorm", ScalingType = "Identity")
 
 plot(Sim)
+
+Sim@Data$vY
 
 # std
 

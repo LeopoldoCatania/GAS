@@ -17,4 +17,6 @@ arma::vec ZeroRemover_v(arma::vec vX);
 arma::vec NaN2Zero(arma::vec vX, double To=0);
 arma::vec Thresholding_vec(arma::vec vX, double dTol=1e50);
 double IndicatorLess(double dX, double dXBar);
+double signum(const double x);
+double Heaviside(const double x, const double a);
 #endif

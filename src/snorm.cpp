@@ -5,123 +5,127 @@
 using namespace arma;
 using namespace Rcpp;
 
-double dSNORM(double dY, double dMu, double dSigma2, double dDelta, bool bLog = false){
+//// This Functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
+//// modified to fit the GAS package
 
-  double dLPDF = log(2.0*dDelta) - log(1.0 + pow(dDelta, 2.0)) - 0.5*log(dSigma2);
 
-  double dZ = 0.0;
+double dnormstd(const double x)
+{
+  double pdf;
+  pdf = exp ( -0.5 * x * x ) / sqrt ( 2.0 * PI );
+  if(pdf == 0.0) pdf = 0.0 + 2.22507e-24;
+  return pdf;
+}
 
-  if (dY < dMu){
-    dZ = (dDelta*(dY - dMu))/pow(dSigma2, 0.5);
-  }else{
-    dZ = (dY - dMu)/(dDelta * pow(dSigma2, 0.5));
-  }
+double rsnorm(const double xi)
+{
+  double weight, z, rr, m1, mu, sigma, xx, ans;
+  weight = xi / (xi + 1.0/xi);
+  z =  Rf_runif(-weight, 1.0 - weight);
+  xx = (z < 0)? 1.0/xi : xi;
+  rr = -1.0 * abs3(Rf_rnorm(0.0, 1.0))/xx * sign_C(z);
+  m1 = 2.0/sqrt(2.0 * PI);
+  mu = m1 * (xi - 1.0/xi);
+  sigma = sqrt((1 - (m1 * m1)) * ( (xi * xi) + 1.0/(xi* xi) ) + 2 * (m1 * m1) - 1.0);
+  ans = (rr - mu ) / sigma;
+  return(ans);
+}
 
-  dLPDF += Rf_dnorm4(dZ, 0.0, 1.0, 1);
+double dsnormstd(const double x, const double xi)
+{
+  double pdf;
+  double mu, sigma,z, xxi, g;
+  double m1 = 2.0/sqrt(2.0*PI);
+  double m12 = m1*m1;
+  double xi2 = xi*xi;
+  mu = m1*(xi-1.0/xi);
+  sigma = sqrt((1.0-m12)*(xi2+1.0/xi2)+2.0*m12-1.0);
+  z = x*sigma+mu;
+  xxi = (z<0)? 1.0/xi : xi;
+  g = 2.0/(xi + 1.0/xi);
+  pdf = g * dnormstd(z/xxi)*sigma;
+  return pdf;
+}
 
-  if(!bLog) dLPDF = exp(dLPDF);
+double psnorm(const double q, const double mu, const double sigma, const double xi)
+{
+  double qx = (q-mu)/sigma;
+  double m1 = 2.0/sqrt(2*PI);
+  double mux = m1 * (xi - 1.0/xi);
+  double sig = sqrt((1.0-m1*m1)*(xi*xi+1.0/(xi*xi)) + 2.0*m1*m1 - 1.0);
+  double z = qx*sig + mux;
+  double Xi = (z<0)?1.0/xi:xi;
+  double g = 2.0/(xi + 1.0/xi);
+  double p = Heaviside(z, 0) - signum(z) * g * Xi * Rf_pnorm5(-abs3(z)/Xi, 0, 1, 1, 0);
+  return( p );
+}
 
-  return dLPDF;
-
+double qsnorm(const double p, const double xi)
+{
+  double m1 = 2.0/sqrt(2*PI);
+  double mu = m1 * (xi - 1.0/xi);
+  double sigma = sqrt((1.0-m1*m1)*(xi*xi+1.0/(xi*xi)) + 2.0*m1*m1 - 1.0);
+  double g = 2.0/(xi + 1.0/xi);
+  double z = p-0.5;
+  double Xi = (z<0)?1.0/xi:xi;
+  double tmp = (Heaviside(z, 0) - signum(z) * p)/ (g* Xi);
+  double q = (-1.0*signum(z)* Rf_qnorm5(tmp, 0, Xi, 1, 0) - mu)/sigma;
+  return( q );
 }
 
 
-double pSNORM(double dY, double dMu, double dSigma2, double dDelta){
+double snormskew( double dXi )
+{
+  double m1 = 2.0/sqrt(2.0 * M_PI);
+  double m2 = 1.0;
+  double m3 = 4/sqrt(2.0 * M_PI);
 
-  double dP = 0.0;
+  double dSkew = (dXi - 1.0/dXi) * ( ( m3 + 2.0 * pow(m1, 3.0) - 3.0 * m1 * m2 ) * ( pow(dXi,2.0) + (1.0/pow(dXi, 2.0) ) ) + 3.0 * m1 * m2 - 4.0 * pow(m1,3.0) )/
+    ( pow(( (m2 - pow(m1, 2.0)) * ( pow(dXi,2.0) + 1.0/pow(dXi, 2.0) ) + 2.0 * pow(m1, 2.0) - m2), 1.5)  );
 
-  double dZ = 0.0;
+  return dSkew;
+}
 
-  if (dY < dMu){
+double dSNORM(double dY, double dMu, double dSigma, double dXi, bool bLog = false){
 
-    dZ = (dDelta*(dY - dMu))/pow(dSigma2, 0.5);
+  double dZ = (dY - dMu)/dSigma;
+  double dPDF = dsnormstd(dZ, dXi)/dSigma;
 
-    dP = 2.0/(1.0 + pow(dDelta, 2.0)) * Rf_pnorm5(dZ, 0.0,1.0,1,0);
+  if(bLog) dPDF = log(dPDF);
 
-  }else{
+  return dPDF;
 
-    dZ = (dY - dMu)/(dDelta * pow(dSigma2, 0.5));
+}
 
-    dP = (1.0 - pow(dDelta, 2.0))/ (1.0 + pow(dDelta, 2.0)) +  2.0 * pow(dDelta, 2.0)/(1.0 + pow(dDelta, 2.0)) * Rf_pnorm5(dZ, 0.0,1.0,1,0);
+double pSNORM(double dY, double dMu, double dSigma, double dXi){
 
-  }
-
+  double dP = psnorm(dY, dMu, dSigma, dXi);
   return dP;
 
 }
 
+double rSNORM(double dMu, double dSigma, double dXi){
 
-double rSNORM(double dMu, double dSigma2, double dDelta){
-
-  double dZ0 = Rf_rnorm(0.0, 1.0);
-  double dZ1 = Rf_rnorm(0.0, 1.0);
-
-  double dPi = 1.0/(1.0 + pow(dDelta, 2.0));
-
-  double dU = rBER(dPi);
-
-  double dY = dMu + pow(dSigma2, 0.5) * (dDelta*(1.0 - dU)*abs3(dZ0) - dU*abs3(dZ1)/dDelta);
-
+  double dY = dMu + rsnorm(dXi)*dSigma;
   return dY;
 
 }
 
+double qSNORM(double dP, double dMu, double dSigma, double dXi) {
 
-double qSNORM(double dP, double dMu, double dSigma2, double dDelta,
-            double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
-  double a=lower;
-  double b=upper;
+  double dQ = qsnorm(dP, dXi)*dSigma + dMu;
 
-  double x=lower;
-  double x1=upper;
-  int iter = 1;
-  double fa,fx;
-  //check
-  fa = pSNORM(a,  dMu, dSigma2, dDelta) - dP;
-  fx = pSNORM(x1, dMu, dSigma2, dDelta) - dP;
-
-  if(fa*fx>0){
-    Rprintf("Bisection Error: upper and lower function evaluations have same sign");
-    return NA_LOGICAL;
-  }
-
-  do
-  {
-    fa=pSNORM(a, dMu, dSigma2, dDelta) - dP;
-    fx=pSNORM(x, dMu, dSigma2, dDelta) - dP;
-
-    if (fa*fx < 0){
-      b=x;
-    }else{
-      a=x;
-    }
-
-    x1=(a+b)/2.0;
-    iter++;
-
-    if (abs3(x1-x) < eps)
-    {
-      return x1;
-    }
-    x=x1;
-  }while(iter<maxiter);
-
-  Rprintf("Bisection Warning: Maximum numeber of iteration reached");
-  return NA_LOGICAL;
+  return dQ;
 }
 
+arma::vec mSNORM(double dMu, double dSigma, double dXi){
 
-arma::vec mSNORM(double dMu, double dSigma2, double dDelta){
   arma::vec vMoments(4);
 
-  double dSigma = pow(dSigma2, 0.5);
-  double dDelta2 = pow(dDelta, 2.0);
-
-  vMoments(0) = dMu + pow(2.0, 0.5)*dSigma*(dDelta2 - 1.0)/(pow(M_PI, 0.5)*dDelta);
-  vMoments(1) = (dSigma2*((M_PI - 2.0)*pow(dDelta, 6.0) + 2.0*dDelta2*(dDelta2 + 1.0) + M_PI - 2.0))/(M_PI * dDelta2*(1.0 + dDelta2));
-  vMoments(2) = pow(2.0, 0.5)*(1.0 - dDelta2)*pow(1.0 + dDelta2, 0.5)*((M_PI - 4.0)*pow(dDelta, 6.0) + 2.0*(2.0 - M_PI)*dDelta2*(1.0 + dDelta2) + M_PI - 4.0)/pow((M_PI - 2.0)*pow(dDelta, 6.0) + 2.0*dDelta2*(1.0 + dDelta2) + (M_PI - 2.0), 3.0/2.0);
-  vMoments(3) = ( (1.0 + dDelta2)*((3.0*pow(M_PI, 2.0)- 4.0*M_PI - 12.0)*(pow(dDelta, 10.0) + 1.0) + 4.0*(9.0 - 2.0*M_PI)*dDelta2*(pow(dDelta, 6.0) + 1.0)) )/pow( (M_PI - 2.0)*pow(dDelta, 6.0) + 2.0*dDelta2*(1.0 + dDelta2) + (M_PI - 2.0), 2.0) +
-                (1.0 + dDelta2)*(12.0*(M_PI - 2.0)*pow(dDelta, 4.0)*(dDelta2 + 1.0))/pow((M_PI - 2.0)*pow(dDelta, 6.0) + 2.0*dDelta2*(1.0 + dDelta2) + (M_PI - 2.0), 2.0);
+  vMoments(0) = dMu;
+  vMoments(1) = pow(dSigma, 2.0);
+  vMoments(2) = snormskew(dXi);
+  vMoments(3) = 0.0;
 
   return vMoments;
 
@@ -129,51 +133,60 @@ arma::vec mSNORM(double dMu, double dSigma2, double dDelta){
 
 arma::vec snorm_Score(double dY, arma::vec vTheta){
 
-  double dMu     = vTheta(0);
-  double dSigma2 = vTheta(1);
-  double dDelta  = vTheta(2);
-
-  double dDelta2 = pow(dDelta, 2.0);
+  double dMu    = vTheta(0);
+  double dSigma = vTheta(1);
+  double dXi     = vTheta(2);
 
   arma::vec vScore(3);
 
-  double dI = 1.0;
-  if(dY >= dMu) dI = 0.0;
+  double dK = (dY - dMu)/dSigma;
 
-  double dI_c = 1.0 - dI;
+  double ddK_mu = -1.0/dSigma;
+  double ddK_sigma = -dK/dSigma;
 
-  double ddMu     = dDelta2/dSigma2 * (dY - dMu)*dI + dI_c*(dY - dMu)/(dDelta2*dSigma2);
-  double ddSigma2 = -1.0/(2.0*dSigma2) + dDelta2*pow(dY - dMu, 2.0)/(2.0*pow(dSigma2, 2.0)) * dI + dI_c*pow(dY - dMu, 2.0)/(2.0*dDelta2*pow(dSigma2, 2.0));
-  double ddDelta  = 1.0/dDelta - 2.0*dDelta/(1.0 + dDelta2) - dDelta/dSigma2 * pow(dY - dMu, 2.0)*dI + dI_c * pow(dY - dMu, 2.0)/(pow(dDelta, 3.0)*dSigma2);
+  double m1 = 2.0/sqrt(2.0*PI);
+  double m12 = m1*m1;
+  double xi2 = dXi * dXi;
+
+  double dMu_tilde = m1 * (dXi - 1.0/dXi);
+  double dSigma_tilde = sqrt((1.0-m12)*(xi2+1.0/xi2)+2.0*m12-1.0);
+
+  double dZ = dK * dSigma_tilde + dMu_tilde;
+
+  double dXi_star = (dZ<0)? 1.0/dXi : dXi;
+
+  //derivative log dsnormstd wrt dK
+  double dA = - dZ * dSigma_tilde / pow(dXi_star, 2.0);
+
+  double ddMu = ddK_mu * dA;
+  double ddSigma = ddK_sigma * dA - 1.0/dSigma;
+
+  // derivative wrt dXi
+
+  double dG = 2.0/(dXi + 1.0/dXi);
+  double dH = dZ/dXi_star;
+
+  double ddG_xi = -2.0*(1.0 - 1.0/pow(dXi, 2.0))/pow(dXi + 1.0/dXi, 2.0);
+  double ddXi_Star_xi = (dZ<0)? -1.0/pow(dXi, 2.0) : 1.0;
+  double ddSigma_tilde_xi = -(1.0 - m12)*(dXi - 1.0/pow(dXi, 3.0))/dSigma_tilde;
+  double ddMu_tilde_xi = m1 * (1.0 + 1.0/pow(dXi, 2.0));
+
+  double ddZ_xi = dK * ddSigma_tilde_xi + ddMu_tilde_xi;
+
+  double ddH_xi = (ddZ_xi * dXi_star - dZ * ddXi_Star_xi )/pow(dXi_star, 2.0);
+
+  double ddXi = ddG_xi/dG - dH*ddH_xi +  ddSigma_tilde_xi/dSigma_tilde;
 
   vScore(0) = ddMu;
-  vScore(1) = ddSigma2;
-  vScore(2) = ddDelta;
+  vScore(1) = ddSigma;
+  vScore(2) = ddXi;
 
   return vScore;
 }
 
 arma::mat snorm_IM(arma::vec vTheta){
 
-  double dSigma2 = vTheta(1);
-  double dDelta  = vTheta(2);
-  double dDelta2 = pow(dDelta, 2.0);
-
-  arma::mat mIM = zeros(3,3);
-
-  double uu = 1.0/dSigma2;
-  double tu = 8.0/(pow(2.0*M_PI*dSigma2, 0.5)*(1.0 + dDelta2));
-  double dd = 1.0/(2.0*pow(dSigma2, 2.0));
-  double td = (dDelta2 - 1.0)/(dDelta*(1.0 + dDelta2)*dSigma2);
-  double tt = 2.0/dDelta2 + 4.0/pow(1.0 + dDelta2 , 2.0);
-
-  mIM(0,0) = uu;
-  mIM(2,0) = tu;
-  mIM(0,2) = tu;
-  mIM(1,1) = dd;
-  mIM(2,1) = td;
-  mIM(1,2) = td;
-  mIM(2,2) = tt;
+  arma::mat mIM = eye(3,3);
 
   return mIM;
 

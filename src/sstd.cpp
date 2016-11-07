@@ -8,16 +8,6 @@ using namespace Rcpp;
 //// This Functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
-double signum(const double x)
-{
-  double res=-(x<0)+(x>0);
-  return  res;
-}
-
-double Heaviside(const double x, const double a){
-  return( (signum(x-a) + 1.0)/2.0 );
-}
-
 
 double xdt(const double x, const double nu)
 {

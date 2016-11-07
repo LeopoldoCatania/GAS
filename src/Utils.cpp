@@ -177,3 +177,13 @@ double IndicatorLess(double dX, double dXBar){
   return dI;
 }
 
+double signum(const double x)
+{
+  double res=-(x<0)+(x>0);
+  return  res;
+}
+
+double Heaviside(const double x, const double a){
+  return( (signum(x-a) + 1.0)/2.0 );
+}
+

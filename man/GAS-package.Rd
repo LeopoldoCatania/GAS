@@ -12,7 +12,7 @@ The GAS package allows us to simulate, estimate and forecast using univariate an
 \tabular{ll}{
 Package: \tab GAS\cr
 Type: \tab Package\cr
-Version: \tab 0.1.4\cr
+Version: \tab 0.1.5\cr
 Date: \tab 2016-07-09\cr
 License: \tab GPL (>= 2)\cr
 }

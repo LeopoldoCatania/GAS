@@ -124,16 +124,16 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
   if(Dist=="snorm"){
 
     double dMu_tilde     = vTheta_tilde(0);
-    double dSigma2_tilde = vTheta_tilde(1);
-    double dDelta_tilde  = vTheta_tilde(2);
+    double dSigma_tilde = vTheta_tilde(1);
+    double dXi_tilde  = vTheta_tilde(2);
 
     double dMu     = dMu_tilde;
-    double dSigma2 = exp(dSigma2_tilde);
-    double dDelta  = Map(dDelta_tilde, dLowerSkewFS, dUpperSkewFS);
+    double dSigma = exp(dSigma_tilde);
+    double dXi  = Map(dXi_tilde, dLowerSkewFS, dUpperSkewFS);
 
     vTheta(0) = dMu;
-    vTheta(1) = dSigma2;
-    vTheta(2) = dDelta;
+    vTheta(1) = dSigma;
+    vTheta(2) = dXi;
 
   }
   if(Dist == "poi"){
@@ -282,16 +282,16 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
   if(Dist=="snorm"){
 
     double dMu     = vTheta(0);
-    double dSigma2 = vTheta(1);
-    double dDelta  = vTheta(2);
+    double dSigma = vTheta(1);
+    double dXi  = vTheta(2);
 
     double dMu_tilde     = dMu;
-    double dSigma2_tilde = exp(dSigma2);
-    double dDelta_tilde  = Unmap(dDelta, dLowerSkewFS, dUpperSkewFS);
+    double dSigma_tilde = log(dSigma);
+    double dXi_tilde  = Unmap(dXi, dLowerSkewFS, dUpperSkewFS);
 
     vTheta_tilde(0) = dMu_tilde;
-    vTheta_tilde(1) = dSigma2_tilde;
-    vTheta_tilde(2) = dDelta_tilde;
+    vTheta_tilde(1) = dSigma_tilde;
+    vTheta_tilde(2) = dXi_tilde;
 
   }
 
@@ -410,12 +410,12 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
   }
   if(Dist=="snorm"){
 
-    double dSigma2_tilde = vTheta_tilde(1);
-    double dDelta_tilde  = vTheta_tilde(2);
+    double dSigma_tilde = vTheta_tilde(1);
+    double dXi_tilde  = vTheta_tilde(2);
 
     mJ(0,0) = 1;
-    mJ(1,1) = exp(dSigma2_tilde);
-    mJ(2,2) = MapDeriv(dDelta_tilde, dLowerSkewFS, dUpperSkewFS);;
+    mJ(1,1) = exp(dSigma_tilde);
+    mJ(2,2) = MapDeriv(dXi_tilde, dLowerSkewFS, dUpperSkewFS);;
 
   }
   if(Dist=="poi"){

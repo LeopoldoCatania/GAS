@@ -1,0 +1,6 @@
+2016-11-07  Leopoldo Catania <leopoldo.catania@uniroma2.it>
+	* DESCRIPTION (Version): New version is 0.1.5.
+	* "snorm" is now the skew normal distribution
+	reparametrized in terms of mean and standard deviation.
+	In the previous "snorm" of version 0.1.4 there was also a
+	bug in the unmapping function.

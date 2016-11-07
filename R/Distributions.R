@@ -38,7 +38,8 @@ DistNote <- function(DistLabel) {
     if (DistLabel == "norm")
         return("")
     if (DistLabel == "snorm")
-        return("Skew Gaussian distribution as in Fernandez and Steel (1998)")
+        return("Skew Gaussian distribution of Fernandez and Steel (1998). It is reparametrised as in
+               fGARCH and rugarch such that the location is the mean and the scale is the standard deviation.")
     if (DistLabel == "std")
         return("The Student-t distribution (not reparametrised in terms of the variance parameter)")
     if (DistLabel == "sstd")
@@ -163,7 +164,7 @@ DistScalingType <- function(DistLabel) {
     if (DistLabel == "norm")
         return("Identity, Inv, InvSqrt")
     if (DistLabel == "snorm")
-        return("Identity, Inv, InvSqrt")
+        return("Identity")
     if (DistLabel == "std")
         return("Identity, Inv, InvSqrt")
     if (DistLabel == "sstd")

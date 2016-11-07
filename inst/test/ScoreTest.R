@@ -72,16 +72,16 @@ Score_univ(dY, vTheta, "ast1")
 
 dY      =  0.9
 dMu     = 1
-dSigma2 = 4
-dDelta  = 1.2
+dSigma = 4
+dXi  = 1.0
 
-vTheta = c(dMu,dSigma2,dDelta)
+vTheta = c(dMu,dSigma,dXi)
 
 grad(function(vTheta,dY){
-  ddist_univ(dY, vTheta, "snorm", bLog=TRUE)
-},vTheta, dY = dY)
+  ddist_Uni(dY, vTheta, "snorm", log=TRUE)
+},vTheta, dY = dY, method = "Richardson")
 
-Score_univ(dY, vTheta, "snorm")
+Score_Uni(dY, vTheta, "snorm")
 
 # sstd
 
