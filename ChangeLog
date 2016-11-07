@@ -4,3 +4,5 @@
 	reparametrized in terms of mean and standard deviation.
 	In the previous "snorm" of version 0.1.4 there was also a
 	bug in the unmapping function.
+	* Bug correction for quantile function and cdf of "norm".
+	* Bug correction for static optimization

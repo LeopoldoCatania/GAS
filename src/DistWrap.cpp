@@ -73,7 +73,7 @@ arma::vec rdist_multi(arma::vec vTheta, int iN,std::string Dist){
 //[[Rcpp::export]]
 double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
   double dP=0.0;
-  if(Dist == "norm") dP = Rf_pnorm5(dQ, vTheta(0), pow(vTheta(1),2.0), 1,0);
+  if(Dist == "norm") dP = Rf_pnorm5(dQ, vTheta(0), pow(vTheta(1),0.5), 1,0);
   if(Dist == "snorm")  dP = pSNORM(dQ, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "std")  dP = pSTD(dQ, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "sstd") dP = pSSTD(dQ, vTheta(0), vTheta(1), vTheta(2),vTheta(3));
@@ -90,7 +90,7 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
 //[[Rcpp::export]]
 double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   double dQ=0.0;
-  if(Dist == "norm")  dQ = Rf_qnorm5(dP, vTheta(0), pow(vTheta(1),2.0), 1,0);
+  if(Dist == "norm")  dQ = Rf_qnorm5(dP, vTheta(0), pow(vTheta(1),0.5), 1,0);
   if(Dist == "snorm") dQ = qSNORM(dP, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "std")   dQ = qSTD(dP, vTheta(0), vTheta(1), vTheta(2));
   if(Dist == "sstd")  dQ = qSSTD(dP, vTheta(0), vTheta(1), vTheta(2), vTheta(3));
