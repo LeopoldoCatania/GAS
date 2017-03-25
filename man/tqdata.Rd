@@ -27,6 +27,9 @@ The data contains 3080 rows and eight columns - in order:
 \usage{data("tqdata")}
 \format{A \link{data.frame} object containing 3,080 observat. ions.}
 \references{
-Bien K, Nolte, I, Pohlmeier W (2011). "An Inflated Multivariate Integer Count Hurdle Model: An Application to Bid and Ask Quote Dynamics", Journal of Applied Econometrics, 26(4), 669-707. \doi{10.1002/jae.1122}\cr
+Bien K, Nolte, I, Pohlmeier W (2011). 
+"An Inflated Multivariate Integer Count Hurdle Model: An Application to Bid and Ask Quote Dynamics". 
+Journal of Applied Econometrics, 26(4), 669-707. 
+\doi{10.1002/jae.1122}
 }
 \keyword{datasets}

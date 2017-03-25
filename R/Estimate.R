@@ -40,7 +40,7 @@ StaticMLFIT_Multiv <- function(mY, Dist) {
     return(out)
 }
 
-UniGASFit <- function(GASSpec, data) {
+UniGASFit <- function(GASSpec, data, fn.optimizer = fn.solnp) {
 
     vY = data
 
@@ -63,37 +63,61 @@ UniGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = suppressWarnings(solnp(vPw, UniGASOptimiser, vY = vY, Dist = Dist, ScalingType = ScalingType, iT = iT,
-        iK = iK, control = list(trace = 0)))
+    optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
     vPw = optimiser$pars
 
     lParList = vPw2lPn_Uni(vPw, iK)
     lParList = AddFixedPar(lParList)
 
-    Inference = InferenceFun_Uni(optimiser$hessian, vPw, iK)
+    mHessian = optimiser$hessian
+
+    if (is.null(mHessian)) {
+      mHessian = numDeriv::hessian(UniGASOptimiser, vPw, data = vY, GASSpec = GASSpec)
+      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values) < 0) {
+         mHessian = optim(vPw, UniGASOptimiser, data = vY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
+      }
+      if (min(eigen(mHessian)$values) < 0) {
+        warning("Hessian matrix is not positive definite. Standard errors are not reliable")
+      }
+    }
+
+    Inference = InferenceFun_Uni(mHessian, vPw, iK)
 
     GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
-    IC = ICfun(-tail(optimiser$values, 1), length(optimiser$pars), iT)
+    IC = ICfun(-optimiser$value, length(optimiser$pars), iT)
 
     vU = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
-    PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = F)
+    PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = FALSE)
 
     mMoments = EvalMoments_univ(GASDyn$mTheta, Dist)
 
     elapsedTime = Sys.time() - Start
 
-    Out <- new("uGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iK = iK, elapsedTime = elapsedTime),
-        GASDyn = GASDyn, Estimates = list(lParList = lParList, optimiser = optimiser, StaticFit = StaticFit,
-            Inference = Inference, IC = IC, vU = vU, Moments = mMoments), Testing = list(PitTest = PitTest),
-        Data = list(vY = vY))
+    Out <- new("uGASFit",
+               ModelInfo = list(Spec = GASSpec,
+                                iT = iT,
+                                iK = iK,
+                                elapsedTime = elapsedTime,
+                                Date = Start,
+                                convergence = optimiser$convergence),
+               GASDyn = GASDyn,
+               Estimates = list(lParList = lParList,
+                                optimiser = optimiser,
+                                StaticFit = StaticFit,
+                                Inference = Inference,
+                                IC = IC,
+                                vU = vU,
+                                Moments = mMoments),
+               Testing = list(PitTest = PitTest),
+               Data = list(vY = vY))
 
     return(Out)
 }
 
 # mY is NxT
-MultiGASFit <- function(GASSpec, data) {
+MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.solnp) {
 
     mY = t(data)
 
@@ -109,8 +133,9 @@ MultiGASFit <- function(GASSpec, data) {
     iN = nrow(mY)
     iK = NumberParameters(Dist, iN)
 
-    if (is.null(rownames(mY)))
+    if (is.null(rownames(mY))) {
         rownames(mY) = paste("Series", 1:iN)
+    }
 
     # starting par
     vPw = MultiGAS_Starting(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters)
@@ -120,27 +145,50 @@ MultiGASFit <- function(GASSpec, data) {
     vPw = RemoveFixedPar(vPw, FixedPar)
 
     # optimise
-    optimiser = suppressWarnings(solnp(vPw, MultiGASOptimiser, mY = mY, Dist = Dist, ScalingType = ScalingType, iT = iT,
-        iN = iN, iK = iK, ScalarParameters = ScalarParameters, control = list(trace = 0)))
+    optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
 
     vPw = optimiser$pars
 
     lParList = vPw2lPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
     lParList = AddFixedPar(lParList)
 
-    Inference = InferenceFun_Multi(optimiser$hessian, Dist, vPw, iK, iN, ScalarParameters)
+    mHessian = optimiser$hessian
+
+    if (is.null(mHessian)) {
+      mHessian = numDeriv::hessian(MultiGASOptimiser, vPw, data = mY, GASSpec = GASSpec)
+      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0)) {
+        mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
+      }
+      if (min(eigen(mHessian)$values) < 0) {
+        warning("Hessian matrix is not positive definite. Standard errors are not reliable")
+      }
+    }
+
+    Inference = InferenceFun_Multi(mHessian, Dist, vPw, iK, iN, ScalarParameters)
 
     GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 
-    IC = ICfun(-tail(optimiser$values, 1), length(optimiser$pars), iT)
+    IC = ICfun(-optimiser$value, length(optimiser$pars), iT)
 
     ## Moments
     mMoments = EvalMoments_multi(GASDyn$mTheta, Dist, iN)
 
     elapsedTime = Sys.time() - Start
 
-    Out <- new("mGASFit", ModelInfo = list(Spec = GASSpec, iT = iT, iN = iN, iK = iK, elapsedTime = elapsedTime),
-        GASDyn = GASDyn, Estimates = list(lParList = lParList, optimiser = optimiser, Inference = Inference,
-            IC = IC, Moments = mMoments), Data = list(mY = mY))
+    Out <- new("mGASFit",
+               ModelInfo = list(Spec = GASSpec,
+                                iT = iT,
+                                iN = iN,
+                                iK = iK,
+                                elapsedTime = elapsedTime,
+                                Date = Start,
+                                convergence = optimiser$convergence),
+        GASDyn = GASDyn,
+        Estimates = list(lParList = lParList,
+                         optimiser = optimiser,
+                         Inference = Inference,
+                         IC = IC,
+                         Moments = mMoments),
+        Data = list(mY = mY))
     return(Out)
 }

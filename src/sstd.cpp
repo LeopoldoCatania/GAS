@@ -170,7 +170,6 @@ double sstdexkurt( double dXi, double dNu )
   return m4;
 }
 
-//[[Rcpp::export]]
 double dSSTD(double dY, double dMu, double dSigma, double dXi, double dNu, bool bLog = false ){
   double dZ = (dY - dMu)/dSigma;
   double dPDF = dsstdstd(dZ, dXi, dNu)/dSigma;
@@ -180,21 +179,18 @@ double dSSTD(double dY, double dMu, double dSigma, double dXi, double dNu, bool 
   return dPDF;
 }
 
-//[[Rcpp::export]]
 double pSSTD(double dY, double dMu, double dSigma, double dXi, double dNu){
 
   double dP = psstd(dY, dMu, dSigma, dXi, dNu);
   return dP;
 }
 
-//[[Rcpp::export]]
 double rSSTD(double dMu, double dSigma, double dXi, double dNu){
 
   double dY = dMu + rsstd(dXi, dNu)*dSigma;
   return dY;
 }
 
-//[[Rcpp::export]]
 double qSSTD(double dP, double dMu, double dSigma, double dXi, double dNu){
 
   double dQ = qsstd(dP, dXi, dNu)*dSigma + dMu;
@@ -202,7 +198,6 @@ double qSSTD(double dP, double dMu, double dSigma, double dXi, double dNu){
   return dQ;
 }
 
-//[[Rcpp::export]]
 arma::vec mSSTD(double dMu, double dSigma, double dXi, double dNu){
   arma::vec vMoments(4);
 
@@ -214,7 +209,6 @@ arma::vec mSSTD(double dMu, double dSigma, double dXi, double dNu){
   return vMoments;
 }
 
-//[[Rcpp::export]]
 arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double dMu    = vTheta(0);
@@ -281,10 +275,19 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   vScore(0) = ddMu;
   vScore(1) = ddSigma;
-  vScore(2) = ddXi;  // check
-  vScore(3) = ddNu;  // check
+  vScore(2) = ddXi;
+  vScore(3) = ddNu;
 
 
   return vScore;
 
 }
+
+arma::mat sstd_IM(arma::vec vTheta){
+
+  arma::mat mIM = eye(4,4);
+
+  return mIM;
+
+}
+

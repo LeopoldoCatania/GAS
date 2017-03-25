@@ -46,7 +46,6 @@ double wCRPS_internal(double dY, arma::vec vTheta, std::string Dist, double dLow
   return dWCRPS;
 }
 
-//[[Rcpp::export]]
 arma::vec wCRPS_series(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper,
                             std::string sType = "uniform", int iB = 1000,  double dA = 0.0, double dB = 1.0){
 

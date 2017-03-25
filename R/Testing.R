@@ -82,7 +82,6 @@ PIT_test <- function(U, G = 20, alpha = 0.05, plot = FALSE) {
     return(list(Hist = Hist, IID = IID))
 }
 
-
 ############################### QUANTILE #
 
 DQOOStest <- function(y, VaR, tau, cLags) {
@@ -119,14 +118,15 @@ HitSequence <- function(returns_X, VaR_X) {
     Hit_X[which(returns_X <= VaR_X)] = 1
     return(Hit_X)
 }
-Kupiec <- function(Hit, tau, alphaTest = 0.95) {
+
+Kupiec <- function(Hit, tau) {
     N = length(Hit)
     x = sum(Hit)
     rate = x/N
     test = -2 * log(((1 - tau)^(N - x) * tau^x)/((1 - rate)^(N - x) * rate^x))
     if (is.nan(test))
         test = -2 * ((N - x) * log(1 - tau) + x * log(tau) - (N - x) * log(1 - rate) - x * log(rate))
-    threshold = qchisq(alphaTest, df = 1)
+    # threshold = qchisq(alphaTest, df = 1)
     pvalue = 1 - pchisq(test, df = 1)
 
     LRpof = c(test, pvalue)
@@ -134,7 +134,7 @@ Kupiec <- function(Hit, tau, alphaTest = 0.95) {
     return(LRpof)
 }
 
-Christoffersen <- function(Hit, tau, alphaTest = 0.95) {
+Christoffersen <- function(Hit, tau) {
     n00 = n01 = n10 = n11 = 0
     N = length(Hit)
     for (i in 2:N) {
@@ -155,20 +155,22 @@ Christoffersen <- function(Hit, tau, alphaTest = 0.95) {
     if (is.nan(LRind))
         LRind = -2 * ((n00 + n10) * log(1 - pi) + (n01 + n11) * log(pi) - n00 * log(1 - pi0) - n01 *
             log(pi0) - n10 * log(1 - pi1) - n11 * log(pi1))
-    LRpof = Kupiec(Hit, tau, alphaTest = alphaTest)["Test"]
+    LRpof = Kupiec(Hit, tau)["Test"]
     LRcc = LRpof + LRind
-    threshold = qchisq(alphaTest, df = 2)
+    # threshold = qchisq(alphaTest, df = 2)
     pvalue = 1 - pchisq(LRcc, df = 2)
     LRcc = c(LRcc, pvalue)
     names(LRcc) = c("Test", "Pvalue")
     return(LRcc)
 }
+
 ActualOverExpected <- function(Hit, tau) {
     N = length(Hit)
     x = sum(Hit)
     Actual = x
     AovE = Actual/(tau * N)
 }
+
 AbsoluteDeviation <- function(Hit, returns_X, VaR_X) {
     series = abs(VaR_X - returns_X)
     series = series[which(Hit == 1)]
@@ -187,5 +189,46 @@ QLoss <- function(vY, vVaR, dTau) {
 
     return(list(Loss = dLoss, LossSeries = vLoss))
 }
+
+############ Gaussianity
+
+JarqueBera <- function(vRes, dAlpha = 0.05) {
+
+  iT = length(vRes)
+
+  m1 = mean(vRes)
+  m2 = mean((vRes - m1)^2.0)
+  m3 = mean((vRes - m1)^3.0)
+  m4 = mean((vRes - m1)^4.0)
+
+  dS = m3 / m2^(3.0 / 2.0)
+  dK = m4 / m2^2.0
+
+  dStat = iT / 6.0 * (dS^2.0 + (dK - 3.0)^2.0 / 4.0)
+
+  dPval = 1.0 - pchisq(dStat, 2)
+
+  dCritical = qchisq(1.0 - dAlpha, 2)
+
+  return(c("Statistic" = dStat, "p-Value" = dPval, "critical" = dCritical))
+
+}
+
+LjungBox <- function(vRes, vLag = c(10, 15, 20)) {
+
+  iP    = length(vLag)
+  mTest = matrix(data = NA, iP, 2, dimnames =
+                   list(vLag, c("Statistic", "p-Value")))
+
+  for (p in 1:iP) {
+    Test = Box.test(vRes, vLag[p], type = "Ljung-Box")
+    mTest[p, ] = c(Test$statistic, Test$p.value)
+  }
+
+  return(mTest)
+
+}
+
+
 
 

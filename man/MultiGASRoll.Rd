@@ -4,12 +4,13 @@
 	Rolling forecast with multivariate GAS models
 }
 \description{
- One-step ahead rolling forecasts with model re-estimation. The function also reports several quantity for backtesting for point and density forecasts.
+ One-step ahead rolling forecasts with model re-estimation. The function also reports
+ several quantity for backtesting for point and density forecasts.
 }
 \usage{
 MultiGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
              RefitEvery = 23, RefitWindow = c("moving", "recursive"),
-             cluster = NULL)
+             cluster = NULL, \ldots)
 }
 \arguments{
 \item{data}{ \code{matrix} of dimension (T + ForecastLength) x N containing the time series of observations. }
@@ -19,8 +20,11 @@ MultiGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
 \item{ForecastLength}{ \code{numeric} Length of the out of sample}
 \item{Nstart}{ \code{numeric} Period when perform the first forecast. Ignored if \code{ForecastLength} is supplied.}
 \item{RefitEvery}{ \code{numeric} Number of periods before model coefficients re-estimation.}
-\item{RefitWindow}{ \code{character} Type of window. If \code{RefitWindow = "recursive"} all the observations are used when the model is re-estimated. If \code{RefitWindow = "moving"} old observations are eliminated.}
-\item{cluster}{ A \code{cluster} object created calling using the \code{paralell} package. If supplied parallel processing is used to speed up the computations.}
+\item{RefitWindow}{ \code{character} Type of window. If \code{RefitWindow = "recursive"} all
+the observations are used when the model is re-estimated. If \code{RefitWindow = "moving"} old observations are eliminated.}
+\item{cluster}{ A \code{cluster} object created calling using the \code{paralell} package.
+If supplied parallel processing is used to speed up the computations.}
+\item{\ldots}{ Additional arguments for \link{MultiGASRoll}}
 %
 }
 \value{
@@ -50,6 +54,5 @@ Roll = MultiGASRoll(mY, GASSpec, ForecastLength = 250,
                        RefitEvery = 100, RefitWindow = c("moving"))
 
 Roll
-
 }
 }

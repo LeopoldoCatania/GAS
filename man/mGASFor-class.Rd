@@ -18,7 +18,9 @@ Class for the multivariate GAS forecast object.
     \item{\code{Forecast}:}{Object of class \code{list}. Contains forecasts:
     \itemize{
 \item \code{PointForecast}: \code{matrix} with parameters forecasts.
-\item \code{Moments}: \code{list} with centered moments forecasts. The first element contains a \code{matrix} with the predicted conditional means. The second element contains an \code{array} with the predicted conditional covariances.
+\item \code{Moments}: \code{list} with centered moments forecasts. The first element 
+contains a \code{matrix} with the predicted conditional means. The second element 
+contains an \code{array} with the predicted conditional covariances.
 \item \code{vLS}: \code{numeric} Log Score (Predictive Log Likelihood).
 }
 }
@@ -39,5 +41,5 @@ Class for the multivariate GAS forecast object.
 \item \code{LogScore} \code{signature(object = "uGASFor")}: Extract Log Scores.
 }
 }
-\author{ Leopoldo Catania}
+\author{Leopoldo Catania}
 \keyword{classes}

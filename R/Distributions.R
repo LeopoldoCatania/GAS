@@ -1,6 +1,18 @@
 DistLabels <- function() {
-    return(c("norm","snorm", "std", "ast", "ast1", "sstd", "ald", "poi", "ber", "gamma", "exp", "beta", "mvnorm",
-        "mvt"))
+    return(c("norm",
+             "snorm",
+             "std",
+             "sstd",
+             "ast",
+             "ast1",
+             "ald",
+             "poi",
+             "ber",
+             "gamma",
+             "exp",
+             "beta",
+             "mvnorm",
+             "mvt"))
 }
 
 DistName <- function(DistLabel) {
@@ -15,7 +27,7 @@ DistName <- function(DistLabel) {
     if (DistLabel == "ast")
         return("Asymmetric Student-t with two tail decay parameters")
     if (DistLabel == "ast1")
-        return("Asymmetric Student-t with two one decay parameter")
+        return("Asymmetric Student-t with one tail decay parameter")
     if (DistLabel == "ald")
         return("Asymmetric Laplace Distribution")
     if (DistLabel == "poi")

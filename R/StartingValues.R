@@ -1,7 +1,9 @@
 StartingNu <- function(vY) {
-    dNu = try(exp(solnp(log(12), function(x, vY) {
-        dNu = exp(x) + LowerNu()
-        -sum(dt(vY, dNu, log = TRUE))
+  dStart = c(unmapVec_C(12, LowerNu(), UpperNu()))
+    dNu = try(exp(solnp(dStart, function(x, vY) {
+      # dNu = exp(x) + LowerNu()
+        dNu =  c(Map_Vec(x, LowerNu(), UpperNu()))
+        - sum(dt(vY, dNu, log = TRUE))
     }, vY = vY, control = list(trace = 0))$pars) + LowerNu(), silent = TRUE)
 
     if (is(dNu, "try-error"))
@@ -57,16 +59,15 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
     }
     if (Dist == "ast" | Dist == "ast1") {
 
-        dEmpmean = mean(vY)
-        dEmpsd = sd(vY)
-
-        vZ = (vY - dEmpmean)/dEmpsd
-
         dNu1 = StartingNu(vY)
 
         if (Dist == "ast") {
 
             dNu2 = dNu1 * 1.5
+
+            if (dNu2 > UpperNu()) {
+              dNu2 = UpperNu() - 1
+            }
 
         } else {
 
@@ -171,6 +172,7 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
 }
 
 UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar) {
+
     StaticFit = StaticMLFIT(vY, Dist)
     vUncValues = StaticFit$optimiser$pars
     names(vUncValues) = paste("kappa", 1:iK, sep = "")

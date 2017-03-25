@@ -12,8 +12,6 @@
 \usepackage{subdepth}
 \usepackage{float}
 
-\usepackage{soul} % remove before submission
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DECLARATIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,20 +47,12 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DEF DAVE
-\newcommand{\dave}[1]{\textbf{\textcolor{red}{#1}}}
-\newcommand{\kris}[1]{\textbf{\textcolor{blue}{#1}}}
-\newcommand{\leo}[1]{\textbf{\textcolor{green}{#1}}}
 \providecommand\Student{\ensuremath{\text{Student--}t}\xspace}
 \providecommand\SStudent{\ensuremath{\text{Skew--Student--}t}\xspace}
 
 \providecommand{\V}{\mathsf{V}}
 \providecommand{\bydef}{\ensuremath{\equiv}\xspace}
 
-\newcommand{\insertfloat}[1]{%
-	\begin{center}
-		[Insert #1 about here]%
-	\end{center}%
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% TITLE PAGE
@@ -122,14 +112,13 @@ David Ardia \\
 \section[introduction]{Introduction}\label{sec:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Time--variation in the parameters describing a stochastic time series process is pervasive in almost all applied scientific fields. Early references to time series models include \citet{kalman.1960} and \citet{box_jenkins.1970}. In many settings, the model of interest is characterized by time--varying parameters, for which the literature has proposed a myriad of possible specifications. Recently, \citet{creal_etal.2013} and \citet{harvey.2013} note that many of the proposed models are either difficult to estimate (in particular, the class of stochastic volatility models reviewed in \cite{shephard.2005}) and/or do not properly take the shape of the conditional distribution of the data into account.\footnote{A typical example is the class of (G)ARCH models in which the squared (demeaned) return is the driver of time--variation in the conditional variance, independently of the shape of the conditional distribution of the return. To see that this is counter--intuitive, consider the case of observing a $10\%$ return when the conditional mean is $0\%$ and the volatility is $3\%$. Under the assumption of a normal distribution, the $10\%$ return is a strong signal of an increase in volatility, while under a fat--tailed \Student distribution, the signal is weakened because of the higher probability that the extreme value is an observation from the tails.} \citet{creal_etal.2013} and \citet{harvey.2013} therefore propose to use the score of the conditional density function as the main driver of time--variation in the parameters of the time series process used to describe the data. A further advantage of using the conditional score as driver  is that the estimation by Maximum Likelihood is straightforward. The resulting model is referred to as: Score--Driven model, Dynamic Conditional Score (DCS) model, or Generalized Autoregressive Score (GAS) model. In this article and accompanying \proglang{R} package, we use the GAS acronym for both.
+Time--variation in the parameters describing a stochastic time series process is pervasive in almost all applied scientific fields. Early references to time series models include \citet{kalman.1960} and \citet{box_jenkins.1970}. In many settings, the model of interest is characterized by time--varying parameters, for which the literature has proposed a myriad of possible specifications. Recently, \citet{creal_etal.2013} and \citet{harvey.2013} note that many of the proposed models are either difficult to estimate (in particular, the class of stochastic volatility models reviewed in \cite{shephard.2005}) and/or do not properly take the shape of the conditional distribution of the data into account.\footnote{A typical example is the class of (G)ARCH models in which the squared (demeaned) return is the driver of time--variation in the conditional variance, independently of the shape of the conditional distribution of the return. To see that this is counter--intuitive, consider the case of observing a $10\%$ return when the conditional mean is $0\%$ and the volatility is $3\%$. Under the assumption of a Gaussian distribution, the $10\%$ return is a strong signal of an increase in volatility, while under a fat--tailed \Student distribution, the signal is weakened because of the higher probability that the extreme value is an observation from the tails.} \citet{creal_etal.2013} and \citet{harvey.2013} therefore propose to use the score of the conditional density function as the main driver of time--variation in the parameters of the time series process used to describe the data. A further advantage of using the conditional score as driver  is that the estimation by Maximum Likelihood is straightforward. The resulting model is referred to as: Score--Driven model, Dynamic Conditional Score (DCS) model, or Generalized Autoregressive Score (GAS) model. In this article and accompanying \proglang{R} package, we use the GAS acronym.
 
-The \proglang{R} package \pkg{GAS} is conceived to be of relevance for the modelling of all types of time series data. It does not matter whether they are real--valued, integer--valued, (0,1)--bounded or strictly positive, as long as there is a conditional density for which the score function and the Hessian are well--defined. The practical relevance of the GAS framework has been illustrated in the case of financial risk forecasting (see \emph{e.g.}, \citet{harvey_sucarrat.2014} for market risk, \citet{oh_patton.2013} for systematic risk, and \citet{creal_etal.2014} for credit risk analysis), dependence modelling (see \emph{e.g.}, \citet{harvey_thiele.2014} and \citet{janus_etal.2014}), and spatial econometrics (see \emph{e.g.}, \citet{blasques_etal.2014a} and \citet{catania_bille.2016}). For a more complete overview of the work on GAS models, we refer the reader to the GAS community page at \href{http://www.gasmodel.com/}{http://www.gasmodel.com/}.
+The \proglang{R} package \pkg{GAS} is conceived to be of relevance for the modelling of all types of time series data. It does not matter whether they are real--valued, integer--valued, (0,1)--bounded or strictly positive, as long as there is a conditional density for which the score function and the Hessian are well--defined. The practical relevance of the GAS framework has been illustrated in the case of financial risk forecasting (see \emph{e.g.}, \citet{harvey_sucarrat.2014} for market risk, \citet{oh_patton.2016} for systematic risk, and \citet{creal_etal.2014} for credit risk analysis), dependence modelling (see \emph{e.g.}, \citet{harvey_thiele.2014} and \citet{janus_etal.2014}), and spatial econometrics (see \emph{e.g.}, \citet{blasques_etal.2014a} and \citet{catania_bille.2017}). For a more complete overview of the work on GAS models, we refer the reader to the GAS community page at \href{http://www.gasmodel.com/}{http://www.gasmodel.com/}.
 
-It is important to note that, even though the GAS framework has been developed by econometricians, it is flexible enough to be used in all fields in which the use of time--varying parameter models is relevant. The main difficulty in using GAS models is to derive the score and Hessian and implementing the Maximum Likelihood estimation of the resulting nonlinear models. The \proglang{R} package \pkg{GAS} answers these needs by proposing an integrated set of \proglang{R} functions to do time series analysis in the \proglang{R} statistical language \citep{R} under the  GAS  framework. The functionalities include: (i) estimation, (ii) prediction, (iii) simulation, (iv) backtesting, and (v) graphical representation of the results, implying that it is ready to use in real--life applications. The user interface uses the \proglang{R} programming language, which has the advantage of being free and open source. However, most of the underlying routines are principally written in \proglang{C++} exploiting the \pkg{armadillo} library \citep{sanderson.2010} and the \proglang{R} packages \pkg{Rcpp} \citep{Rcpp.2011,Rcpp} and \pkg{RcppArmadillo} \citep{RcppArmadillo.2014,RcppArmadillo} to speed up the computations. Furthermore, since the package is written with the \proglang{S4} methods, \proglang{R} users with basic programming knowledge will find common functions such as \code{coef()}, \code{plot()} and \code{show()} to extract and analyze their results. We believe that this aspect is of primary importance since it dramatically increases the number of potential users. The \proglang{R} package \pkg{GAS} is available from the CRAN repository at \url{https://cran.r-project.org/package=GAS}. Other codes available for specific GAS models are available in the GAS community page at \href{http://www.gasmodel.com/}{http://www.gasmodel.com/}. For instance, the \proglang{R} package \pkg{betategarch} \citep{sucarrat.2013} allows us to estimate the beta--t--EGARCH model of \cite{harvey.2013} and its skewed version introduced by \cite{harvey_sucarrat.2014}.
+It is important to note that, even though the GAS framework has been developed by econometricians, it is flexible enough to be used in all fields in which the use of time--varying parameter models is relevant. The main difficulty in using GAS models is to derive the score and Hessian and implementing the Maximum Likelihood estimation of the resulting nonlinear models. The \proglang{R} package \pkg{GAS} answers these needs by proposing an integrated set of \proglang{R} functions to do time series analysis in the \proglang{R} statistical language \citep{R} under the  GAS  framework. The functionalities include: (i) estimation, (ii) prediction, (iii) simulation, (iv) backtesting, and (v) graphical representation of the results, implying that it is ready to use in real--life applications. The user interface uses the \proglang{R} programming language, which has the advantage of being free and open source. However, most of the underlying routines are principally written in \proglang{C++} exploiting the \pkg{armadillo} library \citep{sanderson.2010} and the \proglang{R} packages \pkg{Rcpp} \citep{Rcpp.2011,Rcpp} and \pkg{RcppArmadillo} \citep{RcppArmadillo.2014,RcppArmadillo} to speed up the computations. Furthermore, since the package is written using \proglang{S4} classes, \proglang{R} users with basic programming knowledge will find methods such as \code{coef()}, \code{plot()} and \code{show()} to extract and analyze their results. We believe that this aspect is of primary importance since it dramatically increases the number of potential users. The \proglang{R} package \pkg{GAS} is available from the CRAN repository at \url{https://cran.r-project.org/package=GAS}. Other codes available for specific GAS models are available in the GAS community page at \href{http://www.gasmodel.com/}{http://www.gasmodel.com/}. For instance, the \proglang{R} package \pkg{betategarch} \citep{sucarrat.2013} allows us to estimate the beta--t--EGARCH model of \cite{harvey.2013} and its skewed version introduced by \cite{harvey_sucarrat.2014}.
 
-% paper schedule
-The outline of the paper is as follows: Section~\ref{sec:models} reviews the GAS framework to define time--varying parameter	 models, referring to the seminal works of \citet{creal_etal.2013} and \citet{harvey.2013}. Section~\ref{sec:package} introduces the \proglang{R} package \pkg{GAS} and illustrates how to to simulate, estimate and make predictions. Section~\ref{sec:application} presents a real--life application to financial data. Section~\ref{sec:conclusion} concludes.
+The outline of the paper is as follows. Section~\ref{sec:models} reviews the GAS framework to define time--varying parameter	 models, referring to the seminal works of \citet{creal_etal.2013} and \citet{harvey.2013}. Section~\ref{sec:package} introduces the \proglang{R} package \pkg{GAS} and illustrates how to simulate, estimate and make predictions. Section~\ref{sec:application} presents a real--life application to financial data. Section~\ref{sec:conclusion} concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section[The GAS framework to modeling time--varying parameters]{The GAS framework to modeling time--varying parameters}\label{sec:models}
@@ -148,7 +137,7 @@ time $t$ with conditional distribution:
   \by_t\vert\by_{1:t-1} \sim p(\by_t;\btheta_t) \,,
 \end{equation}
 %
-where $\by_{1:t-1}\bydef(\by_1',\dots,\by_{t-1}')'$ contains the past values of $\by_t$ up to time $t-1$ and $\btheta_t\in\Theta\subseteq\Re^J$ is a vector of time--varying parameters which fully characterizes $p(\cdot)$ and only depends on $\by_{1:t-1}$ and a set of static additional parameters $\bxi$, \emph{i.e.}, $\btheta_t \bydef \btheta(\by_{1:t-1},\bxi)$ for all $t$. The main feature of GAS models is that the evolution in the time--varying parameter vector $\btheta_t$ is driven by the score of the conditional distribution defined in~\eqref{eq:dist}, together with an autoregressive component:
+where $\by_{1:t-1}\bydef(\by_1^\top,\dots,\by_{t-1}^\top)^\top$ contains the past values of $\by_t$ up to time $t-1$ and $\btheta_t\in\Theta\subseteq\Re^J$ is a vector of time--varying parameters which fully characterizes $p(\cdot)$ and only depends on $\by_{1:t-1}$ and a set of static additional parameters $\bxi$, \emph{i.e.}, $\btheta_t \bydef \btheta(\by_{1:t-1},\bxi)$ for all $t$. The main feature of GAS models is that the evolution in the time--varying parameter vector $\btheta_t$ is driven by the score of the conditional distribution defined in~\eqref{eq:dist}, together with an autoregressive component:
 %
 \begin{equation}~\label{eq:updating}
 \btheta_{t+1} \bydef \bkappa + \bA \, \bs_t + \bB\,\btheta_t \,,
@@ -175,20 +164,20 @@ is the score of~\eqref{eq:dist} evaluated at $\btheta_t$. \citet{creal_etal.2013
 with:
 %
 \begin{equation}~\label{eq:information_matrix}
-  \mathcal{I}_t(\btheta_t) \bydef \E_{t-1}\left[\bnabla_t(\by_t,\btheta_t)\bnabla_t(\by_t,\btheta_t)'\right] \,,
+  \mathcal{I}_t(\btheta_t) \bydef \E_{t-1}\left[\bnabla_t(\by_t,\btheta_t)\bnabla_t(\by_t,\btheta_t)^\top\right] \,,
 \end{equation}
 %
 where the expectation is taken with respect to the conditional distribution of $\by_t$ given $\by_{1:t-1}$. The additional parameter $\gamma$ is fixed by the user and usually takes value in the set $\{0,\tfrac{1}{2},1\}$. When $\gamma=0$, $\bS_t=\bI$ and there is no scaling.\footnote{We denote by $\bI$ the identity matrix of appropriate size.} If $\gamma=1$ ($\gamma=\tfrac{1}{2}$), the conditional score $\bnabla_t(\by_t,\btheta_t)$ is premultiplied by the inverse of (the square root of) its covariance matrix $\mathcal{I}_t(\btheta_t)$.
 
-It is worth noting that, whatever the choice of $\gamma$, $\bs_t$ is a Martingale Difference (MD) with respect to the distribution of $\by_t$ given $\by_{1:t-1}$, \emph{i.e.}, $\E_{t-1}\left[\bs_t\right]=\boldsymbol{0}$ for all $t$. Furthermore, when $\gamma = \tfrac{1}{2}$, the additional moment condition $\V_{t-1}\left[\bs_t\right]=\bI$ can be easily derived. Due to the fact that $\bs_t$ is a MD, if the spectral radius of $\bB$ is less then one\footnote{The spectral radius of a $L\times L$ matrix $\bX$ is defined as $\tau\left(\bX\right)\bydef\max\left(\vert\tau_1\vert, \dots, \vert\tau_L\vert\right)$, where $\tau_i$ is the $i$--th eigenvalue of $\bX$, for $i=1,\dots,L$.}, the updating equation of $\btheta_t$ reported in~\eqref{eq:updating} implies a mean reverting process for $\btheta_t$ through the long--term mean $\left(\bI - \bB\right)^{-1}\bkappa$, which means that the unconditional value of $\btheta_t$ is $\left(\bI - \bB\right)^{-1}\bkappa$. It follows that, the $J$--valued vector $\bkappa$ and the $J\times J$ matrix $\bB$ control for the level and the persistence of the process, respectively.
+It is worth noting that, whatever the choice of $\gamma$, $\bs_t$ is a Martingale Difference (MD) with respect to the distribution of $\by_t$ given $\by_{1:t-1}$, \emph{i.e.}, $\E_{t-1}\left[\bs_t\right]=\boldsymbol{0}$ for all $t$. Furthermore, when $\gamma = \tfrac{1}{2}$, the additional moment condition $\V_{t-1}\left[\bs_t\right]=\bI$ can be easily derived. Due to the fact that $\bs_t$ is an MD, if the spectral radius of $\bB$ is less than one\footnote{The spectral radius of a $L\times L$ matrix $\bX$ is defined as $\tau\left(\bX\right)\bydef\max\left(\vert\tau_1\vert, \dots, \vert\tau_L\vert\right)$, where $\tau_i$ is the $i$--th eigenvalue of $\bX$, for $i=1,\dots,L$. In the \proglang{R} package \pkg{GAS}, we impose that $\tau(\bB)<1$.}, the updating equation of $\btheta_t$ reported in~\eqref{eq:updating} implies a mean reverting process for $\btheta_t$ to the long--term mean $\left(\bI - \bB\right)^{-1}\bkappa$, which means that the unconditional value of $\btheta_t$ is $\left(\bI - \bB\right)^{-1}\bkappa$. It follows that, the $J$--valued vector $\bkappa$ and the $J\times J$ matrix $\bB$ control for the level and the persistence of the process, respectively.
 
-The additional $J\times J$ matrix of coefficients $\bA$, that premultiplies the scaled score $\bs_t$, controls for the impact of $\bs_t$ to $\btheta_{t+1}$. Specifically, as detailed in \cite{creal_etal.2013}, the quantity $\bs_t$ indicates the direction to update the vector of parameters from $\btheta_t$, to $\btheta_{t+1}$, acting as a steepest ascent algorithm for improving the model local fit given the current parameter position. Interestingly, this updating procedure resembles the well--known Newton--Raphson algorithm. Hence, $\bA$ can be interpreted as the step of the update, and needs to be designed in a way to do not distort the signal coming from $\bs_t$; see Section~\ref{sec:ml_gas}.
+The additional $J\times J$ matrix of coefficients $\bA$, that premultiplies the scaled score $\bs_t$, controls for the impact of $\bs_t$ on $\btheta_{t+1}$. Specifically, as detailed in \cite{creal_etal.2013}, the quantity $\bs_t$ indicates the direction to update the vector of parameters from $\btheta_t$, to $\btheta_{t+1}$, acting as a steepest ascent algorithm for improving the model local fit given the current parameter position. Interestingly, this updating procedure resembles the well--known Newton--Raphson algorithm. Hence, $\bA$ can be interpreted as the step of the update, and needs to be designed in a way to not distort the signal coming from $\bs_t$; see Section~\ref{sec:ml_gas}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection[Reparametrization]{Reparametrization}\label{sec:reparametrisation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In~\eqref{eq:updating} the parameter vector $\btheta_t$ has a linear specification and is thus unbounded. In practice, the parameter space of $\btheta_t$ is often restricted ($\Theta\subset\Re^J$).  For instance, when we model the scale parameter of a \Student distribution, we need to ensure its positiveness. Even if this problem can be solved by imposing constraints on $\bxi$ \cite[as is done in the GARCH model, see,][]{bollerslev.1986}, the standard solution under the GAS framework is to use a (possibly nonlinear) link function $\Lambda(\cdot)$ that maps $\widetilde\btheta_t\in\Re^J$ into $\btheta_t$ and where $\widetilde\btheta_t\in\Re^J$ has the linear dynamic specification of~\eqref{eq:updating}.
+In~\eqref{eq:updating} the parameter vector $\btheta_t$ has a linear specification and is thus unbounded. In practice, the parameter space of $\btheta_t$ is often restricted ($\Theta\subset\Re^J$).  For instance, when we model the scale parameter of a \Student distribution, we need to ensure its positiveness. Even if this problem can be solved by imposing constraints on $\bxi$ \cite[as is done in the GARCH model; see][]{bollerslev.1986}, the standard solution under the GAS framework is to use a (usually nonlinear) link function $\Lambda(\cdot)$ that maps $\widetilde\btheta_t\in\Re^J$ into $\btheta_t$ and where $\widetilde\btheta_t\in\Re^J$ has the linear dynamic specification of~\eqref{eq:updating}.\footnote{For instance, if we employ the identity mapping and a conditional Gaussian distribution for the innovations, we recover the well--known GARCH model of \cite{bollerslev.1986}. In these circumstances, usual constraints on the model coefficients to ensure positiveness of the conditional variance have to be satisfied. In the \proglang{R} package \pkg{GAS}, the exponential link function is employed for the time--varying scale parameters.}
 Specifically, let $\Lambda:\Re^J\to\Theta$ be a twice differentiable vector--valued mapping function such that $\Lambda(\widetilde\btheta_t) = \btheta_t$. The updating equation for $\btheta_t$ is then given by:
 %
 \begin{align}\label{eq:updating_rep}
@@ -207,17 +196,17 @@ where $\widetilde\bs_t \bydef \widetilde \bS_t(\widetilde\btheta_t) \,\widetilde
 Then, the following relations hold:
 %
 \begin{align*}%~\label{eq:relations}
-  \widetilde\bnabla_t(\by_t,\widetilde\btheta_t) &= \mathcal{J}(\widetilde\btheta_t)'\bnabla_t(\by_t,\btheta_t) \\
-  \mathcal{\widetilde I}_t(\widetilde\btheta_t) &= \mathcal{J}(\widetilde\btheta_t)'\mathcal{I}_t(\btheta_t)\mathcal{J}(\widetilde\btheta_t) \,.
+  \widetilde\bnabla_t(\by_t,\widetilde\btheta_t) &= \mathcal{J}(\widetilde\btheta_t)^\top\bnabla_t(\by_t,\btheta_t) \\
+  \mathcal{\widetilde I}_t(\widetilde\btheta_t) &= \mathcal{J}(\widetilde\btheta_t)^\top\mathcal{I}_t(\btheta_t)\mathcal{J}(\widetilde\btheta_t) \,.
 \end{align*}
 %
- This way, almost all the nonlinear constraints can be easily handled via the definition of a proper mapping function $\Lambda(\cdot)$ and its associated Jacobian matrix $\mathcal{J}(\cdot)$. The coefficients to be estimated are gathered into $\bxi \bydef (\bkappa, \bA, \bB)$ and estimated by numerically maximizing the (log-)likelihood function as detailed in Section~\ref{sec:ml_gas}.\footnote{Clearly, the coefficients $\bkappa$, $\bA$ and $\bB$ in~\eqref{eq:updating_rep} are different from those of~\eqref{eq:updating}, however, for notational purposes, we continue to use the same notation.} In Appendix~\ref{sec:mapping} we discuss the choice of mapping function for GAS models in more details.
+ This way, almost all the nonlinear constraints can be easily handled via the definition of a proper mapping function $\Lambda(\cdot)$ and its associated Jacobian matrix $\mathcal{J}(\cdot)$. The coefficients to be estimated are gathered into $\bxi \bydef (\bkappa, \bA, \bB)$ and estimated by numerically maximizing the (log-)likelihood function as detailed in Section~\ref{sec:ml_gas}.\footnote{Clearly, the coefficients $\bkappa$, $\bA$ and $\bB$ in~\eqref{eq:updating_rep} are different from those of~\eqref{eq:updating}, however, for notational purposes, we continue to use the same notation.} In Appendix~\ref{sec:mapping} we discuss the choice of mapping functions for GAS models in more details.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection[Maximum likelihood estimation]{Maximum likelihood estimation}\label{sec:ml_gas}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-A useful property of GAS models is that, given the past information and the static parameter vector $\bxi$, the vector of time--varying parameters, $\btheta_t$, is perfectly predictable and the loglikelihood function can be easily evaluated via the prediction error decomposition. More precisely, for a sample of $T$ realizations of $\by_t$, collected in $\by_{1:T}$, the vector of parameters $\bxi$ can be estimated by Maximum Likelihood (ML) as the solution of:
+A useful property of GAS models is that given the past information and the static parameter vector $\bxi$, the vector of time--varying parameters, $\btheta_t$, is perfectly predictable and the loglikelihood function can be easily evaluated via the prediction error decomposition. More precisely, for a sample of $T$ realizations of $\by_t$, collected in $\by_{1:T}$, the vector of parameters $\bxi$ can be estimated by Maximum Likelihood (ML) as the solution of:
 %
 \begin{equation}\label{eq:llk_max}
   \widehat{\bxi} \bydef \underset{\bxi}{\arg\max}~\mathcal{L}\left(\bxi;\by_{1:T}\right),
@@ -229,19 +218,19 @@ where:
   \mathcal{L}\left(\bxi;\by_{1:T}\right) \bydef \log p\left(\by_{1};\btheta_1\right) + \sum_{t=2}^{T}\log p\left(\by_{t};\btheta_t\right)\,,
 \end{equation*}
 %
- $\btheta_1 \bydef (\bI - \bB)^{-1}\bkappa$, and, for $t>1$, $\btheta_t \bydef \btheta(\by_{1:t-1},\bxi)$. Note the dependence of $\btheta_t$ on $\bxi$ and $\by_{1:t-1}$.
+with $\btheta_1 \bydef (\bI - \bB)^{-1}\bkappa$, and, for $t>1$, $\btheta_t \bydef \btheta(\by_{1:t-1},\bxi)$. Note the dependence of $\btheta_t$ on $\bxi$ and $\by_{1:t-1}$.
 
-There are two important caveats in the ML evaluation of GAS models. The first one is that, from a theoretical perspective, ML estimation of GAS models is an on--going research topic. General results are reported by \citet{harvey.2013}, \cite{blasques_etal.2014b} and \citet{blasques_etal.2014c}, while results for specific models have been derived by \citet{andres.2014} and \citet{blasques_etal.2014a}.
+There are two important caveats in the ML estimation of GAS models. The first one is that, from a theoretical perspective, ML estimation of GAS models is an on--going research topic. General results are reported by \citet{harvey.2013}, \cite{blasques_etal.2014b} and \citet{blasques_etal.2014c}, while results for specific models have been derived by \citet{andres.2014} and \citet{blasques_etal.2014a}.
 
-The second one is that, even when the ML estimator is consistent and asymptotically normal, the numerical maximization of the loglikelihood function in~\eqref{eq:llk_max} can be challenging, because of the nonlinearities induced by $\Lambda\left(\cdot\right)$ and the way $\by_t$ enters the scaled score $\bs_t$. Consequently, when the optimizer is gradient--based, good starting values need to be selected for GAS models. In the \proglang{R} package \pkg{GAS}, starting values for the optimizer are chosen in the following way: (i) estimate the static version of the model (\emph{i.e.}, with $\bA=\boldsymbol{0}$ and $\bB=\boldsymbol{0}$) and set the initial value of $\bkappa$ accordingly, and (ii) perform a grid search for the coefficients contained in $\bA$ and $\bB$. Further technical details are presented in Section~\ref{sec:gas_est}.
+The second one is that, even when the ML estimator is consistent and asymptotically Gaussian, the numerical maximization of the loglikelihood function in~\eqref{eq:llk_max} can be challenging, because of the nonlinearities induced by $\Lambda\left(\cdot\right)$ and the way $\by_t$ enters the scaled score $\bs_t$. Consequently, when the optimizer is gradient--based, good starting values need to be selected for GAS models. In the \proglang{R} package \pkg{GAS}, starting values for the optimizer are chosen in the following way: (i) estimate the static version of the model (\emph{i.e.}, with $\bA=\boldsymbol{0}$ and $\bB=\boldsymbol{0}$) and set the initial value of $\bkappa$ accordingly, and (ii) perform a grid search for the coefficients contained in $\bA$ and $\bB$. Further technical details are presented in Section~\ref{sec:gas_est}.
 
-Implementation of the models in the \proglang{R} package \pkg{GAS} follows the common approach in the GAS literature. First, matrices $\bA$ and $\bB$ are constrained to be diagonal. Second, in order to avoid an explosive pattern for $\widetilde\btheta_t$, the spectral radius of $\bB$ is constrained to be less than one. Third, the positiveness of each element of $\bA$ is imposed in order to do not distort the signal coming from the conditional score $\bs_t$.% (which provides the direction for parameters update as in the Newton--Raphson algorithm).
+Implementation of the models in the \proglang{R} package \pkg{GAS} follows the common approach in the GAS literature. First, matrices $\bA$ and $\bB$ are constrained to be diagonal. Second, in order to avoid an explosive pattern for $\widetilde\btheta_t$, the spectral radius of $\bB$ is constrained to be less than one. Third, the positiveness of each element of $\bA$ is imposed in order to not distort the signal coming from the conditional score $\bs_t$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section[The R package GAS]{The \proglang{R} package \pkg{GAS}}\label{sec:package}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The \proglang{R} package \pkg{GAS} offers an integrated environment to deal with GAS models in \proglang{R}. Its structure is somehow similar to the \proglang{R} package \pkg{rugarch} \citep{rugarch} for GARCH models, which is widely used by practitioners and academics. The similarities concern the steps the user has to do to perform her analysis as well as the type of functions she faces. Specifically, the first step is to specify the model, which means choosing: (i) the assumptions for the conditional distribution of the data, (ii) the set of parameters that have to vary over time and, (iii) the scaling mechanism for the conditional score. These steps are detailed in Section~\ref{sec:gas_spec}. Once the model is properly specified, the user can estimate the unknown parameters in $\bxi$ by numerical maximization of the log--likelihood function as detailed in Section~\ref{sec:gas_est}. Finally, predictions according to the estimated model can be easily performed; see Section~\ref{sec:gas_fore}. Simulation of GAS models is presented in Section~\ref{sec:gas_sim}.
+The \proglang{R} package \pkg{GAS} offers an integrated environment to deal with GAS models in \proglang{R}. Its structure is somehow similar to the \proglang{R} package \pkg{rugarch} \citep{rugarch} for GARCH models, which is widely used by practitioners and academics. The similarities concern the steps the user has to do to perform her analysis as well as the type of functions she faces. Specifically, the first step is to specify the model, which means choosing: (i) the conditional distribution of the data, (ii) the set of parameters that have to vary over time and, (iii) the scaling mechanism for the conditional score. These steps are detailed in Section~\ref{sec:gas_spec}. Once the model is properly specified, the user can estimate the unknown parameters in $\bxi$ by numerical maximization of the log--likelihood function as detailed in Section~\ref{sec:gas_est}. Finally, predictions according to the estimated model can be easily performed; see Section~\ref{sec:gas_fore}. Simulation of GAS models is presented in Section~\ref{sec:gas_sim}.
 
 Functions for: (i) specification, (ii) estimation, (iii) forecasting and (iv) simulation are available for univariate and multivariate time series. The general nomenclature for the functions when we consider univariate time series is \qmo\code{UniGAS\dots()}\qmcsp and that for multivariate time series is \qmo\code{MultiGAS\dots()}\qmcsp.
 
@@ -252,14 +241,15 @@ purposes, such as: US inflation (\code{cpichg}), US unemployment rate (\code{usu
 \subsection[Specification]{Specification}\label{sec:gas_spec}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Specification of GAS models is the first step the user needs to undertake. This is achieved by using the \code{UniGASSpec()} and \code{MultiGASSpec()} functions, in the cases of univariate and multivariate models, respectively. Both functions accept three arguments and return an object of the class \code{uGASSpec} and \code{mGASSpec}, respectively. The three arguments are:
+Specification of GAS models is the first step the user needs to undertake. This is achieved by using the \code{UniGASSpec()} and \code{MultiGASSpec()} functions, in the cases of univariate and multivariate models, respectively. Both functions accept three arguments and return an object of class \code{uGASSpec} and \code{mGASSpec}, respectively. The three arguments are:
 %
 \begin{itemize}
-  \item[-] \code{Dist}: A \code{character} indicating the label of the conditional distribution assumed for the data. Available distributions can be displayed using the function \code{DistInfo()} and are reported in Table~\ref{tab:dist}. By default \code{Dist = "norm"}, \emph{i.e.}, the Gaussian distribution.
+  \item[-] \code{Dist}: A \code{character} indicating the name of the conditional distribution assumed for the data. Available distributions can be displayed using the function \code{DistInfo()} and are reported in Table~\ref{tab:dist}. By default \code{Dist = "norm"}, \emph{i.e.}, the Gaussian distribution.
       %
-  \item[-] \code{ScalingType}: A \code{character} indicating the scaling mechanism for the conditional score, \emph{i.e.}, the value of the $\gamma$ parameter in~\eqref{eq:information_matrix}. Possible choices are \code{"Identity"} ($\gamma = 0$), \code{"Inv"} ($\gamma = 1$) and \code{"InvSqrt"} ($\gamma = \tfrac{1}{2}$). Note that, for some distributions only \code{ScalingType = "Identity"} is supported; see function \code{DistInfo()} and Table~\ref{tab:dist}. By default \code{ScalingType = "Identity"}, \emph{i.e.}, no scaling occurs.\footnote{In the \proglang{R} package \pkg{GAS} the information matrices and the scores are always computed using their analytical formulations.}
+  \item[-] \code{ScalingType}: A \code{character} indicating the scaling mechanism for the conditional score, \emph{i.e.}, the value of the $\gamma$ parameter in~\eqref{eq:information_matrix}. Possible choices are \code{"Identity"} ($\gamma = 0$), \code{"Inv"} ($\gamma = 1$) and \code{"InvSqrt"} ($\gamma = \tfrac{1}{2}$). For some distributions, only \code{ScalingType = "Identity"} is supported; see function \code{DistInfo()} and Table~\ref{tab:dist}. By default \code{ScalingType = "Identity"}, \emph{i.e.}, no scaling occurs.\footnote{In the \proglang{R} package \pkg{GAS}, the information matrices and the scores are always computed using their analytical formulations.}
       %
-  \item[-] \code{GASPar}: A named \code{list} with \code{boolean} entries containing information about which parameters of the conditional distribution have to be time--varying. Generally, each univariate distribution is identified by a series of maximum four parameters. These are indicated by \code{location, scale, skewness} and \code{shape}. Note that, for some distributions, these labels are not strictly related to their literal statistical meaning. Indeed, for the Exponential distribution \code{exp}, the term \code{location} indicates the usual intensity rate parameter; see the \code{DistInfo()} function for more details. For multivariate distributions, the set of parameters is indicated by \code{location, scale, correlation} and \code{shape}\footnote{In the \proglang{R} documentation an extra parameter, \code{shape2}, is reported. This will be used for future extensions of the package.}. For example, in the case of a multivariate \Student distribution with mean vector $\bmu_t$, scale matrix $\bSigma_t \bydef \bD_t\bR_t\bD_t$, where $\bD_t$ is the diagonal matrix of scales and $\bR_t$ is the correlation matrix, and $\nu_t$ degrees of freedom, we have that: \code{location} refers to $\bmu_t$, \code{scale} refers to $\bD_t$, \code{correlation} refers to $\bR_t$ and \code{shape} refers to $\nu_t$. By default, \code{GASPar = list(location = FALSE, scale = TRUE, skewness = FALSE, shape = FALSE)} for the univariate case, and \code{GASPar = list(location = FALSE, scale = TRUE, correlation = FALSE, shape = FALSE)} for the multivariate case.
+  \item[-] \code{GASPar}: A named \code{list} with \code{logical} entries containing information about which parameters of the conditional distribution have to be time--varying. Generally, each univariate distribution is identified by a series of maximum five parameters. These are indicated by \code{location, scale, skewness, shape} and \code{shape2}. Note that, for some distributions, these labels are not strictly related to their literal statistical meaning. Indeed, for the Exponential distribution \code{exp}, the term \code{location} indicates the usual intensity rate parameter; see the \code{DistInfo()} function and the \proglang{R} documentation for more details. For multivariate distributions, the set of parameters is indicated by \code{location, scale, correlation} and \code{shape}. For example, in the case of a multivariate \Student distribution with mean vector $\bmu_t$, scale matrix $\bSigma_t \bydef \bD_t\bR_t\bD_t$, where $\bD_t$ is the diagonal matrix of scales and $\bR_t$ is the correlation matrix, and $\nu_t$ degrees of freedom, we have that: \code{location} refers to $\bmu_t$, \code{scale} refers to $\bD_t$, \code{correlation} refers to $\bR_t$ and \code{shape} refers to $\nu_t$. By default, \code{GASPar = list(location = FALSE, scale = TRUE, skewness = FALSE, shape = FALSE)} for the univariate case, and
+   \code{GASPar = list(location = FALSE, scale = TRUE, correlation = FALSE, shape = FALSE, shape2 = FALSE)} for the multivariate case.
 \end{itemize}
 
 \begin{table}[!t]
@@ -269,29 +259,29 @@ Specification of GAS models is the first step the user needs to undertake. This 
 			\toprule
 			Label & Name & Type & Parameters & \# & Scaling Type \\
 			\hline
-            \code{norm} & Gaussian & univariate & \code{location, scale} & 2 & \code{Identity, Inv, InvSqrt} \\
-\code{std} & \Student (i) & univariate & \code{location, scale, shape} & 3 & \code{Identity, Inv, InvSqrt} \\
-%\code{ast} & Asymmetric Student-t with two tail decay parameters & univariate & \code{location, scale, skewness, shape, shape2} & 5 & \code{Identity, Inv, InvSqrt} \\
-%\code{ast1} & Asymmetric Student-t with two one decay parameter & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity, Inv, InvSqrt} \\
-\code{sstd} & \SStudent (ii) & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity} \\
-\code{ald} & Asymmetric Laplace (iii) & univariate & \code{location, scale, skewness} & 3 & \code{Identity, Inv, InvSqrt} \\
-\code{poi} & Poisson (iv)& univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
+\code{norm} & Gaussian & univariate & \code{location, scale} & 2 & \code{Identity, Inv, InvSqrt} \\
+\code{snorm} (i) & Skew--Gaussian & univariate & \code{location, scale, skewness} & 3 & \code{Identity} \\
+\code{std} (ii) & \Student & univariate & \code{location, scale, shape} & 3 & \code{Identity, Inv, InvSqrt} \\
+\code{sstd} (i) & \SStudent & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity} \\
+\code{ast} (iii) & Asymmetric \Student with two tail decay parameters & univariate & \code{location, scale, skewness, shape, shape2} & 5 & \code{Identity, Inv, InvSqrt} \\
+\code{ast1} (iv) & Asymmetric \Student with one tail decay parameter & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity, Inv, InvSqrt} \\
+\code{ald} (v) & Asymmetric Laplace Distribution & univariate & \code{location, scale, skewness} & 3 & \code{Identity, Inv, InvSqrt} \\
+\code{poi} (vi)& Poisson & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 %\code{ber} & Bernoulli & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{gamma} & Gamma & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
-\code{exp} & Exponential (v)& univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
-\code{beta} & Beta (vi)& univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
-\code{mvnorm} & Multivariate Gaussian & multivariate & \code{location, scale, correlation} & 9 (vii) & \code{Identity} \\
-\code{mvt} & Multivariate \Student & multivariate & \code{location, scale, correlation, shape} & 10 (vii) & \code{Identity} \\
+\code{exp} (vii) & Exponential & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
+\code{beta} (viii) & Beta & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
+\code{mvnorm} & Multivariate Gaussian & multivariate & \code{location, scale, correlation} & 9 (ix) & \code{Identity} \\
+\code{mvt} & Multivariate \Student & multivariate & \code{location, scale, correlation, shape} & 10 (ix) & \code{Identity} \\
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Statistical distributions or which the  \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time--variation in its parameters. The fifth column, \#, reports the number of parameters of the distribution. Note: (i) the usual \Student distribution (not reparametrised in terms of the variance parameter),
-%(ii) \code{ast1} is the Constraint version of ast see \citet{zhu_galbraith.2010},
-(ii)  the reparametrised \SStudent such that the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \pkg{rugarch} package, (iii) the \code{ald} distribution used the $\theta$, $\sigma$ and $\kappa$ reparametrization, as specified in \citet{kotz_etal.2001}, (iv) for the Poisson distribution \code{location} means the usual intensity parameter, (v) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (vi) for the Exponential distribution \code{location} means the usual rate parameter, (vii) for $N=3$.}
+	\caption{Statistical distributions for which the  \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time--variation in its parameters. The fifth column, \#, reports the number of parameters of the distribution. Note: (i) the reparametrised Skew--Gaussian and \SStudent such that the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \pkg{rugarch} package \citep{rugarch}, (ii) the usual \Student distribution (not reparametrised in terms of the variance parameter), (iii) the Asymmetric \Student distribution of \cite{zhu_galbraith.2010}, (iv) the Asymmetric Student--t distribution of \cite{zhu_galbraith.2010} with equal tail decay parameters, (v) the \code{ald} distribution with the $\theta$, $\sigma$, $\kappa$ reparametrization, as specified in \citet{kotz_etal.2001}, (vi) for the Poisson distribution \code{location} means the usual intensity parameter, (vii) for the Exponential distribution \code{location} means the usual rate parameter, (viii) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (ix) for $N=3$.}
+
 \label{tab:dist}
 \end{table}
 
-The function \code{MultiGASSpec()} also accepts the additional boolean argument \code{ScalarParameters} controlling for the parametrization of $\bA$ and $\bB$ in~\eqref{eq:updating_rep}. Setting \code{ScalarParameters = TRUE} (the default value), the coefficients controlling the evolution of the location, scale and correlation parameters are constrained to be the same across each group. Specifically, if $\by_t\in\Re^3$ follows a GAS process with conditional multivariate Gaussian distribution, the vector of time--varying parameters is $\btheta_t = \left(\mu_{1,t}, \mu_{2,t}, \mu_{3,t}, \sigma_{1,t}, \sigma_{2,t}, \sigma_{3,t}, \rho_{21,t}, \rho_{31,t},\rho_{32,t}\right)^\prime$. If \code{ScalarParameters = TRUE}, the matrix of coefficients $\bA$ is parameterized as:
+The function \code{MultiGASSpec()} also accepts the additional \code{logical} argument \code{ScalarParameters} controlling for the parametrization of $\bA$ and $\bB$ in~\eqref{eq:updating_rep}. Setting \code{ScalarParameters = TRUE} (the default value), the coefficients controlling the evolution of the location, scale and correlation parameters are constrained to be the same across each group. For example, if $\by_t\in\Re^3$ follows a GAS process with conditional multivariate Gaussian distribution, the vector of time--varying parameters is $\btheta_t = \left(\mu_{1,t}, \mu_{2,t}, \mu_{3,t}, \sigma_{1,t}, \sigma_{2,t}, \sigma_{3,t}, \rho_{21,t}, \rho_{31,t},\rho_{32,t}\right)^\prime$. If \code{ScalarParameters = TRUE}, the matrix of coefficients $\bA$ is parameterized as:
 %
 \begin{equation*}%\label{eq:scalarparameters}
 \bA \bydef \diag\left(a_\mu, a_\mu, a_\mu, a_\sigma, a_\sigma, a_\sigma, a_\rho, a_\rho, a_\rho\right) \,,
@@ -310,12 +300,11 @@ As an illustration, assume that we want to specify a \Student GAS model with tim
 \begin{CodeChunk}
 \begin{CodeInput}
 R> GASSpec <- UniGASSpec(Dist = "std", ScalingType = "Identity",
-                        GASPar = list(location = TRUE, scale = TRUE,
-                                      shape = FALSE))
++    GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
 \end{CodeInput}
 \end{CodeChunk}
 %
-Details about the object returned from \code{UniGASSpec()} are printed in the console by simply calling \code{GASSpec}:
+Details about the object returned from \code{UniGASSpec()} are printed to the console by simply calling \code{GASSpec}:
 %
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -342,13 +331,15 @@ Time varying parameters:  location, scale
 \end{CodeOutput}
 \end{CodeChunk}
 %
-Since the scaling matrix $\bS_t$ is set to the identify matrix  (\emph{i.e.}, \code{ScalingType = "Identity"}) this model for the conditional \Student distribution corresponds to the one described in Appendix~\ref{sec:gas_t}. Multivariate GAS specifications are analogously specified using the \code{MultiGASSpec()} function; see \code{help("MultiGASSpec")}.
+Since the scaling matrix $\bS_t$ is set to the identity matrix  (\emph{i.e.}, \code{ScalingType = "Identity"}) this model for the conditional \Student distribution corresponds to the one described in Appendix~\ref{sec:gas_t}. Multivariate GAS specifications are analogously specified using the \code{MultiGASSpec()} function; see \code{help("MultiGASSpec")}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection[Estimation]{Estimation}\label{sec:gas_est}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Similar to model specification, estimation is handled with two different functions for univariate and multivariate models: \code{UniGASFit()} and \code{MultiGASFit()}, respectively. These functions require only two arguments: the GAS specification object \code{GASSpec} and the data, and returns an object of the class \code{uGASFit} or \code{mGASFit}. As an example, let us estimate the GAS model previously specified using the US inflation data included in the \proglang{R} package \pkg{GAS}:
+Similar to model specification, estimation is handled with two different functions for univariate and multivariate models: \code{UniGASFit()} and \code{MultiGASFit()}, respectively. These functions require two arguments: the GAS specification object \code{GASSpec} and the data, and returns an object of class \code{uGASFit} or \code{mGASFit}. By default, the optimization relies on the General Nonlinear Augmented Lagrange Multiplier method of \cite{ye.1988} available in the \proglang{R} package \pkg{Rsolnp} \citep{Rsolnp}. An additional optional \code{function} argument, called \code{fn.optimize}, can be provided by the user in order to rely on a different optimization procedure. This \code{function} must satisfy specific requirements; see the documentation manual for more details and examples.
+
+As an illustration, let us estimate the GAS model previously specified using the US inflation data included in the \proglang{R} package \pkg{GAS}:
 %
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -357,7 +348,7 @@ R> Fit <- UniGASFit(GASSpec, cpichg)
 \end{CodeInput}
 \end{CodeChunk}
 %
-The computational time is less than one second on a modern computer. The optimizer used is the General Nonlinear Augmented Lagrange Multiplier method of \cite{ye.1988} available in the \proglang{R} package \pkg{Rsolnp} \citep{Rsolnp}. Results can be inspected by calling the object \code{Fit}.
+The computational time is less than one second on a modern computer (see the Section Computational Details for precisions). Results can be inspected by calling the object \code{Fit}.\footnote{The command \code{summary(Fit)} provides the same information in addition to the analysis of the residuals as in the \pkg{fGarch} package \citep{fGarch}.}
 %
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -376,34 +367,37 @@ Time varying parameters:  location, scale
 ------------------------------------------
 Estimates:
        Estimate Std. Error t value  Pr(>|t|)
-kappa1  0.03735    0.02991   1.249 1.059e-01
-kappa2 -0.25994    0.13553  -1.918 2.755e-02
-kappa3  0.92671    0.76127   1.217 1.117e-01
-a1      0.07173    0.01780   4.030 2.787e-05
-a2      0.45377    0.20828   2.179 1.468e-02
-b1      0.94318    0.02600  36.272 0.000e+00
-b2      0.85559    0.07185  11.908 0.000e+00
+kappa1  0.03735    0.02999   1.246 1.064e-01
+kappa2 -0.25992    0.14552  -1.786 3.704e-02
+kappa3 -2.84542    0.75898  -3.749 8.876e-05
+a1      0.07173    0.01618   4.433 4.653e-06
+a2      0.45373    0.21185   2.142 1.611e-02
+b1      0.94318    0.02449  38.516 0.000e+00
+b2      0.85560    0.07987  10.712 0.000e+00
 
 ------------------------------------------
 Unconditional Parameters:
 location    scale    shape
-  0.6574   0.1653   6.5262
+  0.6574   0.1653   6.5263
 
 ------------------------------------------
 Information Criteria:
    AIC    BIC     np    llk
  370.4  395.8    7.0 -178.2
- ------------------------------------------
 
-Elapsed time: 0.01 mins
+------------------------------------------
+Convergence:	0
+------------------------------------------
+
+Elapsed time: 0.02 mins
 \end{CodeOutput}
 \end{CodeChunk}
 %
-The output printed in the console is divided into: (i) the summary of the model, (ii) the estimated coefficients along with significance levels according to their asymptotic normal distribution, (iii) the unconditional level of the parameters, \emph{i.e.}, $\Lambda((\bI - \widehat{\bB})^{-1}\widehat{\bkappa})$, (iv) AIC and BIC information criteria in addition to the number of estimated parameters (\code{np}), the log--likelihood (\code{llk}) evaluated at its optimum, and (v) the computation time.
+The output printed to the console is divided into: (i) the summary of the model, (ii) the estimated coefficients along with significance levels according to their asymptotic Gaussian distribution, (iii) the unconditional level of the parameters, \emph{i.e.}, $\Lambda((\bI - \widehat{\bB})^{-1}\widehat{\bkappa})$, (iv) AIC and BIC information criteria in addition to the number of estimated parameters (\code{np}) and the log--likelihood (\code{llk}) evaluated at its optimum, (v) the convergence flag, and (vi) the computation time.\footnote{Convergence flag follows the nomenclature of the default \code{solnp} optimizer, that is: solver has converged (0), or not (1 or 2); see \code{help("solnp")}. For user--defined optimizers, the convergence flag changes accordingly.}
 
 Concerning the estimated coefficients, \code{kappa1}, \code{kappa2} and \code{kappa3} are the elements of vector $\bkappa$ in~\eqref{eq:update_studentt}, \emph{i.e.}, $\kappa_\mu, \kappa_\phi$ and $\kappa_\nu$, respectively. Analogously, \code{a1} and \code{a2} are the estimates of $a_\mu$ and $a_\phi$ and \code{b1} and \code{b2} are estimates of $b_\mu$ and $b_\phi$, where $\phi$ refers to the scale parameter of the \Student distribution; see Appendix~\ref{sec:gas_t}. Note that, since we have specified \code{scale = FALSE} in the \code{UniGASSpec()} function, coefficients \code{a3} and \code{b3}, corresponding to $a_\nu$ and $b_\nu$ are not reported (and constrained to zero during the optimization).
 
-The \proglang{R} package \pkg{GAS} provides several methods to extract the relevant estimated quantities for objects of the class \code{uGASFit} or \code{mGASFit}. They allow us to: (i) calculate several quantities of the estimated conditional distribution at each point in time, such as: quantiles, conditional moments and filtered parameters (see \code{quantile(Fit)}, \code{getMoments(Fit)} and \code{getFilteredParameters(Fit)}, respectively), (ii) extract the estimated coefficients (\code{coef(Fit)}), (iii) generate a graphical representation of the results (\code{plot(Fit)}); see \code{help("uGASFit")} for details.
+The \proglang{R} package \pkg{GAS} provides several methods to extract the relevant estimated quantities for objects of class \code{uGASFit} or \code{mGASFit}. They allow us to: (i) calculate several quantities of the estimated conditional distribution at each point in time, such as: quantiles, conditional moments and filtered parameters (see \code{quantile(Fit)}, \code{getMoments(Fit)} and \code{getFilteredParameters(Fit)}, respectively), (ii) extract the estimated coefficients (\code{coef(Fit)}), (iii) generate a graphical representation of the results (\code{plot(Fit)}); see \code{help("uGASFit")} for details.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection[Forecasting]{Forecasting}\label{sec:gas_fore}
@@ -413,12 +407,12 @@ Forecasting is a crucial aspect in applied time series analysis. Given the param
 by simulation in the multi--step ahead case ($h>1$).
 
 The \proglang{R} package \pkg{GAS} can handle both one--step and multi--step ahead forecasts. Consistent with previous nomenclature, functions for univariate and multivariate predictions are \code{UniGASFor()} and \code{MultiGASFor()}, respectively. These
-functions accept an object of the class \code{uGASFit} or \code{mGASFit}, created using the functions \code{UniGASFit()} and \code{MultiGASFit()}, and return an object of the class \code{uGASFor} and \code{mGASFor}, respectively. Additional arguments are:
+functions accept an object of class \code{uGASFit} or \code{mGASFit}, created using the functions \code{UniGASFit()} and \code{MultiGASFit()}, and return an object of class \code{uGASFor} and \code{mGASFor}, respectively. Additional arguments are:
 %
 \begin{itemize}
   \item \code{H}: a \code{numeric} integer value representing the forecast horizon, \emph{i.e.}, $h$. By default \code{H = 1}.
   \item \code{B}: a \code{numeric} integer value representing the number of draws to approximate the multi--step ahead predictive distribution when $h>1$. By default \code{B = 1e4}.
-  \item \code{ReturnDraws}: a \code{boolean} controlling if the simulated draws from $\by_{T+1}\vert \by_{1:T}$, $\by_{T+2}\vert \by_{1:T},\dots$, $\by_{T+h}\vert \by_{1:T}$ have to be returned. By default \code{ReturnDraws = FALSE}.
+  \item \code{ReturnDraws}: a \code{logical} argument controlling if the simulated draws from $\by_{T+1}\vert \by_{1:T}$, $\by_{T+2}\vert \by_{1:T},\dots$, $\by_{T+h}\vert \by_{1:T}$ have to be returned. By default \code{ReturnDraws = FALSE}.
 \end{itemize}
 %
 Other arguments to perform rolling--type of forecasts are detailed in the documentation; see \code{help("UniGASFor")}. Practically, if we want to predict the next--year inflation (\emph{i.e.}, $h=12$ with the monthly series \code{cpichg}), after having estimated the GAS model of Section~\ref{sec:gas_est}, we can execute the following code:
@@ -448,55 +442,54 @@ Rolling forecast:  FALSE
 ------------------------------------------
 Parameters forecast:
     location  scale shape
-T+1  0.10128 0.1524 6.526
-T+2  0.09497 0.1737 6.526
+T+1  0.10129 0.1524 6.526
+T+2  0.09498 0.1737 6.526
 T+3  0.09380 0.2151 6.526
-T+4  0.09253 0.2577 6.526
+T+4  0.09254 0.2577 6.526
 T+5  0.08745 0.3020 6.526
 
 ....................
      location  scale shape
 T+8   0.08345 0.4219 6.526
-T+9   0.07790 0.4575 6.526
-T+10  0.07380 0.4900 6.526
+T+9   0.07791 0.4574 6.526
+T+10  0.07381 0.4900 6.526
 T+11  0.07557 0.5199 6.526
 T+12  0.07507 0.5465 6.526
 \end{CodeOutput}
 \end{CodeChunk}
 %
-which returns some model information and the predictions of future model parameters based on averages over \code{B} draws. \code{Forecast} is an object of the class \code{uGASFor} and comes with several methods to extract and visualize the results; see \code{help("uGASFor")}.
+which returns some model information and the predictions of future model parameters based on averages over \code{B} draws. \code{Forecast} is an object of class \code{uGASFor} which comes with several methods to extract and visualize the results; see \code{help("uGASFor")}.
 
-As commonly done in time series analysis, predictions are generated from models fitted to rolling windows. The \proglang{R} package \pkg{GAS} includes this functionality via \code{UniGASRoll()} and \code{MultiGASRoll()}. These functions accept several arguments that we briefly describe in the univariate case:
+As commonly done in time series analysis, predictions are generated from models fitted to rolling windows. The \proglang{R} package \pkg{GAS} includes this functionality via \code{UniGASRoll()} and \code{MultiGASRoll()}. These functions accept several arguments that we describe below in the univariate case:
 %
 \begin{itemize}
   \item \code{data}: a vector of length $T + $\code{ForecastLength} containing all the observations.
-  \item \code{GASSpec}: an object of the class \code{uGASSpec} created with \code{UniGASSpec()}.
+  \item \code{GASSpec}: an object of class \code{uGASSpec} created with \code{UniGASSpec()}.
   \item \code{ForecastLength}: a \code{numeric} integer which specifies the length of the out--of--sample.
   \item \code{RefitEvery}: a \code{numeric} integer of periods before coefficients are re--estimated.
-  \item \code{RefitWindow}: a \code{character} for the type of the window. As in the \proglang{R} package \pkg{rugarch}, we define the options: \code{RefitWindow = "recursive"} and \code{RefitWindow = "moving"}. If \code{RefitWindow = "recursive"} all past observations are used when the model is re--estimated. If \code{RefitWindow = "moving"} initial observations are eliminated.
+  \item \code{RefitWindow}: a \code{character} for the type of the window. As in the \proglang{R} package \pkg{rugarch} \citep{rugarch}, we define the options: \code{RefitWindow = "recursive"} and \code{RefitWindow = "moving"}. If \code{RefitWindow = "recursive"} all past observations are used when the model is re--estimated. If \code{RefitWindow = "moving"}, initial observations are eliminated.\footnote{Note that the ``moving window'' approach is also referred to as the ``rolling window'' approach in the literature.} We refer the reader to \citet{marcellino_etal.2006} for a discussion about the difference between the ``recursive'' and the ``moving'' window approaches.
 \end{itemize}
 %
 Other arguments useful to tailor the forecasting procedure and to parallelize the code execution are available and detailed in the \proglang{R} documentation; see \code{help("UniGASRoll")}.
 
-Suppose now we are interested in assessing the forecast performance of the GAS model with a \Student conditional distribution and time--varying location and scale parameters, detailed in Appendix~\ref{sec:gas_t}, and specified in the object \code{GASSpec} in Section~\ref{sec:gas_spec}. We treat the last 150 observations of \code{cpichg} as out--of--sample and run a rolling--window forecast exercise using the following portion of code:
+Suppose now we are interested in assessing the forecasting performance of the GAS model with a \Student conditional distribution and time--varying location and scale parameters, detailed in Appendix~\ref{sec:gas_t}, and specified in the object \code{GASSpec} in Section~\ref{sec:gas_spec}. We treat the last 150 observations of \code{cpichg} as out--of--sample and run a rolling--window forecast exercise using the following portion of code:
 %
 \begin{CodeChunk}
 \begin{CodeInput}
-Roll <- UniGASRoll(cpichg, GASSpec, ForecastLength = 150,
-                  RefitEvery = 3, RefitWindow = "moving")
+R> Roll <- UniGASRoll(cpichg, GASSpec, ForecastLength = 150,
+                      RefitEvery = 3, RefitWindow = "moving")
 \end{CodeInput}
 \end{CodeChunk}
 %
-where model coefficients are re--estimated quarterly (\emph{i.e.}, every three observations with monthly data) using a moving windows (\code{RefitWindow = "moving"}). The code automatically makes a series of one--step ahead rolling predictions according to the model estimated using only the past information. This way, the user can perform out--of--sample analysis with GAS models. The object \code{Roll} belongs to the class \code{uGASRoll} which, as \code{uGASFit} and \code{uGASFor}, comes with several methods to extract and represent
-the results; see \code{help("uGASRoll")}.
+where model coefficients are re--estimated quarterly (\emph{i.e.}, every three observations with monthly data) using a moving windows (\code{RefitWindow = "moving"}). The code automatically makes a series of one--step ahead rolling predictions according to the model estimated using only the past information. This way, the user can perform out--of--sample analysis with GAS models. The object \code{Roll} belongs to the class \code{uGASRoll} which, as \code{uGASFit} and \code{uGASFor}, comes with several methods to extract and represent the results; see \code{help("uGASRoll")}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection[Simulation]{Simulation}\label{sec:gas_sim}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Simulation of univariate and multivariate GAS models is straightforward with the \proglang{R} package \pkg{GAS}. This can be easily done via \code{UniGASSim()} and \code{MultiGASSim()}; see the \proglang{R} documentation. Several examples, also investigating the finite sample properties of the ML estimator for GAS models, are reported in the \code{inst/test/Simulation.R} file included in the package tarball.
+Simulation of univariate and multivariate GAS models is straightforward with the \proglang{R} package \pkg{GAS}. This can be easily done via \code{UniGASSim()} and \code{MultiGASSim()}; see the \proglang{R} documentation. Several examples, are reported in the \code{tests/testthat/test_Simulate.R} file included in the package tarball.
 
-Besides selecting the conditional distribution of the time series process, the user of course needs to specify also the static parameters $\bxi$ governing the dynamics in $\btheta_t$. More precisely, for simulation of GAS models, the vector $\bkappa$ and the matrices $\bA$ and $\bB$, need to be specified. It is worth stressing that, the definition of $\bkappa$ can be tricky, especially for multivariate models. The difficulty emerges from the fact that, $\bkappa$ determines the unconditional value of the reparametrised vector of parameters $\widetilde\btheta_t$, implying that, if the user wants to specify the model in terms of a target value $\btheta^*$ she needs to know the inverse of the mapping function $\Lambda\left(\cdot\right)$.\footnote{Here we define the \qmo target value\qmcsp as the unconditional level of the parameters the user has in mind. This targeting approach requires the time--varying parameter model to be stationary, as explained in, \emph{e.g.}, \cite{blasques_etal.2014e}.} To address this problem, the functions \code{UniUnmapParameters()} and \code{MultiUnmapParameters()}, representing $\Lambda^{-1}\left(\cdot\right)$, are available for univariate and multivariate models, respectively. This way, the user can easily specify $\bkappa$ such that $\bkappa^* \bydef (\bI - \bB)\Lambda^{-1}(\btheta^*)$. Table~\ref{tab:bounds} lists the numerical bounds imposed for the univariate distributions, such that \code{UniUnmapParameters()} cannot takes values outside those ranges. For the multivariate case, please refer to the examples reported in the \code{inst/test/SimulateGAS.R} file included in the package tarball.
+There are two possibilities for simulating GAS models. The first is to simulate from an estimated \code{uGASFit} or \code{mGASFit} object. For instance, if \code{Fit} is an \code{uGASFit} object delivered by the \code{UniGASFit()} function, the code \code{Sim <- UniGASSim(Fit, T.Sim = 1000)} simulates 1,000 observations from the corresponding GAS model. The second possibility is to fully specify a GAS model which means: (i) selecting the conditional distribution of the time series process, and (ii) specify the static parameters $\bxi$ governing the dynamics in $\btheta_t$. Regarding the former point, the vector $\bkappa$ and the system matrices $\bA$ and $\bB$ need to be specified. It is worth stressing that the definition of $\bkappa$ can be tricky, especially for multivariate models. In the analysis of time--varying parameter models, it is common to define $\bkappa$, $\bA$ and $\bB$ in such a way that the time--varying parameter $\btheta_t$ is covariance--stationary and that its unconditional expectation equals a target value. This is straightforward to do do when the mapping function is linear, see, \emph{e.g.}, \cite{francq_etal.2011}. When the link function is non--linear, which is the most common case in GAS modeling, it is more complex. The difficulty emerges from the fact that $\bkappa$ determines the unconditional value of $\widetilde\btheta_t$, that is $\E[\widetilde\btheta_t] = (\bI - \bB)^{-1} \bkappa$, implying that if the user wants to specify the model in terms of a target value $\btheta^* = \Lambda((\bI - \bB)^{-1} \bkappa)$, she needs to know the inverse of the mapping function $\Lambda\left(\cdot\right)$.\footnote{Here we define the \qmo target value\qmcsp as the unconditional expectation of the time--varying parameter the user has in mind. This targeting approach requires the time--varying parameter model to be stationary, as explained in, \emph{e.g.}, \cite{blasques_etal.2014e}.} To address this problem, the functions \code{UniUnmapParameters()} and \code{MultiUnmapParameters()}, representing $\Lambda^{-1}\left(\cdot\right)$, are available for univariate and multivariate models, respectively. This way, the user can easily specify $\bkappa$ such that $\bkappa \bydef (\bI - \bB)\Lambda^{-1}(\btheta^*)$. Table~\ref{tab:bounds} lists the numerical bounds imposed for the univariate distributions, such that the arguments of  \code{UniUnmapParameters()} cannot take values outside those ranges. For the multivariate case, please refer to the examples reported in the \code{inst/test/SimulateGAS.R} file included in the package tarball.
 
 \begin{table}[H]
 	\centering
@@ -506,10 +499,10 @@ Besides selecting the conditional distribution of the time series process, the u
 		Label & \code{location} & \code{scale} & \code{skewness} & \code{shape} \\
 		\hline
 		\code{norm} & $\Re^{~~}$ & $\Re^+$ & -- & --  \\
-		\code{std} & $\Re^{~~}$ & $\Re^+$ & -- & $\left(2.01,50.0\right)$  \\
 		\code{snorm} & $\Re^{~~}$ & $\Re^+$ & $\left(0.1,2.0\right)$ & --  \\
+		\code{std} & $\Re^{~~}$ & $\Re^+$ & -- & $\left(2.01,50.0\right)$  \\
 		\code{sstd} & $\Re^{~~}$ & $\Re^+$ & $\left(0.1,2.0\right)$ & $\left(2.01,50.0\right)$  \\
-		\code{ald} & $\Re^{~~}$ & $\Re^+$ & $\Re^+$ & --  \\
+        \code{ast1} (i) & $\Re^{~~}$ & $\Re^+$ & $\left(0.01,0.99\right)$ & $\left(2.01,50.0\right)$  \\	\code{ald} & $\Re^{~~}$ & $\Re^+$ & $\Re^+$ & --  \\
 		\code{poi} & $\Re^+$ & -- & -- & --  \\
 		\code{gamma} & $\Re^+$ & $\Re^+$ & -- & --  \\
 		\code{exp} & $\Re^+$ & -- & -- & --  \\
@@ -517,7 +510,7 @@ Besides selecting the conditional distribution of the time series process, the u
 		\bottomrule
 	\end{tabular}
 	\caption{Overview of the restrictions on the allowed values for the parameters of the univariate distributions, for which the \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time variation in the parameters. When the parameter space is $\Re^+$, we use the exponential link function reported in~\eqref{eq:exponential_link} with $c=0$, while when the space is of the type $(a, b)$, we use the modified logistic link function
-		reported in~\eqref{eq:logistic_link}; see Appendix~\ref{sec:mapping}.}
+		reported in~\eqref{eq:logistic_link}; see Appendix~\ref{sec:mapping}. Note: (i) for \code{ast} the same constraints apply, and \code{shape2} is constrained in $\left(2.01,50.0\right)$.}
 	\label{tab:bounds}
 \end{table}
 
@@ -532,17 +525,17 @@ such that both the conditional mean and the conditional variance evolve quite pe
 %
 \begin{CodeChunk}
 \begin{CodeInput}
-A <- diag(c(0.1, 0.4, 0.0))
-B <- diag(c(0.9, 0.95, 0.0))
-ThetaStar <- c(0.1, 1.5, 7.0)
-Kappa <- (diag(3) - B) %*% UniUnmapParameters(ThetaStar, "std")
+R> A <- diag(c(0.1, 0.4, 0.0))
+R> B <- diag(c(0.9, 0.95, 0.0))
+R> ThetaStar <- c(0.1, 1.5, 7.0)
+R> Kappa <- (diag(3) - B) %*% UniUnmapParameters(ThetaStar, "std")
+R> Sim <- UniGASSim(T.sim = 1000, kappa = kappa, A = A,
++    B = B, Dist = "std", ScalingType = "Identity")
 
-Sim <- UniGASSim(T = 1000, Kappa, A, B,
-                 Dist = "std", ScalingType = "Identity")
 \end{CodeInput}
 \end{CodeChunk}
 %
-where \code{Sim} is an object of the class \code{uGASSim} and comes with several method such as \code{show}, \code{plot}, and \code{getMoments}, among others; see \code{help("uGASSim")}.
+where \code{Sim} is an object of class \code{uGASSim} which comes with several methods such as \code{show}, \code{plot}, and \code{getMoments}, among others; see \code{help("uGASSim")}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section[Applications to financial data]{Applications to financial data}\label{sec:application}
@@ -557,9 +550,9 @@ R> data("dji30ret", package = "GAS")
 \end{CodeInput}
 \end{CodeChunk}
 %
-where \code{dji30ret} is a $5521 \times 30$ \code{data.frame} containing the daily log--returns. Our analysis is a typical out--of--sample exercise, meaning that: (i) we estimate the models using an in--sample period, (ii) we do predictions of the conditional distribution for the observations in the out--of--sample period, (iii) and that we compare the models according to their out--of--sample performance.
+where \code{dji30ret} is a $5521 \times 30$ \code{data.frame} containing the daily log--returns. Our analysis is a typical out--of--sample exercise, meaning that: (i) we estimate the models using an in--sample period, (ii) we do rolling one--step ahead predictions of the conditional distribution for the observations in the out--of--sample period, and (iii) that we compare the models according to their out--of--sample performance.
 
-The models we consider are univariate/multivariate GAS models estimated with the \proglang{R} package \pkg{GAS}, and univariate/multivariate GARCH models estimated using the popular \proglang{R} packages \pkg{rugarch} \citep{rugarch} and \pkg{rmgarch}  \citep{rmgarch}, respectively. The univariate specifications we consider are: (i) the \SStudent GAS model with only time--varying scale parameter (\emph{i.e.}, \code{Dist = "sstd"}) and, (ii) the GARCH(1,1) model with \SStudent distributed error. For both models we employ the \SStudent distribution of \cite{fernandez_steel.1998} reparametrised such that the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \pkg{rugarch} package.
+The models we consider are univariate/multivariate GAS models estimated with the \proglang{R} package \pkg{GAS}, and univariate/multivariate GARCH models estimated using the popular \proglang{R} packages \pkg{rugarch} \citep{rugarch} and \pkg{rmgarch} \citep{rmgarch}, respectively. The univariate specifications we consider are: (i) the \SStudent GAS model with only time--varying scale parameter (\emph{i.e.}, \code{Dist = "sstd"}) and, (ii) the GARCH(1,1) model with \SStudent distributed error. For both models we employ the \SStudent distribution of \cite{fernandez_steel.1998} reparametrised such that the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \pkg{rugarch} package.
 
 For the multivariate specifications, we consider: (i) the GAS model with conditional multivariate \Student distribution with time--varying scales and correlations used in \citet{creal_etal.2011} and, (ii) the Dynamic Conditional Correlation (DCC) model of \citet{engle.2002} with a conditional multivariate \Student distribution. For simplicity, the multivariate analysis only considers three series of the whole dataset: Caterpillar Inc. (CAT), 3M (MMM) and Pfizer Inc. (PFE).
 
@@ -567,9 +560,8 @@ The code used to specify the univariate and multivariate GAS models is:
 %%
 \begin{CodeChunk}
 \begin{CodeInput}
-R> uGASSpec <- UniGASSpec(Dist = "sstd",
-                         ScalingType = "Identity",
-                         GASPar = list(scale = TRUE))
+R> uGASSpec <- UniGASSpec(Dist = "sstd", ScalingType = "Identity",
++    GASPar = list(scale = TRUE))
 \end{CodeInput}
 \end{CodeChunk}
 %%
@@ -577,11 +569,8 @@ and:
 %%
 \begin{CodeChunk}
 \begin{CodeInput}
-R> mGASSpec <- MultiGASSpec(Dist = "mvt",
-                           ScalingType = "Identity",
-                           GASPar = list(scale = TRUE,
-                                         correlation = TRUE))
-
+R> mGASSpec <- MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
++    GASPar = list(scale = TRUE, correlation = TRUE))
 \end{CodeInput}
 \end{CodeChunk}
 %%
@@ -589,22 +578,21 @@ respectively.
 
 % Experiment design
 The last $H = 3,000$ observations (from January 27th, 1991, to the end of the sample) compose the out--of--sample period. During the out--of--sample period,
-one--step ahead density predictions are constructed by the univariate and multivariate models. Models (and therefore coefficients) are re--estimated using a moving--window every hundredth observations, as detailed in Section~\ref{sec:gas_fore}. One--step ahead rolling prediction are then computed as:
+one--step ahead density predictions are constructed by the univariate and multivariate specifications. The models (and therefore coefficients) are re--estimated using a moving--window every hundredth observations, as detailed in Section~\ref{sec:gas_fore}. One--step ahead rolling prediction are then computed as:
 %%
 \begin{CodeChunk}
 \begin{CodeInput}
-luGASRoll <- list()
-
-N <- ncol(dji30ret)
-
-for(i in 1:N){
-   luGASRoll[[i]]  <- UniGASRoll(data = dji30ret[, i],
-                                 GASSpec = uGASSpec,
-                                 ForecastLength = 3000,
-                                 RefitEvery = 100)
-
-}
-names(luGASRoll) <- colnames(dji30ret)
+R> library("parallel")
+R> cluster = makeCluster(8)
+R>
+R> luGASRoll = list()
+R> N = ncol(dji30ret)
+R> for (i in 1:N) {
++   luGASRoll[[i]] <- UniGASRoll(data = dji30ret[, i],
++     GASSpec = uGASSpec, ForecastLength = 3000,
++     RefitEvery = 100, cluster = cluster)
++ }
+R> names(luGASRoll) <- colnames(dji30ret)
 \end{CodeInput}
 \end{CodeChunk}
 %%
@@ -612,14 +600,14 @@ and:
 %%
 \begin{CodeChunk}
 \begin{CodeInput}
-mGASRoll <- MultiGASRoll(data = dji30ret[, c("CAT", "MMM", "PFE")],
-                        GASSpec = mGASSpec,
-                        ForecastLength = 3000,
-                        RefitEvery = 100)
+R> mGASRoll <- MultiGASRoll(data = dji30ret[, c("CAT", "MMM", "PFE")],
++    GASSpec = mGASSpec, ForecastLength = 3000,
++    RefitEvery = 100, cluster = cluster)
+R> stopCluster(cluster)
 \end{CodeInput}
 \end{CodeChunk}
 %%
-for the univariate and multivariate cases, respectively.
+for the univariate and multivariate cases, respectively. To speed up the computations, we run the code over eight processors via the \proglang{R} package \pkg{parallel}. Again, we emphasize that in the case of one--step ahead density predictions, results are available in closed--form, in contrast with multi--step ahead forecasts which are based on simulations. Hence, our results do not depend on the seed or the parallelization scheme used for the computations.
 
 Let us now compare the ability of GAS and GARCH models in predicting the one--step ahead distribution using so--called \emph{scoring rules}, which compare the predicted density with the ex--post realized value of the return and deliver a score which defines a ranking across the alternative models at each point in time \citep{gneiting_etal.2007}.
 Generally, we define $S_{t+1}\bydef S(y_{t+1}, p(y_{t+1};\widehat\btheta_{t+1}))$ as the score at time $t+1$ for having predicted $p(y_{t+1};\widehat\btheta_{t+1})$ when $y_{t+1}$ has been realized. We consider two widely used scoring rules:
@@ -630,7 +618,7 @@ Generally, we define $S_{t+1}\bydef S(y_{t+1}, p(y_{t+1};\widehat\btheta_{t+1}))
     \overline{wCRPS} \bydef \frac{1}{H}\sum_{t = T}^{T+H-1}\int_{-\infty}^{\infty}w\left(z\right)\left(F\left(z;\widehat\btheta_{t+1}\right) - \mathbb{I}_{\{y_{t+1}<z\}}\right)^2\mathrm{d}z,
   \end{equation}
 
-  where $w\left(z\right)$ is a weight function that emphasizes regions of interest of the predictive distribution, such as the tails or the center. Similarly to \citet{gneiting_ranjan.2012}, we consider the cases of: (i) a weighting that gives equal emphasis to all the parts of the distribution; $w\left(z\right) = 1$, (ii) a weighting that focuses on the center; $w\left(z\right) = \phi_{a,b}\left(z\right)$; (iii) a weighting that focuses on the tails; $w\left(z\right) = 1 - \phi_{a,b}\left(z\right)/\phi_{a,b}\left(0\right)$, (iv) a weighting that focuses on the right tail; $w\left(z\right) = \Phi_{a,b}\left(z\right)$, and (v) a weighting that focuses on the left tail $w\left(z\right) = 1 - \Phi_{a,b}\left(z\right)$. The  functions $\phi_{a,b}\left(z\right)$ and $\Phi_{a,b}\left(z\right)$ are the \textit{pdf} and \textit{cdf} of a Gaussian distribution with mean $a$ and standard deviation $b$, respectively. The label \code{uniform} represents the case where equal emphasis is given to all the parts of the distribution.
+  where $w\left(z\right)$ is a weight function that emphasizes regions of interest of the predictive distribution, such as the tails or the center.\footnote{We denote by $\mathbb{I}_{\{\cdot\}}$ the indicator function which equals one if the condition is satisfied and zero otherwise.} Similarly to \citet{gneiting_ranjan.2012}, we consider the cases of: (i) a weighting that gives equal emphasis to all the parts of the distribution; $w\left(z\right) = 1$, (ii) a weighting that focuses on the center; $w\left(z\right) = \phi_{a,b}\left(z\right)$; (iii) a weighting that focuses on the tails; $w\left(z\right) = 1 - \phi_{a,b}\left(z\right)/\phi_{a,b}\left(0\right)$, (iv) a weighting that focuses on the right tail; $w\left(z\right) = \Phi_{a,b}\left(z\right)$, and (v) a weighting that focuses on the left tail $w\left(z\right) = 1 - \Phi_{a,b}\left(z\right)$. The  functions $\phi_{a,b}\left(z\right)$ and $\Phi_{a,b}\left(z\right)$ are the \textit{pdf} and \textit{cdf} of a Gaussian distribution with mean $a$ and standard deviation $b$, respectively. The label \code{uniform} represents the case where equal emphasis is given to all the parts of the distribution.
    \item The average Negative Log Score (NLS):
 
   \begin{equation}\label{eq:logscore}
@@ -639,12 +627,12 @@ Generally, we define $S_{t+1}\bydef S(y_{t+1}, p(y_{t+1};\widehat\btheta_{t+1}))
   Consistent with \citet{gneiting_etal.2007}, we specify the Negative Log Score such that the \qmo direction\qmcsp between the two scoring rules is the same, \emph{i.e.}, forecasts with lower $\overline{NLS}$ and lower $\overline{wCRPS}$ are preferred.
 \end{itemize}
 %%
-The two aforementioned scoring rules can be easily evaluated using the \code{BacktestDensity()} function available in the \proglang{R} package \pkg{GAS}. The \code{BacktestDensity()} function accepts an object of the class \code{uGASRoll}, and returns a list with two elements: (i) the averages negative LS and wCRPS as in~\eqref{eq:logscore} and~\eqref{eq:crsp}, and (ii) their values at each point in time. Additional arguments are:
+The two aforementioned scoring rules can be easily evaluated using the \code{BacktestDensity()} function available in the \proglang{R} package \pkg{GAS}. The \code{BacktestDensity()} function accepts an object of class \code{uGASRoll}, and returns a list with two elements: (i) the average wCRPS and average NLS as in~\eqref{eq:crsp} and~\eqref{eq:logscore}, and (ii) their values at each point in time. To evaluate the integral in~\eqref{eq:crsp}, we use the numerical integration scheme adopted by \cite{gneiting_ranjan.2012}. To this end, the \code{BacktestDensity()} function accepts the following additional arguments:
 %
 \begin{itemize}
-    \item \code{lower}: \code{numeric} representing the lower bound used to approximate~\eqref{eq:crsp} by Monte Carlo integration as detailed in \cite{gneiting_ranjan.2012}.
+    \item \code{lower}: \code{numeric} representing the lower bound of the numerical integration.
     \item \code{upper}: \code{numeric} as \code{lower} but for the upper bound.\footnote{The two arguments \code{lower} and \code{upper} coincide with $y_l$ and $y_u$ in Equation~16 of \cite{gneiting_ranjan.2012}, respectively. These are two numeric objects with no default value, \emph{i.e.}, the user have to define these values according to her research design.}
-    \item \code{K}: \code{numeric} integer representing the number of points used to discretize the integral in~\eqref{eq:crsp}.\footnote{Equals to $I$ in Equation~16 of \cite{gneiting_ranjan.2012}.} By default \code{K = 1000},
+    \item \code{K}: \code{numeric} integer representing the number of points used in the numerical integration.\footnote{Equals to $I$ in Equation~16 of \cite{gneiting_ranjan.2012}.} By default \code{K = 1000},
 \end{itemize}
 %
 plus the two \code{numeric} arguments, \code{a} and \code{b}, representing $a$ and $b$ in the weight functions, by default \code{a = 0.0} and \code{b = 1.0}.\footnote{These values can be chosen in order to target some \qmo optimal\qmcsp prediction level, or to add more flexibility and focus on specific parts the predictive distribution; see \cite{gneiting_ranjan.2012}.}
@@ -657,62 +645,60 @@ plus the two \code{numeric} arguments, \code{a} and \code{b}, representing $a$ a
 		\toprule
 Asset & NLS & Uniform & Center & Tails & Tails--r & Tails--l\\
 \cmidrule(lr){1-1}\cmidrule(lr){2-7}
-AA & $-1.99^b$ & $-2.39^a$ & $-2.39^a$ & $-1.45^c$ & $-2.46^a$ & $-2.32^b$ \\
-AXP & $-2.85^a$ & $-2.25^b$ & $-2.25^b$ & $0.20^{~}$ & $-2.25^b$ & $-2.25^b$ \\
-BA & $-1.54^c$ & $-2.00^b$ & $-2.00^b$ & $-0.40^{~}$ & $-2.00^b$ & $-1.99^b$ \\
-BAC & $-3.16^a$ & $-1.49^c$ & $-1.50^c$ & $0.64^{~}$ & $-1.25^{~}$ & $-1.73^b$ \\
-C & $-4.07^a$ & $-3.14^a$ & $-3.14^a$ & $-0.29^{~}$ & $-3.18^a$ & $-3.09^a$ \\
-CAT & $-5.47^a$ & $-5.38^a$ & $-5.38^a$ & $-1.94^b$ & $-5.32^a$ & $-5.43^a$ \\
-CVX & $0.71^{~}$ & $1.13^{~}$ & $1.13^{~}$ & $1.27^{~}$ & $1.12^{~}$ & $1.13^{~}$ \\
-DD & $-1.34^c$ & $-0.66^{~}$ & $-0.66^{~}$ & $-0.27^{~}$ & $-0.62^{~}$ & $-0.69^{~}$ \\
-DIS & $-2.17^b$ & $-1.76^b$ & $-1.76^b$ & $-0.40^{~}$ & $-1.78^b$ & $-1.74^b$ \\
-GE & $-3.81^a$ & $-4.22^a$ & $-4.22^a$ & $-1.73^b$ & $-4.23^a$ & $-4.20^a$ \\
-GM & $0.09^{~}$ & $-0.44^{~}$ & $-0.45^{~}$ & $0.45^{~}$ & $-0.51^{~}$ & $-0.37^{~}$ \\
-HD & $-3.67^a$ & $-2.89^a$ & $-2.89^a$ & $-3.32^a$ & $-2.89^a$ & $-2.88^a$ \\
-HPQ & $-4.38^a$ & $-4.44^a$ & $-4.44^a$ & $-3.42^a$ & $-4.42^a$ & $-4.45^a$ \\
-IBM & $-3.92^a$ & $-4.03^a$ & $-4.03^a$ & $-2.95^a$ & $-4.00^a$ & $-4.06^a$ \\
-INTC & $-3.16^a$ & $-1.72^b$ & $-1.72^b$ & $-1.48^c$ & $-1.80^b$ & $-1.65^b$ \\
-JNJ & $-3.81^a$ & $-2.08^b$ & $-2.08^b$ & $-0.41^{~}$ & $-2.01^b$ & $-2.16^b$ \\
-JPM & $-1.97^b$ & $-1.93^b$ & $-1.93^b$ & $-0.23^{~}$ & $-1.87^b$ & $-1.99^b$ \\
-AIG & $-0.22^{~}$ & $0.94^{~}$ & $0.95^{~}$ & $0.68^{~}$ & $0.76^{~}$ & $1.05^{~}$ \\
-KO & $-3.36^a$ & $-3.03^a$ & $-3.03^a$ & $-0.95^{~}$ & $-3.05^a$ & $-3.00^a$ \\
-MCD & $-2.04^b$ & $-1.96^b$ & $-1.96^b$ & $-1.02^{~}$ & $-1.96^b$ & $-1.95^b$ \\
-MMM & $-4.22^a$ & $-4.62^a$ & $-4.62^a$ & $-2.26^b$ & $-4.62^a$ & $-4.62^a$ \\
-MRK & $-3.82^a$ & $-5.10^a$ & $-5.10^a$ & $-3.70^a$ & $-5.18^a$ & $-5.02^a$ \\
-MSFT & $-3.24^a$ & $-2.76^a$ & $-2.76^a$ & $-2.25^b$ & $-2.79^a$ & $-2.73^a$ \\
-PFE & $-4.86^a$ & $-4.98^a$ & $-4.98^a$ & $-3.21^a$ & $-5.02^a$ & $-4.94^a$ \\
-PG & $-1.97^b$ & $-1.99^b$ & $-1.99^b$ & $-2.07^b$ & $-2.01^b$ & $-1.97^b$ \\
-T & $-0.31^{~}$ & $-0.16^{~}$ & $-0.16^{~}$ & $0.46^{~}$ & $-0.14^{~}$ & $-0.18^{~}$ \\
-UTX & $-1.50^c$ & $-1.52^c$ & $-1.52^c$ & $-0.80^{~}$ & $-1.57^c$ & $-1.46^c$ \\
-VZ & $-2.22^b$ & $-2.13^b$ & $-2.13^b$ & $-2.41^a$ & $-2.13^b$ & $-2.14^b$ \\
-WMT & $-2.15^b$ & $-1.83^b$ & $-1.83^b$ & $-0.13^{~}$ & $-1.88^b$ & $-1.78^b$ \\
-XOM & $0.17^{~}$ & $0.39^{~}$ & $0.39^{~}$ & $1.26^{~}$ & $0.42^{~}$ & $0.37^{~}$ \\
+AA & $-1.95^b$ & $-2.34^a$ & $-2.34^a$ & $-1.47^c$ & $-2.39^a$ & $-2.28^b$ \\
+AXP & $-2.98^a$ & $-1.84^b$ & $-1.84^b$ & $ 0.36^{~}$ & $-1.84^b$ & $-1.84^b$ \\
+BA & $-1.44^c$ & $-1.89^b$ & $-1.90^b$ & $-0.56^{~}$ & $-1.89^b$ & $-1.90^b$ \\
+BAC & $-2.94^a$ & $-1.10^{~}$ & $-1.11^{~}$ & $ 0.48^{~}$ & $-0.91^{~}$ & $-1.30^c$ \\
+C & $-4.13^a$ & $-2.79^a$ & $-2.80^a$ & $-0.23^{~}$ & $-2.84^a$ & $-2.74^a$ \\
+CAT & $-5.24^a$ & $-5.17^a$ & $-5.17^a$ & $-2.03^b$ & $-5.11^a$ & $-5.22^a$ \\
+CVX & $ 0.76^{~}$ & $ 1.23^{~}$ & $ 1.23^{~}$ & $ 1.39^c$ & $ 1.22^{~}$ & $ 1.22^{~}$ \\
+DD & $-0.57^{~}$ & $-0.29^{~}$ & $-0.29^{~}$ & $-0.20^{~}$ & $-0.25^{~}$ & $-0.33^{~}$ \\
+DIS & $-2.48^a$ & $-1.66^b$ & $-1.66^b$ & $-0.27^{~}$ & $-1.66^b$ & $-1.65^b$ \\
+GE & $-2.44^a$ & $-2.61^a$ & $-2.61^a$ & $-1.51^c$ & $-2.61^a$ & $-2.61^a$ \\
+GM & $ 0.76^{~}$ & $-0.16^{~}$ & $-0.16^{~}$ & $ 0.45^{~}$ & $-0.22^{~}$ & $-0.10^{~}$ \\
+HD & $-3.06^a$ & $-2.40^a$ & $-2.40^a$ & $-2.91^a$ & $-2.41^a$ & $-2.40^a$ \\
+HPQ & $-4.09^a$ & $-4.19^a$ & $-4.19^a$ & $-3.17^a$ & $-4.19^a$ & $-4.20^a$ \\
+IBM & $-3.63^a$ & $-3.74^a$ & $-3.74^a$ & $-2.87^a$ & $-3.71^a$ & $-3.76^a$ \\
+INTC & $-3.28^a$ & $-1.70^b$ & $-1.70^b$ & $-1.43^c$ & $-1.77^b$ & $-1.63^c$ \\
+JNJ & $-2.82^a$ & $-1.15^{~}$ & $-1.15^{~}$ & $-0.02^{~}$ & $-1.09^{~}$ & $-1.21^{~}$ \\
+JPM & $-1.29^c$ & $-1.52^c$ & $-1.52^c$ & $-0.24^{~}$ & $-1.45^c$ & $-1.59^c$ \\
+AIG & $-0.23^{~}$ & $ 0.63^{~}$ & $ 0.63^{~}$ & $ 0.69^{~}$ & $ 0.48^{~}$ & $ 0.74^{~}$ \\
+KO & $-3.01^a$ & $-2.58^a$ & $-2.58^a$ & $-0.35^{~}$ & $-2.62^a$ & $-2.55^a$ \\
+MCD & $-1.52^c$ & $-1.55^c$ & $-1.55^c$ & $-0.58^{~}$ & $-1.55^c$ & $-1.55^c$ \\
+MMM & $-3.92^a$ & $-4.20^a$ & $-4.20^a$ & $-2.28^b$ & $-4.20^a$ & $-4.19^a$ \\
+MRK & $-3.20^a$ & $-3.55^a$ & $-3.55^a$ & $-2.58^a$ & $-3.59^a$ & $-3.50^a$ \\
+MSFT & $-3.08^a$ & $-2.22^b$ & $-2.22^b$ & $-1.73^b$ & $-2.24^b$ & $-2.20^b$ \\
+PFE & $-4.18^a$ & $-3.63^a$ & $-3.63^a$ & $-2.98^a$ & $-3.65^a$ & $-3.61^a$ \\
+PG & $-1.86^b$ & $-1.70^b$ & $-1.70^b$ & $-1.47^c$ & $-1.69^b$ & $-1.71^b$ \\
+T & $-0.42^{~}$ & $ 0.01^{~}$ & $ 0.01^{~}$ & $ 0.54^{~}$ & $ 0.03^{~}$ & $-0.02^{~}$ \\
+UTX & $-1.71^b$ & $-1.62^c$ & $-1.62^c$ & $-1.01^{~}$ & $-1.66^b$ & $-1.57^c$ \\
+VZ & $-1.24^{~}$ & $-1.57^c$ & $-1.57^c$ & $-1.84^b$ & $-1.56^c$ & $-1.57^c$ \\
+WMT & $-1.87^b$ & $-1.09^{~}$ & $-1.09^{~}$ & $ 0.15^{~}$ & $-1.13^{~}$ & $-1.04^{~}$ \\
+XOM & $ 0.47^{~}$ & $ 0.22^{~}$ & $ 0.22^{~}$ & $ 1.02^{~}$ & $ 0.24^{~}$ & $ 0.20^{~}$ \\
 		\bottomrule
 	\end{tabular}
 	%}
-	\caption{Test statistics for the \cite{diebold_mariano.1995} test of equal performance between the series of negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample logarithmic returns of Dow Jones 30 constituents. Negative values indicate that GAS models report more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. The apexes $a,b$ and $c$ represent  rejection of the null hypothesis of Equal Predictive Ability at the $1\%, 5\%$ and $10\%$ confidence levels, respectively. The out--of--sample period spans from January 27th, 1991, to February 3rd, 2009 for a total of 3,000 observations.}
+	\caption{Test statistics for the \cite{diebold_mariano.1995} test of equal performance between the series of negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample logarithmic returns of Dow Jones 30 constituents. Negative values indicate that GAS models provide more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. The apexes $a,b$ and $c$ represent  rejection of the null hypothesis of Equal Predictive Ability at the $1\%, 5\%$ and $10\%$ confidence levels, respectively. The out--of--sample period spans from January 27th, 1991, to February 3rd, 2009 for a total of 3,000 observations.}
 	\label{tab:BackDist}
 \end{table}
 
-In our case, in order to evaluate $\overline{NLS}$ and $\overline{wCRPS}$ for the first asset we can simply run:
+In our case, in order to evaluate $\overline{NLS}$ and $\overline{wCRPS}$ for the first asset, we can simply run:\footnote{Chosen \code{lower} and \code{upper} values define a proper range for log--returns not in percentage points as the one considered here.}
 %
 \begin{CodeChunk}
 \begin{CodeInput}
 R> DensityBacktest <- BacktestDensity(luGASRoll[[1]],
-                                      lower = -1.0, upper = 1.0)
++    lower = -1.0, upper = 1.0)
 R> DensityBacktest$average
 \end{CodeInput}
 \begin{CodeOutput}
-        LS    uniform     center      tails     tail_r     tail_l
--2.389e+00  1.329e-02  5.300e-03  7.310e-06  6.645e-03  6.648e-03 
+       NLS    uniform     center      tails     tail_r     tail_l
+-2.389e+00  1.329e-02  5.299e-03  7.309e-06  6.643e-03  6.647e-03
 \end{CodeOutput}
 \end{CodeChunk}
-%
-where \code{lower = -1.0} and \code{upper = 1.0}.\footnote{Chosen \code{lower} and \code{upper} values define a proper range for log--returns not in percentage points as the one considered here.}
 
-Table~\ref{tab:BackDist} reports the test statistics for the \citet{diebold_mariano.1995} (DM) test of equal performance between the series of Negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample period. Negative values indicate that GAS models generate more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. We found that, for almost all the series, GAS outperforms GARCH at very high confidence levels according to both NLS and wCRPS. Interestingly, our results suggest that GAS delivers more accurate results whatever part of the conditional distribution the $\overline{wCRPS}$ emphasizes.
+Table~\ref{tab:BackDist} reports the test statistics for the \citet{diebold_mariano.1995} (DM) test of equal performance between the series of Negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample period. Negative values indicate that GAS models generate more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. We find that, for almost all the series, GAS outperforms GARCH at very high confidence levels according to both NLS and wCRPS. Interestingly, our results suggest that GAS delivers more accurate results whatever part of the conditional distribution the $\overline{wCRPS}$ emphasizes.
 
-For the multivariate analysis we only consider $\overline{NLS}$. In this case, the DM test statistic is $-4.15$, which strongly favours the GAS model against the DCC specification. To further investigate this result, we report in Figure~\ref{fig:cumlogscore} the Cumulative sum of the differences between the Log Scores (CLS) of GAS and DCC defined as:
+For the multivariate analysis we only consider $\overline{NLS}$. In this case, the DM test statistic is $-3.27$, which strongly favours the GAS model against the DCC specification. To further investigate this result, we report in Figure~\ref{fig:cumlogscore} the Cumulative sum of the differences between the Log Scores (CLS) of GAS and DCC defined as:
 %
 \begin{equation*}%\label{eq:diff}
   CLS_{T:T+l}^{GAS\vert DCC} \bydef \sum_{t = T}^{t = T+l-1}\log p\left(\by_{t+1};\widehat{\btheta}_{t+1}^{GAS}\right) - \log p\left(\by_{t+1};\widehat{\btheta}_{t+1}^{DCC}\right)\,,
@@ -728,26 +714,20 @@ R> LS_MGAS <- LogScore(mGASRoll)
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=1\textwidth]{CumLogScore_Multi}
+\includegraphics[width=1\textwidth]{Figure1}
 \caption{Cumulative out--of--sample Log Score differences between the multivariate \Student GAS and the DCC(1,1) model of \citet{engle.2002} with multivariate \Student errors. Periods when the plot line slopes upward represent periods in which GAS outperforms GARCH, while downward--sloping segments indicate periods when the GARCH forecast is more accurate.  The blue shaded area represents periods of recession in the US economy according to the \qmo USREC\qmcsp series available from the Federal Reserve Bank of St. Louis web site at  \url{https://fred.stlouisfed.org/series/USREC}.}
 \label{fig:cumlogscore}
 \end{figure}
 
-Looking at Figure~\ref{fig:cumlogscore}, periods when the plot line slopes upward represent periods in which GAS outperforms DCC, while downward--sloping segments indicate periods when the DCC forecast is more accurate. From this plot, we clearly understand the output of the DM test. Interestingly, we found that GAS starts dominating DCC after 2000.
+In Figure~\ref{fig:cumlogscore}, periods when the plot line slopes upward represent periods in which GAS outperforms DCC, while downward--sloping segments indicate periods when the DCC forecast is more accurate. From this plot, we clearly understand the output of the DM test. Interestingly, we find that GAS starts dominating DCC after 2003.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section[Conclusion]{Conclusion}\label{sec:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This article introduced the \proglang{R} package \pkg{GAS} for simulating, estimating and forecasting time--varying parameter models under the Generalized Autoregressive Score framework. It allows   practitioners in many scientific areas to perform their applied research using GAS models in a  user--friendly environment.
-
-%\proglang{R} %. We briefly reviewed GAS models and the fast growing literature that relies on this class of models in applied works. To our knowledge, the \proglang{R} package \pkg{GAS} is the first complete framework for GAS models
-%allowing in an user--friendly environment.
+This article introduced the \proglang{R} package \pkg{GAS} for simulating, estimating and forecasting time--varying parameter models under the Generalized Autoregressive Score framework. It allows   practitioners in many scientific areas to perform their applied research using GAS models in a user--friendly environment.
 
 We introduced the model specification in a general way and illustrated the package usage. In particular, we performed an empirical application using financial data in which we compared the performance of univariate and multivariate GAS and GARCH models. Given the flexibility of GAS models and the availability of several statistical distributions in the \pkg{GAS} package, a number of different applications can be easily handled, such as: (i) the analysis of integer valued time series using the Poisson GAS model (\code{poi}), (ii) the analysis of (0,1)--bounded time series using the Beta GAS model (\code{beta}), (iii) the analysis of strictly positive time series with an inverse location/scale dependence using the Gamma GAS model (\code{gamma}).
-
-%We are convinced that GAS models are relevant in many fields and hope that the \proglang{R} package \pkg{GAS} will be fruitful for many
-%researchers like econometricians or applied statisticians.
 
 Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publications.
 
@@ -755,15 +735,13 @@ Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publi
 \section*{Computational details}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The results in this paper were obtained using \proglang{R} 3.2.3 \citep{R} with the
-packages: \pkg{GAS} version 0.1.4 \citep{GAS}, \pkg{MASS} version 7.3-45 and \citep{MASS.2002,MASS},
-\pkg{Rcpp} version 0.12.7 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.400.2.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{Rsolnp} version 1.16 \citep{Rsolnp}, \pkg{xts} version 0.9-7 \citep{xts} and \pkg{quantmod} version 0.4-6 \citep{quantmod}.
+The results in this paper were obtained using \proglang{R} 3.3.3 \citep{R} with the
+packages: \pkg{GAS} version 0.1.6 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-45 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
+\pkg{Rcpp} version 0.12.10 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.700.0.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{Rsolnp} version 1.16 \citep{Rsolnp}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.9-7 \citep{xts}, and \pkg{zoo} version 1.7-14 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-7. Computations were performed on a Genuine Intel\textregistered{} quad core CPU i7--3630QM 2.40Ghz processor.
+
 \proglang{R} itself and all packages used are available
 from \proglang{CRAN} at \url{http://CRAN.R-project.org/}. The
 package \pkg{GAS} is available from the CRAN repository at \url{https://cran.r-project.org/package=GAS}. The version under development is available in \proglang{GitHub} at \url{https://github.com/LeopoldoCatania/GAS}.
-Computations were performed on
-a Genuine Intel\textregistered{} quad core CPU i7--3630QM 2.40Ghz processor. Code outputs were
-obtained using \code{options(digits = 4, max.print = 40, prompt = "R> ")}
 
 The folder \code{inst/doc} inside the \pkg{GAS} package tarball contains additional technical documentations. A step by step guide on how to add a new statistical distribution in the \pkg{GAS} package is reported in the file \code{AddNewDistribution.pdf}.
 
@@ -771,14 +749,15 @@ The folder \code{inst/doc} inside the \pkg{GAS} package tarball contains additio
 \section*{Acknowledgments}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+The authors thank the Associate Editor (Paul Gilbert) and two referees for their comments.
 The authors acknowledge Google for financial support via the
 Google Summer of Code 2016  project
-"GAS"; see \url{https://summerofcode.withgoogle.com/projects/#4717600793690112}.
+"GAS".
 Any remaining errors or shortcomings are the authors' responsibility.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % JSS has its own style
-\begin{thebibliography}{47}
+\begin{thebibliography}{54}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -825,7 +804,7 @@ Blasques F, Koopman SJ, Lucas A (2014{\natexlab{c}}).
 \bibitem[{Blasques \emph{et~al.}(2014{\natexlab{d}})Blasques, Koopman, Lucas,
   and Schaumburg}]{blasques_etal.2014a}
 Blasques F, Koopman SJ, Lucas A, Schaumburg J (2014{\natexlab{d}}).
-\newblock \enquote{Spillover Dynamics for Systemic Risk Measurement using
+\newblock \enquote{Spillover Dynamics for Systemic Risk Measurement Using
   Spatial Financial Time Series Models.}
 \newblock \emph{techreport TI 2014-103/III}, Tinbergen Institute.
 \newblock \urlprefix\url{http://www.tinbergen.nl/discussionpaper/?paper=2369}.
@@ -842,16 +821,18 @@ Box GE, Jenkins GM (1970).
 \newblock \emph{Time Series Analysis: {F}orecasting and Control}.
 \newblock Holden--Day, San Francisco.
 
-\bibitem[{Catania and {Bill{\'e}}(2016)}]{catania_bille.2016}
-Catania L, {Bill{\'e}} AG (2016).
+\bibitem[{Catania and {Bill{\'e}}(2017)}]{catania_bille.2017}
+Catania L, {Bill{\'e}} AG (2017).
 \newblock \enquote{Dynamic Spatial Autoregressive Models with Autoregressive
   and Heteroskedastic Disturbances.}
-\newblock Working paper, \urlprefix\url{http://arxiv.org/abs/1602.02542}.
+\newblock \emph{Journal of Applied Econometrics}, pp. 1--19.
+\newblock ISSN 1099-1255.
+\newblock \doi{10.1002/jae.2565}.
 
-\bibitem[{Catania \emph{et~al.}(2016)Catania, Boudt, and Ardia}]{GAS}
-Catania L, Boudt K, Ardia D (2016).
+\bibitem[{Catania \emph{et~al.}(2017)Catania, Boudt, and Ardia}]{GAS}
+Catania L, Boudt K, Ardia D (2017).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
-\newblock \proglang{R}~package version 0.1.4,
+\newblock \proglang{R}~package version 0.1.6,
   \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}
@@ -891,21 +872,21 @@ Eddelbuettel D, Fran\c{c}ois R (2011).
 \newblock \emph{Journal of Statistical Software}, \textbf{40}(8), 1--18.
 \newblock \doi{10.18637/jss.v040.i08}.
 
-\bibitem[{Eddelbuettel \emph{et~al.}(2016{\natexlab{a}})Eddelbuettel,
+\bibitem[{Eddelbuettel \emph{et~al.}(2017{\natexlab{a}})Eddelbuettel,
   Fran\c{c}ois, Allaire, Ushey, Kou, Bates, and Chambers}]{Rcpp}
 Eddelbuettel D, Fran\c{c}ois R, Allaire J, Ushey K, Kou Q, Bates D, Chambers J
-  (2016{\natexlab{a}}).
+  (2017{\natexlab{a}}).
 \newblock \emph{\pkg{Rcpp}: {S}eamless \proglang{R} and \proglang{C++}
   Integration}.
-\newblock \proglang{R}~package version 0.12.7,
+\newblock \proglang{R}~package version 0.12.10,
   \urlprefix\url{https://cran.r-project.org/package=Rcpp}.
 
-\bibitem[{Eddelbuettel \emph{et~al.}(2016{\natexlab{b}})Eddelbuettel,
+\bibitem[{Eddelbuettel \emph{et~al.}(2017{\natexlab{b}})Eddelbuettel,
   Fran\c{c}ois, and Bates}]{RcppArmadillo}
-Eddelbuettel D, Fran\c{c}ois R, Bates D (2016{\natexlab{b}}).
+Eddelbuettel D, Fran\c{c}ois R, Bates D (2017{\natexlab{b}}).
 \newblock \emph{\pkg{RcppArmadillo}: \pkg{Rcpp} Integration for the
   \pkg{Armadillo} Templated Linear Algebra Library}.
-\newblock \proglang{R}~package version 0.7.400.2.0,
+\newblock \proglang{R}~package version 0.7.700.0.0,
   \urlprefix\url{https://cran.r-project.org/package=RcppArmadillo}.
 
 \bibitem[{Eddelbuettel and Sanderson(2014)}]{RcppArmadillo.2014}
@@ -927,10 +908,17 @@ Engle RF (2002).
 
 \bibitem[{Fern{\'a}ndez and Steel(1998)}]{fernandez_steel.1998}
 Fern{\'a}ndez C, Steel MF (1998).
-\newblock \enquote{On Bayesian modeling of fat tails and skewness.}
+\newblock \enquote{On Bayesian Modeling of Fat Tails and Skewness.}
 \newblock \emph{Journal of the American Statistical Association},
   \textbf{93}(441), 359--371.
 \newblock \doi{10.1080/01621459.1998.10474117}.
+
+\bibitem[{Francq \emph{et~al.}(2011)Francq, Horv\'{a}th, and
+  Zako{\"\i}an}]{francq_etal.2011}
+Francq C, Horv\'{a}th L, Zako{\"\i}an JM (2011).
+\newblock \enquote{Merits and Drawbacks of Variance Targeting in GARCH Models.}
+\newblock \emph{Journal of Financial Econometrics}, \textbf{9}(4), 619.
+\newblock \doi{10.1093/jjfinec/nbr004}.
 
 \bibitem[{Ghalanos(2015{\natexlab{a}})}]{rmgarch}
 Ghalanos A (2015{\natexlab{a}}).
@@ -944,19 +932,25 @@ Ghalanos A (2015{\natexlab{b}}).
 \newblock \proglang{R}~package version 1.3-6,
   \urlprefix\url{https://cran.r-project.org/package=rugarch}.
 
-\bibitem[{Ghalanos and Theussl(2016)}]{Rsolnp}
-Ghalanos A, Theussl S (2016).
+\bibitem[{Ghalanos and Theussl(2015)}]{Rsolnp}
+Ghalanos A, Theussl S (2015).
 \newblock \emph{\pkg{Rsolnp}: {G}eneral Non--Linear Optimization using
   Augmented {L}agrange Multiplier Method}.
 \newblock \proglang{R}~package version 1.16,
   \urlprefix\url{https://cran.r-project.org/package=Rsolnp}.
 
+\bibitem[{Gilbert and Varadhan(2016)}]{numDeriv}
+Gilbert P, Varadhan R (2016).
+\newblock \emph{\pkg{numDeriv}: Accurate Numerical Derivatives}.
+\newblock \proglang{R}~package version 2016.8-1,
+  \urlprefix\url{https://CRAN.R-project.org/package=numDeriv}.
+
 \bibitem[{Gneiting \emph{et~al.}(2007)Gneiting, Balabdaoui, and
   Raftery}]{gneiting_etal.2007}
 Gneiting T, Balabdaoui F, Raftery AE (2007).
 \newblock \enquote{Probabilistic Forecasts, Calibration and Sharpness.}
-\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
-  Methodology)}, \textbf{69}(2), 243--268.
+\newblock \emph{Journal of the Royal Statistical Society B}, \textbf{69}(2),
+  243--268.
 \newblock \doi{10.1111/j.1467-9868.2007.00587.x}.
 
 \bibitem[{Gneiting and Ranjan(2011)}]{gneiting_ranjan.2012}
@@ -987,19 +981,17 @@ Harvey AC, Sucarrat G (2014).
   320--338.
 \newblock \doi{10.1016/j.csda.2013.09.022}.
 
-\bibitem[{Harvey and Thiele(2015)}]{harvey_thiele.2014}
-Harvey AC, Thiele S (2015).
+\bibitem[{Harvey and Thiele(2016)}]{harvey_thiele.2014}
+Harvey AC, Thiele S (2016).
 \newblock \enquote{Testing Against Changing Correlation.}
+\newblock \emph{Journal of Empirical Finance}, \textbf{38, Part B}, 575--589.
 \newblock \doi{10.1016/j.jempfin.2015.09.003}.
-\newblock Forthcoming in the Journal of Empirical Finance.
 
 \bibitem[{Jaeckel and Rebonato(1999)}]{jaeckel_rebonato.1999}
 Jaeckel P, Rebonato R (1999).
 \newblock \enquote{The Most General Methodology for Creating a Valid
   Correlation Matrix for Risk Management and Option Pricing Purposes.}
 \newblock \emph{Journal of Risk}, \textbf{2}(2), 17--28.
-\newblock
-  \urlprefix\url{http://www.risk.net/journal-of-risk/technical-paper/2161082/the-methodology-creating-valid-correlation-matrix-risk-management-option-pricing-purposes}.
 
 \bibitem[{Janus \emph{et~al.}(2014)Janus, Koopman, and Lucas}]{janus_etal.2014}
 Janus P, Koopman SJ, Lucas A (2014).
@@ -1011,15 +1003,16 @@ Janus P, Koopman SJ, Lucas A (2014).
 \bibitem[{Kalman(1960)}]{kalman.1960}
 Kalman RE (1960).
 \newblock \enquote{A New Approach to Linear Filtering and Prediction Problems.}
-\newblock \emph{Transactions of the ASME--Journal of Basic Engineering},
-  \textbf{82}(Series D), 35--45.
+\newblock \emph{Transactions of the ASME--Journal of Basic Engineering D},
+  \textbf{82}, 35--45.
+\newblock \doi{10.1115/1.3662552}.
 
 \bibitem[{Kotz \emph{et~al.}(2001)Kotz, Kozubowski, and
   Podgorski}]{kotz_etal.2001}
 Kotz S, Kozubowski T, Podgorski K (2001).
 \newblock \emph{The {L}aplace Distribution and Generalizations: {A} Revisit
   with Applications to Communications, Economics, Engineering, and Finance}.
-\newblock Springer--Verlag.
+\newblock Springer--Verlag, New York.
 \newblock \urlprefix\url{http://www.springer.com/us/book/9780817641665}.
 
 \bibitem[{Lucas and Zhang(2016)}]{lucas_zhang.2016}
@@ -1030,12 +1023,20 @@ Lucas A, Zhang X (2016).
   293--302.
 \newblock \doi{10.1016/j.ijforecast.2015.09.003}.
 
-\bibitem[{Oh and Patton(2013)}]{oh_patton.2013}
-Oh DH, Patton AJ (2013).
+\bibitem[{Marcellino \emph{et~al.}(2006)Marcellino, Stock, and
+  Watson}]{marcellino_etal.2006}
+Marcellino M, Stock JH, Watson MW (2006).
+\newblock \enquote{A Comparison of Direct and Iterated Multistep {AR} Methods
+  for Forecasting Macroeconomic Time Series.}
+\newblock \emph{Journal of Econometrics}, \textbf{135}(1--2), 499--526.
+\newblock \doi{10.1016/j.jeconom.2005.07.020}.
+
+\bibitem[{Oh and Patton(2016)}]{oh_patton.2016}
+Oh DH, Patton AJ (2016).
 \newblock \enquote{Time--Varying Systemic Risk: {E}vidence from a Dynamic
   Copula Model of {CDS} Spreads.}
+\newblock \emph{Journal of Business \& Economic Statistics}, \textbf{0}, 1--47.
 \newblock \doi{10.1080/07350015.2016.1177535}.
-\newblock Forthcoming in the Journal of Business \& Economic Statistics.
 
 \bibitem[{Pinheiro and Bates(1996)}]{pinheiro_bates.1996}
 Pinheiro JC, Bates DM (1996).
@@ -1049,14 +1050,14 @@ Pourahmadi M, Wang X (2015).
 \newblock \enquote{Distribution of Random Correlation Matrices:
   {H}yperspherical Parameterization of the {C}holesky Factor.}
 \newblock \emph{Statistics \& Probability Letters}, \textbf{106}, 5--12.
+\newblock \doi{10.1016/j.spl.2015.06.015}.
 
-\bibitem[{\proglang{R} {Core Team}(2016)}]{R}
-\proglang{R} {Core Team} (2016).
+\bibitem[{\proglang{R} {Core Team}(2017)}]{R}
+\proglang{R} {Core Team} (2017).
 \newblock \emph{\proglang{R}: {A} Language and Environment for Statistical
   Computing}.
 \newblock \proglang{R} Foundation for Statistical Computing, Vienna, Austria.
-\newblock \proglang{R}~version 3.2.3,
-  \urlprefix\url{https://www.R-project.org/}.
+\newblock \urlprefix\url{https://www.R-project.org/}.
 
 \bibitem[{Rapisarda \emph{et~al.}(2007)Rapisarda, Brigo, and
   Mercurio}]{rapisarda_etal.2007}
@@ -1065,21 +1066,21 @@ Rapisarda F, Brigo D, Mercurio F (2007).
 \newblock \emph{IMA Journal of Management Mathematics}, \textbf{18}(1), 55--73.
 \newblock \doi{10.1016/j.spl.2015.06.015}.
 
-\bibitem[{Ripley(2015)}]{MASS}
-Ripley B (2015).
+\bibitem[{Ripley(2016)}]{MASS}
+Ripley B (2016).
 \newblock \emph{\pkg{MASS}: {S}upport Functions and Datasets for {V}enables and
   {R}ipley's {MASS}}.
 \newblock \proglang{R}~package version 7.3-45,
   \urlprefix\url{https://CRAN.R-project.org/package=MASS}.
 
-\bibitem[{Ryan(2015)}]{quantmod}
-Ryan JA (2015).
+\bibitem[{Ryan(2016)}]{quantmod}
+Ryan JA (2016).
 \newblock \emph{\pkg{quantmod}: {Q}uantitative Financial Modelling Framework}.
-\newblock \proglang{R}~package version 0.4-6,
+\newblock \proglang{R}~package version 0.4-7,
   \urlprefix\url{https://CRAN.R-project.org/package=quantmod}.
 
-\bibitem[{Ryan and Ulrich(2015)}]{xts}
-Ryan JA, Ulrich JM (2015).
+\bibitem[{Ryan and Ulrich(2014)}]{xts}
+Ryan JA, Ulrich JM (2014).
 \newblock \emph{\pkg{xts}: {E}xtensible Time Series}.
 \newblock \proglang{R}~package version 0.9-7,
   \urlprefix\url{https://CRAN.R-project.org/package=xts}.
@@ -1099,24 +1100,52 @@ Shephard N (2005).
 
 \bibitem[{Sucarrat(2013)}]{sucarrat.2013}
 Sucarrat G (2013).
-\newblock \enquote{betategarch: Simulation, estimation and forecasting of
-  Beta-Skew-t-EGARCH models.}
-\newblock \emph{The R Journal}, \textbf{5}(2), 137--147.
+\newblock \enquote{\pkg{betategarch}: Simulation, Estimation and Forecasting of
+  Beta-Skew-t-EGARCH Models.}
+\newblock \emph{The \proglang{R} Journal}, \textbf{5}(2), 137--147.
 \newblock
   \urlprefix\url{https://journal.r-project.org/archive/2013-2/sucarrat.pdf}.
 
 \bibitem[{Venables and Ripley(2002)}]{MASS.2002}
 Venables WN, Ripley BD (2002).
-\newblock \emph{Modern Applied Statistics with {S}}.
-\newblock Fourth edition. Springer--Verlag, New York.
-\newblock ISBN 0-387-95457-0,
-  \urlprefix\url{http://www.stats.ox.ac.uk/pub/MASS4}.
+\newblock \emph{Modern Applied Statistics with \proglang{S}}.
+\newblock 4th edition. Springer--Verlag, New York.
+\newblock \urlprefix\url{http://www.stats.ox.ac.uk/pub/MASS4}.
+
+\bibitem[{Wuertz \emph{et~al.}(2016)Wuertz, with contribution~from
+  Michal~Miklovic, Boudt, Chausse, and {others}}]{fGarch}
+Wuertz D, with contribution~from Michal~Miklovic YC, Boudt C, Chausse P,
+  {others} (2016).
+\newblock \emph{fGarch: Rmetrics - Autoregressive Conditional Heteroskedastic
+  Modelling}.
+\newblock R package version 3010.82.1,
+  \urlprefix\url{https://CRAN.R-project.org/package=fGarch}.
 
 \bibitem[{Ye(1988)}]{ye.1988}
 Ye Y (1988).
 \newblock \emph{Interior Algorithms for Linear, Quadratic, and Linearly
   Constrained Convex Programming}.
 \newblock Ph.D. thesis, Stanford University.
+
+\bibitem[{Zeileis(2004)}]{zeileis.2004}
+Zeileis A (2004).
+\newblock \enquote{Econometric Computing with HC and HAC Covariance Matrix
+  Estimators.}
+\newblock \emph{Journal of Statistical Software}, \textbf{11}(10), 1--17.
+\newblock \urlprefix\url{http://www.jstatsoft.org/v11/i10/}.
+
+\bibitem[{Zeileis and Grothendieck(2005)}]{zoo}
+Zeileis A, Grothendieck G (2005).
+\newblock \enquote{\pkg{zoo}: \proglang{S3} Infrastructure for Regular and
+  Irregular Time Series.}
+\newblock \emph{Journal of Statistical Software}, \textbf{14}(6), 1--27.
+\newblock \doi{10.18637/jss.v014.i06}.
+
+\bibitem[{Zeileis and Hothorn(2002)}]{lmtest}
+Zeileis A, Hothorn T (2002).
+\newblock \enquote{Diagnostic Checking in Regression Relationships.}
+\newblock \emph{R News}, \textbf{2}(3), 7--10.
+\newblock \urlprefix\url{https://CRAN.R-project.org/doc/Rnews/}.
 
 \bibitem[{Zhu and Galbraith(2010)}]{zhu_galbraith.2010}
 Zhu D, Galbraith JW (2010).
@@ -1136,7 +1165,7 @@ Zhu D, Galbraith JW (2010).
 \section[The GAS model with conditional Student-t distribution]{The GAS model with conditional \Student distribution}\label{sec:gas_t}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Let us consider the case where the distribution of the univariate random variable $y_t\in\Re$, conditionally on $\by_{1:t-1}$, is \Student with location $\mu_t$, scale $\phi_t$ and $\nu_t$ degrees of freedom, \emph{i.e.}, $\btheta_t = (\mu_t,\phi_t,\nu_t)^\prime$ and:
+Let us consider the case where the distribution of the univariate random variable $y_t\in\Re$, conditionally on $\by_{1:t-1}$, is \Student with location $\mu_t$, scale $\phi_t \in\Re^+$, and $\nu_t>2$ degrees of freedom\footnote{Note that the degrees of freedom parameter is assumed to be a real number larger than two, which makes the computation of the partial derivative straightforward.}, \emph{i.e.}, $\btheta_t = (\mu_t,\phi_t,\nu_t)^\prime$ and:
 %
 \begin{equation}~\label{eq:std}
   p(y_t;\btheta_t) \bydef \frac{\Gamma\left(\frac{\nu_t + 1}{2}\right)}{\Gamma\left(\frac{\nu_t}{2}\right)\phi_t\sqrt{\pi\nu_t}}\left(1 + \frac{\left(y_t - \mu_t\right)^2}{\nu_t\phi_t^2}\right)^{-\frac{\nu_t + 1}{2}} \,.
@@ -1145,7 +1174,7 @@ Let us consider the case where the distribution of the univariate random variabl
 As will become clear, the score corresponding to the \Student distribution has the advantage of dampening the effect of extreme observations on the future volatility, when
 the \Student has sufficiently fat tails. It has been used by \citet{creal_etal.2013} and \citet{lucas_zhang.2016} under the name tGAS, and by \citet{harvey.2013} and \citet{harvey_luati.2014} under the name Beta--t--EGARCH.
 
-Differentiating the logarithm of~\eqref{eq:std} with respect to $\btheta_t$ leads to the score vector $\bnabla_t(y_t,\btheta_t)=(\nabla_t^\mu,\nabla_t^\phi,\nabla_t^\nu)'$, with:
+Differentiating the logarithm of~\eqref{eq:std} with respect to $\btheta_t$ leads to the score vector $\bnabla_t(y_t,\btheta_t)=(\nabla_t^\mu,\nabla_t^\phi,\nabla_t^\nu)^\top$, with:
 %
 \begin{align*}%~\label{eq:score_std}
 \begin{split}
@@ -1156,9 +1185,9 @@ Differentiating the logarithm of~\eqref{eq:std} with respect to $\btheta_t$ lead
 \end{split}
 \end{align*}
 %
-where $\psi(\cdot)$ is the Digamma function. Without loss of generality, let us consider the case where $\gamma = 0$ with no reparametrization, \emph{i.e.}, $\btheta_t = \widetilde\btheta_t$. The results when $\gamma \neq 0$ and a mapping function $\Lambda(\cdot)$ for $\btheta_t$ is introduced are qualitatively the same. Clearly, what controls for the response to extreme observations in the conditional score $\bnabla_t(y_t,\btheta_t)$ is the degree of freedom parameter $\nu_t$. When $\nu_t$ is small, say $\nu_t = 3$, the conditional distribution of $y_t$ has high probability mass in the tails, which means that extreme observations, which would be considered outliers under the conditionally normal distribution, are likely to be observed.
+where $\psi(\cdot)$ is the Digamma function. Without loss of generality, let us consider the case where $\gamma = 0$ with no reparametrization, \emph{i.e.}, $\btheta_t = \widetilde\btheta_t$. The results when $\gamma \neq 0$ and a mapping function $\Lambda(\cdot)$ for $\btheta_t$ is introduced are qualitatively the same. Clearly, what controls for the response to extreme observations in the conditional score $\bnabla_t(y_t,\btheta_t)$ is the degree of freedom parameter $\nu_t$. When $\nu_t$ is small, say $\nu_t = 3$, the conditional distribution of $y_t$ has high probability mass in the tails, which means that extreme observations, which would be considered outliers under the conditionally Gaussian distribution, are likely to be observed.
 
-If we introduce the following mapping function for the unrestricted vector of parameter $\widetilde\btheta_t = (\widetilde\mu_t,\widetilde\phi_t,\widetilde\nu_t)'$:
+If we introduce the following mapping function for the unrestricted vector of parameter $\widetilde\btheta_t = (\widetilde\mu_t,\widetilde\phi_t,\widetilde\nu_t)^\top$:
 %
 \begin{equation*}%~\label{eq:mapping}
   \Lambda(\widetilde\btheta_t) \bydef \begin{cases}
@@ -1173,11 +1202,11 @@ with $c=2$ in order to ensure the existence of $V_{t-1}\left[y_t\right]$, then t
 \begin{align}~\label{eq:update_studentt}
 \begin{split}
   \btheta_{t+1} &\bydef  \Lambda(\widetilde\btheta_{t+1})\\
-  \widetilde\btheta_{t+1} &\bydef \bkappa + \bA\mathcal{J}(\widetilde\btheta_t)'\bnabla_t(y_t,\btheta_t) + \bB\widetilde\btheta_t \,,
+  \widetilde\btheta_{t+1} &\bydef \bkappa + \bA\mathcal{J}(\widetilde\btheta_t)^\top\bnabla_t(y_t,\btheta_t) + \bB\widetilde\btheta_t \,,
 \end{split}
 \end{align}
 %
-where $\bkappa\bydef(\kappa_\mu, \kappa_\phi, \kappa_\nu)'$, $\bA \bydef \diag(a_\mu, a_\phi, a_\nu)$ and $\bB \bydef \diag(b_\mu, b_\phi, b_\nu)$. In this particular case, the Jacobian matrix $\mathcal{J}(\widetilde\btheta_t)$ takes the form:
+where $\bkappa\bydef(\kappa_\mu, \kappa_\phi, \kappa_\nu)^\top$, $\bA \bydef \diag(a_\mu, a_\phi, a_\nu)$ and $\bB \bydef \diag(b_\mu, b_\phi, b_\nu)$. In this particular case, the Jacobian matrix $\mathcal{J}(\widetilde\btheta_t)$ takes the form:
 %
 \begin{equation*}
   \mathcal{J}(\widetilde\btheta_t) = \begin{pmatrix}
@@ -1205,7 +1234,7 @@ Generally, there are three types of constraints we want to impose on $\theta_{i,
 %
 the additional case when $\theta_{i,t}\in\Re$, and thus $\widetilde\theta_{i,t} = \theta_{i,t}$, implicitly requires that $\lambda_i:\Re\to\Re$ is the identity function.
 
-The first case, $\theta_{i,t}>c$,\footnote{The case $\theta_{i,t}<c$ follows immediately.} covers the situation where, for example, $\theta_{i,t}$ is a scale parameter and, consequently, its positiveness has to be imposed (\emph{i.e.}, $c=0$). In this case, $\lambda_i:\Re\to\left[c,\infty\right)$, and the exponential link function, defined as:
+The first case, $\theta_{i,t}>c$, covers the situation where, for example, $\theta_{i,t}$ is a scale parameter and, consequently, its positiveness has to be imposed (\emph{i.e.}, $c=0$).\footnote{The case $\theta_{i,t}<c$ follows immediately.} In this case, $\lambda_i:\Re\to\left[c,\infty\right)$, and the exponential link function, defined as:
 %
 \begin{equation}\label{eq:exponential_link}
   \theta_{i,t} = \exp(\widetilde\theta_{i,t}) + c\,,

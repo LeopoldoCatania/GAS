@@ -2,7 +2,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-//[[Rcpp::export]]
 double dSTD(double dY, double dMu, double dPhi2 , double dNu, bool bLog=false) {
 
   double dLPDF = Rf_lgammafn((dNu+1.0)/2.0) -  Rf_lgammafn(dNu/2.0) - 0.5*log(dPhi2) - 0.5*log(M_PI*dNu) - (dNu+1.0)/2.0 * log(1.0 + pow(dY-dMu,2.0)/(dNu*dPhi2));

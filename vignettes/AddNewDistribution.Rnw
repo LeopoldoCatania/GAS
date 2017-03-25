@@ -31,7 +31,7 @@
 
 \section*{Add a new distribution to the GAS package}
 
-This short note illustrates how to add a new distribution in the \pkg{GAS} package. Changes have to be made in the \code{.R} files inside the R folder and in the \code{.cpp} and \code{.h} files inside the src folder of the package tarball, respecrtively.\\
+This short note illustrates how to add a new distribution in the \pkg{GAS} package. Changes have to be made in the \code{.R} files inside the R folder and in the \code{.cpp} and \code{.h} files inside the src folder of the package tarball, respectively.\\
 %
 The following guidelines apply when:
 %

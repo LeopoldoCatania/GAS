@@ -14,5 +14,8 @@ bring the starting date of the data to 2001.
 \usage{data("dji30ret")}
 \format{A data.frame containing 5,521x30 observations.}
 \source{Yahoo Finance}
-\references{Ghalanos A (2015). "rugarch: Univariate GARCH models." R package version 1.3-6, \url{https://cran.r-project.org/package=rugarch}.}
+\references{
+Ghalanos A (2015). 
+"rugarch: Univariate GARCH models." 
+\url{https://cran.r-project.org/package=rugarch}.}
 \keyword{datasets}

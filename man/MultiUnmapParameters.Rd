@@ -5,7 +5,8 @@
 	Inverse of \link{MultiMapParameters}
 }
 \description{
-		Transform distribution parameters into the unrestricted parameters. The unrestricted vector of parameters is updated using the GAS recursion.
+		Transform distribution parameters into the unrestricted parameters. 
+		The unrestricted vector of parameters is updated using the GAS recursion.
 	}
 \usage{
 MultiUnmapParameters(Theta, Dist, N)
@@ -22,7 +23,9 @@ MultiUnmapParameters(Theta, Dist, N)
 %
 }
 \details{
-	The order of the parameters is generally: locations, scales, correlations, shape. When the distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.
+	The order of the parameters is generally: locations, scales, correlations, shape. When the 
+	distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. 
+	See also \link{DistInfo} for specific distributions.
 }
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
@@ -35,14 +38,14 @@ N = 3
 Dist = "mvt"
 
 # Vector of location parameters (this is not transformed).
-Mu  = c(0.1,0.2,0.3)
+Mu  = c(0.1, 0.2, 0.3)
 
 # Vector of scales parameters for the firs, second and third variables.
 Phi = c(1.0, 1.2, 0.3)
 
 # This represents vec(R), where R is the correlation matrix.
 # Note that is up to the user to ensure that vec(R) implies a proper correlation matrix
-Rho = c(0.1,0.2,0.3)
+Rho = c(0.1, 0.2, 0.3)
 
 # Vector of parameters such that the degrees of freedom are 7.
 Theta = c(Mu, Phi, Rho, 7)
@@ -53,5 +56,4 @@ Theta_tilde
 
 # It works
 all(abs(MultiMapParameters(Theta_tilde, Dist, N) - Theta) < 1e-16)
-
 }

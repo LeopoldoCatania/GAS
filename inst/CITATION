@@ -1,0 +1,37 @@
+citHeader("To cite package 'GAS' in publications use:")
+
+citEntry(entry="Manual",
+         title = "GAS: Generalized Autoregressive Score Models",
+         author = personList(person(given="Leopoldo", family="Catania"),
+                             person(given="Kris", family="Boudt"),
+                             person(given="David", family="Ardia")),
+         year = "2017",
+         note = "R package version 0.1.6",
+         url  = "https://CRAN.R-project.org/package=GAS",
+         textVersion = "Catania, L., Boudt, K., Ardia, D. (2016). GAS: Generalized Autoregressive Score Models.
+         R package. URL https://CRAN.R-project.org/package=GAS")
+
+
+citEntry(entry="Article",
+         title = "GAS: Generalized Autoregressive Score Models in R",
+         author = personList(person(given="David", family="Ardia"),
+                             person(given="Kris", family="Boudt"),
+                             person(given="Leopoldo", family="Catania")
+         ),
+         year = "2016",
+         journal = "Working paper",
+         url  = "https://ssrn.com/abstract=2825380",
+         textVersion = "Ardia, D., Boudt, K., Catania, L. (2016a). Generalized autoregressive score models in R: The GAS package.
+         Working paper. https://ssrn.com/abstract=2825380")
+
+citEntry(entry="Article",
+         title = "Value-at-Risk prediction in R with the GAS package",
+         author = personList(person(given="David", family="Ardia"),
+                             person(given="Kris", family="Boudt"),
+                             person(given="Leopoldo", family="Catania")
+         ),
+         year = "2016",
+         journal = "Working paper",
+         url  = "https://ssrn.com/abstract=2871444",
+         textVersion = "Ardia, D., Boudt, K., Catania, L. (2016b). Value-at-Risk prediction in R with the GAS package.
+         Working paper. https://ssrn.com/abstract=2871444")

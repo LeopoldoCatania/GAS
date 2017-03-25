@@ -1,39 +1,64 @@
-PlotMenu <- function(object) {
-    if (is(object, "uGASFit")) {
-        vplotMenu = c("Filtered Parameters", "Conditional Moments",
-            "Probability Integral Transformation", "Data", "Data + Filtered Mean")
+PlotMenu <- function(x) {
+    if (is(x, "uGASFit")) {
+        vplotMenu = c("Filtered Parameters",
+                      "Conditional Moments",
+                      "Probability Integral Transformation",
+                      "Data",
+                      "Data + Filtered Mean")
     }
-    if (is(object, "mGASFit")) {
-        vplotMenu = c("Filtered Parameters", "Conditional Moments", "Data")
+    if (is(x, "mGASFit")) {
+        vplotMenu = c("Filtered Parameters",
+                      "Conditional Moments",
+                      "Data")
     }
-    if (is(object, "uGASSim")) {
-        vplotMenu = c("Filtered Parameters", "Conditional Moments", "Simulated Data")
+    if (is(x, "uGASSim")) {
+        vplotMenu = c("Filtered Parameters",
+                      "Conditional Moments",
+                      "Simulated Data")
     }
-    if (is(object, "mGASSim")) {
-        vplotMenu = c("Filtered Parameters", "Conditional Moments", "Simulated Data")
+    if (is(x, "mGASSim")) {
+        vplotMenu = c("Filtered Parameters",
+                      "Conditional Moments",
+                      "Simulated Data")
     }
-    if (is(object, "uGASFor")) {
-        Roll = object@Info$Roll
+    if (is(x, "uGASFor")) {
+        Roll = x@Info$Roll
         if (!Roll)
-            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values",
-                "Parameters Forecast with confidence bands + Filtered Values", "Conditional Moments Forecast",
-                "Conditional Moments Forecast + In Sample Moments")
+            vplotMenu = c("Parameters Forecast",
+                          "Parameters Forecast with confidence bands",
+                          "Parameters Forecast + Filtered Values",
+                          "Parameters Forecast with confidence bands + Filtered Values",
+                          "Conditional Moments Forecast",
+                          "Conditional Moments Forecast + In Sample Moments")
         if (Roll)
-            vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments", "Log scores")
+            vplotMenu = c("Parameters Forecast",
+                          "Forecast vs Realized",
+                          "Conditional Moments",
+                          "Log scores")
     }
-    if (is(object, "mGASFor")) {
-        Roll = object@Info$Roll
+    if (is(x, "mGASFor")) {
+        Roll = x@Info$Roll
         if (!Roll)
-            vplotMenu = c("Parameters Forecast", "Parameters Forecast with confidence bands", "Parameters Forecast + Filtered Values",
-                "Parameters Forecast with confidence bands + Filtered Values")
+            vplotMenu = c("Parameters Forecast",
+                          "Parameters Forecast with confidence bands",
+                          "Parameters Forecast + Filtered Values",
+                          "Parameters Forecast with confidence bands + Filtered Values")
         if (Roll)
-            vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments", "Log scores")
+            vplotMenu = c("Parameters Forecast",
+                          "Forecast vs Realized",
+                          "Conditional Moments",
+                          "Log scores")
     }
-    if (is(object, "uGASRoll")) {
-        vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments", "Probability Integral Transformation")
+    if (is(x, "uGASRoll")) {
+        vplotMenu = c("Parameters Forecast",
+                      "Forecast vs Realized",
+                      "Conditional Moments",
+                      "Probability Integral Transformation")
     }
-    if (is(object, "mGASRoll")) {
-        vplotMenu = c("Parameters Forecast", "Forecast vs Realized", "Conditional Moments")
+    if (is(x, "mGASRoll")) {
+        vplotMenu = c("Parameters Forecast",
+                      "Forecast vs Realized",
+                      "Conditional Moments")
     }
 
     return(vplotMenu)
@@ -50,14 +75,12 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
             if (i == iK)
                 par(mar = c(3, 4, 0, 2))
 
-
-            vLim = c(min(mTheta[, i]), max(mTheta[, i]))
-
+            vLim = range(mTheta[, i])
 
             plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
-            lines(vDates, mTheta[, i], col = "black")
+            lines(vDates, mTheta[, i])
             axis(4, at = mean(vLim), labels = colnames(mTheta)[i], tick = F, padj = -1)
         }
         if (!is(vDates, "integer")) {
@@ -94,7 +117,7 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
                       ylim = vLim)
 
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-                    lines(vDates, mTheta[, i], col = "black")
+                    lines(vDates, mTheta[, i])
                     axis(4, at = mean(vLim), labels = colnames(mTheta)[i], tick = F, padj = -1)
 
                     if (any(i == plotSeq - 1) | (i == iK)) {
@@ -147,7 +170,7 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
                 las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
-            lines(vDates_is, mTheta_is[, i], col = "black")
+            lines(vDates_is, mTheta_is[, i])
             lines(vDates_os, mTheta_os[, i], col = "red")
 
             abline(v = tail(vDates_is, 1), lty = 2)
@@ -187,7 +210,7 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
                       las = 1, ylim = vLim)
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
-                    lines(vDates_is, mTheta_is[, i], col = "black")
+                    lines(vDates_is, mTheta_is[, i])
                     lines(vDates_os, mTheta_os[, i], col = "red")
 
                     abline(v = tail(vDates_is, 1), lty = 2)
@@ -227,7 +250,7 @@ PlotSingleSeries <- function(vTheta, iT, vDates) {
 
     plot(vDates, vTheta, type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-    lines(vDates, vTheta, col = "black")
+    lines(vDates, vTheta)
     axis(4, at = mean(vLim), labels = "vY", tick = F, padj = -1, las = 1)
 
     if (!is(vDates, "integer")) {
@@ -251,14 +274,16 @@ PlotForecastVsRealized_Univ <- function(mRealVsForecast, vDates_os, object) {
 
     plot(vDates_os, mRealVsForecast[, 1], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-    lines(vDates_os, mRealVsForecast[, 2], col = "black")
+    lines(vDates_os, mRealVsForecast[, 2])
     lines(vDates_os, mRealVsForecast[, 1], col = "red")
 
-    if (is(object, "uGASFor") | is(object, "uGASRoll"))
+    if (is(object, "uGASFor") | is(object, "uGASRoll")) {
         legend("topright", legend = c("Realized", "Predicted"), col = c("black", "red"), lty = c(1,
             1))
-    if (is(object, "uGASFit"))
+    }
+    if (is(object, "uGASFit")) {
         legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1, 1))
+    }
 
     if (!is(vDates_os, "integer")) {
         axis.Date(1, at = seq(min(vDates_os), max(vDates_os), vDates_os[2] - vDates_os[1]))
@@ -290,7 +315,7 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
             plot(vDates_os, mReal[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
 
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-            lines(vDates_os, mReal[, i], col = "black")
+            lines(vDates_os, mReal[, i])
             lines(vDates_os, mForcasted[, i], col = "red")
 
             axis(4, at = mean(vLim), labels = colnames(mReal)[i], tick = F, padj = -1)
@@ -388,7 +413,9 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
             lines(vDates, mTheta[, i], col = "red")
-            for (q in 1:iQ) lines(vDates, cBands[, q, i], col = "blue")
+            for (q in 1:iQ) {
+              lines(vDates, cBands[, q, i], col = "blue")
+            }
 
             axis(4, at = mean(vLim), labels = colnames(mTheta)[i], tick = F, padj = -1)
         }
@@ -425,8 +452,10 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
                       ylim = vLim)
 
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-                    lines(vDates, mTheta[, i], col = "black")
-                    for (q in 1:iQ) lines(vDates, cBands[, q, i], col = "red")
+                    lines(vDates, mTheta[, i])
+                    for (q in 1:iQ) {
+                      lines(vDates, cBands[, q, i], col = "red")
+                    }
                     axis(4, at = mean(vLim), labels = colnames(mTheta)[i], tick = F, padj = -1)
 
                     if (any(i == plotSeq - 1) | (i == iK)) {
@@ -459,8 +488,9 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
 
     iS = nrow(mTheta_is)
 
-    if (is.numeric(vDates_is))
+    if (is.numeric(vDates_is)) {
         vDates_os = (length(vDates_is) + 1):(length(vDates_is) + iH)
+    }
 
     vDateFull = c(vDates_is, vDates_os)
 
@@ -480,10 +510,12 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
                 las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
-            lines(vDates_is, mTheta_is[, i], col = "black")
+            lines(vDates_is, mTheta_is[, i])
             lines(vDates_os, mTheta_os[, i], col = "red")
 
-            for (q in 1:iQ) lines(vDates_os, cBands[, q, i], col = "blue")
+            for (q in 1:iQ) {
+              lines(vDates_os, cBands[, q, i], col = "blue")
+            }
             abline(v = tail(vDates_is, 1), lty = 2)
             axis(4, at = mean(vLim), labels = colnames(mTheta_is)[i], tick = F, padj = -1)
         }
@@ -508,12 +540,15 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
 
                 for (i in Start:(Start + 9)) {
                   if (i <= iK) {
-                    if (any(i == plotSeq))
+                    if (any(i == plotSeq)) {
                       par(mar = c(0, 4, 0.1, 2))
-                    if (all(i != plotSeq) & all(i != plotSeq - 1))
+                    }
+                    if (all(i != plotSeq) & all(i != plotSeq - 1)) {
                       par(mar = c(0, 4, 0, 2))
-                    if (any(i == plotSeq - 1))
+                    }
+                    if (any(i == plotSeq - 1)) {
                       par(mar = c(3, 4, 0, 2))
+                    }
 
                     vLim = c(min(cBands[, , i], mTheta_is[, i]), max(cBands[, , i], mTheta_is[, i]))
 
@@ -521,10 +556,12 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
                       las = 1, ylim = vLim)
                     grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
 
-                    lines(vDates_is, mTheta_is[, i], col = "black")
+                    lines(vDates_is, mTheta_is[, i])
                     lines(vDates_os, mTheta_os[, i], col = "red")
 
-                    for (q in 1:iQ) lines(vDates_os, cBands[, q, i], col = "blue")
+                    for (q in 1:iQ) {
+                      lines(vDates_os, cBands[, q, i], col = "blue")
+                    }
 
                     abline(v = tail(vDates_is, 1), lty = 2)
                     axis(4, at = mean(vLim), labels = colnames(mTheta_is)[i], tick = F, padj = -1)

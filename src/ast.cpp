@@ -4,7 +4,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-//[[Rcpp::export]]
 double Kast(double dX){
 
   double dOut = Rf_lgammafn((dX+1.0)/2.0) - 0.5*log(M_PI*dX) - Rf_lgammafn(dX*0.5);
@@ -346,26 +345,3 @@ double qAST(double dP, double dMu, double dSigma, double dAlpha, double dNu1, do
   Rprintf("Bisection Warning: Maximum numeber of iteration reached");
   return NA_LOGICAL;
 }
-
-
-////[[Rcpp::export]]
-// double qAST(double dP, double dMu, double dSigma, double dAlpha, double dV1, double dV2) {
-//
-//   double dK1=Kast(dV1);
-//   double dK2=Kast(dV2);
-//
-//   double dMin_p_a= minDouble_C(dP, dAlpha);
-//   double dMax_p_a= maxDouble_C(dP, dAlpha);
-//
-//   double dAlpha_star= dAlpha * dK1/(dAlpha*dK1 + (1.0 - dAlpha)*dK2);
-//
-//   double dP1 = dMin_p_a/(2.0 * dAlpha);
-//   double dP2 = (dMax_p_a + 1.0 - 2.0 * dAlpha)/(2.0 * (1.0 - dAlpha));
-//
-//   double F1_inv = R::qt(dP1, dV1, 1, 0) ;
-//   double F2_inv = R::qt(dP2, dV2, 1, 0) ;
-//
-//   double x = 2.0 * dAlpha_star * F1_inv  + 2.0 * (1.0 - dAlpha_star) * F2_inv;
-//
-//   return x ;
-// }

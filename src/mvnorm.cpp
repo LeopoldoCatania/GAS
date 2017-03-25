@@ -69,7 +69,6 @@ double dmvnorm_ThetaParam(arma::vec vY,
   return dPDF;
 
 }
-//[[Rcpp::export]]
 arma::vec RhoScore(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, int iN){
 
   arma::mat mRho_S = zeros(iN,iN);
@@ -98,7 +97,6 @@ arma::vec RhoScore(arma::vec vR, arma::mat mD, arma::vec vY, arma::vec vMu, int 
   return vR_s;
 
 }
-//[[Rcpp::export]]
 arma::vec DScore(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, int iN){
 
   arma::mat mU = zeros(iN,iN);
@@ -120,7 +118,6 @@ arma::vec DScore(arma::mat mD, arma::mat mR, arma::vec vY, arma::vec vMu, int iN
   return vD_s;
 
 }
-//[[Rcpp::export]]
 arma::vec MuScore(arma::vec vMu, arma::mat mD, arma::mat mR, arma::vec vY, int iN){
 
   arma::vec vU(iN);

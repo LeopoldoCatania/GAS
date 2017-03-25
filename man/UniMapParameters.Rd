@@ -4,7 +4,8 @@
 	Mapping function for univariate distributions
 }
 \description{
-	Map unrestricted vector of parameters into the proper space. This function transforms the parameters updated using the GAS recursion into their proper space.
+	Map unrestricted vector of parameters into the proper space. 
+	This function transforms the parameters updated using the GAS recursion into their proper space.
 	}
 \usage{
 UniMapParameters(Theta_tilde, Dist)
@@ -18,7 +19,9 @@ UniMapParameters(Theta_tilde, Dist)
 %
 }
 \details{
-	The order of the parameters is generally: \code{location}, \code{scale}, \code{skewness}, \code{shape}, \code{shape2}. When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.
+	The order of the parameters is generally: \code{location}, \code{scale}, \code{skewness}, \code{shape}, \code{shape2}. 
+	When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. 
+	See also \link{DistInfo} for specific distributions.
 }
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
@@ -40,5 +43,4 @@ Theta_tilde = c(0.1, log(1.5), log(7 - LowerNu()))
 Theta = UniMapParameters(Theta_tilde, Dist)
 
 Theta
-
 }

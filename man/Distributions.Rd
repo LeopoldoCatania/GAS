@@ -16,7 +16,8 @@
 	Distributions of the GAS package
 }
 \description{
-	Density, distribution function, quantile function, random generator, moments, scores and information matrix of univariate and multivariate distributions of the GAS package.
+	Density, distribution function, quantile function, random generator, moments, scores and 
+	information matrix of univariate and multivariate distributions of the GAS package.
 }
 \usage{
 ddist_Uni(y, Theta, Dist, log = FALSE)
@@ -40,7 +41,9 @@ Score_Multi(y, Theta, Dist)
 \code{numeric} Scalar probability.}
 %
 \item{Theta}{
-\code{numeric} Vector of distribution parameters. The order of the parameters is generally: \code{location, scale, skewness, shape, shape2}. When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.}
+\code{numeric} Vector of distribution parameters. The order of the parameters is generally: \code{location, scale, skewness, shape, shape2}. 
+When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. 
+See also \link{DistInfo} for specific distributions.}
 %
 \item{Dist}{
 \code{character} Label of the conditional distribution, see \link{DistInfo}.}
@@ -52,8 +55,12 @@ Score_Multi(y, Theta, Dist)
 \code{numeric} Integer. cross-sectional dimension for the multivariate case.}
 }
 \details{
-The function \code{mdist_Uni} returns a vector with four elements: \code{mean}, \code{variance}, \code{skewness} and \code{kurtosis} coefficients. The functions
-\code{Score_Uni} and \code{IM_Uni} returns the score and the Fisher information matrix for univariate distributions. The function \code{Score_Multi} returns the score for multivariate distributions. See \link{DistInfo} for the lists of supported distributions. These functions are not vectorized. \code{ddist_Uni} and \code{ddist_Multi} give the density, \code{pdist_Uni} gives the distribution function, \code{qdist_Uni} gives the quantile function, and \code{rdist_Uni} and \code{rdist_Multi} generate random deviates.
+The function \code{mdist_Uni} returns a vector with four elements: \code{mean}, \code{variance}, \code{skewness} 
+and \code{kurtosis} coefficients. The functions \code{Score_Uni} and \code{IM_Uni} returns the score and the Fisher information matrix 
+for univariate distributions. The function \code{Score_Multi} returns the score for multivariate distributions. 
+See \link{DistInfo} for the lists of supported distributions. 
+These functions are not vectorized. \code{ddist_Uni} and \code{ddist_Multi} give the density, \code{pdist_Uni} gives 
+the distribution function, \code{qdist_Uni} gives the quantile function, and \code{rdist_Uni} and \code{rdist_Multi} generate random deviates.
 }
 \value{
 \enumerate{
@@ -83,6 +90,5 @@ rdist_Uni(Theta, "sstd")
 
 #moments
 mdist_Uni(Theta, "sstd")
-
 }
 

@@ -6,3 +6,23 @@
 	bug in the unmapping function.
 	* Bug correction for quantile function and cdf of "norm".
 	* Bug correction for static optimization
+2017-03-20   Leopoldo Catania <leopoldo.catania@uniroma2.it>
+ * DESCRIPTION (Version): New version is 0.1.6.
+ * New method residuals
+ * New method summary
+ * Test files corrected
+ * The coef method for "uGASRoll", "mGASRoll", "uGASFit", "mGASFit"
+ now accept the additional logical argument do.list (defauls do.list = FALSE)
+ * The plot method now accepts the additional character argument "which" (default which = NULL)
+ * The plot method now does not call dev.off()
+ * Corrected bug in the plot method for objects mGASFit and mGASSim
+ * Corrected bug for getMoments method for the mGASSim object
+ * UniGASSim() and MultiGASSim() now accept an uGASFit and mGASFit object as principal argument
+ * Corrected bug for information matrix in the sstd case
+ * Bug correction for DistInfo("ast1")
+ * The user can now provide her personal optimizer
+ * mapping functions are now roboust to numerica under/overflow
+ * added warning for non positive definite hessian matrices
+ * added documentation for the plot method
+ * Added CITATION
+

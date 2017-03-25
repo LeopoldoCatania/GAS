@@ -1,5 +1,19 @@
 
-UniGASSim <- function(T.sim, kappa, A, B, Dist, ScalingType) {
+UniGASSim <- function(fit = NULL, T.sim = 1000, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
+
+  if (!is.null(fit)) {
+    lCoef = coef(fit, do.list = TRUE)
+    kappa = lCoef$lCoef$vKappa
+    A = lCoef$lCoef$mA
+    B = lCoef$lCoef$mB
+    Dist = getDist(fit)
+    ScalingType = getScalingType(fit)
+  } else {
+    if (any(is.null(kappa), is.null(A), is.null(B), is.null(Dist), is.null(ScalingType))) {
+      stop("If an uGASFit object is not provided, arguments kappa, A, B,
+           Dist and ScalingType, have to be provided")
+    }
+  }
 
     iT = T.sim
 
@@ -13,12 +27,37 @@ UniGASSim <- function(T.sim, kappa, A, B, Dist, ScalingType) {
 
     mMoments = EvalMoments_univ(lSim$mTheta, Dist)
 
-    Sim <- new("uGASSim", ModelInfo = list(iT = iT, iK = iK, vKappa = vKappa, mA = mA, mB = mB, Dist = Dist,
-        ScalingType = ScalingType), GASDyn = lSim, Data = list(vY = lSim$vY, Moments = mMoments))
+    Sim <- new("uGASSim",
+               ModelInfo = list(iT = iT,
+                                iK = iK,
+                                vKappa = vKappa,
+                                mA = mA,
+                                mB = mB,
+                                Dist = Dist,
+                                ScalingType = ScalingType),
+               GASDyn = lSim,
+               Data = list(vY = lSim$vY,
+                           Moments = mMoments))
+
     return(Sim)
 }
 
-MultiGASSim <- function(T.sim, N, kappa, A, B, Dist, ScalingType) {
+MultiGASSim <- function(fit = NULL, T.sim = 1000, N = NULL, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
+
+  if (!is.null(fit)) {
+    lCoef = coef(fit, do.list = TRUE)
+    kappa = lCoef$lCoef$vKappa
+    A = lCoef$lCoef$mA
+    B = lCoef$lCoef$mB
+    Dist = getDist(fit)
+    ScalingType = getScalingType(fit)
+    N = fit@ModelInfo$iN
+  } else {
+    if (any(is.null(kappa), is.null(N), is.null(A), is.null(B), is.null(Dist), is.null(ScalingType))) {
+      stop("If an uGASFit object is not provided, arguments kappa, A, B,
+           Dist and ScalingType, have to be provided")
+    }
+  }
 
     iT = T.sim
 
@@ -35,8 +74,19 @@ MultiGASSim <- function(T.sim, N, kappa, A, B, Dist, ScalingType) {
 
     lMoments = EvalMoments_multi(lSim$mTheta, Dist, iN)
 
-    Sim <- new("mGASSim", ModelInfo = list(iT = iT, iN = iN, iK = iK, vKappa = vKappa, mA = mA, mB = mB,
-        Dist = Dist, ScalingType = ScalingType), GASDyn = lSim, Data = list(mY = mY, Moments = lMoments))
+    Sim <- new("mGASSim",
+               ModelInfo = list(iT = iT,
+                                iN = iN,
+                                iK = iK,
+                                vKappa = vKappa,
+                                mA = mA,
+                                mB = mB,
+                                Dist = Dist,
+                                ScalingType = ScalingType),
+               GASDyn = lSim,
+               Data = list(mY = mY,
+                           Moments = lMoments))
+
     return(Sim)
 }
 

@@ -2,7 +2,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-//[[Rcpp::export]]
 double dGAMMA(double dY, double dAlpha, double dBeta, bool bLog=false) {
 
   double dLPDF = Rf_dgamma(dY, dAlpha, 1.0/dBeta, 1);

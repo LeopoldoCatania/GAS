@@ -7,7 +7,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-//[[Rcpp::export]]
 arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde, int iK, std::string Dist, std::string ScalingType){
 
   arma::vec vS_tilde(iK);
@@ -46,7 +45,6 @@ arma::vec GASInnovation_univ(double dY, arma::vec vTheta, arma::vec vTheta_tilde
   return vS_tilde;
 }
 
-//[[Rcpp::export]]
 arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_tilde, int iN, int iK,  std::string Dist, std::string ScalingType){
 
   arma::vec vScore   = Score_multi(vY, vTheta, iN, Dist);

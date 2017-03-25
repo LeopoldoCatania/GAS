@@ -29,7 +29,10 @@ Class for multivariate GAS model simulation.
 }
 }
 %
-\item{\code{GASDyn}:}{Object of class \code{list}. Contains: the series of simulated parameters (\code{GASDyn$mTheta}), the series of scaled scores (\code{GASDyn$mInnovation}), the series of unrestricted simulated parameters (\code{GASDyn$mTheta_tilde}), the series of log densities (\code{GASDyn$vLLK}), the log likelihood evaluated at its optimum value (\code{GASDyn$dLLK})}
+\item{\code{GASDyn}:}{Object of class \code{list}. Contains: the series of simulated 
+parameters (\code{GASDyn$mTheta}), the series of scaled scores (\code{GASDyn$mInnovation}), 
+the series of unrestricted simulated parameters (\code{GASDyn$mTheta_tilde}), the 
+series of log densities (\code{GASDyn$vLLK}), the log likelihood evaluated at its optimum value (\code{GASDyn$dLLK})}
 %
 \item{\code{Data}:}{Object of class \code{matrix}. Matrix of dimension iN x iT of simulated data}}
   }
@@ -43,5 +46,5 @@ Class for multivariate GAS model simulation.
 \item \code{getMoments} \code{signature(object = 'uGASFor')}: Extract simulated moments.
 }
 }
-\author{ Leopoldo Catania}
+\author{Leopoldo Catania}
 \keyword{classes}

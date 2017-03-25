@@ -85,7 +85,6 @@ arma::vec ZeroRemover_v(arma::vec vX){
   return vX;
 }
 
-//[[Rcpp::export]]
 arma::mat build_mR(arma::vec vR, int iN){
 
   arma::mat mR = eye(iN,iN);
@@ -186,4 +185,3 @@ double signum(const double x)
 double Heaviside(const double x, const double a){
   return( (signum(x-a) + 1.0)/2.0 );
 }
-

@@ -1,11 +1,14 @@
 \name{MultiMapParameters}
 \alias{MultiMapParameters}
 \alias{build_mR}
+\alias{MapR_C}
+\alias{build_vR}
 \title{
 	Mapping function for univariate distributions
 }
 \description{
-	Map unrestricted vector of parameters into the proper space. This function transforms the parameters updated using the GAS recursion into their proper space.
+	Map unrestricted vector of parameters into the proper space. This function transforms 
+	the parameters updated using the GAS recursion into their proper space.
 	}
 \usage{
 MultiMapParameters(Theta_tilde, Dist, N)
@@ -22,7 +25,9 @@ MultiMapParameters(Theta_tilde, Dist, N)
 %
 }
 \details{
-	The order of the parameters is generally: locations, scales, correlations, shape. When the distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. See also \link{DistInfo} for specific distributions.
+	The order of the parameters is generally: locations, scales, correlations, shape. When the 
+	distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. 
+	See also \link{DistInfo} for specific distributions.
 }
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
@@ -63,5 +68,4 @@ Theta_tilde = c(Mu_tilde, Phi_tilde , Rho_tilde, log(7 - LowerNu()))
 Theta = MultiMapParameters(Theta_tilde, Dist, N)
 
 Theta
-
 }
