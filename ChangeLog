@@ -25,4 +25,7 @@
  * added warning for non positive definite hessian matrices
  * added documentation for the plot method
  * Added CITATION
+2017-03-27   Leopoldo Catania <leopoldo.catania@uniroma2.it>
+ * DESCRIPTION (Version): New version is 0.1.7.
+ * some tests have been moved from /tests/ to /inst/ExtensionTests/
 
