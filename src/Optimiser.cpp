@@ -12,6 +12,7 @@ double StaticLLK_Univ(arma::vec vY, arma::vec vTheta, int iT, std::string Dist){
   }
   return dLLK;
 }
+
 //[[Rcpp::export]]
 double StaticLLK_Multi(arma::mat mY, arma::vec vTheta, int iT, int iN, std::string Dist){
   double dLLK = 0.0;

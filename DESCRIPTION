@@ -12,4 +12,4 @@ LazyData: TRUE
 Imports: Rcpp (>= 0.12.2)
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 2.10), Rsolnp, methods, MASS, xts, numDeriv, zoo
-Suggests: testthat, cubature
+Suggests: testthat
