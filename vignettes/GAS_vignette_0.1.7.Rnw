@@ -719,7 +719,7 @@ R> LS_MGAS <- LogScore(mGASRoll)
 \label{fig:cumlogscore}
 \end{figure}
 
-In Figure~\ref{fig:cumlogscore}, periods when the plot line slopes upward represent periods in which GAS outperforms DCC, while downward--sloping segments indicate periods when the DCC forecast is more accurate. From this plot, we clearly understand the output of the DM test. Interestingly, we find that GAS starts dominating DCC after 2003.
+In Figure~\ref{fig:cumlogscore}, periods when the plot line slopes upward represent periods in which GAS outperforms DCC, while downward--sloping segments indicate periods when the DCC forecast is more accurate. From this plot, we clearly understand the result of DM test. Interestingly, we find that GAS starts dominating DCC after 2003.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section[Conclusion]{Conclusion}\label{sec:conclusion}
@@ -736,7 +736,7 @@ Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The results in this paper were obtained using \proglang{R} 3.3.3 \citep{R} with the
-packages: \pkg{GAS} version 0.1.6 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-45 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
+packages: \pkg{GAS} version 0.1.7 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-45 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
 \pkg{Rcpp} version 0.12.10 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.700.0.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{Rsolnp} version 1.16 \citep{Rsolnp}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.9-7 \citep{xts}, and \pkg{zoo} version 1.7-14 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-7. Computations were performed on a Genuine Intel\textregistered{} quad core CPU i7--3630QM 2.40Ghz processor.
 
 \proglang{R} itself and all packages used are available
@@ -832,7 +832,7 @@ Catania L, {Bill{\'e}} AG (2017).
 \bibitem[{Catania \emph{et~al.}(2017)Catania, Boudt, and Ardia}]{GAS}
 Catania L, Boudt K, Ardia D (2017).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
-\newblock \proglang{R}~package version 0.1.6,
+\newblock \proglang{R}~package version 0.1.7,
   \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}

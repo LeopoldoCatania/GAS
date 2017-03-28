@@ -1,6 +1,6 @@
 context("Test Score")
 
-tol = 1e-04
+tol = 1e-02
 
 test_that("Score", {
 

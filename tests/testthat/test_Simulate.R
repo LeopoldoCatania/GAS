@@ -1,6 +1,6 @@
 context("Test Simulate")
 
-tol = 1e-4
+tol = 1e-2
 
 test_that("Simulation", {
 
