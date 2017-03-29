@@ -321,7 +321,7 @@ Label: std
 Type: univariate
 Parameters: location, scale, shape
 Number of Parameters: 3
-References:	
+References:
 -------------------------------------------------------
 GAS specification
 -------------------------------------------------------
@@ -359,7 +359,7 @@ R> Fit
 -          Univariate GAS Fit            -
 ------------------------------------------
 
-Model Specification:	
+Model Specification:
 T =  276
 Conditional distribution:  std
 Score scaling type:  Identity
@@ -736,7 +736,7 @@ Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The results in this paper were obtained using \proglang{R} 3.3.3 \citep{R} with the
-packages: \pkg{GAS} version 0.1.7 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-45 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
+packages: \pkg{GAS} version 0.1.8 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-45 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
 \pkg{Rcpp} version 0.12.10 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.700.0.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{Rsolnp} version 1.16 \citep{Rsolnp}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.9-7 \citep{xts}, and \pkg{zoo} version 1.7-14 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-7. Computations were performed on a Genuine Intel\textregistered{} quad core CPU i7--3630QM 2.40Ghz processor.
 
 \proglang{R} itself and all packages used are available
@@ -832,7 +832,7 @@ Catania L, {Bill{\'e}} AG (2017).
 \bibitem[{Catania \emph{et~al.}(2017)Catania, Boudt, and Ardia}]{GAS}
 Catania L, Boudt K, Ardia D (2017).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
-\newblock \proglang{R}~package version 0.1.7,
+\newblock \proglang{R}~package version 0.1.8,
   \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}

@@ -39,10 +39,10 @@ BacktestDensity <- function(Roll, lower, upper, K = 1000, a = 0, b = 1) {
     mWCRPS = mWCRPS_backtest(vY, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
     colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
 
-    vAvg = c(LS = -mean(vLS), apply(mWCRPS, 2, mean))
+    vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2, mean))
 
     lOut = list()
-    lOut[["series"]] = list(NLS = vLS, WCRPS = mWCRPS)
+    lOut[["series"]] = list(LS = vLS, WCRPS = mWCRPS)
     lOut[["average"]] = vAvg
 
     return(lOut)

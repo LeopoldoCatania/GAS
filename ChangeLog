@@ -29,5 +29,7 @@
 	* DESCRIPTION (Version): New version is 0.1.7.
 	* some tests have been moved from /tests/ to /inst/ExtensionTests/
 	* added registration of symbols
-
+2017-03-29   Leopoldo Catania <leopoldo.catania@uniroma2.it>
+	* DESCRIPTION (Version): New version is 0.1.7.
+	* Bugfix in output of BacktestDensity()
 
