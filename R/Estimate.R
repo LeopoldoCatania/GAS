@@ -1,25 +1,28 @@
 
-StaticMLFIT <- function(vY, Dist) {
+StaticMLFIT <- function(vY, Dist, fn.optimizer) {
 
     iT = length(vY)
     iK = NumberParameters(Dist)
 
     vTheta_tilde = StaticStarting_Uni(vY, Dist, iK)
 
-    optimiser = suppressWarnings(solnp(vTheta_tilde, StaticLLKoptimizer_Uni, vY = vY, Dist = Dist, iT = iT, iK = iK,
-        control = list(trace = 0)))
+    lArguments = list(Dist    = Dist,
+                      iT      = iT,
+                      iK      = iK)
+
+    optimiser = fn.optimizer(par0 = vTheta_tilde, data = vY, GASSpec = lArguments, FUN = wrapper_StaticLLKoptimizer_Uni)
 
     vTheta_tilde = optimiser$pars
 
     vTheta = as.numeric(MapParameters_univ(vTheta_tilde, Dist, iK))
     names(vTheta) = FullNamesUni(Dist)
 
-    out = list(vTheta = vTheta, dLLK = -tail(optimiser$values, 1), optimiser = optimiser)
+    out = list(vTheta = vTheta, dLLK = -optimiser$value, optimiser = optimiser)
 
     return(out)
 }
 
-StaticMLFIT_Multiv <- function(mY, Dist) {
+StaticMLFIT_Multiv <- function(mY, Dist, fn.optimizer) {
 
     iT = ncol(mY)
     iN = nrow(mY)
@@ -27,15 +30,19 @@ StaticMLFIT_Multiv <- function(mY, Dist) {
 
     vTheta_tilde = StaticStarting_Multi(mY, Dist, iN)
 
-    optimiser = suppressWarnings(solnp(vTheta_tilde, StaticLLKoptimizer_Multi, mY = mY, Dist = Dist, iT = iT, iK = iK,
-        iN = iN, control = list(trace = 0)))
+    lArguments = list(Dist    = Dist,
+                      iT      = iT,
+                      iK      = iK,
+                      iN      = iN)
+
+    optimiser = fn.optimizer(par0 = vTheta_tilde, data = mY, GASSpec = lArguments, FUN = wrapper_StaticLLKoptimizer_Multi)
 
     vTheta_tilde = optimiser$pars
 
     vTheta = as.numeric(MapParameters_multi(vTheta_tilde, Dist, iN, iK))
     names(vTheta) = FullNamesMulti(iN, Dist)
 
-    out = list(vTheta = vTheta, dLLK = -tail(optimiser$values, 1), optimiser = optimiser)
+    out = list(vTheta = vTheta, dLLK = -optimiser$value, optimiser = optimiser)
 
     return(out)
 }
@@ -54,7 +61,7 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.solnp) {
     iK = NumberParameters(Dist)
 
     # starting par
-    lStarting = UniGAS_Starting(vY, iT, iK, Dist, ScalingType, GASPar)
+    lStarting = UniGAS_Starting(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
     vPw = lStarting$vPw
     StaticFit = lStarting$StaticFit
 
@@ -62,10 +69,16 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.solnp) {
     FixedPar = GetFixedPar_Uni(Dist, GASPar)
     vPw = RemoveFixedPar(vPw, FixedPar)
 
+    GASSpec@Spec$PwNames = names(vPw)
+
     # optimise
     optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
     vPw = optimiser$pars
+
+    if (is.null(names(vPw))) {
+      names(vPw) = GAS:::getPwNames(GASSpec)
+    }
 
     lParList = vPw2lPn_Uni(vPw, iK)
     lParList = AddFixedPar(lParList)
@@ -138,16 +151,22 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.solnp) {
     }
 
     # starting par
-    vPw = MultiGAS_Starting(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters)
+    vPw = MultiGAS_Starting(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters, fn.optimizer)
 
     # fixed par
     FixedPar = GetFixedPar_Multi(Dist, GASPar, iN, ScalarParameters)
     vPw = RemoveFixedPar(vPw, FixedPar)
 
+    GASSpec@Spec$PwNames = names(vPw)
+
     # optimise
     optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
 
     vPw = optimiser$pars
+
+    if (is.null(names(vPw))) {
+      names(vPw) = GAS:::getPwNames(GASSpec)
+    }
 
     lParList = vPw2lPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
     lParList = AddFixedPar(lParList)

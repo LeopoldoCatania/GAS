@@ -7,6 +7,28 @@ StaticLLKoptimizer_Uni <- function(vTheta_tilde, vY, Dist, iT, iK) {
     }
     return(-dLLK)
 }
+
+# Note that in wrapper_StaticLLKoptimizer_Uni() the argument GASSpec
+# is used as an artificial variable which contains additional parameters
+# needed by StaticLLKoptimizer_Uni(). This is introduced in order to use
+# the same optimzer for the choice of starting values and model estimation.
+wrapper_StaticLLKoptimizer_Uni <- function(vTheta_tilde, data, GASSpec) {
+
+  Dist = GASSpec$Dist
+  iT   = GASSpec$iT
+  iK   = GASSpec$iK
+
+  dmLLK = StaticLLKoptimizer_Uni(vTheta_tilde = vTheta_tilde,
+                                 vY   = data,
+                                 Dist = Dist,
+                                 iT   = iT,
+                                 iK   = iK)
+
+  return(dmLLK)
+
+}
+
+
 StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
     vTheta = MapParameters_multi(vTheta_tilde, Dist, iN, iK)
     dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
@@ -17,7 +39,33 @@ StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
     return(-dLLK)
 }
 
+# Note that in wrapper_StaticLLKoptimizer_Multi() the argument GASSpec
+# is used as an artificial variable which contains additional parameters
+# needed by StaticLLKoptimizer_Uni(). This is introduced in order to use
+# the same optimzer for the choice of starting values and model estimation.
+wrapper_StaticLLKoptimizer_Multi <- function(vTheta_tilde, data, GASSpec) {
+
+  Dist = GASSpec$Dist
+  iT   = GASSpec$iT
+  iK   = GASSpec$iK
+  iN   = GASSpec$iN
+
+  dmLLK = StaticLLKoptimizer_Multi(vTheta_tilde = vTheta_tilde,
+                                 mY   = data,
+                                 Dist = Dist,
+                                 iT   = iT,
+                                 iK   = iK,
+                                 iN   = iN)
+
+  return(dmLLK)
+
+}
+
 UniGASOptimiser <- function(vPw, data, GASSpec) {
+
+  if (is.null(names(vPw))) {
+    names(vPw) = GAS:::getPwNames(GASSpec)
+  }
 
   Dist = getDist(GASSpec)
   ScalingType = getScalingType(GASSpec)
@@ -46,6 +94,10 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
 }
 
 MultiGASOptimiser <- function(vPw, data, GASSpec){
+
+  if (is.null(names(vPw))) {
+    names(vPw) = GAS:::getPwNames(GASSpec)
+  }
 
   Dist = getDist(GASSpec)
   ScalingType = getScalingType(GASSpec)

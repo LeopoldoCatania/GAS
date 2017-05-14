@@ -5,15 +5,16 @@
 using namespace arma;
 using namespace Rcpp;
 
-//// This Functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
+//// These functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
+const double dEps = 2.220446e-16;
 
 double dnormstd(const double x)
 {
   double pdf;
   pdf = exp ( -0.5 * x * x ) / sqrt ( 2.0 * PI );
-  if(pdf == 0.0) pdf = 0.0 + 2.22507e-24;
+  if(pdf < 0.0) pdf = 0.0 + dEps;
   return pdf;
 }
 

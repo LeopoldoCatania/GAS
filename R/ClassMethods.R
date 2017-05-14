@@ -1142,6 +1142,14 @@ setMethod("getForecast", signature(object = "mGASFor"), function(object) return(
 setMethod("getForecast", signature(object = "uGASRoll"), function(object) return(object@Forecast$PointForecast))
 setMethod("getForecast", signature(object = "mGASRoll"), function(object) return(object@Forecast$PointForecast))
 
+
+getPwNames = function(object) {
+  UseMethod("getPwNames")
+}
+setMethod("getPwNames", signature(object = "uGASSpec"), function(object) return(object@Spec$PwNames))
+setMethod("getPwNames", signature(object = "mGASSpec"), function(object) return(object@Spec$PwNames))
+
+
 residuals = function(object, ...) {
   UseMethod("residuals")
 }

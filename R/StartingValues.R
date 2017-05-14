@@ -170,9 +170,9 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
 
 }
 
-UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar) {
+UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer) {
 
-    StaticFit = StaticMLFIT(vY, Dist)
+    StaticFit = StaticMLFIT(vY, Dist, fn.optimizer)
     vUncValues = StaticFit$optimiser$pars
     names(vUncValues) = paste("kappa", 1:iK, sep = "")
 
@@ -311,9 +311,9 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
     return(pw)
 }
 
-StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParameters) {
+StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParameters, fn.optimizer) {
 
-    StaticFit = StaticMLFIT_Multiv(mY, "mvt")
+    StaticFit = StaticMLFIT_Multiv(mY, "mvt", fn.optimizer)
 
     vUncValues = StaticFit$optimiser$pars
     names(vUncValues) = paste("kappa.", mvtParNames(iN), sep = "")
@@ -355,12 +355,12 @@ StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParame
     return(pw)
 }
 
-MultiGAS_Starting <- function(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters) {
+MultiGAS_Starting <- function(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters, fn.optimizer) {
 
     if (Dist == "mvnorm")
         vPw = StartingValues_mvnorm(mY, iT, iN, iK, GASPar, ScalingType, ScalarParameters)
     if (Dist == "mvt")
-        vPw = StartingValues_mvt(mY, iT, iN, iK, GASPar, ScalingType, ScalarParameters)
+        vPw = StartingValues_mvt(mY, iT, iN, iK, GASPar, ScalingType, ScalarParameters, fn.optimizer)
 
     return(vPw)
 }

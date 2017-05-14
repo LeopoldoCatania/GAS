@@ -36,3 +36,10 @@
 	* DESCRIPTION (Version): New version is 0.1.9.
 	* some unit tests were removed due to issues related to testing with
 	dev or patched R versions
+2017-05-13
+	* DESCRIPTION (Version): New version is 0.2.0.
+	* Third part optimizers which return an unnamed vector of parameres
+	can be used. This is for example nloptr.
+	* The nloptr package is a new dependence.
+	* Starting values are now chosen using the same optimizer defined by the user.
+	* Some numerical underflow problems are now solved.
