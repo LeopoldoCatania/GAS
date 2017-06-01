@@ -42,4 +42,10 @@
 	can be used. This is for example nloptr.
 	* The nloptr package is a new dependence.
 	* Starting values are now chosen using the same optimizer defined by the user.
+	* Solved bug for qdist_Uni().
 	* Some numerical underflow problems are now solved.
+	* New distribution: Negative Binomial.
+	* New distribution: Skellam.
+	* New lower bound for degree of freedom is 2.01. Before was 4.0.
+	* Additional argument Compute.SE for UniGASFit, MultiGASFit, UniGASRoll, MultiGASRoll.
+

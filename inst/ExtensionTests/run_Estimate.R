@@ -69,7 +69,7 @@ help(tqdata)
 
 GASSpec = UniGASSpec(Dist = "poi", ScalingType = "Identity", GASPar = list(location = TRUE))
 
-vY = abs(tqdata[,7] - tqdata[,8])  # absolute bid-ask spread
+vY = abs(tqdata[, 6] - tqdata[, 5])  # absolute bid-ask spread
 
 Fit     = UniGASFit(GASSpec,vY)
 

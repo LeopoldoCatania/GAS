@@ -39,7 +39,11 @@ arma::vec mSTD(double dMu, double dPhi2, double dNu){
   vMoments(0) = dMu;
   vMoments(1) = dPhi2*dNu/(dNu-2.0);
   vMoments(2) = 0.0;
-  vMoments(3) = 6.0/(dNu - 4.0) + 3.0;
+  if (dNu > 4.0) {
+    vMoments(3) = 6.0/(dNu - 4.0) + 3.0;
+  } else {
+    vMoments(3) = NA_REAL;
+  }
   return vMoments;
 }
 

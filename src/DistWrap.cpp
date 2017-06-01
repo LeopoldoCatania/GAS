@@ -10,6 +10,8 @@
 #include "gamma.h"
 #include "exp.h"
 #include "beta.h"
+#include "negbin.h"
+#include "skellam.h"
 #include "mvnorm.h"
 #include "mvt.h"
 
@@ -32,6 +34,8 @@ double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog){
   if(Dist == "gamma") dLPDF = dGAMMA(dY, vTheta(0), vTheta(1), bLog);
   if(Dist == "exp")   dLPDF = dEXP(dY, vTheta(0), bLog);
   if(Dist == "beta")  dLPDF = dBETA(dY, vTheta(0), vTheta(1), bLog);
+  if(Dist == "negbin") dLPDF = dNEGBIN(dY, vTheta(0), vTheta(1), bLog);
+  if(Dist == "skellam") dLPDF = dSKELLAM(dY, vTheta(0), vTheta(1), bLog);
   return dLPDF;
 }
 
@@ -58,6 +62,8 @@ double rdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "gamma") dY = rGAMMA(vTheta(0), vTheta(1));
   if(Dist == "exp")  dY = rEXP(vTheta(0));
   if(Dist == "beta") dY = rBETA(vTheta(0), vTheta(1));
+  if(Dist == "negbin") dY = rNEGBIN(vTheta(0), vTheta(1));
+  if(Dist == "skellam") dY = rSKELLAM(vTheta(0), vTheta(1));
 
   return dY;
 }
@@ -85,6 +91,9 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
   if(Dist == "gamma") dP = pGAMMA(dQ, vTheta(0), vTheta(1));
   if(Dist == "exp")  dP = pEXP(dQ, vTheta(0));
   if(Dist == "beta") dP = pBETA(dQ, vTheta(0), vTheta(1));
+  if(Dist == "negbin") dP = pNEGBIN(dQ, vTheta(0), vTheta(1));
+  if(Dist == "skellam") dP = pSKELLAM(dQ, vTheta(0), vTheta(1));
+
   return dP;
 }
 //[[Rcpp::export]]
@@ -102,6 +111,8 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   if(Dist == "gamma") dQ = qGAMMA(dP, vTheta(0), vTheta(1));
   if(Dist == "exp")   dQ = qEXP(dP, vTheta(0));
   if(Dist == "beta")  dQ = qBETA(dP, vTheta(0), vTheta(1));
+  if(Dist == "negbin") dQ = qNEGBIN(dP, vTheta(0), vTheta(1));
+  if(Dist == "skellam") dQ = qSKELLAM(dP, vTheta(0), vTheta(1));
   return dQ;
 }
 //[[Rcpp::export]]
@@ -119,6 +130,8 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "gamma") vMoments = mGAMMA(vTheta(0), vTheta(1));
   if(Dist == "exp")  vMoments = mEXP(vTheta(0));
   if(Dist == "beta") vMoments = mBETA(vTheta(0), vTheta(1));
+  if(Dist == "negbin") vMoments = mNEGBIN(vTheta(0), vTheta(1));
+  if(Dist == "skellam") vMoments = mSKELLAM(vTheta(0), vTheta(1));
   return vMoments;
 }
 

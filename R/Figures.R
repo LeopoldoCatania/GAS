@@ -75,7 +75,7 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
             if (i == iK)
                 par(mar = c(3, 4, 0, 2))
 
-            vLim = range(mTheta[, i])
+            vLim = range(na.omit(mTheta[, i]))
 
             plot(vDates, mTheta[, i], type = "n", xaxt = "n", xlab = "", ylab = "", las = 1, ylim = vLim)
             grid(nx = 10, ny = 10, col = "gray", lty = "dotted")

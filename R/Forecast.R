@@ -222,7 +222,7 @@ MultiGASFor <- function(mGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000, 
 }
 
 UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving",
-    "recursive"), cluster = NULL, ...) {
+    "recursive"), cluster = NULL, Compute.SE = FALSE, ...) {
 
     StartTime = Sys.time()
 
@@ -266,10 +266,10 @@ UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
     }
     # fits
     if (is.null(cluster)) {
-        lFits = lapply(lData, UniGASFit, GASSpec = GASSpec, ... = ...)
+        lFits = lapply(lData, UniGASFit, GASSpec = GASSpec, ... = ..., Compute.SE = Compute.SE)
     }
     if (!is.null(cluster)) {
-        lFits = parLapply(cluster, lData, UniGASFit, GASSpec = GASSpec, ... = ...)
+        lFits = parLapply(cluster, lData, UniGASFit, GASSpec = GASSpec, ... = ..., Compute.SE = Compute.SE)
     }
 
     # coef
@@ -329,7 +329,7 @@ UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
 }
 
 MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, RefitEvery = 23, RefitWindow = c("moving",
-    "recursive"), cluster = NULL, ...) {
+    "recursive"), cluster = NULL, Compute.SE = FALSE, ...) {
 
     StartTime = Sys.time()
 
@@ -372,10 +372,10 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Ref
     }
     # fits
     if (is.null(cluster)) {
-      lFits = lapply(lData, MultiGASFit, GASSpec = GASSpec, ... = ...)
+      lFits = lapply(lData, MultiGASFit, GASSpec = GASSpec, ... = ..., Compute.SE = Compute.SE)
     }
     if (!is.null(cluster)) {
-        lFits = parLapply(cluster, lData, MultiGASFit, GASSpec = GASSpec, ... = ...)
+        lFits = parLapply(cluster, lData, MultiGASFit, GASSpec = GASSpec, ... = ..., Compute.SE = Compute.SE)
     }
 
     # coef

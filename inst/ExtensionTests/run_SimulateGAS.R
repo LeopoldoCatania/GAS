@@ -19,7 +19,7 @@ B = matrix(c(0.9,0.0,
 Kappa = (diag(2) - B) %*% UniUnmapParameters(c(0, 0.1), "norm")
 
 help(UniGASSim)
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "norm", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "norm", ScalingType = "Identity")
 
 # plot(Sim)
 
@@ -43,7 +43,7 @@ B = matrix(c(0.7 , 0.0 , 0.0 ,
 
 Kappa = (diag(3) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1), "snorm")
 
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "snorm", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "snorm", ScalingType = "Identity")
 
 # plot(Sim)
 
@@ -69,7 +69,7 @@ B = matrix(c(0.7 , 0.0 , 0.0 ,
 
 Kappa = (diag(3) - B) %*% UniUnmapParameters(c(0, 0.1, 8), "std")
 
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "std", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "std", ScalingType = "Identity")
 
 # plot(Sim)
 
@@ -95,7 +95,7 @@ B = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
 
 Kappa = (diag(4) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1, 8), "sstd")
 
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "sstd", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "sstd", ScalingType = "Identity")
 
 # plot(Sim)
 
@@ -108,7 +108,7 @@ B = matrix(c(0.94), 1)
 
 Kappa = (1 - B) * log(5)
 
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "poi", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "poi", ScalingType = "Identity")
 
 # plot(Sim)
 
@@ -125,7 +125,23 @@ B = matrix(c(0.98, 0.0,
 Kappa = (diag(2) - B) %*% c(log(0.1), log(0.4))
 
 
-Sim = UniGASSim(iT, Kappa, A, B, Dist = "beta", ScalingType = "Identity")
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "beta", ScalingType = "Identity")
+
+# negative binomial
+
+iT = 1e4
+
+A = matrix(c(7.5, 0.0,
+             0.0, 0.0), 2)
+
+B = matrix(c(0.99, 0.0,
+             0.0, 0.0), 2)
+
+Kappa = (diag(2) - B) %*% c(log(0.8/0.2), log(2))
+
+
+Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "negbin", ScalingType = "Inv")
+
 
 # plot(Sim)
 

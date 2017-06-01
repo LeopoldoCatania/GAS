@@ -11,6 +11,8 @@ DistLabels <- function() {
              "gamma",
              "exp",
              "beta",
+             "negbin",
+             "skellam",
              "mvnorm",
              "mvt"))
 }
@@ -40,6 +42,10 @@ DistName <- function(DistLabel) {
         return("Exponential")
     if (DistLabel == "beta")
         return("Beta")
+  if (DistLabel == "negbin")
+    return("Negative Binomial")
+  if (DistLabel == "skellam")
+    return("Skellam")
     if (DistLabel == "mvnorm")
         return("Multivariate Gaussian")
     if (DistLabel == "mvt")
@@ -50,19 +56,19 @@ DistNote <- function(DistLabel) {
     if (DistLabel == "norm")
         return("")
     if (DistLabel == "snorm")
-        return("Skew Gaussian distribution of Fernandez and Steel (1998). It is reparametrised as in
+        return("Skew Gaussian distribution of Fernandez and Steel (1998). It is reparameterized as in
                fGARCH and rugarch such that the location is the mean and the scale is the standard deviation.")
     if (DistLabel == "std")
-        return("The Student-t distribution (not reparametrised in terms of the variance parameter)")
+        return("The Student-t distribution (not reparameterized in terms of the variance parameter)")
     if (DistLabel == "sstd")
-        return("This is the Skew-Student-t distribution of Fernandez and Steel (1998). It is reparametrised as in
+        return("This is the Skew-Student-t distribution of Fernandez and Steel (1998). It is reparameterized as in
                fGARCH and rugarch such that the location is the mean and the scale is the standard deviation.")
     if (DistLabel == "ast")
         return("")
     if (DistLabel == "ast1")
         return("Constraint version of ast")
     if (DistLabel == "ald")
-        return("The theta, sigma, kappa reparametrisation is used, see Kotz et al. (2001)")
+        return("The theta, sigma, kappa reparameterisation is used, see Kotz et al. (2001)")
     if (DistLabel == "poi")
         return("For the Poisson distribution 'location' means the usual intensity parameter")
     if (DistLabel == "ber")
@@ -73,6 +79,12 @@ DistNote <- function(DistLabel) {
         return("For the Beta distribution 'shape' means the usual alpha parameter and 'scale' means the usual beta parameter")
     if (DistLabel == "exp")
         return("For the Exponential distribution 'location' means the usual rate parameter")
+    if (DistLabel == "skellam")
+        return("The Skellam distribution reparameterized in terms of mean and variance.")
+    if (DistLabel == "negbin")
+        return("The negative binomial distribution with size = nu and prob = pi. Both parameters can be time-varying,
+                however, only pi can be be used with a scaled score. For the Negative Binomial distribution 'location'
+                means the probability of success parameter, and 'scale' refers to the size parameter.")
     if (DistLabel == "mvnorm")
         return("")
     if (DistLabel == "mvt")
@@ -104,6 +116,10 @@ DistReference <- function(DistLabel) {
         return("")
     if (DistLabel == "gamma")
         return("")
+  if (DistLabel == "negbin")
+    return("")
+  if (DistLabel == "skellam")
+    return("")
     if (DistLabel == "mvnorm")
         return("")
     if (DistLabel == "mvt")
@@ -135,6 +151,10 @@ DistParameters <- function(DistLabel) {
         return(c("location"))
     if (DistLabel == "beta")
         return(c("scale", "shape"))
+    if (DistLabel == "skellam")
+        return(c("location", "scale"))
+    if (DistLabel == "negbin")
+        return(c("location", "scale"))
     if (DistLabel == "mvnorm")
         return(c("location", "scale", "correlation"))
     if (DistLabel == "mvt")
@@ -165,6 +185,10 @@ DistType <- function(DistLabel) {
     if (DistLabel == "exp")
         return("univariate")
     if (DistLabel == "beta")
+        return("univariate")
+    if (DistLabel == "negbin")
+        return("univariate")
+    if (DistLabel == "skellam")
         return("univariate")
     if (DistLabel == "mvnorm")
         return("multivariate")
@@ -197,6 +221,10 @@ DistScalingType <- function(DistLabel) {
         return("Identity, Inv, InvSqrt")
     if (DistLabel == "beta")
         return("Identity, Inv, InvSqrt")
+    if (DistLabel == "negbin")
+        return("Identity, Inv, InvSqrt")
+    if (DistLabel == "skellam")
+        return("Identity")
     if (DistLabel == "mvnorm")
         return("Identity")
     if (DistLabel == "mvt")

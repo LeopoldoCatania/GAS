@@ -20,31 +20,42 @@ BacktestVaR <- function(data, VaR, alpha, Lags = 4) {
     return(lOut)
 }
 
-BacktestDensity <- function(Roll, lower, upper, K = 1000, a = 0, b = 1) {
+BacktestDensity <- function(Roll, lower, upper, K = 1000, a = NULL, b = NULL) {
 
-    dLower = lower
-    dUpper = upper
-    iK = K
-    dA = a
-    dB = b
+  dLower = lower
+  dUpper = upper
+  iK = K
 
-    iH = Roll@Info$ForecastLength
-    vY = tail(getObs(Roll), iH)
-    Dist = getDist(Roll)
-    mTheta = getForecast(Roll)
+  iH = Roll@Info$ForecastLength
 
-    iT = length(vY)
-    vLS = EvaluateLogScore_Univ(t(mTheta), vY, Dist, iT)
+  vY     = getObs(Roll)
+  vY_oos = tail(vY, iH)
+  vY_is  = vY[1:(length(vY) - iH)]
 
-    mWCRPS = mWCRPS_backtest(vY, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
-    colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
+  Dist = getDist(Roll)
+  mTheta = getForecast(Roll)
 
-    vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2, mean))
+  if (is.null(a)) {
+    a = mean(vY_is)
+  }
+  if (is.null(b)) {
+    b = sd(vY_is)
+  }
 
-    lOut = list()
-    lOut[["series"]] = list(LS = vLS, WCRPS = mWCRPS)
-    lOut[["average"]] = vAvg
+  dA = a
+  dB = b
 
-    return(lOut)
+  iT = length(vY_oos)
+  vLS = EvaluateLogScore_Univ(t(mTheta), vY_oos, Dist, iT)
+
+  mWCRPS = mWCRPS_backtest(vY_oos, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
+  colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
+
+  vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2, mean))
+
+  lOut = list()
+  lOut[["series"]] = list(LS = vLS, WCRPS = mWCRPS)
+  lOut[["average"]] = vAvg
+
+  return(lOut)
 }
-

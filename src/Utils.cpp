@@ -18,6 +18,8 @@ int NumberParameters(std::string Dist, int iN = 1){
   if(Dist == "gamma")  iK = 2;
   if(Dist == "exp")  iK = 1;
   if(Dist == "beta")  iK = 2;
+  if(Dist == "negbin")  iK = 2;
+  if(Dist == "skellam")  iK = 2;
   if(Dist == "mvnorm") iK = 2*iN + iN*(iN-1)/2;
   if(Dist == "mvt")    iK = 2*iN + iN*(iN-1)/2 + 1;
 
@@ -184,4 +186,41 @@ double signum(const double x)
 
 double Heaviside(const double x, const double a){
   return( (signum(x-a) + 1.0)/2.0 );
+}
+
+double ModBesselFirst(double dX, double dNu, int iM = 1000) {
+
+  double dOut = 0.0;
+  double dLogX = log(dX) - log(2.0);
+  int m;
+
+
+  for (m = 0; m < iM + 1; m++) {
+
+    dOut += exp((2.0 * m + dNu * 1.0) * dLogX - Rf_lgammafn(m * 1.0 + 1.0) - Rf_lgammafn(m * 1.0 + dNu + 1.0));
+  }
+
+
+  return dOut;
+
+}
+
+double ModBesselFirst_Deriv(double dX, double dNu, int iM = 1000) {
+
+  // double dDeriv = dNu/dX * ModBesselFirst(dX, dNu) + ModBesselFirst(dX, dNu + 1.0);
+
+  double dLogX = log(dX) - log(2.0);
+
+  double dDeriv = 0.0;
+
+  int m;
+  for (m = 0; m < iM; m++) {
+    dDeriv += exp(log(2.0 * m + dNu) + (2.0 * m + dNu - 1.0) * dLogX -
+      Rf_lgammafn(m * 1.0 + 1.0) - Rf_lgammafn(m * 1.0 + dNu + 1.0) +
+      log(0.5));
+  }
+
+
+  return dDeriv;
+
 }

@@ -10,7 +10,7 @@ reports several quantity for backtesting for point and density forecasts.
 \usage{
 UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
            RefitEvery = 23, RefitWindow = c("moving", "recursive"),
-           cluster = NULL, \ldots)
+           cluster = NULL, Compute.SE = FALSE, \ldots)
 }
 \arguments{
 \item{data}{\code{numeric} vector containing the time series of observations.}
@@ -24,7 +24,10 @@ UniGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
 all the observations are used when the model is re-estimated. If \code{RefitWindow = "moving"} old observations are eliminated.}
 \item{cluster}{ A \code{cluster} object created calling using the \code{paralell} package.
 If supplied parallel processing is used to speed up the computations.}
-\item{\ldots}{ Additional arguments for \link{MultiGASRoll}}
+%
+\item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = FALSE}}
+%
+\item{\ldots}{ Additional arguments for \link{UniGASFit}}
 %
 }
 \value{

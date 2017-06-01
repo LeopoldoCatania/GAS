@@ -10,7 +10,8 @@
 #include "gamma.h"
 #include "exp.h"
 #include "beta.h"
-
+#include "negbin.h"
+#include "skellam.h"
 
 
 using namespace Rcpp;
@@ -31,6 +32,8 @@ arma::mat IM_univ(arma::vec vTheta,std::string Dist){
   if(Dist == "gamma") mIM = gamma_IM(vTheta);
   if(Dist == "exp")  mIM = exp_IM(vTheta(0));
   if(Dist == "beta") mIM = beta_IM(vTheta);
+  if(Dist == "negbin") mIM = negbin_IM(vTheta);
+  if(Dist == "skellam") mIM = skellam_IM(vTheta);
   return mIM;
 }
 

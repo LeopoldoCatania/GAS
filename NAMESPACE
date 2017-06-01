@@ -1,5 +1,5 @@
-# exportPattern("^[[:alpha:]]+") #remove before CRAN
-# importFrom(Rcpp, evalCpp)      #remove before CRAN
+#exportPattern("^[[:alpha:]]+") #remove before CRAN
+#importFrom(Rcpp, evalCpp)      #remove before CRAN
 useDynLib(GAS, .registration = TRUE)
 import(methods)
 importFrom(Rcpp,evalCpp)
@@ -11,7 +11,6 @@ importFrom(stats,qchisq,pchisq,qnorm,median,na.omit,dt,cor,sd,var,lm,pnorm,Box.t
 importFrom(MASS,ginv)
 importFrom(numDeriv,jacobian)
 importFrom(Rsolnp,solnp)
-importFrom(nloptr,nloptr)
 importFrom(parallel,clusterEvalQ,parLapply)
 importFrom(grDevices,dev.cur,dev.off)
 exportClasses("uGASFit", "mGASFit", "uGASSim", "mGASSim", "uGASSpec", "mGASSpec", "uGASFor", "mGASFor", "uGASRoll", "mGASRoll")
@@ -28,3 +27,5 @@ export("UniGASSim", "MultiGASSim")
 export("PIT_test")
 export("UnMapR_C", "MapR_C", "build_vR")
 export("ddist_Uni", "ddist_Multi", "pdist_Uni", "qdist_Uni", "rdist_Uni", "mdist_Uni", "rdist_Multi", "Score_Uni", "IM_Uni", "Score_Multi", "Quantiles")
+export("fn.solnp", "fn.optim")
+

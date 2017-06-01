@@ -10,7 +10,7 @@ introduced by Gneiting and Ranjan (2012), and (ii) their values at each point in
 evaluated using 5 weight functions, see Details.
 }
 \usage{
-BacktestDensity(Roll, lower, upper, K = 1000, a = 0.0, b = 1.0)
+BacktestDensity(Roll, lower, upper, K = 1000, a = NULL, b = NULL)
 }
 \arguments{
 \item{Roll}{
@@ -30,10 +30,12 @@ in Gneiting and Ranjan (2012).  This coincides with \eqn{y_{u}} in Equation 16 o
 This is \eqn{I} in Equation 16 of Gneiting and Ranjan (2012). By default \code{K = 1000.}}
 %
 \item{a}{
-\code{numeric}. mean of the normal distribution used in the weight function. By default \code{a = 0.0}.}
+\code{numeric}. mean of the normal distribution used in the weight function. By default \code{a = NULL}, which
+means that it is set equal to the empircial mean of the in sample observations.}
 %
 \item{b}{
-\code{numeric}. standard deviation of the normal distribution used in the weight function. By default \code{b = 1.0}.}
+\code{numeric}. standard deviation of the normal distribution used in the weight function. By default \code{b = NULL}, which
+means that it is set equal to the empircial standard deviation of the in sample observations.}
 %
 }
 \details{
@@ -67,7 +69,7 @@ Journal of Business & Economic Statistics, 29(3), 411-422.
 \doi{10.1198/jbes.2010.08110}.
 }
 \examples{
-
+\dontrun{
 data("cpichg")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
@@ -80,4 +82,5 @@ Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
 BackTest = BacktestDensity(Roll, lower = -100, upper = 100)
 
 BackTest$average
+}
 }

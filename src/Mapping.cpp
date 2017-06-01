@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-const double dLowerShape = 4.0;
+const double dLowerShape = 2.01;
 const double dUpperShape = 50.0;
 
 const double dLowerSkewFS = 0.50;
@@ -12,7 +12,7 @@ const double dUpperSkewFS = 1.50;
 
 const double dNumericalUpperLimit = 1e50;
 const double dNumericalLowerLimit = -1e50;
-const double dNumericalUnderflow  = 1e-50;
+const double dNumericalUnderflow  = 1e-4;
 
 double Map(double dX, double dL,double dU) {
   double dMap =  dL + ( dU - dL ) / (1.0 + exp( - dX ));
@@ -37,6 +37,59 @@ double MapDeriv(double dX, double dL, double dU){
   double dDeriv = -dX + log(dU-dL) - 2.0*log(1.0 + exp(-dX));
 
   return exp(dDeriv);
+}
+
+double Logit(double dP) {
+
+  if (dP < 1e-10) {
+    dP = 1e-10;
+  }
+
+  if (dP > 1.0 - 1e-10) {
+    dP = 1.0 - 1e-10;
+  }
+
+  double dLogit = log(dP) - log(1.0 - dP) ;
+
+  return dLogit;
+
+}
+
+double LogitInv(double dLogit) {
+
+  double logx = 0.0;
+  double logy = dLogit;
+
+  double dFoo = 0.0;
+
+  if (logx > logy) {
+    dFoo = logx + log(1.0 + exp(logy - logx));
+  } else {
+    dFoo = logy + log(1.0 + exp(logx - logy));
+  }
+
+  double dP = exp(dLogit - dFoo);
+
+  if (dP < 1e-10) {
+    dP = 1e-10;
+  }
+
+  if (dP > 1.0 - 1e-10) {
+    dP = 1.0 - 1e-10;
+  }
+
+  return dP;
+
+}
+
+double Deriv_LogitInv(double dLogit){
+
+  double dLogitInv = LogitInv(dLogit);
+
+  double dDeriv = dLogitInv * (1.0 - dLogitInv);
+
+  return dDeriv;
+
 }
 
 double CheckScale(double dScale) {
@@ -213,6 +266,25 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(1) = CheckScale(dSigma);
     vTheta(2) = CheckScale(dKappa);
   }
+  if(Dist == "negbin"){
+
+    double dPi = LogitInv(vTheta_tilde(0));
+    double dNu = exp(vTheta_tilde(1));
+
+    vTheta(0) = dPi;
+    vTheta(1) = CheckScale(dNu);
+
+  }
+  if(Dist == "skellam"){
+    double dMu_tilde = vTheta_tilde(0);
+    double dSigma2_tilde = vTheta_tilde(1);
+
+    double dMu = dMu_tilde;
+    double dSigma2 = exp(dSigma2_tilde);
+
+    vTheta(0) = dMu;
+    vTheta(1) = CheckScale(dSigma2);
+  }
   return InfRemover_vec(vTheta);
 }
 //[[Rcpp::export]]
@@ -375,6 +447,26 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
     vTheta_tilde(1) = dSigma_tilde;
     vTheta_tilde(2) = dKappa_tilde;
   }
+  if(Dist == "skellam"){
+    double dMu = vTheta(0);
+    double dSigma2 = vTheta(1);
+
+    double dMu_tilde = dMu;
+    double dSigma2_tilde = log(dSigma2);
+
+    vTheta_tilde(0) = dMu_tilde;
+    vTheta_tilde(1) = CheckScale(dSigma2_tilde);
+  }
+  if(Dist == "negbin"){
+
+    double dPi_tilde = Logit(vTheta(0));
+    double dNu_tilde = log(vTheta(1));
+
+    vTheta_tilde(0) = dPi_tilde;
+    vTheta_tilde(1) = dNu_tilde;
+
+  }
+
 
   return vTheta_tilde;
 }
@@ -491,6 +583,23 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1.0;
     mJ(1,1) = CheckScale(exp(dSigma_tilde));
     mJ(2,2) = CheckScale(exp(dKappa_tilde));
+  }
+  if(Dist == "negbin"){
+
+    double dPi_tilde = vTheta_tilde(0);
+    double dNu_tilde = vTheta_tilde(1);
+
+    mJ(0,0) = Deriv_LogitInv(dPi_tilde);
+    mJ(1,1) = CheckScale(exp(dNu_tilde));
+
+  }
+  if(Dist=="skellam"){
+
+    double dSigma2_tilde = vTheta_tilde(1);
+
+    mJ(0,0) = 1.0;
+    mJ(1,1) = CheckScale(exp(dSigma2_tilde));
+
   }
 
   arma::vec vJ_safe =  InfRemover_vec(mJ.diag());

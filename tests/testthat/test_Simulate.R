@@ -20,7 +20,7 @@ test_that("Simulation", {
   set.seed(123)
   Sim = GAS::UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "norm", ScalingType = "Identity")
 
-  tmp = Sim@Data$vY
+  tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
   expect_true(abs(sum(tmp) - -129.6511) < tol)
 
@@ -44,7 +44,7 @@ test_that("Simulation", {
   set.seed(123)
   Sim = GAS::UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "snorm", ScalingType = "Identity")
 
-  tmp = Sim@Data$vY
+  tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
   expect_true(abs(sum(tmp) - 5.506904) < tol)
 
@@ -67,11 +67,11 @@ test_that("Simulation", {
   set.seed(123)
   Sim = GAS::UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "std", ScalingType = "Identity")
 
-  tmp = Sim@Data$vY
+  tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
   expect_true(abs(sum(tmp) - -8.063126) < tol)
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0001108389, 0.0991014929, 7.9800370961)))
+  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0001093, 0.0991094, 7.9597717)))
   expect_true(tmp < tol)
 
   # sstd
@@ -93,11 +93,11 @@ test_that("Simulation", {
   set.seed(123)
   Sim = GAS::UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "sstd", ScalingType = "Identity")
 
-  tmp = Sim@Data$vY
+  tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
-  expect_true(abs(sum(tmp) - 4.379524) < tol)
+  expect_true(abs(sum(tmp) - 4.38) < tol)
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0000000, 0.1473415, 1.1000000, 8.0000000)))
+  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0000, 0.1473, 1.1000, 8.0000)))
   expect_true(tmp < tol)
 
   ## MULTIVARIATE
@@ -129,7 +129,7 @@ test_that("Simulation", {
   set.seed(123)
   Sim = GAS::MultiGASSim(fit = NULL, iT, N, Kappa, A, B, Dist, ScalingType = "Identity")
 
-  tmp = Sim@Data$mY
+  tmp = getObs(Sim)
   expect_equal(dim(tmp), c(N, iT))
 
   tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.10000000, 0.20000000, 0.30000000, 0.92602321,

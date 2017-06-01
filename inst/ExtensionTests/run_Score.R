@@ -124,6 +124,21 @@ expect_equal(dim(vApprox), c(4, 1))
 expect_equal(dim(vGAS), c(4, 1))
 expect_true(max(vApprox - vGAS) < tol)
 
+# Skellam
+
+dY = 4
+dMu = 1
+dSigma2 = 4
+
+vTheta = c(dMu, dSigma2)
+
+vApprox = matrix(numDeriv::grad(function(vTheta, dY) {
+  GAS::ddist_Uni(dY, vTheta, "skellam", log = TRUE)
+}, vTheta, dY = dY, method = "simple"), ncol = 1)
+
+vGAS = GAS:::Score_Uni(dY, vTheta, "skellam")
+
+
 ## multivariate
 
 # mvt

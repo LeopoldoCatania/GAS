@@ -7,7 +7,7 @@
 	Estimate univariate GAS models by Maximum Likelihood.
 }
 \usage{
-UniGASFit(GASSpec, data, fn.optimizer = fn.solnp)
+UniGASFit(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
 }
 \arguments{
 \item{GASSpec}{
@@ -18,8 +18,10 @@ It can also be an object of the class \code{ts}, \code{xts} or \code{zoo}.}
 %
 \item{fn.optimizer}{\code{function}. This is a generic optimization function that can be provided by the user.
 The default optimizer is the  General Nonlinear Augmented Lagrange Multiplier method of Ye (1988) available in
-the R package Rsolnp (Ghalanos and Theussl 2016). By default \code{fn.optimizer = fn.solnp} where \link{fn.solnp} is
-a wrapper to the \link{solnp} function of the Rsolnp R package. See Details for user defined optimization routines.}
+the R package Rsolnp (Ghalanos and Theussl 2016). By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
+a wrapper to the \link{optim} function. See Details for user defined optimization routines.}
+%
+\item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = TRUE}}
 }
 \details{
 Maximum Likelihood estimation of GAS models is an on-going research topic.
@@ -140,15 +142,98 @@ Fit.NM.optim = UniGASFit(GASSpec, sp500ret, fn.optimizer = fn.NM.optim )
 
 Fit.NM.optim
 
-# Estimate the model with a different optimizer.
-# Assume we want to use the BFGS optimization provided by
-# the optim() function, we create
-# the wrapper fn.optim in this way
 
-fn.BFGS.optim <- function(par0, data, GASSpec, FUN) {
+# Estimate time-varying Negative Binomial distribution for the Goals dataset.
+# Let's use the gosolnp() optimizer for the time-varying model estimation and
+# the solnp() optimizer for estimation of the static model for the choice of
+# the starting value. The logical is(GASSpec, "list") is TRUE when the function
+# is evaluated for the choice of starting values, and FALSE when the function
+# is evaluated for the time-varying model.
+# We can also make use of parallel computation calling a cluster object defined
+# in the Global environment.
 
-  optimizer = optim(par0, FUN, data = data, GASSpec = GASSpec, method = "BFGS",
-                    control = list(trace = 0), hessian = TRUE)
+fn.gosolnp <- function(par0, data, GASSpec, FUN) {
+
+  if (is(GASSpec, "list")) {
+
+    optimiser = suppressWarnings(solnp(par0, FUN, data = data,
+                                        GASSpec = GASSpec,
+                                        control = list(trace = 0)))
+
+  } else {
+
+    cluster = get("cluster", envir = globalenv())
+
+    optimiser = suppressWarnings(gosolnp(
+      pars = NULL,
+      fun = FUN, data = data, cluster = cluster,
+      GASSpec = GASSpec,
+      n.sim = 100000,
+      n.restarts = 10,
+      LB = c(-5, -2, -2, -2),
+      UB = c(5, 8, 3.0, 5.0))
+
+    )
+  }
+
+  out = list(pars = optimiser$pars,
+             value = tail(optimiser$values, 1),
+             hessian = optimiser$hessian,
+             convergence = optimiser$convergence)
+
+  return(out)
+
+}
+
+data("Goals")
+
+cluster = makeCluster(8)
+
+GASSpec = UniGASSpec(Dist = "negbin", ScalingType = "Inv",
+                     GASPar = list(location = TRUE, scale = FALSE))
+
+
+vY = na.omit(Goals[, 1])
+
+Fit = UniGASFit(GASSpec, vY, fn.optimizer = fn.gosolnp)
+
+Fit
+
+# Estimate the model with the Differential Evolution algoritm implemented
+# in the DEoptim package. We can also make use of parallel computation
+# calling a cluster object defined in the Global environment.
+
+library(DEoptim)
+library(Rsolnp)
+
+fn.DEoptim <- function(par0, data, GASSpec, FUN) {
+
+  if (is(GASSpec, "list")) {
+
+    optimizer = suppressWarnings(solnp(par0, FUN, data = data,
+                                       GASSpec = GASSpec,
+                                       control = list(trace = 0)))
+
+  } else {
+
+    cluster = get("cluster", envir = globalenv())
+
+    optimizer.DE = DEoptim(FUN, lower = rep(-10, length(par0)), upper = rep(10, length(par0)),
+                           data = data, GASSpec = GASSpec,
+                           control = DEoptim.control(cluster = cluster))
+
+    par = optimizer.DE$optim$bestmem
+
+    names(par) = names(par0)
+
+    optimizer = list(par = par,
+                     value = optimizer.DE$optim$bestval,
+                     hessian = NULL,
+                     convergence = 0)
+
+  }
+
+
 
   out = list(pars = optimizer$par,
              value = optimizer$value,
@@ -159,9 +244,20 @@ fn.BFGS.optim <- function(par0, data, GASSpec, FUN) {
 
 }
 
-Fit.BFGS.optim = UniGASFit(GASSpec, sp500ret, fn.optimizer = fn.BFGS.optim )
+data("tqdata")
 
-Fit.BFGS.optim
+cluster = makeCluster(8)
+
+GASSpec = UniGASSpec(Dist = "negbin", ScalingType = "Identity",
+                     GASPar = list(location = TRUE, scale = TRUE))
+
+vY = abs(tqdata[, 6] - tqdata[, 5]) * 100  # absolute bid-ask spread
+
+Fit.DEoptim = UniGASFit(GASSpec, vY, fn.optimizer = fn.DEoptim)
+
+Fit.DEoptim
+
+stopCluster(cluster)
 
 }
 }

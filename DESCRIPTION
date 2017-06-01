@@ -9,7 +9,7 @@ License: GPL-3
 BugReports: https://github.com/LeopoldoCatania/GAS/issues
 URL: https://github.com/LeopoldoCatania/GAS
 LazyData: TRUE
-Imports: Rcpp (>= 0.12.2)
+Imports: Rcpp (>= 0.12.2), Rsolnp, MASS, xts, numDeriv, zoo
 LinkingTo: Rcpp, RcppArmadillo
-Depends: R (>= 2.10), Rsolnp, methods, MASS, xts, numDeriv, zoo, nloptr
+Depends: R (>= 2.10), methods
 Suggests: testthat

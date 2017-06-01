@@ -11,7 +11,7 @@ pdist_Uni <- function(q, Theta, Dist){
 }
 
 qdist_Uni <- function(p, Theta, Dist){
-  pdist_univ(p, Theta, Dist)
+  qdist_univ(p, Theta, Dist)
 }
 
 mdist_Uni <- function(Theta, Dist){

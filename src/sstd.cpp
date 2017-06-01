@@ -5,7 +5,7 @@ using namespace arma;
 using namespace Rcpp;
 
 
-//// These functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
+//// This Functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
 
@@ -150,7 +150,7 @@ double sstdexkurt( double dXi, double dNu )
   // Theoretical moments based on bijection betweeen Fernandez and Steel verions
   // and Hansen's Generalized Skew-T (credit due to Michael Rockinger)
   double m4 = 0.0;
-  if(dNu > 4 ){
+  if(dNu > 4.0){
     double eta  = dNu;
     double k2   = pow(dXi,2.0);
     double lda  = (k2-1.0)/(k2+1.0);

@@ -7,7 +7,7 @@
 	Estimate multivariate GAS models by Maximum Likelihood.
 }
 \usage{
-MultiGASFit(GASSpec, data, fn.optimizer = fn.solnp)
+MultiGASFit(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
 }
 \arguments{
 \item{GASSpec}{
@@ -19,8 +19,10 @@ It can also be an object of the class \code{ts}, \code{xts} or \code{zoo}.}
 %
 \item{fn.optimizer}{\code{function}. This is a generic optimization function that can be provided by the user.
 The default optimizer is the  General Nonlinear Augmented Lagrange Multiplier method of Ye (1988) available in
-the R package Rsolnp (Ghalanos and Theussl 2016). By default \code{fn.optimizer = fn.solnp} where \link{fn.solnp} is
-a wrapper to the \link{solnp} function of the Rsolnp R package. See Details for user defined optimization routines.}
+the R package Rsolnp (Ghalanos and Theussl 2016). By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
+a wrapper to the \link{optim} function. See Details for user defined optimization routines.}
+%
+\item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = TRUE}}
 }
 \details{
 Maximum Likelihood estimation of GAS models is an on-going research topic.

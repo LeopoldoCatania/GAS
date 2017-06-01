@@ -1,11 +1,11 @@
 StaticLLKoptimizer_Uni <- function(vTheta_tilde, vY, Dist, iT, iK) {
-    vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
-    dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
+  vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
+  dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
 
-    if (is.na(dLLK)) {
-        dLLK = -1e+50
-    }
-    return(-dLLK)
+  if (is.na(dLLK)) {
+    dLLK = -1e+50
+  }
+  return(-dLLK)
 }
 
 # Note that in wrapper_StaticLLKoptimizer_Uni() the argument GASSpec
@@ -29,14 +29,46 @@ wrapper_StaticLLKoptimizer_Uni <- function(vTheta_tilde, data, GASSpec) {
 }
 
 
-StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
-    vTheta = MapParameters_multi(vTheta_tilde, Dist, iN, iK)
-    dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
+StaticOptimizationLink_Univ <- function(vTheta_tilde, vY, lArguments, fn.optimizer) {
 
-    if (is.na(dLLK)) {
-        dLLK = -1e+50
-    }
-    return(-dLLK)
+  Dist = lArguments$Dist
+
+  # for these distribution the ML estimator is available in closed form
+  if (any(Dist %in% c("norm",
+                      "poi",
+                      "ber",
+                      "exp",
+                      "skellam"))) {
+
+    iK   = lArguments$iK
+    iT   = lArguments$iT
+
+    optimiser = list()
+    optimiser[["pars"]] = vTheta_tilde
+
+    vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
+    dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
+
+    optimiser[["value"]] = -dLLK
+
+  } else {
+
+    optimiser = fn.optimizer(par0 = vTheta_tilde, data = vY, GASSpec = lArguments, FUN = wrapper_StaticLLKoptimizer_Uni)
+
+  }
+
+  return(optimiser)
+
+}
+
+StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
+  vTheta = MapParameters_multi(vTheta_tilde, Dist, iN, iK)
+  dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
+
+  if (is.na(dLLK)) {
+    dLLK = -1e+50
+  }
+  return(-dLLK)
 }
 
 # Note that in wrapper_StaticLLKoptimizer_Multi() the argument GASSpec
@@ -51,11 +83,11 @@ wrapper_StaticLLKoptimizer_Multi <- function(vTheta_tilde, data, GASSpec) {
   iN   = GASSpec$iN
 
   dmLLK = StaticLLKoptimizer_Multi(vTheta_tilde = vTheta_tilde,
-                                 mY   = data,
-                                 Dist = Dist,
-                                 iT   = iT,
-                                 iK   = iK,
-                                 iN   = iN)
+                                   mY   = data,
+                                   Dist = Dist,
+                                   iT   = iT,
+                                   iK   = iK,
+                                   iN   = iN)
 
   return(dmLLK)
 
@@ -64,7 +96,7 @@ wrapper_StaticLLKoptimizer_Multi <- function(vTheta_tilde, data, GASSpec) {
 UniGASOptimiser <- function(vPw, data, GASSpec) {
 
   if (is.null(names(vPw))) {
-    names(vPw) = GAS:::getPwNames(GASSpec)
+    names(vPw) = getPwNames(GASSpec)
   }
 
   Dist = getDist(GASSpec)
@@ -96,7 +128,7 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
 MultiGASOptimiser <- function(vPw, data, GASSpec){
 
   if (is.null(names(vPw))) {
-    names(vPw) = GAS:::getPwNames(GASSpec)
+    names(vPw) = getPwNames(GASSpec)
   }
 
   Dist = getDist(GASSpec)
