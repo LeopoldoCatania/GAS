@@ -17,8 +17,7 @@ An object of the class \link{uGASSpec} created using the function \link{UniGASSp
 It can also be an object of the class \code{ts}, \code{xts} or \code{zoo}.}
 %
 \item{fn.optimizer}{\code{function}. This is a generic optimization function that can be provided by the user.
-The default optimizer is the  General Nonlinear Augmented Lagrange Multiplier method of Ye (1988) available in
-the R package Rsolnp (Ghalanos and Theussl 2016). By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
+By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
 a wrapper to the \link{optim} function. See Details for user defined optimization routines.}
 %
 \item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = TRUE}}
@@ -53,8 +52,8 @@ or \code{character} string reporting information about the convergence of the op
 
 The user is allowed to not include the last two elements of the output of the \code{fn.optimizer} function, that is, the values
 \code{hessian = NULL} and \code{convergence = NULL} are admissible. In the case of \code{hessian = NULL}, the Hessian matrix is
-evaluated numerically using the \link{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided
-hessian is not positive defined, a try with the hessian evaluation used by the function \link{optim} is made.
+evaluated numerically using the \link{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian
+is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
 
 }
 \value{
@@ -122,7 +121,7 @@ Fit
 # Estimate the model with a different optimizer.
 # Assume we want to use the Nelder and Mead optimization provided by
 # the optim() function, we create
-# the wrapper fn.optim in this way
+# the wrapper fn.NM.optim in this way
 
 fn.NM.optim <- function(par0, data, GASSpec, FUN) {
 
