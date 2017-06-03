@@ -7,7 +7,7 @@ Generalized Autoregressive Score Models in R
 [![Pending Pull-Requests](http://githubbadges.herokuapp.com/LeopoldoCatania/GAS/pulls.svg?style=flat)](https://github.com/LeopoldoCatania/GAS/pulls)
 [![Github Issues](http://githubbadges.herokuapp.com/LeopoldoCatania/GAS/issues.svg)](https://github.com/LeopoldoCatania/GAS/issues)
 
-`GAS` ([Catania et al., 2016](https://CRAN.R-project.org/package=GAS)) implements the Generalized Autoregressive 
+`GAS` ([Catania et al., 20xx](https://CRAN.R-project.org/package=GAS)) implements the Generalized Autoregressive 
 Score (GAS) framework in R. The GAS package provides 
 functions to simulate univariate and multivariate GAS processes,
 estimate the GAS parameters and to make time series forecasts. Full description of the algorithm
@@ -19,7 +19,7 @@ The latest development version of `GAS` is available at [https://github.com/Leop
 
 Please cite `GAS` in publications:
 
-Catania, L., Boudt, K., Ardia, D. (2016).  
+Catania, L., Boudt, K., Ardia, D. (20xx).  
 _GAS: Generalized Autoregressive Score Models_.  
 R package.  
 [https://CRAN.R-project.org/package=GAS](https://CRAN.R-project.org/package=GAS)  
