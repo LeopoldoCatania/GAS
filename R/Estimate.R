@@ -19,7 +19,7 @@ StaticMLFIT <- function(vY, Dist, fn.optimizer) {
   vTheta = as.numeric(MapParameters_univ(vTheta_tilde, Dist, iK))
   names(vTheta) = FullNamesUni(Dist)
 
-  out = list(vTheta = vTheta, dLLK = -optimiser$value, optimiser = optimiser)
+  out = list(vTheta = vTheta, dLLK = -optimiser$value * iT, optimiser = optimiser)
 
   return(out)
 }
@@ -44,7 +44,7 @@ StaticMLFIT_Multiv <- function(mY, Dist, fn.optimizer) {
   vTheta = as.numeric(MapParameters_multi(vTheta_tilde, Dist, iN, iK))
   names(vTheta) = FullNamesMulti(iN, Dist)
 
-  out = list(vTheta = vTheta, dLLK = -optimiser$value, optimiser = optimiser)
+  out = list(vTheta = vTheta, dLLK = -optimiser$value * iT, optimiser = optimiser)
 
   return(out)
 }
@@ -97,13 +97,14 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
       warning("Hessian matrix is not positive definite. Standard errors are not reliable")
     }
   }
+    mHessian = mHessian * iT # recall that we maximize the avg log like
   }
 
   Inference = InferenceFun_Uni(mHessian, vPw, iK, Compute.SE)
 
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
-  IC = ICfun(-optimiser$value, length(optimiser$pars), iT)
+  IC = ICfun(-optimiser$value * iT, length(optimiser$pars), iT)
 
   vU = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
   PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = FALSE)
@@ -178,22 +179,25 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   mHessian = optimiser$hessian
 
   if (Compute.SE) {
-  if (is.null(mHessian)) {
-    mHessian = numDeriv::hessian(MultiGASOptimiser, vPw, data = mY, GASSpec = GASSpec)
-    if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0)) {
-      mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
-    }
-    if (min(eigen(mHessian)$values) < 0) {
+
+    if (is.null(mHessian)) {
+      mHessian = numDeriv::hessian(MultiGASOptimiser, vPw, data = mY, GASSpec = GASSpec)
+      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0)) {
+        mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
+      }
+      if (min(eigen(mHessian)$values) < 0) {
       warning("Hessian matrix is not positive definite. Standard errors are not reliable")
+      }
     }
-  }
+    mHessian = mHessian * iT # recall that we maximize the avg log like
+
   }
 
   Inference = InferenceFun_Multi(mHessian, Dist, vPw, iK, iN, ScalarParameters, Compute.SE)
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 
-  IC = ICfun(-optimiser$value, length(optimiser$pars), iT)
+  IC = ICfun(-optimiser$value * iT, length(optimiser$pars), iT)
 
   ## Moments
   mMoments = EvalMoments_multi(GASDyn$mTheta, Dist, iN)
