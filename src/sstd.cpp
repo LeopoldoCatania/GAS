@@ -271,6 +271,14 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double ddXi    = ddLogG_xi + ddLogSigma_tilde_xi - 0.5 * (dNu + 1.0) *  1.0 / dC * ( ddL1*dL2 -  dL1* ddL2 )/pow(dL2, 2.0);
 
+  if (ddSigma > 1e5) {
+    ddSigma = 1e5;
+  }
+
+  if (ddSigma < -1e5) {
+    ddSigma = -1e5;
+  }
+
   arma::vec vScore(4);
 
   vScore(0) = ddMu;
