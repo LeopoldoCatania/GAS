@@ -122,6 +122,10 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
     dMLLK = 1e+10
   }
 
+  Text2Write = paste(c(vPw, paste(dMLLK, "\n", sep = "")), collapse = ",")
+
+  cat(Text2Write, file = "llk_pars.txt", append = TRUE)
+
   return(dMLLK)
 
 }
