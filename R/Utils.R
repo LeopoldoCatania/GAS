@@ -12,7 +12,7 @@ UpperB <- function() {
     return(0.9999999)
 }
 
-LowerNu <- function() return(2.5)
+LowerNu <- function() return(3.0)
 UpperNu <- function() return(50)
 
 Array2Matrix <- function(aArray, type) {
