@@ -5,7 +5,7 @@ StaticLLKoptimizer_Uni <- function(vTheta_tilde, vY, Dist, iT, iK) {
   if (is.na(dLLK)) {
     dLLK = -1e+50
   }
-  return(-dLLK / iT)
+  return(-dLLK)
 }
 
 # Note that in wrapper_StaticLLKoptimizer_Uni() the argument GASSpec
@@ -68,7 +68,7 @@ StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
   if (is.na(dLLK)) {
     dLLK = -1e+50
   }
-  return(-dLLK / iT)
+  return(-dLLK)
 }
 
 # Note that in wrapper_StaticLLKoptimizer_Multi() the argument GASSpec
@@ -121,7 +121,7 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
     dMLLK = 1e+50
   }
 
-  return(dMLLK / iT)
+  return(dMLLK)
 
 }
 
@@ -152,5 +152,5 @@ MultiGASOptimiser <- function(vPw, data, GASSpec){
   if (!is.finite(dMLLK)) {
     dMLLK = 1e+50
   }
-  return(dMLLK / iT)
+  return(dMLLK)
 }
