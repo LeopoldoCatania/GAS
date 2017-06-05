@@ -15,7 +15,7 @@ fn.solnp <- function(par0, data, GASSpec, FUN) {
 
 fn.optim <- function(par0, data, GASSpec, FUN) {
 
-  solver.ctr <- list(trace = 0, abstol = 1e-8)
+  solver.ctr <- list(trace = 0, abstol = 1e-8, reltol = 1e-8)
 
   optimiser = suppressWarnings(optim(par0, FUN, data = data, GASSpec = GASSpec,
                                      method = "BFGS",
