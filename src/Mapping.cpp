@@ -94,7 +94,7 @@ double Deriv_LogitInv(double dLogit){
 
 double CheckScale(double dScale) {
   if (dScale > dNumericalUpperLimit) {
-    dScale = dNumericalLowerLimit;
+    dScale = dNumericalUpperLimit;
   }
   if (dScale < dNumericalUnderflow) {
     dScale = dNumericalUnderflow;
@@ -104,7 +104,7 @@ double CheckScale(double dScale) {
 
 double CheckLocation(double dLocation) {
   if (dLocation > dNumericalUpperLimit) {
-    dLocation = dNumericalLowerLimit;
+    dLocation = dNumericalUpperLimit;
   }
   if (dLocation < dNumericalLowerLimit) {
     dLocation = dNumericalUnderflow;
