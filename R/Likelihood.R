@@ -2,9 +2,10 @@ StaticLLKoptimizer_Uni <- function(vTheta_tilde, vY, Dist, iT, iK) {
   vTheta = MapParameters_univ(vTheta_tilde, Dist, iK)
   dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
 
-  if (is.na(dLLK)) {
+  if (is.na(dLLK) | !is.finite(dLLK)) {
     dLLK = -1e+10
   }
+
   return(-dLLK)
 }
 
@@ -65,7 +66,7 @@ StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
   vTheta = MapParameters_multi(vTheta_tilde, Dist, iN, iK)
   dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
 
-  if (is.na(dLLK)) {
+  if (is.na(dLLK) | !is.finite(dLLK)) {
     dLLK = -1e+10
   }
   return(-dLLK)
