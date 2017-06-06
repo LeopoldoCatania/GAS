@@ -223,6 +223,7 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double dMu_tilde = dMu1*(dXi - 1.0/dXi);
   double dSigma_tilde = pow( (1.0 - pow(dMu1, 2.0))*(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0*pow(dMu1, 2.0) -1.0, 0.5);
+  double dLogSigma_tilde = 0.5 * log((1.0 - pow(dMu1, 2.0))*(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0*pow(dMu1, 2.0) -1.0);
   double dZ = (dY - dMu)/dSigma * dSigma_tilde + dMu_tilde;
 
   double dXi_star  = dXi;
@@ -259,7 +260,7 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double dFoo1_W = 2.0 * log(dXi_star) + log(dNu - 2.0);
   double dFoo2_W = 2.0 * log(abs3(dZ));
-  double dW = -3.0 * log(dSigma) + 2.0 * log(dSigma_tilde) + 2.0 * log(abs3(dY - dMu)) + log(dNu + 1.0) - LogSum(dFoo1_W, dFoo2_W);
+  double dW = -3.0 * log(dSigma) + 2.0 * dLogSigma_tilde + 2.0 * log(abs3(dY - dMu)) + log(dNu + 1.0) - LogSum(dFoo1_W, dFoo2_W);
 
   double dFoo_E = dMu_tilde*(dY - dMu);
 
@@ -275,7 +276,7 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   }
 
-  double dE = log(dNu + 1.0) + log(dSigma_tilde) + log(abs3(dMu_tilde * (dY - dMu))) - 2.0 * log(dSigma) - LogSum(dFoo1_W, dFoo2_W);
+  double dE = log(dNu + 1.0) + dLogSigma_tilde + log(abs3(dMu_tilde * (dY - dMu))) - 2.0 * log(dSigma) - LogSum(dFoo1_W, dFoo2_W);
 
   double ddSigma = dQ + exp(dW) + dSgn * exp(dE);
 
