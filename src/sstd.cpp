@@ -216,7 +216,10 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
   double dXi    = vTheta(2);
   double dNu    = vTheta(3);
 
-  double dMu1 = 2.0*pow(dNu - 2.0, 0.5)/(dNu - 1.0)  * Rf_gammafn(0.5*(dNu + 1.0))/(Rf_gammafn(0.5*dNu)*Rf_gammafn(0.5));
+  // double dMu1 = 2.0*pow(dNu - 2.0, 0.5)/(dNu - 1.0)  * Rf_gammafn(0.5*(dNu + 1.0))/(Rf_gammafn(0.5*dNu)*Rf_gammafn(0.5));
+
+  double dLogMu1 = log(2.0) + 0.5 * log(dNu - 2.0) - log(dNu - 1.0) + Rf_lgammafn(0.5 * (dNu + 1.0)) - Rf_lgammafn(0.5 * dNu) - Rf_lgammafn(0.5);
+  double dMu1    = exp(dLogMu1);
 
   double dMu_tilde = dMu1*(dXi - 1.0/dXi);
   double dSigma_tilde = pow( (1.0 - pow(dMu1, 2.0))*(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0*pow(dMu1, 2.0) -1.0, 0.5);
@@ -249,7 +252,32 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double ddMu    = (dNu + 1.0)/dC  * dSigma_tilde/dSigma * dZ/( pow(dXi_star, 2.0)*(dNu - 2.0) );
 
-  double ddSigma = -1.0/dSigma + (dNu + 1.0)/dC * dSigma_tilde/pow(dSigma, 2.0) * dZ*(dY - dMu)/( pow(dXi_star, 2.0)*(dNu - 2.0) );
+  // old one
+  // double ddSigma = -1.0/dSigma + (dNu + 1.0)/dC * dSigma_tilde/pow(dSigma, 2.0) * dZ*(dY - dMu)/( pow(dXi_star, 2.0)*(dNu - 2.0) );
+
+  double dQ = -1.0/dSigma;
+
+  double dFoo1_W = 2.0 * log(dXi_star) + log(dNu - 2.0);
+  double dFoo2_W = 2.0 * log(abs3(dZ));
+  double dW = -3.0 * log(dSigma) + 2.0 * log(dSigma_tilde) + 2.0 * log(abs3(dY - dMu)) + log(dNu + 1.0) - LogSum(dFoo1_W, dFoo2_W);
+
+  double dFoo_E = dMu_tilde*(dY - dMu);
+
+  double dSgn = 0.0;
+
+  if (dFoo_E < 0) {
+
+    dSgn = -1.0;
+
+  } else {
+
+    dSgn = +1.0;
+
+  }
+
+  double dE = log(dNu + 1.0) + log(dSigma_tilde) + log(abs3(dMu_tilde * (dY - dMu))) - 2.0 * log(dSigma) - LogSum(dFoo1_W, dFoo2_W);
+
+  double ddSigma = dQ + exp(dW) + dSgn * exp(dE);
 
   double ddNu     = ddSigma_tilde_nu/dSigma_tilde + 0.5*(1.0/dNu - 1.0/(dNu-2.0)) + Rf_digamma(0.5*(dNu+1.0))*0.5 -
                     0.5*Rf_digamma(0.5*dNu) - 1.0/(2.0 * dNu) - 0.5*(log(dC) + dZ*(dNu + 1.0)*(2.0*(dNu-2.0)*ddL_nu - dZ)/(dC*pow(dXi_star*(dNu-2.0),2.0)));

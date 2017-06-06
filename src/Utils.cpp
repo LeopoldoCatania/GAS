@@ -224,3 +224,28 @@ double ModBesselFirst_Deriv(double dX, double dNu, int iM = 1000) {
   return dDeriv;
 
 }
+
+double LogSum(double dLogX, double dLogY) {
+
+  double dLogA = 0.0;
+  double dLogB = 0.0;
+
+  if (dLogX > dLogY) {
+
+    dLogA = dLogY;
+    dLogB = dLogX;
+
+  } else {
+
+    dLogB = dLogY;
+    dLogA = dLogX;
+
+  }
+
+
+  double dLogSum = dLogA + log(1.0 + exp(dLogB - dLogA));
+
+
+  return dLogSum;
+
+}

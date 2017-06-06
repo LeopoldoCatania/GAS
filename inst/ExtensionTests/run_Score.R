@@ -116,13 +116,15 @@ vTheta = c(dMu, dSigma, dXi, dNu)
 
 vApprox = matrix(numDeriv::grad(function(vTheta, dY) {
   GAS::ddist_Uni(dY, vTheta, "sstd", log = TRUE)
-}, vTheta, dY = dY, method = "simple"), ncol = 1)
+}, vTheta, dY = dY), ncol = 1)
 
 vGAS = GAS:::Score_Uni(dY, vTheta, "sstd")
 
+abs(vApprox[2] - vGAS[2])
+
 expect_equal(dim(vApprox), c(4, 1))
 expect_equal(dim(vGAS), c(4, 1))
-expect_true(max(vApprox - vGAS) < tol)
+expect_true(abs(vApprox[2] - vGAS[2]) < tol)
 
 # Skellam
 
@@ -135,6 +137,8 @@ vTheta = c(dMu, dSigma2)
 vApprox = matrix(numDeriv::grad(function(vTheta, dY) {
   GAS::ddist_Uni(dY, vTheta, "skellam", log = TRUE)
 }, vTheta, dY = dY, method = "simple"), ncol = 1)
+
+
 
 vGAS = GAS:::Score_Uni(dY, vTheta, "skellam")
 
