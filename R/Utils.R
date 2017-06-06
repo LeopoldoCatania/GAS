@@ -2,14 +2,14 @@ LowerA <- function() {
     return(0)
 }
 UpperA <- function() {
-    return(5)
+    return(4)
 }
 
 LowerB <- function() {
     return(0)
 }
 UpperB <- function() {
-    return(0.9999999)
+    return(0.9999)
 }
 
 LowerNu <- function() return(2.5)
