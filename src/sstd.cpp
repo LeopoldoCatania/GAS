@@ -278,7 +278,14 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double dE = log(dNu + 1.0) + dLogSigma_tilde + log(abs3(dMu_tilde * (dY - dMu))) - 2.0 * log(dSigma) - LogSum(dFoo1_W, dFoo2_W);
 
-  double ddSigma = dQ + exp(dW) + dSgn * exp(dE);
+  double ddSigma = 0.0;
+
+  if (dSgn < 0) {
+    ddSigma = dQ + exp(dW) + dSgn * exp(dE);
+  } else {
+    ddSigma = dQ + exp(LogSum(dW, dE));
+  }
+
 
   double ddNu     = ddSigma_tilde_nu/dSigma_tilde + 0.5*(1.0/dNu - 1.0/(dNu-2.0)) + Rf_digamma(0.5*(dNu+1.0))*0.5 -
                     0.5*Rf_digamma(0.5*dNu) - 1.0/(2.0 * dNu) - 0.5*(log(dC) + dZ*(dNu + 1.0)*(2.0*(dNu-2.0)*ddL_nu - dZ)/(dC*pow(dXi_star*(dNu-2.0),2.0)));
