@@ -1,6 +1,6 @@
 context("Test Simulate")
 
-tol = 1e-2
+tol = 1e-4
 
 test_that("Simulation", {
 
@@ -71,7 +71,7 @@ test_that("Simulation", {
   expect_equal(dim(tmp), c(iT, 1))
   expect_true(abs(sum(tmp) - -8.063126) < tol)
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0001093, 0.0991094, 7.9597717)))
+  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0001108389, 0.0991014929, 7.9800370961)))
   expect_true(tmp < tol)
 
   # sstd
@@ -95,9 +95,9 @@ test_that("Simulation", {
 
   tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
-  expect_true(abs(sum(tmp) - 4.38) < tol)
+  expect_true(abs(sum(tmp) - 4.379524) < tol)
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0000, 0.1473, 1.1000, 8.0000)))
+  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0000000, 0.1473415, 1.1000000, 8.0000000)))
   expect_true(tmp < tol)
 
   ## MULTIVARIATE
@@ -137,3 +137,4 @@ test_that("Simulation", {
   expect_true(tmp < tol)
 
 })
+
