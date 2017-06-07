@@ -202,6 +202,13 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
 
   StaticFit = StaticMLFIT(vY, Dist, fn.optimizer)
   vUncValues = StaticFit$optimiser$pars
+
+  if (Dist == "sstd") {
+    if (StaticFit$vTheta["shape"] < 15) {
+      vUncValues["shape"] = unmapVec_C(15, LowerNu(), UpperNu())
+    }
+  }
+
   names(vUncValues) = paste("kappa", 1:iK, sep = "")
 
   if (iK > 1) {
