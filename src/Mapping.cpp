@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-const double dLowerShape = 2.5;
+const double dLowerShape = 3.0;
 const double dUpperShape = 50.0;
 
 const double dLowerSkewFS = 0.50;

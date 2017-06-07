@@ -305,7 +305,6 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
   vScore(2) = ddXi;
   vScore(3) = ddNu;
 
-
   return vScore;
 
 }
