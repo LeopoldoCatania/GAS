@@ -10,9 +10,9 @@ const double dUpperShape = 50.0;
 const double dLowerSkewFS = 0.50;
 const double dUpperSkewFS = 1.50;
 
-const double dNumericalUpperLimit = 1e10;
-const double dNumericalLowerLimit = -1e10;
-const double dNumericalUnderflow  = 1e-10;
+const double dNumericalUpperLimit = 1e7;
+const double dNumericalLowerLimit = -1e7;
+const double dNumericalUnderflow  = 1e-7;
 
 double Map(double dX, double dL,double dU) {
   double dMap =  dL + ( dU - dL ) / (1.0 + exp( - dX ));
