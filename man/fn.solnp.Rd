@@ -4,7 +4,7 @@
 	A wrapper to the \link{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
 }
 \description{
-	This function is just a wrapper to the \link{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
+	This function is a wrapper to the \link{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
 }
 \usage{
  fn.solnp(par0, data, GASSpec, FUN)

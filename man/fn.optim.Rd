@@ -4,7 +4,7 @@
 	A wrapper to the \link{optim} function.
 }
 \description{
-	This function is just a wrapper to the standard \link{optim}  optimizer with \code{method = "BFGS"}.
+	This function is a wrapper to the standard \link{optim}  optimizer with \code{method = "BFGS"}.
 }
 \usage{
  fn.optim(par0, data, GASSpec, FUN)

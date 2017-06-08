@@ -11,5 +11,5 @@ URL: https://github.com/LeopoldoCatania/GAS
 LazyData: TRUE
 Imports: Rcpp (>= 0.12.2), Rsolnp, MASS, xts, numDeriv, zoo
 LinkingTo: Rcpp, RcppArmadillo
-Depends: R (>= 2.10), methods
+Depends: R (>= 3.2.0), methods
 Suggests: testthat

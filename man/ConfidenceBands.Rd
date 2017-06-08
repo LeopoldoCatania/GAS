@@ -4,7 +4,7 @@
 	Build confidence bands for the filtered parameters
 }
 \description{
-	Build confidence bands for the filtered parameters sampling the coefficients 
+	Build confidence bands for the filtered parameters sampling the coefficients
 	from the asymptotic distribution as in Blasques et al. (2016).
 }
 \usage{
@@ -24,16 +24,16 @@ An object of the class \link{uGASFit} or \link{mGASFit}}
 Additional arguments.}
 }
 \details{
-	This function implements the "In-Sample Simulation-Based Bands" Sec 3.3 of Blasques et al. (2016).
+	This function implements the "In-Sample Simulation-Based Bands" Section 3.3 of Blasques et al. (2016).
 }
-\value{An object of the class \code{array} of dimension T+1 x B x K, where T is the length of 
-the time series, K is the number of parameters and B the number of draws. The first slice reports 
-the estimated filtered parameters. Also the one step ahead prediction is reported, this why T + 1.}
+\value{An object of the class \code{array} of dimension (T+1) x B x K, where T is the length of
+the time series, K is the number of parameters and B the number of draws. The first slice reports
+the estimated filtered parameters. The one step ahead prediction is also reported, this why T+1.}
 \author{Leopoldo Catania}
 \references{
-Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016). 
-"In-sample Confidence Bands and Out-of-Sample Forecast Bands for Time-Varying Parameters in Observation-Driven Models." 
-International Journal of Forecasting, 32(3), 875-887. 
+Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016).
+"In-sample Confidence Bands and Out-of-Sample Forecast Bands for Time-Varying Parameters in Observation-Driven Models."
+International Journal of Forecasting, 32(3), 875-887.
 \doi{10.1016/j.ijforecast.2016.04.002}.
 }
 \examples{

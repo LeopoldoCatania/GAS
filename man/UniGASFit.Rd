@@ -42,7 +42,7 @@ Further technical details are presented in Section 3.2 of Ardia et. al. (2016a).
 The user is free to employ his/her own optimization routine via the \code{fn.optimizer} argument. \code{fn.optimizer}
 accepts a \code{function} object. The user provided optimizer has to satisfy strict requirements. The arguments of the
 \code{fn.optimizer} are : i) \code{par0} a vector of starting values, ii) \code{data} the data provided, iii) \code{GASSpec}
-an object of the class \link{uGASSpec}, and iv) \code{FUN} the likelihood function. The output of \code{fn.optimizer} have
+an object of the class \link{uGASSpec}, and iv) \code{FUN} the likelihood function. The output of \code{fn.optimizer} has
 to be an object of the class \code{list} with four named elements: i) \code{pars}: a \code{numeric} vector
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
 evaluated at its minimum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at

@@ -1,0 +1,133 @@
+R version 3.4.0 (2017-04-21)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 14.04.5 LTS
+
+Matrix products: default
+BLAS: /usr/lib/libblas/libblas.so.3.0
+LAPACK: /usr/lib/lapack/liblapack.so.3.0
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] methods   stats     graphics  grDevices utils     datasets  base     
+
+other attached packages:
+[1] GAS_0.2.0       devtools_1.13.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.11      lattice_0.20-35   zoo_1.8-0         digest_0.6.12    
+ [5] withr_1.0.2       truncnorm_1.0-7   MASS_7.3-47       grid_3.4.0       
+ [9] R6_2.2.1          git2r_0.18.0      httr_1.2.1        curl_2.6         
+[13] xts_0.9-7         tools_3.4.0       parallel_3.4.0    numDeriv_2016.8-1
+[17] compiler_3.4.0    memoise_1.1.0     Rsolnp_1.16      
+
+
+SECTION 3.1
+-----------
+
+
+-------------------------------------------------------
+-            Univariate GAS Specification             -
+-------------------------------------------------------
+Conditional distribution
+-------------------------------------------------------
+Name:	Student-t
+Label:	std
+Type:	univariate
+Parameters:	location, scale, shape
+Number of Parameters:	3
+References:	
+-------------------------------------------------------
+GAS specification
+-------------------------------------------------------
+Score scaling type:  Identity
+Time varying parameters:  location, scale
+-------------------------------------------------------
+
+SECTION 3.2
+-----------
+
+
+------------------------------------------
+-          Univariate GAS Fit            -
+------------------------------------------
+
+Model Specification:	
+T =  276
+Conditional distribution:  std
+Score scaling type:  Identity
+Time varying parameters:  location, scale
+------------------------------------------
+Estimates:
+       Estimate Std. Error t value  Pr(>|t|)
+kappa1  0.03736    0.03110   1.201 1.148e-01
+kappa2 -0.25993    0.14084  -1.846 3.248e-02
+kappa3 -2.84547    0.79650  -3.572 1.768e-04
+a1      0.07173    0.01846   3.887 5.077e-05
+a2      0.45372    0.21392   2.121 1.696e-02
+b1      0.94317    0.02723  34.634 0.000e+00
+b2      0.85560    0.07430  11.515 0.000e+00
+
+------------------------------------------
+Unconditional Parameters:
+location    scale    shape 
+  0.6575   0.1653   6.5261 
+
+------------------------------------------
+Information Criteria:
+   AIC    BIC     np    llk 
+ 370.4  395.8    7.0 -178.2 
+
+------------------------------------------
+Convergence:	0
+------------------------------------------
+
+Elapsed time: 0.01 mins
+
+SECTION 3.3
+-----------
+
+
+------------------------------------------
+-        Univariate GAS Forecast         -
+------------------------------------------
+
+Model Specification
+Conditional distribution:  std
+Score scaling type:  Identity
+Horizon:  12
+Rolling forecast:  FALSE
+------------------------------------------
+Parameters forecast:
+    location  scale shape
+T+1  0.10130 0.1524 6.526
+T+2  0.09499 0.1737 6.526
+T+3  0.09382 0.2151 6.526
+T+4  0.09256 0.2577 6.526
+T+5  0.08747 0.3020 6.526
+
+....................
+     location  scale shape
+T+8   0.08345 0.4219 6.526
+T+9   0.07792 0.4575 6.526
+T+10  0.07383 0.4900 6.526
+T+11  0.07558 0.5199 6.526
+T+12  0.07507 0.5465 6.526
+
+
+SECTION 3.4
+-----------
+
+
+
+SECTION 4
+---------
+
+    NLS uniform  center   tails  tail_r  tail_l 
+ 2.2163  1.3292  0.1767  0.5251  0.6522  0.6770 
