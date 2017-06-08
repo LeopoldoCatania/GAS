@@ -50,7 +50,7 @@ GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
 library("parallel")
 
 Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
-                  RefitEvery = 10, RefitWindow = c("moving"))
+                  RefitEvery = 12, RefitWindow = c("moving"))
 
 
 Roll

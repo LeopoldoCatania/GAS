@@ -1,0 +1,1687 @@
+R version 3.4.0 (2017-04-21)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows >= 8 x64 (build 9200)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Italian_Italy.1252  LC_CTYPE=Italian_Italy.1252    LC_MONETARY=Italian_Italy.1252
+[4] LC_NUMERIC=C                   LC_TIME=Italian_Italy.1252    
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] GAS_0.2.0       testthat_1.0.2  xts_0.9-7       devtools_1.13.2 lmtest_0.9-35   zoo_1.8-0       sandwich_2.3-4 
+[8] rmgarch_1.3-0   rugarch_1.3-6  
+
+loaded via a namespace (and not attached):
+ [1] multicool_0.1-10            ks_1.10.6                   lattice_0.20-35             pcaPP_1.9-61               
+ [5] expm_0.999-2                SkewHyperbolic_0.3-2        htmltools_0.3.6             nloptr_1.0.4               
+ [9] withr_1.0.2                 htmlwidgets_0.8             mvtnorm_1.0-6               codetools_0.2-15           
+[13] memoise_1.1.0               misc3d_0.8-4                knitr_1.16                  Bessel_0.5-5               
+[17] ff_2.2-13                   httpuv_1.3.3                curl_2.6                    Rcpp_0.12.11               
+[21] KernSmooth_2.23-15          xtable_1.8-2                DistributionUtils_0.5-1     jsonlite_1.5               
+[25] truncnorm_1.0-7             FNN_1.1                     mime_0.5                    bit_1.1-12                 
+[29] spd_2.0-1                   digest_0.6.12               shiny_1.0.3                 numDeriv_2016.8-1          
+[33] grid_3.4.0                  tools_3.4.0                 magrittr_1.5                rgl_0.98.1                 
+[37] Rsolnp_1.16                 crayon_1.3.2                MASS_7.3-47                 GeneralizedHyperbolic_0.8-1
+[41] Matrix_1.2-9                httr_1.2.1                  R6_2.2.1                    compiler_3.4.0             
+[45] git2r_0.18.0               
+
+
+SECTION 3
+---------
+
+ 
+Table 1
+        Label             Name                                                  Type          
+norm    "\\code{norm}"    "Gaussian"                                            "univariate"  
+snorm   "\\code{snorm}"   "Skew-Gaussian"                                       "univariate"  
+std     "\\code{std}"     "Student-t"                                           "univariate"  
+sstd    "\\code{sstd}"    "Skew-Student-t"                                      "univariate"  
+ast     "\\code{ast}"     "Asymmetric Student-t with two tail decay parameters" "univariate"  
+ast1    "\\code{ast1}"    "Asymmetric Student-t with one tail decay parameter"  "univariate"  
+ald     "\\code{ald}"     "Asymmetric Laplace Distribution"                     "univariate"  
+poi     "\\code{poi}"     "Poisson"                                             "univariate"  
+ber     "%\\code{ber}"    "Bernoulli"                                           "univariate"  
+gamma   "\\code{gamma}"   "Gamma"                                               "univariate"  
+exp     "\\code{exp}"     "Exponential"                                         "univariate"  
+beta    "\\code{beta}"    "Beta"                                                "univariate"  
+negbin  "\\code{negbin}"  "Negative Binomial"                                   "univariate"  
+skellam "\\code{skellam}" "Skellam"                                             "univariate"  
+mvnorm  "\\code{mvnorm}"  "Multivariate Gaussian"                               "multivariate"
+mvt     "\\code{mvt}"     "Multivariate Student-t"                              "multivariate"
+        Parameters                                         N. of Parameters Scaling Type                         
+norm    "\\code{location, scale}"                          "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
+snorm   "\\code{location, scale, skewness}"                "3"              "\\code{Identity} \\\\"              
+std     "\\code{location, scale, shape}"                   "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
+sstd    "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity} \\\\"              
+ast     "\\code{location, scale, skewness, shape, shape2}" "5"              "\\code{Identity, Inv, InvSqrt} \\\\"
+ast1    "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity, Inv, InvSqrt} \\\\"
+ald     "\\code{location, scale, skewness}"                "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
+poi     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
+ber     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
+gamma   "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
+exp     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
+beta    "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
+negbin  "\\code{location, scale}"                          "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
+skellam "\\code{location, scale}"                          "2"              "\\code{Identity} \\\\"              
+mvnorm  "\\code{location, scale, correlation}"             "9"              "\\code{Identity} \\\\"              
+mvt     "\\code{location, scale, correlation, shape}"      "10"             "\\code{Identity} \\\\"              
+
+
+SECTION 4
+---------
+
+
+
+UNIVARIATE FORECAST
+-------------------
+
+
+
+Rolling forecast with univariate GAS
+
+
+
+GAS rolling estimation asset 1 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.05682  2.28883  1.10576  7.95185 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01042  0.97537  0.02333  0.73445 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07702 1.635    1.083 6.777
+T+2  0.07702 1.594    1.083 6.777
+T+3  0.07702 1.577    1.083 6.777
+T+4  0.07702 1.538    1.083 6.777
+T+5  0.07702 1.518    1.083 6.777
+T+6  0.07702 1.625    1.083 6.777
+GAS parameters tail
+      location scale skewness shape
+T+95   0.04828 5.710    1.053 7.339
+T+96   0.04828 5.592    1.053 7.339
+T+97   0.04828 5.436    1.053 7.339
+T+98   0.04828 5.356    1.053 7.339
+T+99   0.04828 5.560    1.053 7.339
+T+100  0.04828 5.394    1.053 7.339
+
+
+GAS rolling estimation asset 2 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.09148  2.16225  1.09106  8.45367 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01953  1.15054  0.01240  1.27186 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07824 1.963    1.072 6.211
+T+2  0.07824 1.875    1.072 6.211
+T+3  0.07824 1.912    1.072 6.211
+T+4  0.07824 1.877    1.072 6.211
+T+5  0.07824 1.848    1.072 6.211
+T+6  0.07824 1.825    1.072 6.211
+GAS parameters tail
+      location scale skewness shape
+T+95   0.05213 5.331    1.092  8.88
+T+96   0.05213 5.706    1.092  8.88
+T+97   0.05213 5.829    1.092  8.88
+T+98   0.05213 5.985    1.092  8.88
+T+99   0.05213 5.757    1.092  8.88
+T+100  0.05213 5.562    1.092  8.88
+
+
+GAS rolling estimation asset 3 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06568  2.00681  1.04949  5.70312 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01650  0.61647  0.01364  0.44013 
+GAS parameters head
+    location scale skewness shape
+T+1  0.06532 1.672    1.082 5.759
+T+2  0.06532 1.742    1.082 5.759
+T+3  0.06532 2.000    1.082 5.759
+T+4  0.06532 1.874    1.082 5.759
+T+5  0.06532 1.882    1.082 5.759
+T+6  0.06532 1.769    1.082 5.759
+GAS parameters tail
+      location scale skewness shape
+T+95   0.07564 3.068    1.018 6.646
+T+96   0.07564 2.953    1.018 6.646
+T+97   0.07564 2.840    1.018 6.646
+T+98   0.07564 3.130    1.018 6.646
+T+99   0.07564 3.204    1.018 6.646
+T+100  0.07564 3.272    1.018 6.646
+
+
+GAS rolling estimation asset 4 
+GAS parameters mean
+location    scale skewness    shape 
+  0.1054   2.0633   1.0207   7.7925 
+GAS parameters std
+location    scale skewness    shape 
+ 0.02277  1.69980  0.03060  1.08470 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1253 1.849    1.078 5.466
+T+2   0.1253 1.788    1.078 5.466
+T+3   0.1253 1.692    1.078 5.466
+T+4   0.1253 1.606    1.078 5.466
+T+5   0.1253 1.696    1.078 5.466
+T+6   0.1253 1.808    1.078 5.466
+GAS parameters tail
+      location scale skewness shape
+T+95   0.05766 13.15    1.024 7.029
+T+96   0.05766 12.86    1.024 7.029
+T+97   0.05766 13.04    1.024 7.029
+T+98   0.05766 12.81    1.024 7.029
+T+99   0.05766 12.26    1.024 7.029
+T+100  0.05766 12.15    1.024 7.029
+
+
+GAS rolling estimation asset 5 
+GAS parameters mean
+location    scale skewness    shape 
+   0.105    2.293    1.068    7.424 
+GAS parameters std
+location    scale skewness    shape 
+ 0.03755  1.83432  0.01547  0.89573 
+GAS parameters head
+    location scale skewness shape
+T+1    0.124 2.743    1.084 5.886
+T+2    0.124 2.913    1.084 5.886
+T+3    0.124 2.976    1.084 5.886
+T+4    0.124 2.769    1.084 5.886
+T+5    0.124 2.651    1.084 5.886
+T+6    0.124 2.584    1.084 5.886
+GAS parameters tail
+      location scale skewness shape
+T+95   0.03584 13.86    1.055 7.562
+T+96   0.03584 13.47    1.055 7.562
+T+97   0.03584 13.93    1.055 7.562
+T+98   0.03584 13.57    1.055 7.562
+T+99   0.03584 13.38    1.055 7.562
+T+100  0.03584 12.87    1.055 7.562
+
+
+GAS rolling estimation asset 6 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.09426  2.09881  1.09102  5.80420 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01293  0.61606  0.02109  0.65723 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07526 1.628    1.087 4.759
+T+2  0.07526 1.601    1.087 4.759
+T+3  0.07526 1.674    1.087 4.759
+T+4  0.07526 1.625    1.087 4.759
+T+5  0.07526 1.635    1.087 4.759
+T+6  0.07526 1.574    1.087 4.759
+GAS parameters tail
+      location scale skewness shape
+T+95    0.1003 4.607    1.047 5.996
+T+96    0.1003 4.531    1.047 5.996
+T+97    0.1003 4.477    1.047 5.996
+T+98    0.1003 4.477    1.047 5.996
+T+99    0.1003 4.463    1.047 5.996
+T+100   0.1003 4.406    1.047 5.996
+
+
+GAS rolling estimation asset 7 
+GAS parameters mean
+location    scale skewness    shape 
+  0.0652   1.5806   1.0400  10.6887 
+GAS parameters std
+location    scale skewness    shape 
+0.007583 0.531519 0.021117 2.775116 
+GAS parameters head
+    location scale skewness shape
+T+1  0.06644 1.736     1.03 6.308
+T+2  0.06644 1.692     1.03 6.308
+T+3  0.06644 1.635     1.03 6.308
+T+4  0.06644 1.648     1.03 6.308
+T+5  0.06644 1.602     1.03 6.308
+T+6  0.06644 1.629     1.03 6.308
+GAS parameters tail
+      location scale skewness shape
+T+95   0.07572 2.361   0.9814 14.83
+T+96   0.07572 2.277   0.9814 14.83
+T+97   0.07572 2.267   0.9814 14.83
+T+98   0.07572 2.460   0.9814 14.83
+T+99   0.07572 2.352   0.9814 14.83
+T+100  0.07572 2.253   0.9814 14.83
+
+
+GAS rolling estimation asset 8 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06234  1.82428  1.08437  7.53939 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01040  0.71334  0.01707  0.55949 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07305 1.852    1.067 6.437
+T+2  0.07305 1.931    1.067 6.437
+T+3  0.07305 1.926    1.067 6.437
+T+4  0.07305 1.880    1.067 6.437
+T+5  0.07305 1.835    1.067 6.437
+T+6  0.07305 1.767    1.067 6.437
+GAS parameters tail
+      location scale skewness shape
+T+95   0.04223 4.284     1.11 7.009
+T+96   0.04223 4.177     1.11 7.009
+T+97   0.04223 4.292     1.11 7.009
+T+98   0.04223 4.309     1.11 7.009
+T+99   0.04223 4.304     1.11 7.009
+T+100  0.04223 4.206     1.11 7.009
+
+
+GAS rolling estimation asset 9 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.05925  1.98430  1.06676  6.41407 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01642  0.79080  0.01280  0.31849 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08991 1.499    1.083 6.611
+T+2  0.08991 1.474    1.083 6.611
+T+3  0.08991 1.453    1.083 6.611
+T+4  0.08991 1.533    1.083 6.611
+T+5  0.08991 1.517    1.083 6.611
+T+6  0.08991 1.492    1.083 6.611
+GAS parameters tail
+      location scale skewness shape
+T+95   0.03401 4.007     1.06 6.284
+T+96   0.03401 3.939     1.06 6.284
+T+97   0.03401 4.014     1.06 6.284
+T+98   0.03401 4.108     1.06 6.284
+T+99   0.03401 4.074     1.06 6.284
+T+100  0.03401 4.023     1.06 6.284
+
+
+GAS rolling estimation asset 10 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.08623  1.73649  1.07165 10.24144 
+GAS parameters std
+location    scale skewness    shape 
+ 0.02348  0.86480  0.01496  1.45779 
+GAS parameters head
+    location scale skewness shape
+T+1  0.09247 1.430    1.054 9.242
+T+2  0.09247 1.452    1.054 9.242
+T+3  0.09247 1.508    1.054 9.242
+T+4  0.09247 1.480    1.054 9.242
+T+5  0.09247 1.448    1.054 9.242
+T+6  0.09247 1.408    1.054 9.242
+GAS parameters tail
+      location scale skewness shape
+T+95   0.03044 5.154    1.091 7.609
+T+96   0.03044 5.173    1.091 7.609
+T+97   0.03044 5.119    1.091 7.609
+T+98   0.03044 5.217    1.091 7.609
+T+99   0.03044 5.235    1.091 7.609
+T+100  0.03044 5.227    1.091 7.609
+
+
+GAS rolling estimation asset 11 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.04779  2.39259  1.11526  7.71946 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01269  1.33066  0.01499  1.37285 
+GAS parameters head
+    location scale skewness shape
+T+1  0.05842 1.648    1.114 6.384
+T+2  0.05842 1.862    1.114 6.384
+T+3  0.05842 1.802    1.114 6.384
+T+4  0.05842 1.792    1.114 6.384
+T+5  0.05842 1.749    1.114 6.384
+T+6  0.05842 1.720    1.114 6.384
+GAS parameters tail
+      location scale skewness shape
+T+95   0.02103 6.545     1.09 5.667
+T+96   0.02103 6.183     1.09 5.667
+T+97   0.02103 5.904     1.09 5.667
+T+98   0.02103 6.145     1.09 5.667
+T+99   0.02103 6.148     1.09 5.667
+T+100  0.02103 6.001     1.09 5.667
+
+
+GAS rolling estimation asset 12 
+GAS parameters mean
+location    scale skewness    shape 
+  0.1087   2.1357   1.0601   7.0112 
+GAS parameters std
+location    scale skewness    shape 
+ 0.03628  0.81834  0.01830  0.76781 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1411 1.979    1.043 7.382
+T+2   0.1411 1.932    1.043 7.382
+T+3   0.1411 1.890    1.043 7.382
+T+4   0.1411 1.850    1.043 7.382
+T+5   0.1411 1.788    1.043 7.382
+T+6   0.1411 1.728    1.043 7.382
+GAS parameters tail
+      location scale skewness shape
+T+95   0.02755 3.474    1.085 6.626
+T+96   0.02755 3.462    1.085 6.626
+T+97   0.02755 3.523    1.085 6.626
+T+98   0.02755 3.659    1.085 6.626
+T+99   0.02755 3.597    1.085 6.626
+T+100  0.02755 3.474    1.085 6.626
+
+
+GAS rolling estimation asset 13 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.09136  2.50262  1.04421  5.52730 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01338  0.93310  0.01131  0.38361 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07839 2.504    1.025 5.741
+T+2  0.07839 2.428    1.025 5.741
+T+3  0.07839 2.383    1.025 5.741
+T+4  0.07839 2.311    1.025 5.741
+T+5  0.07839 2.423    1.025 5.741
+T+6  0.07839 2.337    1.025 5.741
+GAS parameters tail
+      location scale skewness shape
+T+95   0.09102 3.363    1.033 5.151
+T+96   0.09102 3.282    1.033 5.151
+T+97   0.09102 3.364    1.033 5.151
+T+98   0.09102 3.458    1.033 5.151
+T+99   0.09102 3.503    1.033 5.151
+T+100  0.09102 3.408    1.033 5.151
+
+
+GAS rolling estimation asset 14 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06493  1.86806  1.06850  5.05205 
+GAS parameters std
+location    scale skewness    shape 
+ 0.02388  0.73201  0.01805  0.33244 
+GAS parameters head
+    location scale skewness shape
+T+1  0.03424 2.108    1.063 4.911
+T+2  0.03424 2.023    1.063 4.911
+T+3  0.03424 1.949    1.063 4.911
+T+4  0.03424 1.893    1.063 4.911
+T+5  0.03424 1.879    1.063 4.911
+T+6  0.03424 1.838    1.063 4.911
+GAS parameters tail
+      location scale skewness shape
+T+95   0.04351 3.017    1.036 5.795
+T+96   0.04351 2.917    1.036 5.795
+T+97   0.04351 2.981    1.036 5.795
+T+98   0.04351 2.986    1.036 5.795
+T+99   0.04351 2.903    1.036 5.795
+T+100  0.04351 2.818    1.036 5.795
+
+
+GAS rolling estimation asset 15 
+GAS parameters mean
+location    scale skewness    shape 
+  0.1441   2.6197   1.0301   7.3472 
+GAS parameters std
+location    scale skewness    shape 
+ 0.05465  0.95800  0.01138  0.46246 
+GAS parameters head
+    location scale skewness shape
+T+1   0.2022 2.528    1.018 6.688
+T+2   0.2022 2.439    1.018 6.688
+T+3   0.2022 2.429    1.018 6.688
+T+4   0.2022 2.508    1.018 6.688
+T+5   0.2022 2.470    1.018 6.688
+T+6   0.2022 2.397    1.018 6.688
+GAS parameters tail
+      location scale skewness shape
+T+95   0.04479 3.976    1.008 7.184
+T+96   0.04479 3.959    1.008 7.184
+T+97   0.04479 3.877    1.008 7.184
+T+98   0.04479 3.953    1.008 7.184
+T+99   0.04479 3.962    1.008 7.184
+T+100  0.04479 4.073    1.008 7.184
+
+
+GAS rolling estimation asset 16 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.07944  1.37482  1.06388  8.13495 
+GAS parameters std
+location    scale skewness    shape 
+ 0.02703  0.52150  0.01404  1.12006 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1035 1.753    1.045 7.413
+T+2   0.1035 1.774    1.045 7.413
+T+3   0.1035 1.913    1.045 7.413
+T+4   0.1035 1.840    1.045 7.413
+T+5   0.1035 1.896    1.045 7.413
+T+6   0.1035 1.841    1.045 7.413
+GAS parameters tail
+      location scale skewness shape
+T+95   0.03574 1.604    1.073 6.096
+T+96   0.03574 1.630    1.073 6.096
+T+97   0.03574 1.655    1.073 6.096
+T+98   0.03574 1.605    1.073 6.096
+T+99   0.03574 1.587    1.073 6.096
+T+100  0.03574 1.532    1.073 6.096
+
+
+GAS rolling estimation asset 17 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.09077  2.29416  1.05768  7.55410 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01823  1.37704  0.01493  0.83219 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08435 1.906    1.041 5.518
+T+2  0.08435 1.821    1.041 5.518
+T+3  0.08435 1.862    1.041 5.518
+T+4  0.08435 1.820    1.041 5.518
+T+5  0.08435 2.023    1.041 5.518
+T+6  0.08435 2.137    1.041 5.518
+GAS parameters tail
+      location scale skewness shape
+T+95   0.05816 8.067    1.087 6.933
+T+96   0.05816 7.801    1.087 6.933
+T+97   0.05816 8.044    1.087 6.933
+T+98   0.05816 8.216    1.087 6.933
+T+99   0.05816 7.902    1.087 6.933
+T+100  0.05816 7.602    1.087 6.933
+
+
+GAS rolling estimation asset 18 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.07829  2.14360  1.08452  8.98151 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01819  2.22697  0.01292  7.39823 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08375 1.379    1.066 6.904
+T+2  0.08375 1.335    1.066 6.904
+T+3  0.08375 1.342    1.066 6.904
+T+4  0.08375 1.322    1.066 6.904
+T+5  0.08375 1.410    1.066 6.904
+T+6  0.08375 1.365    1.066 6.904
+GAS parameters tail
+      location scale skewness shape
+T+95    0.0307 6.361    1.068 5.752
+T+96    0.0307 6.527    1.068 5.752
+T+97    0.0307 6.363    1.068 5.752
+T+98    0.0307 6.931    1.068 5.752
+T+99    0.0307 6.467    1.068 5.752
+T+100   0.0307 6.272    1.068 5.752
+
+
+GAS rolling estimation asset 19 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.07524  1.46889  1.08443  7.56168 
+GAS parameters std
+location    scale skewness    shape 
+ 0.03464  0.62025  0.01407  1.09003 
+GAS parameters head
+    location scale skewness shape
+T+1    0.128 1.522    1.077 7.505
+T+2    0.128 1.599    1.077 7.505
+T+3    0.128 1.607    1.077 7.505
+T+4    0.128 1.568    1.077 7.505
+T+5    0.128 1.521    1.077 7.505
+T+6    0.128 1.490    1.077 7.505
+GAS parameters tail
+      location scale skewness shape
+T+95   0.01631 2.311    1.086 5.913
+T+96   0.01631 2.255    1.086 5.913
+T+97   0.01631 2.220    1.086 5.913
+T+98   0.01631 2.164    1.086 5.913
+T+99   0.01631 2.179    1.086 5.913
+T+100  0.01631 2.142    1.086 5.913
+
+
+GAS rolling estimation asset 20 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.05935  1.71363  1.06681  7.02748 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01357  0.45880  0.02453  0.91478 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07053 1.733     1.06 8.014
+T+2  0.07053 1.737     1.06 8.014
+T+3  0.07053 1.754     1.06 8.014
+T+4  0.07053 1.697     1.06 8.014
+T+5  0.07053 1.645     1.06 8.014
+T+6  0.07053 1.605     1.06 8.014
+GAS parameters tail
+      location scale skewness shape
+T+95   0.06506 2.342    1.043 6.247
+T+96   0.06506 2.273    1.043 6.247
+T+97   0.06506 2.231    1.043 6.247
+T+98   0.06506 2.231    1.043 6.247
+T+99   0.06506 2.166    1.043 6.247
+T+100  0.06506 2.104    1.043 6.247
+
+
+GAS rolling estimation asset 21 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06296  1.57809  1.06965  5.08102 
+GAS parameters std
+location    scale skewness    shape 
+0.007813 0.527006 0.017908 0.328793 
+GAS parameters head
+    location scale skewness shape
+T+1  0.07356 1.581    1.043 4.904
+T+2  0.07356 1.659    1.043 4.904
+T+3  0.07356 1.689    1.043 4.904
+T+4  0.07356 1.680    1.043 4.904
+T+5  0.07356 1.647    1.043 4.904
+T+6  0.07356 1.640    1.043 4.904
+GAS parameters tail
+      location scale skewness shape
+T+95   0.05202 2.860    1.073 4.912
+T+96   0.05202 2.801    1.073 4.912
+T+97   0.05202 2.819    1.073 4.912
+T+98   0.05202 2.807    1.073 4.912
+T+99   0.05202 2.975    1.073 4.912
+T+100  0.05202 3.185    1.073 4.912
+
+
+GAS rolling estimation asset 22 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.07969  1.77457  1.05684  6.52023 
+GAS parameters std
+location    scale skewness    shape 
+ 0.03341  0.53282  0.05166  1.22483 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1185 2.034    1.104 7.729
+T+2   0.1185 2.147    1.104 7.729
+T+3   0.1185 2.228    1.104 7.729
+T+4   0.1185 2.210    1.104 7.729
+T+5   0.1185 2.121    1.104 7.729
+T+6   0.1185 2.135    1.104 7.729
+GAS parameters tail
+      location scale skewness shape
+T+95   0.02707 2.411    0.979 4.496
+T+96   0.02707 2.425    0.979 4.496
+T+97   0.02707 2.386    0.979 4.496
+T+98   0.02707 2.300    0.979 4.496
+T+99   0.02707 2.269    0.979 4.496
+T+100  0.02707 2.189    0.979 4.496
+
+
+GAS rolling estimation asset 23 
+GAS parameters mean
+location    scale skewness    shape 
+  0.1256   2.0336   1.0798   7.4246 
+GAS parameters std
+location    scale skewness    shape 
+ 0.06923  0.82152  0.01532  1.28986 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1976 2.467     1.04 7.531
+T+2   0.1976 2.340     1.04 7.531
+T+3   0.1976 2.298     1.04 7.531
+T+4   0.1976 2.491     1.04 7.531
+T+5   0.1976 2.393     1.04 7.531
+T+6   0.1976 2.511     1.04 7.531
+GAS parameters tail
+      location scale skewness shape
+T+95   0.01997 4.276    1.078 5.438
+T+96   0.01997 4.059    1.078 5.438
+T+97   0.01997 3.944    1.078 5.438
+T+98   0.01997 3.871    1.078 5.438
+T+99   0.01997 3.836    1.078 5.438
+T+100  0.01997 3.925    1.078 5.438
+
+
+GAS rolling estimation asset 24 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.08436  1.83193  1.04113  9.51185 
+GAS parameters std
+location    scale skewness    shape 
+ 0.04714  0.59980  0.01687  2.03111 
+GAS parameters head
+    location scale skewness shape
+T+1   0.1075 1.861    1.043 7.811
+T+2   0.1075 1.967    1.043 7.811
+T+3   0.1075 2.126    1.043 7.811
+T+4   0.1075 2.100    1.043 7.811
+T+5   0.1075 2.089    1.043 7.811
+T+6   0.1075 2.144    1.043 7.811
+GAS parameters tail
+      location scale skewness shape
+T+95  -0.00633 2.526    1.014 6.021
+T+96  -0.00633 2.455    1.014 6.021
+T+97  -0.00633 2.488    1.014 6.021
+T+98  -0.00633 2.489    1.014 6.021
+T+99  -0.00633 2.629    1.014 6.021
+T+100 -0.00633 2.620    1.014 6.021
+
+
+GAS rolling estimation asset 25 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.08452  1.42758  1.05666  7.01862 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01583  0.57522  0.01427  1.17185 
+GAS parameters head
+    location scale skewness shape
+T+1  0.09946 1.460    1.072  6.32
+T+2  0.09946 1.474    1.072  6.32
+T+3  0.09946 1.465    1.072  6.32
+T+4  0.09946 1.466    1.072  6.32
+T+5  0.09946 1.455    1.072  6.32
+T+6  0.09946 1.619    1.072  6.32
+GAS parameters tail
+      location scale skewness shape
+T+95   0.05431 2.022    1.039 5.109
+T+96   0.05431 1.971    1.039 5.109
+T+97   0.05431 2.034    1.039 5.109
+T+98   0.05431 1.974    1.039 5.109
+T+99   0.05431 2.222    1.039 5.109
+T+100  0.05431 2.297    1.039 5.109
+
+
+GAS rolling estimation asset 26 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06139  1.80037  1.05294  8.21615 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01870  0.71198  0.01753  0.65901 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08325 1.178     1.08 9.024
+T+2  0.08325 1.209     1.08 9.024
+T+3  0.08325 1.160     1.08 9.024
+T+4  0.08325 1.107     1.08 9.024
+T+5  0.08325 1.123     1.08 9.024
+T+6  0.08325 1.097     1.08 9.024
+GAS parameters tail
+      location scale skewness shape
+T+95   0.04326 2.889    1.039 8.058
+T+96   0.04326 2.943    1.039 8.058
+T+97   0.04326 2.874    1.039 8.058
+T+98   0.04326 3.011    1.039 8.058
+T+99   0.04326 2.940    1.039 8.058
+T+100  0.04326 2.920    1.039 8.058
+
+
+GAS rolling estimation asset 27 
+GAS parameters mean
+location    scale skewness    shape 
+  0.0952   1.7513   1.0578   7.0898 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01325  0.67980  0.01783  1.07256 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08755 1.526    1.081 5.333
+T+2  0.08755 1.564    1.081 5.333
+T+3  0.08755 1.611    1.081 5.333
+T+4  0.08755 1.647    1.081 5.333
+T+5  0.08755 1.644    1.081 5.333
+T+6  0.08755 1.590    1.081 5.333
+GAS parameters tail
+      location scale skewness shape
+T+95   0.07046 2.794    1.025 8.103
+T+96   0.07046 2.734    1.025 8.103
+T+97   0.07046 2.756    1.025 8.103
+T+98   0.07046 2.868    1.025 8.103
+T+99   0.07046 2.818    1.025 8.103
+T+100  0.07046 2.753    1.025 8.103
+
+
+GAS rolling estimation asset 28 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.04608  1.75410  1.07437  8.26708 
+GAS parameters std
+location    scale skewness    shape 
+ 0.01979  0.70168  0.01768  0.65742 
+GAS parameters head
+    location scale skewness shape
+T+1  0.06927 1.247    1.091 6.835
+T+2  0.06927 1.245    1.091 6.835
+T+3  0.06927 1.244    1.091 6.835
+T+4  0.06927 1.244    1.091 6.835
+T+5  0.06927 1.257    1.091 6.835
+T+6  0.06927 1.209    1.091 6.835
+GAS parameters tail
+      location scale skewness shape
+T+95   0.02034 2.657    1.039 8.307
+T+96   0.02034 2.739    1.039 8.307
+T+97   0.02034 2.786    1.039 8.307
+T+98   0.02034 2.775    1.039 8.307
+T+99   0.02034 2.709    1.039 8.307
+T+100  0.02034 2.706    1.039 8.307
+
+
+GAS rolling estimation asset 29 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.05999  1.77173  1.05295 15.81272 
+GAS parameters std
+ location     scale  skewness     shape 
+ 0.029671  0.660595  0.008398 15.211727 
+GAS parameters head
+    location scale skewness shape
+T+1  0.08139 2.047    1.047  7.68
+T+2  0.08139 2.061    1.047  7.68
+T+3  0.08139 1.995    1.047  7.68
+T+4  0.08139 2.025    1.047  7.68
+T+5  0.08139 1.956    1.047  7.68
+T+6  0.08139 1.894    1.047  7.68
+GAS parameters tail
+      location scale skewness shape
+T+95   0.01739 2.436    1.065 49.62
+T+96   0.01739 2.400    1.065 49.62
+T+97   0.01739 2.363    1.065 49.62
+T+98   0.01739 2.349    1.065 49.62
+T+99   0.01739 2.330    1.065 49.62
+T+100  0.01739 2.303    1.065 49.62
+
+
+GAS rolling estimation asset 30 
+GAS parameters mean
+location    scale skewness    shape 
+ 0.06681  1.56596  1.01813 10.82430 
+GAS parameters std
+location    scale skewness    shape 
+0.009836 0.549972 0.036049 1.699063 
+GAS parameters head
+    location scale skewness shape
+T+1  0.06059 1.302    1.047 7.528
+T+2  0.06059 1.268    1.047 7.528
+T+3  0.06059 1.273    1.047 7.528
+T+4  0.06059 1.227    1.047 7.528
+T+5  0.06059 1.192    1.047 7.528
+T+6  0.06059 1.334    1.047 7.528
+GAS parameters tail
+      location scale skewness shape
+T+95   0.07134 2.167   0.9413 11.37
+T+96   0.07134 2.085   0.9413 11.37
+T+97   0.07134 2.007   0.9413 11.37
+T+98   0.07134 2.081   0.9413 11.37
+T+99   0.07134 2.015   0.9413 11.37
+T+100  0.07134 1.940   0.9413 11.37
+
+
+Rolling forecast with univariate GARCH
+
+
+
+GARCH rolling estimation asset 1 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05738    2.30461    1.09640    7.73794    0.00000   -0.01940 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01164    1.03037    0.02319    0.72188    0.00000    2.65111 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07769 1.584 1.082 6.559          0   0.2083
+1976-11-28 01:00:00 0.07769 1.556 1.082 6.559          0  -0.9056
+1976-11-29 01:00:00 0.07769 1.541 1.082 6.559          0   0.0000
+1976-11-30 01:00:00 0.07769 1.515 1.082 6.559          0   0.9056
+1976-12-01 01:00:00 0.07769 1.498 1.082 6.559          0   3.3416
+1976-12-02 01:00:00 0.07769 1.605 1.082 6.559          0   1.5308
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.04306 6.377 1.042 7.307          0    3.066
+1985-02-08 01:00:00 0.04306 6.273 1.042 7.307          0    1.613
+1985-02-09 01:00:00 0.04306 6.151 1.042 7.307          0   -3.607
+1985-02-10 01:00:00 0.04306 6.066 1.042 7.307          0   -8.014
+1985-02-11 01:00:00 0.04306 6.147 1.042 7.307          0   -1.292
+1985-02-12 01:00:00 0.04306 6.025 1.042 7.307          0    4.451
+
+
+GARCH rolling estimation asset 2 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.092575   2.149066   1.066397   8.038622   0.000000  -0.001538 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02108    1.11497    0.01564    1.07482    0.00000    2.47107 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.08068 1.871 1.069 6.035          0    0.000
+1976-11-28 01:00:00 0.08068 1.811 1.069 6.035          0    2.056
+1976-11-29 01:00:00 0.08068 1.828 1.069 6.035          0   -1.111
+1976-11-30 01:00:00 0.08068 1.797 1.069 6.035          0    1.285
+1976-12-01 01:00:00 0.08068 1.769 1.069 6.035          0    1.326
+1976-12-02 01:00:00 0.08068 1.746 1.069 6.035          0   -1.326
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.05035 4.938 1.055 8.535          0   9.2915
+1985-02-08 01:00:00 0.05035 5.303 1.055 8.535          0   6.7793
+1985-02-09 01:00:00 0.05035 5.399 1.055 8.535          0  -6.5996
+1985-02-10 01:00:00 0.05035 5.483 1.055 8.535          0   0.1196
+1985-02-11 01:00:00 0.05035 5.310 1.055 8.535          0   1.4833
+1985-02-12 01:00:00 0.05035 5.155 1.055 8.535          0  -5.3838
+
+
+GARCH rolling estimation asset 3 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+ 0.0622937  2.0331037  1.0393805  5.5538202  0.0000000 -0.0002917 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01371    0.65899    0.02042    0.47025    0.00000    2.18978 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.06948 1.600 1.081 5.405          0  -1.8541
+1976-11-28 01:00:00 0.06948 1.619 1.081 5.405          0   4.2740
+1976-11-29 01:00:00 0.06948 1.855 1.081 5.405          0  -0.2301
+1976-11-30 01:00:00 0.06948 1.796 1.081 5.405          0   1.8944
+1976-12-01 01:00:00 0.06948 1.791 1.081 5.405          0  -0.2263
+1976-12-02 01:00:00 0.06948 1.736 1.081 5.405          0   1.8633
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.06807 3.011 0.9982 6.672          0  0.48707
+1985-02-08 01:00:00 0.06807 2.929 0.9982 6.672          0  0.04626
+1985-02-09 01:00:00 0.06807 2.848 0.9982 6.672          0 -6.02922
+1985-02-10 01:00:00 0.06807 3.085 0.9982 6.672          0  3.85497
+1985-02-11 01:00:00 0.06807 3.116 0.9982 6.672          0 -3.63414
+1985-02-12 01:00:00 0.06807 3.139 0.9982 6.672          0  3.11281
+
+
+GARCH rolling estimation asset 4 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.09347    2.07484    0.99080    7.70321    0.00000   -0.04251 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02366    1.71462    0.03824    1.12337    0.00000    2.80667 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1153 1.689 1.059  5.35          0  0.99660
+1976-11-28 01:00:00 0.1153 1.643 1.059  5.35          0 -0.05221
+1976-11-29 01:00:00 0.1153 1.584 1.059  5.35          0  0.20866
+1976-11-30 01:00:00 0.1153 1.528 1.059  5.35          0  2.21601
+1976-12-01 01:00:00 0.1153 1.595 1.059  5.35          0  2.51649
+1976-12-02 01:00:00 0.1153 1.684 1.059  5.35          0 -1.95740
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.04257 14.39 0.9682  7.18          0    8.004
+1985-02-08 01:00:00 0.04257 13.89 0.9682  7.18          0   12.833
+1985-02-09 01:00:00 0.04257 13.79 0.9682  7.18          0   -8.615
+1985-02-10 01:00:00 0.04257 13.37 0.9682  7.18          0   -2.994
+1985-02-11 01:00:00 0.04257 12.74 0.9682  7.18          0   -9.228
+1985-02-12 01:00:00 0.04257 12.45 0.9682  7.18          0  -12.405
+
+
+GARCH rolling estimation asset 5 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.10403    2.28914    1.04837    7.26442    0.00000   -0.04271 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.04153    1.84651    0.02449    0.82525    0.00000    3.12522 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1226 2.472 1.081 5.756          0  -3.7617
+1976-11-28 01:00:00 0.1226 2.580 1.081 5.756          0   3.7617
+1976-11-29 01:00:00 0.1226 2.639 1.081 5.756          0   0.0000
+1976-11-30 01:00:00 0.1226 2.486 1.081 5.756          0   1.5924
+1976-12-01 01:00:00 0.1226 2.387 1.081 5.756          0   2.0329
+1976-12-02 01:00:00 0.1226 2.327 1.081 5.756          0  -0.9331
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.02951 13.53 1.012 7.657          0    6.416
+1985-02-08 01:00:00 0.02951 13.15 1.012 7.657          0   17.096
+1985-02-09 01:00:00 0.02951 13.45 1.012 7.657          0   -7.411
+1985-02-10 01:00:00 0.02951 13.11 1.012 7.657          0   -9.403
+1985-02-11 01:00:00 0.02951 12.88 1.012 7.657          0    2.778
+1985-02-12 01:00:00 0.02951 12.44 1.012 7.657          0   -5.346
+
+
+GARCH rolling estimation asset 6 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.08961    2.11007    1.08258    5.64087    0.00000    0.02356 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.009314   0.541744   0.030000   0.534273   0.000000   2.213334 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07159 1.608 1.082 4.607          0  -0.8147
+1976-11-28 01:00:00 0.07159 1.592 1.082 4.607          0   2.2246
+1976-11-29 01:00:00 0.07159 1.614 1.082 4.607          0   0.5982
+1976-11-30 01:00:00 0.07159 1.594 1.082 4.607          0   1.4474
+1976-12-01 01:00:00 0.07159 1.589 1.082 4.607          0   0.1305
+1976-12-02 01:00:00 0.07159 1.567 1.082 4.607          0  -1.7106
+GARCH parameters tail
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.0765 3.969 1.017 5.908          0  -1.0771
+1985-02-08 01:00:00 0.0765 3.935 1.017 5.908          0   2.0821
+1985-02-09 01:00:00 0.0765 3.907 1.017 5.908          0  -3.5470
+1985-02-10 01:00:00 0.0765 3.898 1.017 5.908          0  -3.1901
+1985-02-11 01:00:00 0.0765 3.885 1.017 5.908          0  -1.8319
+1985-02-12 01:00:00 0.0765 3.857 1.017 5.908          0  -0.9954
+
+
+GARCH rolling estimation asset 7 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.06392    1.59501    1.03078   10.18789    0.00000    0.03840 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.007298   0.644425   0.032883   2.419186   0.000000   1.792775 
+GARCH parameters head
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.06002 1.533 1.03  6.37          0  -0.7537
+1976-11-28 01:00:00 0.06002 1.509 1.03  6.37          0   0.3997
+1976-11-29 01:00:00 0.06002 1.479 1.03  6.37          0   1.7140
+1976-11-30 01:00:00 0.06002 1.482 1.03  6.37          0  -0.5681
+1976-12-01 01:00:00 0.06002 1.457 1.03  6.37          0   1.8668
+1976-12-02 01:00:00 0.06002 1.468 1.03  6.37          0  -0.1722
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.07088 2.540 0.9498 14.44          0   1.1159
+1985-02-08 01:00:00 0.07088 2.454 0.9498 14.44          0   2.3308
+1985-02-09 01:00:00 0.07088 2.428 0.9498 14.44          0  -4.3910
+1985-02-10 01:00:00 0.07088 2.597 0.9498 14.44          0  -0.1417
+1985-02-11 01:00:00 0.07088 2.494 0.9498 14.44          0  -0.3267
+1985-02-12 01:00:00 0.07088 2.398 0.9498 14.44          0   1.9024
+
+
+GARCH rolling estimation asset 8 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.06132    1.83007    1.07532    7.34705    0.00000   -0.01705 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01181    0.67950    0.01372    0.52286    0.00000    1.99835 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07163 1.730 1.053 6.464          0  -2.4962
+1976-11-28 01:00:00 0.07163 1.767 1.053 6.464          0   1.8263
+1976-11-29 01:00:00 0.07163 1.758 1.053 6.464          0   1.1311
+1976-11-30 01:00:00 0.07163 1.726 1.053 6.464          0   1.0932
+1976-12-01 01:00:00 0.07163 1.695 1.053 6.464          0   0.3534
+1976-12-02 01:00:00 0.07163 1.654 1.053 6.464          0  -0.2270
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.03994 3.978 1.091  6.95          0   0.3875
+1985-02-08 01:00:00 0.03994 3.906 1.091  6.95          0   6.0043
+1985-02-09 01:00:00 0.03994 3.990 1.091  6.95          0  -3.8363
+1985-02-10 01:00:00 0.03994 3.982 1.091  6.95          0  -3.5091
+1985-02-11 01:00:00 0.03994 3.965 1.091  6.95          0  -1.3594
+1985-02-12 01:00:00 0.03994 3.901 1.091  6.95          0   3.0437
+
+
+GARCH rolling estimation asset 9 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05965    1.97926    1.05542    6.18327    0.00000   -0.00184 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01819    0.73830    0.01827    0.28053    0.00000    2.24596 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.09073 1.438 1.077 6.321          0  -0.8295
+1976-11-28 01:00:00 0.09073 1.423 1.077 6.321          0   1.0129
+1976-11-29 01:00:00 0.09073 1.410 1.077 6.321          0   2.1750
+1976-11-30 01:00:00 0.09073 1.466 1.077 6.321          0   1.1587
+1976-12-01 01:00:00 0.09073 1.455 1.077 6.321          0   1.0139
+1976-12-02 01:00:00 0.09073 1.439 1.077 6.321          0   0.4813
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.03319 3.865 1.045  6.17          0    1.852
+1985-02-08 01:00:00 0.03319 3.822 1.045  6.17          0    4.733
+1985-02-09 01:00:00 0.03319 3.843 1.045  6.17          0   -4.733
+1985-02-10 01:00:00 0.03319 3.866 1.045  6.17          0   -2.719
+1985-02-11 01:00:00 0.03319 3.837 1.045  6.17          0   -2.348
+1985-02-12 01:00:00 0.03319 3.803 1.045  6.17          0    2.058
+
+
+GARCH rolling estimation asset 10 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.084267   1.762272   1.048500   9.693367   0.000000  -0.004337 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02265    0.83427    0.01495    1.31988    0.00000    2.03165 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.08879 1.351 1.033 8.545          0  -1.4781
+1976-11-28 01:00:00 0.08879 1.361 1.033 8.545          0   2.2473
+1976-11-29 01:00:00 0.08879 1.405 1.033 8.545          0   0.9153
+1976-11-30 01:00:00 0.08879 1.384 1.033 8.545          0   0.7564
+1976-12-01 01:00:00 0.08879 1.361 1.033 8.545          0   0.4511
+1976-12-02 01:00:00 0.08879 1.333 1.033 8.545          0  -0.6775
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.03037 4.857 1.068 7.645          0    5.025
+1985-02-08 01:00:00 0.03037 4.858 1.068 7.645          0    3.314
+1985-02-09 01:00:00 0.03037 4.819 1.068 7.645          0   -5.951
+1985-02-10 01:00:00 0.03037 4.853 1.068 7.645          0   -4.749
+1985-02-11 01:00:00 0.03037 4.849 1.068 7.645          0   -4.295
+1985-02-12 01:00:00 0.03037 4.833 1.068 7.645          0   -2.175
+
+
+GARCH rolling estimation asset 11 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05002    2.50043    1.10271    7.29369    0.00000   -0.07816 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01533    1.61467    0.01628    1.33199    0.00000    3.07686 
+GARCH parameters head
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.05466 1.602 1.09 6.287          0  -3.4215
+1976-11-28 01:00:00 0.05466 1.799 1.09 6.287          0  -0.6635
+1976-11-29 01:00:00 0.05466 1.750 1.09 6.287          0  -1.3049
+1976-11-30 01:00:00 0.05466 1.731 1.09 6.287          0   0.8836
+1976-12-01 01:00:00 0.05466 1.691 1.09 6.287          0   1.0849
+1976-12-02 01:00:00 0.05466 1.662 1.09 6.287          0   0.4515
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01326 8.292 1.069 5.352          0  -0.8915
+1985-02-08 01:00:00 0.01326 8.017 1.069 5.352          0   2.0680
+1985-02-09 01:00:00 0.01326 7.766 1.069 5.352          0  -7.2759
+1985-02-10 01:00:00 0.01326 7.731 1.069 5.352          0  -5.4941
+1985-02-11 01:00:00 0.01326 7.602 1.069 5.352          0  -4.0684
+1985-02-12 01:00:00 0.01326 7.421 1.069 5.352          0  -1.3938
+
+
+GARCH rolling estimation asset 12 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.10158    2.17896    1.03731    6.83203    0.00000    0.02338 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.03862    0.85937    0.01276    0.86149    0.00000    2.38537 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1379 1.977 1.024 7.433          0  -0.8314
+1976-11-28 01:00:00 0.1379 1.936 1.024 7.433          0   1.1070
+1976-11-29 01:00:00 0.1379 1.899 1.024 7.433          0   1.0949
+1976-11-30 01:00:00 0.1379 1.863 1.024 7.433          0   0.2719
+1976-12-01 01:00:00 0.1379 1.816 1.024 7.433          0   0.0000
+1976-12-02 01:00:00 0.1379 1.773 1.024 7.433          0  -0.6355
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01819 3.368 1.053 6.553          0  -2.7203
+1985-02-08 01:00:00 0.01819 3.340 1.053 6.553          0   3.9012
+1985-02-09 01:00:00 0.01819 3.362 1.053 6.553          0  -4.4452
+1985-02-10 01:00:00 0.01819 3.414 1.053 6.553          0  -2.1595
+1985-02-11 01:00:00 0.01819 3.367 1.053 6.553          0   0.1856
+1985-02-12 01:00:00 0.01819 3.292 1.053 6.553          0   1.6096
+
+
+GARCH rolling estimation asset 13 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.07994    2.51775    1.03053    5.41211    0.00000    0.02070 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01820    0.88474    0.01213    0.36194    0.00000    2.71917 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.06488 2.449 1.005 5.688          0   1.0767
+1976-11-28 01:00:00 0.06488 2.413 1.005 5.688          0   1.5182
+1976-11-29 01:00:00 0.06488 2.385 1.005 5.688          0  -0.8575
+1976-11-30 01:00:00 0.06488 2.350 1.005 5.688          0  -3.0867
+1976-12-01 01:00:00 0.06488 2.374 1.005 5.688          0   0.6769
+1976-12-02 01:00:00 0.06488 2.337 1.005 5.688          0  -2.0446
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.07232 3.439 1.016 5.016          0   0.8956
+1985-02-08 01:00:00 0.07232 3.387 1.016 5.016          0   4.1479
+1985-02-09 01:00:00 0.07232 3.410 1.016 5.016          0  -4.0365
+1985-02-10 01:00:00 0.07232 3.434 1.016 5.016          0  -3.3393
+1985-02-11 01:00:00 0.07232 3.432 1.016 5.016          0  -0.2593
+1985-02-12 01:00:00 0.07232 3.379 1.016 5.016          0   4.0707
+
+
+GARCH rolling estimation asset 14 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05102    1.84253    1.03628    4.95420    0.00000    0.03494 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02351    0.69856    0.02304    0.33449    0.00000    2.03654 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.02313 1.918 1.037 4.725          0 -0.18326
+1976-11-28 01:00:00 0.02313 1.870 1.037 4.725          0  0.42709
+1976-11-29 01:00:00 0.02313 1.826 1.037 4.725          0  0.78836
+1976-11-30 01:00:00 0.02313 1.788 1.037 4.725          0 -1.30721
+1976-12-01 01:00:00 0.02313 1.767 1.037 4.725          0  0.97443
+1976-12-02 01:00:00 0.02313 1.736 1.037 4.725          0 -0.09095
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.02806 3.184 0.9914   5.9          0  0.06548
+1985-02-08 01:00:00 0.02806 3.131 0.9914   5.9          0  3.38943
+1985-02-09 01:00:00 0.02806 3.137 0.9914   5.9          0 -2.46636
+1985-02-10 01:00:00 0.02806 3.117 0.9914   5.9          0 -0.93398
+1985-02-11 01:00:00 0.02806 3.070 0.9914   5.9          0 -0.78870
+1985-02-12 01:00:00 0.02806 3.022 0.9914   5.9          0  2.76575
+
+
+GARCH rolling estimation asset 15 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.134116   2.648351   1.015602   7.097462   0.000000  -0.006065 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05429    0.95118    0.01147    0.37584    0.00000    2.90577 
+GARCH parameters head
+                       Mu Sigma   Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.184 2.369 0.9948 6.616          0   0.3636
+1976-11-28 01:00:00 0.184 2.324 0.9948 6.616          0   2.0953
+1976-11-29 01:00:00 0.184 2.313 0.9948 6.616          0  -2.7629
+1976-11-30 01:00:00 0.184 2.346 0.9948 6.616          0  -1.3489
+1976-12-01 01:00:00 0.184 2.323 0.9948 6.616          0   0.9217
+1976-12-02 01:00:00 0.184 2.285 0.9948 6.616          0  -0.6135
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.03674 3.878 0.9918 6.923          0    3.163
+1985-02-08 01:00:00 0.03674 3.859 0.9918 6.923          0    1.438
+1985-02-09 01:00:00 0.03674 3.813 0.9918 6.923          0   -4.676
+1985-02-10 01:00:00 0.03674 3.837 0.9918 6.923          0   -3.579
+1985-02-11 01:00:00 0.03674 3.830 0.9918 6.923          0    5.505
+1985-02-12 01:00:00 0.03674 3.880 0.9918 6.923          0    0.731
+
+
+GARCH rolling estimation asset 16 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.07590    1.39503    1.03866    7.79857    0.00000    0.03022 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02646    0.55083    0.01212    1.01100    0.00000    1.50503 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.09812 1.671 1.024 7.112          0  -1.7051
+1976-11-28 01:00:00 0.09812 1.675 1.024 7.112          0   3.4231
+1976-11-29 01:00:00 0.09812 1.804 1.024 7.112          0  -0.4580
+1976-11-30 01:00:00 0.09812 1.750 1.024 7.112          0   2.5140
+1976-12-01 01:00:00 0.09812 1.788 1.024 7.112          0   1.0124
+1976-12-02 01:00:00 0.09812 1.744 1.024 7.112          0  -0.6062
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.03452 1.650 1.044 6.021          0   1.7355
+1985-02-08 01:00:00 0.03452 1.653 1.044 6.021          0   1.7572
+1985-02-09 01:00:00 0.03452 1.658 1.044 6.021          0  -0.4793
+1985-02-10 01:00:00 0.03452 1.618 1.044 6.021          0  -1.0175
+1985-02-11 01:00:00 0.03452 1.593 1.044 6.021          0   0.0000
+1985-02-12 01:00:00 0.03452 1.550 1.044 6.021          0   1.5309
+
+
+GARCH rolling estimation asset 17 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.08822    2.29439    1.03050    7.29038    0.00000    0.00175 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02070    1.35251    0.01312    0.71647    0.00000    2.74662 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07772 1.752 1.023 5.403          0  -0.2633
+1976-11-28 01:00:00 0.07772 1.701 1.023 5.403          0   1.9579
+1976-11-29 01:00:00 0.07772 1.724 1.023 5.403          0  -0.9524
+1976-11-30 01:00:00 0.07772 1.694 1.023 5.403          0   3.5886
+1976-12-01 01:00:00 0.07772 1.887 1.023 5.403          0   2.8544
+1976-12-02 01:00:00 0.07772 1.966 1.023 5.403          0  -3.1065
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.04877 8.661 1.048 7.036          0   2.2600
+1985-02-08 01:00:00 0.04877 8.423 1.048 7.036          0   9.8714
+1985-02-09 01:00:00 0.04877 8.506 1.048 7.036          0  -8.4058
+1985-02-10 01:00:00 0.04877 8.499 1.048 7.036          0   0.3141
+1985-02-11 01:00:00 0.04877 8.249 1.048 7.036          0  -1.2227
+1985-02-12 01:00:00 0.04877 8.013 1.048 7.036          0  -4.6709
+
+
+GARCH rolling estimation asset 18 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.07594    2.25583    1.07303    7.23779    0.00000   -0.10707 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02175    2.87498    0.01748    0.71708    0.00000    3.70395 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.0795 1.332 1.059 6.726          0   0.0000
+1976-11-28 01:00:00 0.0795 1.308 1.059 6.726          0   1.2966
+1976-11-29 01:00:00 0.0795 1.307 1.059 6.726          0  -0.7018
+1976-11-30 01:00:00 0.0795 1.293 1.059 6.726          0   2.4168
+1976-12-01 01:00:00 0.0795 1.352 1.059 6.726          0  -0.1086
+1976-12-02 01:00:00 0.0795 1.327 1.059 6.726          0   0.6138
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01742 5.727 1.028 5.953          0   6.8993
+1985-02-08 01:00:00 0.01742 5.844 1.028 5.953          0   4.3485
+1985-02-09 01:00:00 0.01742 5.718 1.028 5.953          0  -8.8947
+1985-02-10 01:00:00 0.01742 6.086 1.028 5.953          0  -0.7782
+1985-02-11 01:00:00 0.01742 5.799 1.028 5.953          0  -3.9846
+1985-02-12 01:00:00 0.01742 5.654 1.028 5.953          0 -13.0053
+
+
+GARCH rolling estimation asset 19 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.073062   1.488628   1.060216   7.090109   0.000000  -0.003799 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.03446    0.62559    0.01561    0.89989    0.00000    1.66697 
+GARCH parameters head
+                       Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.124 1.435 1.054 6.864          0  -1.8921
+1976-11-28 01:00:00 0.124 1.471 1.054 6.864          0   1.6653
+1976-11-29 01:00:00 0.124 1.475 1.054 6.864          0   1.0473
+1976-11-30 01:00:00 0.124 1.452 1.054 6.864          0  -0.6353
+1976-12-01 01:00:00 0.124 1.426 1.054 6.864          0   1.0431
+1976-12-02 01:00:00 0.124 1.407 1.054 6.864          0   1.4142
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.02872 2.360 1.054   5.9          0   0.6948
+1985-02-08 01:00:00 0.02872 2.323 1.054   5.9          0   1.2158
+1985-02-09 01:00:00 0.02872 2.293 1.054   5.9          0  -0.7093
+1985-02-10 01:00:00 0.02872 2.257 1.054   5.9          0  -1.9243
+1985-02-11 01:00:00 0.02872 2.247 1.054   5.9          0  -1.1300
+1985-02-12 01:00:00 0.02872 2.218 1.054   5.9          0   2.5247
+
+
+GARCH rolling estimation asset 20 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05641    1.73447    1.05921    6.78896    0.00000    0.03917 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01577    0.46018    0.02962    0.93750    0.00000    1.82559 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.06759 1.763 1.054 7.844          0   1.7449
+1976-11-28 01:00:00 0.06759 1.753 1.054 7.844          0   1.9273
+1976-11-29 01:00:00 0.06759 1.752 1.054 7.844          0  -0.5316
+1976-11-30 01:00:00 0.06759 1.710 1.054 7.844          0  -0.5881
+1976-12-01 01:00:00 0.06759 1.671 1.054 7.844          0   0.8542
+1976-12-02 01:00:00 0.06759 1.637 1.054 7.844          0  -1.1227
+GARCH parameters tail
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.0589 2.256 1.027 6.162          0   0.2053
+1985-02-08 01:00:00 0.0589 2.217 1.027 6.162          0   1.1553
+1985-02-09 01:00:00 0.0589 2.187 1.027 6.162          0  -1.8068
+1985-02-10 01:00:00 0.0589 2.175 1.027 6.162          0  -0.2066
+1985-02-11 01:00:00 0.0589 2.137 1.027 6.162          0  -0.2070
+1985-02-12 01:00:00 0.0589 2.101 1.027 6.162          0   1.6784
+
+
+GARCH rolling estimation asset 21 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05885    1.56179    1.05715    4.99400    0.00000    0.01261 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.009248   0.441189   0.014570   0.189692   0.000000   1.660173 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07133 1.444 1.043 4.897          0  -2.7226
+1976-11-28 01:00:00 0.07133 1.486 1.043 4.897          0   2.0418
+1976-11-29 01:00:00 0.07133 1.496 1.043 4.897          0  -1.0876
+1976-11-30 01:00:00 0.07133 1.487 1.043 4.897          0   0.5453
+1976-12-01 01:00:00 0.07133 1.469 1.043 4.897          0   1.2232
+1976-12-02 01:00:00 0.07133 1.461 1.043 4.897          0  -0.3966
+GARCH parameters tail
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.04594 2.724 1.05 4.865          0   0.7996
+1985-02-08 01:00:00 0.04594 2.696 1.05 4.865          0   2.6142
+1985-02-09 01:00:00 0.04594 2.692 1.05 4.865          0   2.0185
+1985-02-10 01:00:00 0.04594 2.678 1.05 4.865          0  -5.0038
+1985-02-11 01:00:00 0.04594 2.749 1.05 4.865          0  -6.0741
+1985-02-12 01:00:00 0.04594 2.861 1.05 4.865          0   1.9950
+
+
+GARCH rolling estimation asset 22 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.075707   1.877862   1.034948   6.394787   0.000000  -0.001424 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.03612    0.60593    0.04570    1.16124    0.00000    2.03659 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1157 1.898 1.081 7.483          0  -2.9584
+1976-11-28 01:00:00 0.1157 1.967 1.081 7.483          0   3.4326
+1976-11-29 01:00:00 0.1157 2.049 1.081 7.483          0  -1.8781
+1976-11-30 01:00:00 0.1157 2.030 1.081 7.483          0   0.8001
+1976-12-01 01:00:00 0.1157 1.967 1.081 7.483          0   2.5182
+1976-12-02 01:00:00 0.1157 1.979 1.081 7.483          0  -1.5980
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01247 2.159 0.9656 4.447          0   2.0656
+1985-02-08 01:00:00 0.01247 2.149 0.9656 4.447          0   1.4348
+1985-02-09 01:00:00 0.01247 2.112 0.9656 4.447          0   0.5544
+1985-02-10 01:00:00 0.01247 2.057 0.9656 4.447          0  -1.3568
+1985-02-11 01:00:00 0.01247 2.023 0.9656 4.447          0  -0.4212
+1985-02-12 01:00:00 0.01247 1.970 0.9656 4.447          0   6.1721
+
+
+GARCH rolling estimation asset 23 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+    0.1253     2.0578     1.0655     7.2374     0.0000     0.0192 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.06851    0.83976    0.01396    1.19303    0.00000    2.29123 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1932 2.407 1.032 7.019          0  -0.3854
+1976-11-28 01:00:00 0.1932 2.300 1.032 7.019          0   1.8174
+1976-11-29 01:00:00 0.1932 2.252 1.032 7.019          0  -3.1779
+1976-11-30 01:00:00 0.1932 2.385 1.032 7.019          0  -0.9833
+1976-12-01 01:00:00 0.1932 2.301 1.032 7.019          0   3.3045
+1976-12-02 01:00:00 0.1932 2.393 1.032 7.019          0  -1.6386
+GARCH parameters tail
+                       Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.022 4.308 1.062  5.45          0    0.170
+1985-02-08 01:00:00 0.022 4.199 1.062  5.45          0    2.129
+1985-02-09 01:00:00 0.022 4.120 1.062  5.45          0   -2.526
+1985-02-10 01:00:00 0.022 4.055 1.062  5.45          0   -2.825
+1985-02-11 01:00:00 0.022 4.003 1.062  5.45          0    4.180
+1985-02-12 01:00:00 0.022 4.010 1.062  5.45          0    3.689
+
+
+GARCH rolling estimation asset 24 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.08225    1.87053    1.02925    9.52304    0.00000    0.00861 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.04936    0.60749    0.01897    2.00659    0.00000    1.98265 
+GARCH parameters head
+                        Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.1011 1.756 1.029 7.374          0   -2.764
+1976-11-28 01:00:00 0.1011 1.817 1.029 7.374          0    3.949
+1976-11-29 01:00:00 0.1011 1.949 1.029 7.374          0   -1.527
+1976-11-30 01:00:00 0.1011 1.931 1.029 7.374          0    1.947
+1976-12-01 01:00:00 0.1011 1.923 1.029 7.374          0    2.810
+1976-12-02 01:00:00 0.1011 1.959 1.029 7.374          0   -1.230
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 -0.0197 3.434 0.9955 6.129          0    1.080
+1985-02-08 01:00:00 -0.0197 3.308 0.9955 6.129          0   -2.431
+1985-02-09 01:00:00 -0.0197 3.241 0.9955 6.129          0   -2.094
+1985-02-10 01:00:00 -0.0197 3.161 0.9955 6.129          0   -3.637
+1985-02-11 01:00:00 -0.0197 3.189 0.9955 6.129          0    2.104
+1985-02-12 01:00:00 -0.0197 3.115 0.9955 6.129          0    2.061
+
+
+GARCH rolling estimation asset 25 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.08189    1.49415    1.04472    6.93849    0.00000    0.02718 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01555    0.73687    0.02012    1.11478    0.00000    1.73035 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.09233 1.386 1.056 6.079          0   -1.266
+1976-11-28 01:00:00 0.09233 1.384 1.056 6.079          0    1.266
+1976-11-29 01:00:00 0.09233 1.374 1.056 6.079          0   -1.139
+1976-11-30 01:00:00 0.09233 1.367 1.056 6.079          0    1.222
+1976-12-01 01:00:00 0.09233 1.356 1.056 6.079          0    3.459
+1976-12-02 01:00:00 0.09233 1.533 1.056 6.079          0    1.406
+GARCH parameters tail
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.05318 1.795 1.02 5.181          0  0.58371
+1985-02-08 01:00:00 0.05318 1.756 1.02 5.181          0  2.57674
+1985-02-09 01:00:00 0.05318 1.796 1.02 5.181          0  0.06873
+1985-02-10 01:00:00 0.05318 1.753 1.02 5.181          0 -6.60282
+1985-02-11 01:00:00 0.05318 2.219 1.02 5.181          0 -2.69658
+1985-02-12 01:00:00 0.05318 2.242 1.02 5.181          0  1.60811
+
+
+GARCH rolling estimation asset 26 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.06345    1.83699    1.04436    7.91800    0.00000    0.01082 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02007    0.75157    0.01942    0.68713    0.00000    2.04869 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.08321 1.186 1.063 8.584          0  -1.0965
+1976-11-28 01:00:00 0.08321 1.201 1.063 8.584          0   0.4400
+1976-11-29 01:00:00 0.08321 1.160 1.063 8.584          0   0.0000
+1976-11-30 01:00:00 0.08321 1.121 1.063 8.584          0   1.0917
+1976-12-01 01:00:00 0.08321 1.132 1.063 8.584          0   0.6494
+1976-12-02 01:00:00 0.08321 1.110 1.063 8.584          0  -0.4324
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.04124 2.913 1.023 8.014          0 -3.41201
+1985-02-08 01:00:00 0.04124 2.934 1.023 8.014          0 -0.07716
+1985-02-09 01:00:00 0.04124 2.879 1.023 8.014          0 -4.74210
+1985-02-10 01:00:00 0.04124 2.970 1.023 8.014          0 -0.36489
+1985-02-11 01:00:00 0.04124 2.916 1.023 8.014          0  2.16963
+1985-02-12 01:00:00 0.04124 2.890 1.023 8.014          0  0.83119
+
+
+GARCH rolling estimation asset 27 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.09112    1.77488    1.03488    6.80407    0.00000    0.03781 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.01317    0.77292    0.02294    0.91604    0.00000    1.97797 
+GARCH parameters head
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.08707 1.533 1.07 5.241          0  -1.5565
+1976-11-28 01:00:00 0.08707 1.537 1.07 5.241          0   2.0699
+1976-11-29 01:00:00 0.08707 1.552 1.07 5.241          0   1.9652
+1976-11-30 01:00:00 0.08707 1.563 1.07 5.241          0   1.4335
+1976-12-01 01:00:00 0.08707 1.555 1.07 5.241          0  -0.3099
+1976-12-02 01:00:00 0.08707 1.532 1.07 5.241          0   0.6805
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.06505 2.544 1.008 7.929          0   1.1643
+1985-02-08 01:00:00 0.06505 2.489 1.008 7.929          0   2.8430
+1985-02-09 01:00:00 0.06505 2.502 1.008 7.929          0  -3.9868
+1985-02-10 01:00:00 0.06505 2.601 1.008 7.929          0  -1.4276
+1985-02-11 01:00:00 0.06505 2.554 1.008 7.929          0  -0.9421
+1985-02-12 01:00:00 0.06505 2.496 1.008 7.929          0   1.6067
+
+
+GARCH rolling estimation asset 28 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.04584    1.78124    1.06014    8.21510    0.00000    0.01398 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02043    0.72875    0.01840    0.68922    0.00000    1.94740 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.06799 1.197 1.084 6.729          0  -0.9199
+1976-11-28 01:00:00 0.06799 1.191 1.084 6.729          0  -0.9284
+1976-11-29 01:00:00 0.06799 1.186 1.084 6.729          0  -0.9371
+1976-11-30 01:00:00 0.06799 1.182 1.084 6.729          0   1.2802
+1976-12-01 01:00:00 0.06799 1.191 1.084 6.729          0   0.0000
+1976-12-02 01:00:00 0.06799 1.158 1.084 6.729          0  -0.1959
+GARCH parameters tail
+                         Mu Sigma Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01679 2.658 1.02 8.436          0   -3.380
+1985-02-08 01:00:00 0.01679 2.700 1.02 8.436          0    3.154
+1985-02-09 01:00:00 0.01679 2.724 1.02 8.436          0   -2.257
+1985-02-10 01:00:00 0.01679 2.702 1.02 8.436          0   -1.198
+1985-02-11 01:00:00 0.01679 2.646 1.02 8.436          0    2.382
+1985-02-12 01:00:00 0.01679 2.632 1.02 8.436          0    3.122
+
+
+GARCH rolling estimation asset 29 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.05730    1.78637    1.04431    8.75407    0.00000    0.04588 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.02795    0.67261    0.01052    0.90937    0.00000    1.92675 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.07485 2.134 1.038  7.35          0  -1.9239
+1976-11-28 01:00:00 0.07485 2.123 1.038  7.35          0   0.5055
+1976-11-29 01:00:00 0.07485 2.070 1.038  7.35          0   2.3257
+1976-11-30 01:00:00 0.07485 2.075 1.038  7.35          0   0.0000
+1976-12-01 01:00:00 0.07485 2.021 1.038  7.35          0   0.4097
+1976-12-02 01:00:00 0.07485 1.972 1.038  7.35          0   1.3805
+GARCH parameters tail
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.01188 2.359 1.062  8.57          0   0.3902
+1985-02-08 01:00:00 0.01188 2.321 1.062  8.57          0  -0.1231
+1985-02-09 01:00:00 0.01188 2.282 1.062  8.57          0  -1.8015
+1985-02-10 01:00:00 0.01188 2.268 1.062  8.57          0  -1.5583
+1985-02-11 01:00:00 0.01188 2.249 1.062  8.57          0  -1.1741
+1985-02-12 01:00:00 0.01188 2.222 1.062  8.57          0   2.6278
+
+
+GARCH rolling estimation asset 30 
+GARCH parameters mean
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+   0.06436    1.58682    1.01038   10.64867    0.00000    0.04692 
+GARCH parameters std
+        Mu      Sigma       Skew      Shape Shape(GIG)   Realized 
+  0.007735   0.649721   0.046608   1.644852   0.000000   1.766652 
+GARCH parameters head
+                         Mu Sigma  Skew Shape Shape(GIG) Realized
+1976-11-27 01:00:00 0.05947 1.231 1.048 7.149          0   0.7295
+1976-11-28 01:00:00 0.05947 1.207 1.048 7.149          0   1.2384
+1976-11-29 01:00:00 0.05947 1.206 1.048 7.149          0  -0.3596
+1976-11-30 01:00:00 0.05947 1.177 1.048 7.149          0  -0.5160
+1976-12-01 01:00:00 0.05947 1.153 1.048 7.149          0   2.6042
+1976-12-02 01:00:00 0.05947 1.271 1.048 7.149          0  -0.2523
+GARCH parameters tail
+                         Mu Sigma   Skew Shape Shape(GIG) Realized
+1985-02-07 01:00:00 0.06192 2.312 0.9196 11.04          0   0.4063
+1985-02-08 01:00:00 0.06192 2.235 0.9196 11.04          0   0.4173
+1985-02-09 01:00:00 0.06192 2.161 0.9196 11.04          0  -2.8802
+1985-02-10 01:00:00 0.06192 2.209 0.9196 11.04          0  -0.6776
+1985-02-11 01:00:00 0.06192 2.142 0.9196 11.04          0   0.2742
+1985-02-12 01:00:00 0.06192 2.071 0.9196 11.04          0   1.8475
+
+
+MULTIVARIATE FORECAST
+---------------------
+
+
+
+UNIVARIATE COMPARISON
+---------------------
+
+[[1]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[2]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[3]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[4]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[5]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[6]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[7]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+[[8]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
+
+
+
+MULTIVARIATE COMPARISON
+-----------------------
+
+
+
+TABLES
+------
+
+
+
+Table 3
+     NLS           uniform       center        tails         tail_r        tail_l            
+AA   "$-1.98^b$"   "$-2.36^a$"   "$-2.15^b$"   "$-2.02^b$"   "$-2.16^b$"   "$-1.04^{~}$ \\\\"
+AXP  "$-2.98^a$"   "$-2.35^a$"   "$-3.14^a$"   "$-1.21^{~}$" "$-1.53^c$"   "$-1.60^c$ \\\\"  
+BA   "$-1.44^c$"   "$-1.91^b$"   "$-2.79^a$"   "$-1.13^{~}$" "$-1.21^{~}$" "$-1.39^c$ \\\\"  
+BAC  "$-2.95^a$"   "$-1.44^c$"   "$-3.80^a$"   "$ 0.22^{~}$" "$ 1.26^{~}$" "$-4.00^a$ \\\\"  
+C    "$-0.66^{~}$" "$-0.55^{~}$" "$-1.82^b$"   "$ 0.34^{~}$" "$-1.59^c$"   "$ 0.40^{~}$ \\\\"
+CAT  "$-5.26^a$"   "$-5.20^a$"   "$-5.61^a$"   "$-3.77^a$"   "$-2.17^b$"   "$-5.29^a$ \\\\"  
+CVX  "$ 0.84^{~}$" "$ 1.26^{~}$" "$ 0.00^{~}$" "$ 1.41^c$"   "$ 0.71^{~}$" "$ 1.04^{~}$ \\\\"
+DD   "$-1.09^{~}$" "$-0.57^{~}$" "$-0.53^{~}$" "$-0.51^{~}$" "$ 0.23^{~}$" "$-0.91^{~}$ \\\\"
+DIS  "$-2.10^b$"   "$-1.69^b$"   "$-2.40^a$"   "$-1.00^{~}$" "$-1.69^b$"   "$-0.84^{~}$ \\\\"
+GE   "$-3.29^a$"   "$-3.33^a$"   "$-3.76^a$"   "$-2.61^a$"   "$-3.44^a$"   "$-2.21^b$ \\\\"  
+GM   "$ 0.08^{~}$" "$-0.42^{~}$" "$-1.22^{~}$" "$-0.20^{~}$" "$-1.03^{~}$" "$ 0.39^{~}$ \\\\"
+HD   "$-3.39^a$"   "$-2.53^a$"   "$-1.84^b$"   "$-2.72^a$"   "$-1.44^c$"   "$-1.91^b$ \\\\"  
+HPQ  "$-4.25^a$"   "$-4.50^a$"   "$-3.58^a$"   "$-4.53^a$"   "$-3.08^a$"   "$-3.50^a$ \\\\"  
+IBM  "$-3.54^a$"   "$-3.79^a$"   "$-3.41^a$"   "$-3.57^a$"   "$-1.99^b$"   "$-3.47^a$ \\\\"  
+INTC "$-3.17^a$"   "$-1.71^b$"   "$-1.70^b$"   "$-1.39^c$"   "$-2.93^a$"   "$ 0.09^{~}$ \\\\"
+JNJ  "$-3.74^a$"   "$-2.15^b$"   "$-3.57^a$"   "$-0.69^{~}$" "$-0.14^{~}$" "$-3.05^a$ \\\\"  
+JPM  "$-2.05^b$"   "$-2.12^b$"   "$-2.91^a$"   "$-1.21^{~}$" "$-1.22^{~}$" "$-1.55^c$ \\\\"  
+AIG  "$ 1.07^{~}$" "$ 0.66^{~}$" "$-1.10^{~}$" "$ 0.71^{~}$" "$-0.79^{~}$" "$ 0.96^{~}$ \\\\"
+KO   "$-3.12^a$"   "$-3.07^a$"   "$-3.78^a$"   "$-1.59^c$"   "$-3.39^a$"   "$-1.69^b$ \\\\"  
+MCD  "$-2.03^b$"   "$-1.86^b$"   "$-2.21^b$"   "$-1.39^c$"   "$-1.67^b$"   "$-1.10^{~}$ \\\\"
+MMM  "$-4.15^a$"   "$-4.54^a$"   "$-4.13^a$"   "$-4.12^a$"   "$-3.33^a$"   "$-3.37^a$ \\\\"  
+MRK  "$-2.98^a$"   "$-3.63^a$"   "$-4.15^a$"   "$-3.08^a$"   "$-4.56^a$"   "$-1.91^b$ \\\\"  
+MSFT "$-3.42^a$"   "$-2.74^a$"   "$-3.14^a$"   "$-1.64^c$"   "$-2.64^a$"   "$-1.69^b$ \\\\"  
+PFE  "$-3.65^a$"   "$-3.54^a$"   "$-3.72^a$"   "$-3.07^a$"   "$-4.03^a$"   "$-2.46^a$ \\\\"  
+PG   "$-1.78^b$"   "$-1.85^b$"   "$-2.91^a$"   "$-1.25^{~}$" "$-1.34^c$"   "$-1.31^c$ \\\\"  
+T    "$-0.41^{~}$" "$-0.24^{~}$" "$-1.19^{~}$" "$ 0.26^{~}$" "$ 0.35^{~}$" "$-0.65^{~}$ \\\\"
+UTX  "$-1.50^c$"   "$-1.61^c$"   "$-1.74^b$"   "$-1.38^c$"   "$-1.10^{~}$" "$-0.89^{~}$ \\\\"
+VZ   "$-1.99^b$"   "$-1.94^b$"   "$-1.50^c$"   "$-1.95^b$"   "$-1.35^c$"   "$-1.52^c$ \\\\"  
+WMT  "$ 2.11^b$"   "$ 0.92^{~}$" "$ 0.84^{~}$" "$ 0.81^{~}$" "$-0.42^{~}$" "$ 1.68^b$ \\\\"  
+XOM  "$ 0.15^{~}$" "$ 0.38^{~}$" "$-1.29^c$"   "$ 0.72^{~}$" "$ 0.69^{~}$" "$-0.04^{~}$ \\\\"
+      test     pvalue 
+-3.3386561  0.0004209 
+
+
+FIGURES
+-------
+
+
+
+Figure 1
+RStudioGD 
+        2 
