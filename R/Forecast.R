@@ -304,7 +304,7 @@ UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
         Moments = do.call(rbind, lapply(lForecasts, getMoments))
     }
 
-    if (all(class(vY) != c("zoo", "ts", "xts"))) {
+    if (all(class(vY)[1] != c("zoo", "ts", "xts"))) {
       rownames(mForc)  = paste("T+", 1:ForecastLength, sep = "")
       rownames(Moments) = paste("T+", 1:ForecastLength, sep = "")
     }
@@ -415,7 +415,7 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Ref
         Moments = EvalMoments_multi(t(mForc), Dist, iN)
     }
 
-    if (all(class(vY) != c("zoo", "ts", "xts"))) {
+    if (all(class(mY)[1] != c("zoo", "ts", "xts"))) {
       rownames(mForc)  = paste("T+", 1:ForecastLength, sep = "")
       rownames(Moments) = paste("T+", 1:ForecastLength, sep = "")
     }
