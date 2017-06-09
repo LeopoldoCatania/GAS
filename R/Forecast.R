@@ -298,10 +298,15 @@ UniGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Refit
 
         }, lFits = lFits, lOut = lOut)
 
-        mForc = do.call(rbind, lapply(lForecasts, getForecast))
-        vU = do.call(c, lapply(lForecasts, pit))
-        vLS = do.call(c, lapply(lForecasts, LogScore))
+        mForc   = do.call(rbind, lapply(lForecasts, getForecast))
+        vU      = do.call(c, lapply(lForecasts, pit))
+        vLS     = do.call(c, lapply(lForecasts, LogScore))
         Moments = do.call(rbind, lapply(lForecasts, getMoments))
+    }
+
+    if (all(class(vY) != c("zoo", "ts", "xts"))) {
+      rownames(mForc)  = paste("T+", 1:ForecastLength, sep = "")
+      rownames(Moments) = paste("T+", 1:ForecastLength, sep = "")
     }
 
     PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = FALSE)
@@ -408,6 +413,11 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Ref
         vU = NULL
         vLS = do.call(c, lapply(lForecasts, LogScore))
         Moments = EvalMoments_multi(t(mForc), Dist, iN)
+    }
+
+    if (all(class(vY) != c("zoo", "ts", "xts"))) {
+      rownames(mForc)  = paste("T+", 1:ForecastLength, sep = "")
+      rownames(Moments) = paste("T+", 1:ForecastLength, sep = "")
     }
 
     elapsedTime = Sys.time() - StartTime

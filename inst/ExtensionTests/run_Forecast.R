@@ -45,7 +45,7 @@ library(parallel)
 cluster = makeCluster(7)
 
 help(UniGASRoll)
-Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50, RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
+Roll = UniGASRoll(as.numeric(cpichg), GASSpec, ForecastLength = 50, RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
 
@@ -92,9 +92,9 @@ plot(Forecast)
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-cluster = makeCluster(7)
+cluster = makeCluster(5)
 
-Roll    = MultiGASRoll(mY, GASSpec, ForecastLength = 500, RefitEvery = 500, RefitWindow = c("moving"), cluster = cluster)
+Roll    = MultiGASRoll(mY, GASSpec, ForecastLength = 500, RefitEvery = 100, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
 
