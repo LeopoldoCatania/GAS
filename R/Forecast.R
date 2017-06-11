@@ -417,7 +417,6 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500, Nstart = NULL, Ref
 
     if (all(class(mY)[1] != c("zoo", "ts", "xts"))) {
       rownames(mForc)  = paste("T+", 1:ForecastLength, sep = "")
-      rownames(Moments) = paste("T+", 1:ForecastLength, sep = "")
     }
 
     elapsedTime = Sys.time() - StartTime

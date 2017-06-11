@@ -48,4 +48,6 @@
 	* New distribution: Skellam.
 	* New lower bound for degree of freedom is 2.01. Before was 4.0.
 	* Additional argument Compute.SE for UniGASFit, MultiGASFit, UniGASRoll, MultiGASRoll.
-
+2017-06-12
+  * DESCRIPTION (Version): New version is 0.2.1.
+  * Bug in MultiGASRoll()
