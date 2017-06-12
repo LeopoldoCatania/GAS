@@ -13,7 +13,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GAS_0.2.0
+[1] GAS_0.2.1
 
 loaded via a namespace (and not attached):
  [1] pcaPP_1.9-61                Rcpp_0.12.11                compiler_3.4.0              nloptr_1.0.4               
@@ -89,7 +89,7 @@ Information Criteria:
 Convergence:	0
 ------------------------------------------
 
-Elapsed time: 0.02 mins
+Elapsed time: 0.01 mins
 
 SECTION 3.3
 -----------

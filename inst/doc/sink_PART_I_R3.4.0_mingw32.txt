@@ -9,24 +9,16 @@ locale:
 [4] LC_NUMERIC=C                   LC_TIME=Italian_Italy.1252    
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GAS_0.2.0       testthat_1.0.2  xts_0.9-7       devtools_1.13.2 lmtest_0.9-35   zoo_1.8-0       sandwich_2.3-4 
-[8] rmgarch_1.3-0   rugarch_1.3-6  
+[1] GAS_0.2.1       devtools_1.13.2
 
 loaded via a namespace (and not attached):
- [1] multicool_0.1-10            ks_1.10.6                   lattice_0.20-35             pcaPP_1.9-61               
- [5] expm_0.999-2                SkewHyperbolic_0.3-2        htmltools_0.3.6             nloptr_1.0.4               
- [9] withr_1.0.2                 htmlwidgets_0.8             mvtnorm_1.0-6               codetools_0.2-15           
-[13] memoise_1.1.0               misc3d_0.8-4                knitr_1.16                  Bessel_0.5-5               
-[17] ff_2.2-13                   httpuv_1.3.3                curl_2.6                    Rcpp_0.12.11               
-[21] KernSmooth_2.23-15          xtable_1.8-2                DistributionUtils_0.5-1     jsonlite_1.5               
-[25] truncnorm_1.0-7             FNN_1.1                     mime_0.5                    bit_1.1-12                 
-[29] spd_2.0-1                   digest_0.6.12               shiny_1.0.3                 numDeriv_2016.8-1          
-[33] grid_3.4.0                  tools_3.4.0                 magrittr_1.5                rgl_0.98.1                 
-[37] Rsolnp_1.16                 crayon_1.3.2                MASS_7.3-47                 GeneralizedHyperbolic_0.8-1
- [ reached getOption("max.print") -- omitted 5 entries ]
+ [1] Rcpp_0.12.11      lattice_0.20-35   zoo_1.8-0         digest_0.6.12     withr_1.0.2       truncnorm_1.0-7  
+ [7] MASS_7.3-47       grid_3.4.0        R6_2.2.1          git2r_0.18.0      httr_1.2.1        curl_2.6         
+[13] xts_0.9-7         tools_3.4.0       parallel_3.4.0    numDeriv_2016.8-1 compiler_3.4.0    memoise_1.1.0    
+[19] Rsolnp_1.16      
 
 
 SECTION 3.1
@@ -89,7 +81,7 @@ Information Criteria:
 Convergence:	0
 ------------------------------------------
 
-Elapsed time: 0.01 mins
+Elapsed time: 0.02 mins
 
 SECTION 3.3
 -----------

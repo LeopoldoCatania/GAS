@@ -18,7 +18,7 @@ attached base packages:
 [1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] GAS_0.2.0       devtools_1.13.2
+[1] GAS_0.2.1       devtools_1.13.2
 
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.11      lattice_0.20-35   zoo_1.8-0         digest_0.6.12    

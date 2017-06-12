@@ -9,7 +9,7 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{xspace}
-\usepackage{subdepth}
+%\usepackage{subdepth}
 \usepackage{float}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -396,7 +396,7 @@ Information Criteria:
 Convergence:	0
 ------------------------------------------
 
-Elapsed time: 0.01 mins
+Elapsed time: 0.02 mins
 \end{CodeOutput}
 \end{CodeChunk}
 %
