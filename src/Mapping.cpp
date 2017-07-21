@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-const double dLowerShape = 4.01;
+const double dLowerShape = 4.00;
 const double dUpperShape = 50.0;
 
 const double dLowerSkewFS = 0.50;
@@ -277,7 +277,7 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     double dMu    = dMu_tilde;
     double dSigma = exp(dSigma_tilde);
     double dBetaBar = dBetaBar_tilde;
-    double dNu  = Map(dNu_tilde, dLowerShape, dUpperShape);
+    double dNu  = Map(dNu_tilde, dLowerShape + 0.01, dUpperShape);
 
     vTheta(0) = CheckLocation(dMu);
     vTheta(1) = CheckScale(dSigma);
@@ -476,7 +476,7 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
     double dMu_tilde    = dMu;
     double dSigma_tilde = log(dSigma);
     double dBetaBar_tilde = dBetaBar;
-    double dNu_tilde  = Unmap(dNu,dLowerShape,dUpperShape);
+    double dNu_tilde  = Unmap(dNu, dLowerShape + 0.01, dUpperShape);
 
     vTheta_tilde(0) = dMu_tilde;
     vTheta_tilde(1) = dSigma_tilde;
@@ -628,7 +628,7 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1.0;
     mJ(1,1) = CheckScale(exp(dSigma_tilde));
     mJ(2,2) = 1.0;
-    mJ(3,3) = MapDeriv(dNu_tilde,dLowerShape,dUpperShape);
+    mJ(3,3) = MapDeriv(dNu_tilde,dLowerShape + 0.01, dUpperShape);
   }
   if(Dist == "negbin"){
 
