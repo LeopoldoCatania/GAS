@@ -3,7 +3,7 @@ StaticLLKoptimizer_Uni <- function(vTheta_tilde, vY, Dist, iT, iK) {
   dLLK = StaticLLK_Univ(vY, vTheta, iT, Dist)
 
   if (is.na(dLLK) | !is.finite(dLLK)) {
-    dLLK = -1e+10
+    dLLK = -1.0e+10
   }
 
   return(-dLLK)
@@ -67,7 +67,7 @@ StaticLLKoptimizer_Multi <- function(vTheta_tilde, mY, Dist, iT, iN, iK) {
   dLLK = StaticLLK_Multi(mY, vTheta, iT, iN, Dist)
 
   if (is.na(dLLK) | !is.finite(dLLK)) {
-    dLLK = -1e+10
+    dLLK = -1.0e+10
   }
   return(-dLLK)
 }
@@ -115,15 +115,12 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
   if (!is(dLLK, "try-error")) {
     dMLLK = -dLLK
   } else {
-    dMLLK = 1e+10
+    dMLLK = 1.0e+10
   }
 
   if (!is.finite(dMLLK)) {
-    dMLLK = 1e+10
+    dMLLK = 1.0e+10
   }
-
-  # Text2Write = paste(c(vPw, paste(dMLLK, "\n", sep = "")), collapse = ",")
-  # cat(Text2Write, file = "llk_pars.txt", append = TRUE)
 
   return(dMLLK)
 
@@ -151,10 +148,10 @@ MultiGASOptimiser <- function(vPw, data, GASSpec){
   if (!is(dLLK, "try-error")) {
     dMLLK = -dLLK
   } else {
-    dMLLK = 1e+10
+    dMLLK = 1.0e+10
   }
   if (!is.finite(dMLLK)) {
-    dMLLK = 1e+10
+    dMLLK = 1.0e+10
   }
   return(dMLLK)
 }

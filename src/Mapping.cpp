@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-const double dLowerShape = 4.0;
+const double dLowerShape = 4.01;
 const double dUpperShape = 50.0;
 
 const double dLowerSkewFS = 0.50;
@@ -266,6 +266,24 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
     vTheta(1) = CheckScale(dSigma);
     vTheta(2) = CheckScale(dKappa);
   }
+  if(Dist=="ghskt"){
+
+    double dMu_tilde      = vTheta_tilde(0);
+    double dSigma_tilde   = vTheta_tilde(1);
+    double dBetaBar_tilde = vTheta_tilde(2);
+    double dNu_tilde      = vTheta_tilde(3);
+
+
+    double dMu    = dMu_tilde;
+    double dSigma = exp(dSigma_tilde);
+    double dBetaBar = dBetaBar_tilde;
+    double dNu  = Map(dNu_tilde, dLowerShape, dUpperShape);
+
+    vTheta(0) = CheckLocation(dMu);
+    vTheta(1) = CheckScale(dSigma);
+    vTheta(2) = dBetaBar;
+    vTheta(3) = dNu;
+  }
   if(Dist == "negbin"){
 
     double dPi = LogitInv(vTheta_tilde(0));
@@ -447,6 +465,24 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
     vTheta_tilde(1) = dSigma_tilde;
     vTheta_tilde(2) = dKappa_tilde;
   }
+  if(Dist=="ghskt"){
+
+    double dMu      = vTheta(0);
+    double dSigma   = vTheta(1);
+    double dBetaBar = vTheta(2);
+    double dNu      = vTheta(3);
+
+
+    double dMu_tilde    = dMu;
+    double dSigma_tilde = log(dSigma);
+    double dBetaBar_tilde = dBetaBar;
+    double dNu_tilde  = Unmap(dNu,dLowerShape,dUpperShape);
+
+    vTheta_tilde(0) = dMu_tilde;
+    vTheta_tilde(1) = dSigma_tilde;
+    vTheta_tilde(2) = dBetaBar_tilde;
+    vTheta_tilde(3) = dNu_tilde;
+  }
   if(Dist == "skellam"){
     double dMu = vTheta(0);
     double dSigma2 = vTheta(1);
@@ -583,6 +619,16 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(0,0) = 1.0;
     mJ(1,1) = CheckScale(exp(dSigma_tilde));
     mJ(2,2) = CheckScale(exp(dKappa_tilde));
+  }
+  if(Dist=="ghskt"){
+
+    double dSigma_tilde = vTheta_tilde(1);
+    double dNu_tilde    = vTheta_tilde(3);
+
+    mJ(0,0) = 1.0;
+    mJ(1,1) = CheckScale(exp(dSigma_tilde));
+    mJ(2,2) = 1.0;
+    mJ(3,3) = MapDeriv(dNu_tilde,dLowerShape,dUpperShape);
   }
   if(Dist == "negbin"){
 

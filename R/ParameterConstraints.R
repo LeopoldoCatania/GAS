@@ -63,6 +63,16 @@ GetFixedPar_Uni <- function(Dist, GASPar) {
         if (!GASPar$skewness)
             FixedPar = c(FixedPar, a3 = 0, b3 = 0)
     }
+    if (Dist == "ghskt") {
+      if (!GASPar$location)
+        FixedPar = c(FixedPar, a1 = 0, b1 = 0)
+      if (!GASPar$scale)
+        FixedPar = c(FixedPar, a2 = 0, b2 = 0)
+      if (!GASPar$skewness)
+        FixedPar = c(FixedPar, a3 = 0, b3 = 0)
+      if (!GASPar$shape)
+        FixedPar = c(FixedPar, a4 = 0, b4 = 0)
+    }
     if (Dist == "poi") {
         if (!GASPar$location)
             FixedPar = c(FixedPar, a1 = 0, b1 = 0)
@@ -115,7 +125,7 @@ MultiFixedScale <- function(iN, Dist, ScalarParameters) {
 
     } else {
 
-        FixedPar = rep(0, iN * 2)
+        FixedPar = rep(0, iN * 2L)
         if (Dist == "mvnorm")
             names(FixedPar) = c(paste("a.sigma", 1:iN, sep = ""), paste("b.sigma", 1:iN, sep = ""))
         if (Dist == "mvt")
@@ -133,7 +143,7 @@ MultiFixedLocation <- function(iN, ScalarParameters) {
 
     } else {
 
-        FixedPar = rep(0, iN * 2)
+        FixedPar = rep(0, iN * 2L)
         names(FixedPar) = c(paste("a.mu", 1:iN, sep = ""), paste("b.mu", 1:iN, sep = ""))
 
     }
@@ -148,7 +158,7 @@ MultiFixedCorrelation <- function(iN, ScalarParameters) {
 
     } else {
 
-        FixedPar = rep(0, iN * (iN - 1))
+        FixedPar = rep(0, iN * (iN - 1L))
         vRhoNames = RhoNames(iN)
         names(FixedPar) = c(paste("a.", vRhoNames, sep = ""), paste("b.", vRhoNames, sep = ""))
 
@@ -194,11 +204,11 @@ FixedDynamicPar_Multi <- function(Dist, iN, GASPar) {
     if (GASPar$location)
         vBool[1:iN] = TRUE
     if (GASPar$scale)
-        vBool[(iN + 1):(2 * iN)] = TRUE
+        vBool[(iN + 1L):(2L * iN)] = TRUE
     if (GASPar$correlation)
-        vBool[(2 * iN + 1):(2 * iN + iN * (iN - 1)/2)] = TRUE
+        vBool[(2L * iN + 1L):(2L * iN + iN * (iN - 1L)/2L)] = TRUE
     if (GASPar$shape)
-        vBool[2 * iN + iN * (iN - 1)/2 + 1] = TRUE
+        vBool[2L * iN + iN * (iN - 1L)/2L + 1L] = TRUE
 
     return(vBool)
 }
@@ -213,11 +223,11 @@ MatrixCoefficientStructure_Multi <- function(Dist, iN, iK, GASPar) {
     if (GASPar$location)
         diag(lStructure[["location"]])[1:iN] = TRUE
     if (GASPar$scale)
-        diag(lStructure[["scale"]])[(iN + 1):(2 * iN)] = TRUE
+        diag(lStructure[["scale"]])[(iN + 1L):(2L * iN)] = TRUE
     if (GASPar$correlation)
-        diag(lStructure[["correlation"]])[(2 * iN + 1):(2 * iN + iN * (iN - 1)/2)] = TRUE
+        diag(lStructure[["correlation"]])[(2L * iN + 1L):(2L * iN + iN * (iN - 1L)/2L)] = TRUE
     if (GASPar$shape)
-        diag(lStructure[["shape"]])[(1 + 2 * iN + iN * (iN - 1)/2)] = TRUE
+        diag(lStructure[["shape"]])[(1L + 2L * iN + iN * (iN - 1L)/2L)] = TRUE
 
     return(lStructure)
 

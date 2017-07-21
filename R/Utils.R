@@ -12,16 +12,16 @@ UpperB <- function() {
     return(0.9999)
 }
 
-LowerNu <- function() return(4.0)
+LowerNu <- function() return(4.01)
 UpperNu <- function() return(50)
 
 Array2Matrix <- function(aArray, type) {
 
-  iN = dim(aArray)[1]
-  iT = dim(aArray)[3]
+  iN = dim(aArray)[1L]
+  iT = dim(aArray)[3L]
 
-  vSeriesName = dimnames(aArray)[[1]]
-  vDates = dimnames(aArray)[[3]]
+  vSeriesName = dimnames(aArray)[[1L]]
+  vDates = dimnames(aArray)[[3L]]
 
   if (is.null(vSeriesName)) {
     vSeriesName = paste("series", 1:iN, sep = "")
@@ -34,42 +34,42 @@ Array2Matrix <- function(aArray, type) {
   vColNames = NULL
 
   # keep all the lements
-  if (type == 1) {
+  if (type == 1L) {
     iL = iN * iN
     mMat = matrix(data = NA, iT, iL)
-    iC = 1
+    iC = 1L
     for (i in 1:iN) {
       for (j in 1:iN) {
         mMat[, iC] = aArray[i, j, ]
-        iC = iC + 1
+        iC = iC + 1L
         vColNames = c(vColNames, paste(vSeriesName[i], vSeriesName[j], sep = "."))
       }
     }
   }
   # keep the lower triangular elements
-  if (type == 2) {
-    iL = iN * (iN + 1) / 2
+  if (type == 2L) {
+    iL = iN * (iN + 1L) / 2L
     mMat = matrix(data = NA, iT, iL)
-    iC = 1
+    iC = 1L
     for (i in 1:iN) {
       for (j in 1:i) {
         mMat[, iC] = aArray[i, j, ]
-        iC = iC + 1
+        iC = iC + 1L
         vColNames = c(vColNames, paste(vSeriesName[i], vSeriesName[j], sep = "."))
       }
     }
   }
   # keep the lower triangular elements
   # without the main diagonal elements
-  if (type == 3) {
-    iL = iN * (iN + 1) / 2
+  if (type == 3L) {
+    iL = iN * (iN + 1L) / 2L
     mMat = matrix(data = NA, iT, iL)
-    iC = 1
+    iC = 1L
     for (i in 1:iN) {
       for (j in 1:i) {
         if (i != j) {
           mMat[, iC] = aArray[i, j, ]
-          iC = iC + 1
+          iC = iC + 1L
           vColNames = c(vColNames, paste(vSeriesName[i], vSeriesName[j], sep = "."))
         }
       }

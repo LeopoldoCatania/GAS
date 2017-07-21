@@ -51,3 +51,15 @@
 2017-06-12
   * DESCRIPTION (Version): New version is 0.2.1.
   * Bug in MultiGASRoll()
+2017-01-07
+  * Bug in rmvt_mat(), the mean of the distribution was misspecified.
+2017-05-07
+  * New distribution: Genrealized Hyperbolic Skew Student's t
+2017-10-07
+  * DESCRIPTION (Version): New version is 0.2.2.
+  * Bug in the visualization of uGASSim and mGASSim objects, instead of
+  the B matrix the A matrix was shown.
+2017-18-07
+  * DESCRIPTION (Version): New version is 0.2.3.
+2017-21-07
+  * Added warning if the optimizer does not converge.

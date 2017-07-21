@@ -1,7 +1,7 @@
 Package: GAS
 Type: Package
 Title: Generalized Autoregressive Score Models
-Version: 0.2.1
+Version: 0.2.3
 Author: Leopoldo Catania [aut,cre], Kris Boudt [ctb], David Ardia [ctb]
 Maintainer: Leopoldo Catania <leopoldo.catania@uniroma2.it>
 Description: Simulate, estimate and forecast using univariate and multivariate GAS models.
@@ -9,7 +9,7 @@ License: GPL-3
 BugReports: https://github.com/LeopoldoCatania/GAS/issues
 URL: https://github.com/LeopoldoCatania/GAS
 LazyData: TRUE
-Imports: Rcpp (>= 0.12.2), Rsolnp, MASS, xts, numDeriv, zoo
-LinkingTo: Rcpp, RcppArmadillo
+Imports: Rcpp (>= 0.12.2), Rsolnp, MASS, xts, numDeriv, zoo, RcppNumerical
+LinkingTo: Rcpp, RcppArmadillo, RcppEigen, RcppNumerical
 Depends: R (>= 3.2.0), methods
 Suggests: testthat

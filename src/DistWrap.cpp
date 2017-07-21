@@ -12,9 +12,9 @@
 #include "beta.h"
 #include "negbin.h"
 #include "skellam.h"
+#include "ghskt.h"
 #include "mvnorm.h"
 #include "mvt.h"
-
 
 using namespace Rcpp;
 using namespace arma;
@@ -36,6 +36,8 @@ double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog){
   if(Dist == "beta")  dLPDF = dBETA(dY, vTheta(0), vTheta(1), bLog);
   if(Dist == "negbin") dLPDF = dNEGBIN(dY, vTheta(0), vTheta(1), bLog);
   if(Dist == "skellam") dLPDF = dSKELLAM(dY, vTheta(0), vTheta(1), bLog);
+  if(Dist == "ghskt") dLPDF = dGHSKT(dY, vTheta(0), vTheta(1), vTheta(2), vTheta(3), bLog);
+
   return dLPDF;
 }
 
@@ -64,6 +66,7 @@ double rdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "beta") dY = rBETA(vTheta(0), vTheta(1));
   if(Dist == "negbin") dY = rNEGBIN(vTheta(0), vTheta(1));
   if(Dist == "skellam") dY = rSKELLAM(vTheta(0), vTheta(1));
+  if(Dist == "ghskt") dY = rGHSKT(vTheta(0), vTheta(1), vTheta(2), vTheta(3));
 
   return dY;
 }
@@ -93,6 +96,7 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist){
   if(Dist == "beta") dP = pBETA(dQ, vTheta(0), vTheta(1));
   if(Dist == "negbin") dP = pNEGBIN(dQ, vTheta(0), vTheta(1));
   if(Dist == "skellam") dP = pSKELLAM(dQ, vTheta(0), vTheta(1));
+  if(Dist == "ghskt") dP = pGHSKT(dQ, vTheta(0), vTheta(1), vTheta(2), vTheta(3));
 
   return dP;
 }
@@ -113,6 +117,7 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   if(Dist == "beta")  dQ = qBETA(dP, vTheta(0), vTheta(1));
   if(Dist == "negbin") dQ = qNEGBIN(dP, vTheta(0), vTheta(1));
   if(Dist == "skellam") dQ = qSKELLAM(dP, vTheta(0), vTheta(1));
+  if(Dist == "ghskt") dQ = qGHSKT(dP, vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   return dQ;
 }
 //[[Rcpp::export]]
@@ -125,6 +130,7 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "ast")  vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(4));
   if(Dist == "ast1") vMoments = mAST(vTheta(0), vTheta(1), vTheta(2),vTheta(3),vTheta(3));
   if(Dist == "ald")  vMoments = mALD(vTheta(0), vTheta(1), vTheta(2));
+  if(Dist == "ghskt") vMoments = mGHSKT(vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   if(Dist == "poi")  vMoments = mPOI(vTheta(0));
   if(Dist == "ber")  vMoments = mBER(vTheta(0));
   if(Dist == "gamma") vMoments = mGAMMA(vTheta(0), vTheta(1));

@@ -29,10 +29,6 @@ General results are reported by Blasques et al. (2014b), Blasques et al. (2014a)
 Andres (2014).\cr
 %
 
-The optimizer used is the General Nonlinear Augmented Lagrange Multiplier method of Ye (1988) available in
-the R package Rsolnp (Ghalanos and Theussl 2016).\cr
-%
-
 Starting values for the optimizer are chosen in the following way: (i) estimate the static
 version of the model (i.e., with A = 0 and B = 0) and set the initial value of the intercept parameter
 accordingly, and (ii) perform a grid search for the coefficients contained in A and B.
@@ -46,14 +42,14 @@ an object of the class \link{uGASSpec}, and iv) \code{FUN} the likelihood functi
 to be an object of the class \code{list} with four named elements: i) \code{pars}: a \code{numeric} vector
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
 evaluated at its minimum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
-the minimum of the negative log likelihood, this is used for inferential purposes, and iv) \code{convergence} a \code{numeric}
-or \code{character} string reporting information about the convergence of the optimization. This quantity is printed in used by the
-\code{show()} and \code{summary()} methods.
+the minimum of the negative log likelihood, this is used for inferential purposes, and iv) \code{convergence} a \code{numeric} variable  reporting information about the convergence of the optimization. This quantity is printed by the
+\code{show()} and \code{summary()} methods. \code{convergence = 0} has to indicates successful completion.
 
 The user is allowed to not include the last two elements of the output of the \code{fn.optimizer} function, that is, the values
 \code{hessian = NULL} and \code{convergence = NULL} are admissible. In the case of \code{hessian = NULL}, the Hessian matrix is
-evaluated numerically using the \link{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian
-is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
+evaluated numerically using the \link{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
+
+By default, the \code{optim} optimizer with \code{method = "BFGS"} is employed.
 
 }
 \value{

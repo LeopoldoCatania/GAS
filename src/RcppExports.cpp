@@ -2,13 +2,14 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include <RcppArmadillo.h>
+#include <RcppEigen.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
 
 // mWCRPS_backtest
 arma::mat mWCRPS_backtest(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper, int iB, double dA, double dB);
-RcppExport SEXP GAS_mWCRPS_backtest(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
+RcppExport SEXP _GAS_mWCRPS_backtest(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,7 +27,7 @@ END_RCPP
 }
 // EvaluateLogScore_Univ
 arma::vec EvaluateLogScore_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
-RcppExport SEXP GAS_EvaluateLogScore_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
+RcppExport SEXP _GAS_EvaluateLogScore_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -40,7 +41,7 @@ END_RCPP
 }
 // EvaluateLogScore_Multi
 arma::vec EvaluateLogScore_Multi(arma::mat mTheta, arma::mat mY, std::string Dist, int iT, int iN);
-RcppExport SEXP GAS_EvaluateLogScore_Multi(SEXP mThetaSEXP, SEXP mYSEXP, SEXP DistSEXP, SEXP iTSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_EvaluateLogScore_Multi(SEXP mThetaSEXP, SEXP mYSEXP, SEXP DistSEXP, SEXP iTSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -55,7 +56,7 @@ END_RCPP
 }
 // ddist_univ
 double ddist_univ(double dY, arma::vec vTheta, std::string Dist, bool bLog);
-RcppExport SEXP GAS_ddist_univ(SEXP dYSEXP, SEXP vThetaSEXP, SEXP DistSEXP, SEXP bLogSEXP) {
+RcppExport SEXP _GAS_ddist_univ(SEXP dYSEXP, SEXP vThetaSEXP, SEXP DistSEXP, SEXP bLogSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -69,7 +70,7 @@ END_RCPP
 }
 // ddist_multi
 double ddist_multi(arma::vec vY, arma::vec vTheta, int iN, std::string Dist, bool bLog);
-RcppExport SEXP GAS_ddist_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP, SEXP bLogSEXP) {
+RcppExport SEXP _GAS_ddist_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP, SEXP bLogSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,7 +85,7 @@ END_RCPP
 }
 // rdist_univ
 double rdist_univ(arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_rdist_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_rdist_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -96,7 +97,7 @@ END_RCPP
 }
 // rdist_multi
 arma::vec rdist_multi(arma::vec vTheta, int iN, std::string Dist);
-RcppExport SEXP GAS_rdist_multi(SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_rdist_multi(SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -109,7 +110,7 @@ END_RCPP
 }
 // pdist_univ
 double pdist_univ(double dQ, arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_pdist_univ(SEXP dQSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_pdist_univ(SEXP dQSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -122,7 +123,7 @@ END_RCPP
 }
 // qdist_univ
 double qdist_univ(double dP, arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_qdist_univ(SEXP dPSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_qdist_univ(SEXP dPSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -135,7 +136,7 @@ END_RCPP
 }
 // mdist_univ
 arma::vec mdist_univ(arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_mdist_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_mdist_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -147,7 +148,7 @@ END_RCPP
 }
 // mdist_multi_mean
 arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN);
-RcppExport SEXP GAS_mdist_multi_mean(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_mdist_multi_mean(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -160,7 +161,7 @@ END_RCPP
 }
 // mdist_multi_cov
 arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN);
-RcppExport SEXP GAS_mdist_multi_cov(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_mdist_multi_cov(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -173,7 +174,7 @@ END_RCPP
 }
 // GASFilter_univ
 List GASFilter_univ(arma::vec vY, arma::vec vKappa, arma::mat mA, arma::mat mB, int iT, int iK, std::string Dist, std::string ScalingType);
-RcppExport SEXP GAS_GASFilter_univ(SEXP vYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+RcppExport SEXP _GAS_GASFilter_univ(SEXP vYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -191,7 +192,7 @@ END_RCPP
 }
 // GASFilter_multi
 List GASFilter_multi(arma::mat mY, arma::vec vKappa, arma::mat mA, arma::mat mB, int iT, int iN, int iK, std::string Dist, std::string ScalingType);
-RcppExport SEXP GAS_GASFilter_multi(SEXP mYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iNSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+RcppExport SEXP _GAS_GASFilter_multi(SEXP mYSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iTSEXP, SEXP iNSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -210,7 +211,7 @@ END_RCPP
 }
 // uGASMultiForcast
 List uGASMultiForcast(arma::vec vTheta_tp1, arma::vec vKappa, arma::mat mA, arma::mat mB, int iH, int iB, int iK, std::string Dist, std::string ScalingType, bool bReturnsDraws);
-RcppExport SEXP GAS_uGASMultiForcast(SEXP vTheta_tp1SEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iHSEXP, SEXP iBSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP, SEXP bReturnsDrawsSEXP) {
+RcppExport SEXP _GAS_uGASMultiForcast(SEXP vTheta_tp1SEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iHSEXP, SEXP iBSEXP, SEXP iKSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP, SEXP bReturnsDrawsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -230,7 +231,7 @@ END_RCPP
 }
 // mGASMultiForcast
 List mGASMultiForcast(arma::vec vTheta_tp1, arma::vec vKappa, arma::mat mA, arma::mat mB, int iH, int iB, int iK, int iN, std::string Dist, std::string ScalingType, bool bReturnsDraws);
-RcppExport SEXP GAS_mGASMultiForcast(SEXP vTheta_tp1SEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iHSEXP, SEXP iBSEXP, SEXP iKSEXP, SEXP iNSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP, SEXP bReturnsDrawsSEXP) {
+RcppExport SEXP _GAS_mGASMultiForcast(SEXP vTheta_tp1SEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP iHSEXP, SEXP iBSEXP, SEXP iKSEXP, SEXP iNSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP, SEXP bReturnsDrawsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -251,7 +252,7 @@ END_RCPP
 }
 // IM_univ
 arma::mat IM_univ(arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_IM_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_IM_univ(SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -263,7 +264,7 @@ END_RCPP
 }
 // Map_Vec
 arma::vec Map_Vec(arma::vec vX, double dL, double dU);
-RcppExport SEXP GAS_Map_Vec(SEXP vXSEXP, SEXP dLSEXP, SEXP dUSEXP) {
+RcppExport SEXP _GAS_Map_Vec(SEXP vXSEXP, SEXP dLSEXP, SEXP dUSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -276,7 +277,7 @@ END_RCPP
 }
 // unmapVec_C
 arma::vec unmapVec_C(arma::vec vG, double dL, double dU);
-RcppExport SEXP GAS_unmapVec_C(SEXP vGSEXP, SEXP dLSEXP, SEXP dUSEXP) {
+RcppExport SEXP _GAS_unmapVec_C(SEXP vGSEXP, SEXP dLSEXP, SEXP dUSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -289,7 +290,7 @@ END_RCPP
 }
 // MapParameters_univ
 arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK);
-RcppExport SEXP GAS_MapParameters_univ(SEXP vTheta_tildeSEXP, SEXP DistSEXP, SEXP iKSEXP) {
+RcppExport SEXP _GAS_MapParameters_univ(SEXP vTheta_tildeSEXP, SEXP DistSEXP, SEXP iKSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -302,7 +303,7 @@ END_RCPP
 }
 // UnmapParameters_univ
 arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK);
-RcppExport SEXP GAS_UnmapParameters_univ(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iKSEXP) {
+RcppExport SEXP _GAS_UnmapParameters_univ(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iKSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -315,7 +316,7 @@ END_RCPP
 }
 // MapR_C
 arma::mat MapR_C(arma::vec vPhi, int iN);
-RcppExport SEXP GAS_MapR_C(SEXP vPhiSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_MapR_C(SEXP vPhiSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -327,7 +328,7 @@ END_RCPP
 }
 // UnMapR_C
 arma::vec UnMapR_C(arma::vec vRho, int iN);
-RcppExport SEXP GAS_UnMapR_C(SEXP vRhoSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_UnMapR_C(SEXP vRhoSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -339,7 +340,7 @@ END_RCPP
 }
 // MapParameters_multi
 arma::vec MapParameters_multi(arma::vec vTheta_tilde, std::string Dist, int iN, int iK);
-RcppExport SEXP GAS_MapParameters_multi(SEXP vTheta_tildeSEXP, SEXP DistSEXP, SEXP iNSEXP, SEXP iKSEXP) {
+RcppExport SEXP _GAS_MapParameters_multi(SEXP vTheta_tildeSEXP, SEXP DistSEXP, SEXP iNSEXP, SEXP iKSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -353,7 +354,7 @@ END_RCPP
 }
 // UnmapParameters_multi
 arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist, int iN, int iK);
-RcppExport SEXP GAS_UnmapParameters_multi(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP, SEXP iKSEXP) {
+RcppExport SEXP _GAS_UnmapParameters_multi(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP, SEXP iKSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -367,7 +368,7 @@ END_RCPP
 }
 // EvalMoments_univ
 arma::mat EvalMoments_univ(arma::mat mTheta, std::string Dist);
-RcppExport SEXP GAS_EvalMoments_univ(SEXP mThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_EvalMoments_univ(SEXP mThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -379,7 +380,7 @@ END_RCPP
 }
 // EvalMoments_multi
 List EvalMoments_multi(arma::mat mTheta, std::string Dist, int iN);
-RcppExport SEXP GAS_EvalMoments_multi(SEXP mThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_EvalMoments_multi(SEXP mThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -392,7 +393,7 @@ END_RCPP
 }
 // rmvnorm_mat
 arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma);
-RcppExport SEXP GAS_rmvnorm_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP) {
+RcppExport SEXP _GAS_rmvnorm_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -405,7 +406,7 @@ END_RCPP
 }
 // StaticLLK_Univ
 double StaticLLK_Univ(arma::vec vY, arma::vec vTheta, int iT, std::string Dist);
-RcppExport SEXP GAS_StaticLLK_Univ(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_StaticLLK_Univ(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -419,7 +420,7 @@ END_RCPP
 }
 // StaticLLK_Multi
 double StaticLLK_Multi(arma::mat mY, arma::vec vTheta, int iT, int iN, std::string Dist);
-RcppExport SEXP GAS_StaticLLK_Multi(SEXP mYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP iNSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_StaticLLK_Multi(SEXP mYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP iNSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -434,7 +435,7 @@ END_RCPP
 }
 // EvaluatePit_Univ
 arma::vec EvaluatePit_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
-RcppExport SEXP GAS_EvaluatePit_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
+RcppExport SEXP _GAS_EvaluatePit_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -448,7 +449,7 @@ END_RCPP
 }
 // Quantiles
 arma::mat Quantiles(arma::mat mTheta, std::string Dist, arma::vec vProbs);
-RcppExport SEXP GAS_Quantiles(SEXP mThetaSEXP, SEXP DistSEXP, SEXP vProbsSEXP) {
+RcppExport SEXP _GAS_Quantiles(SEXP mThetaSEXP, SEXP DistSEXP, SEXP vProbsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -461,7 +462,7 @@ END_RCPP
 }
 // Score_univ
 arma::vec Score_univ(double dY, arma::vec vTheta, std::string Dist);
-RcppExport SEXP GAS_Score_univ(SEXP dYSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_Score_univ(SEXP dYSEXP, SEXP vThetaSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -474,7 +475,7 @@ END_RCPP
 }
 // Score_multi
 arma::vec Score_multi(arma::vec vY, arma::vec vTheta, int iN, std::string Dist);
-RcppExport SEXP GAS_Score_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP) {
+RcppExport SEXP _GAS_Score_multi(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iNSEXP, SEXP DistSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -488,7 +489,7 @@ END_RCPP
 }
 // SimulateGAS_univ
 List SimulateGAS_univ(int iT, arma::vec vKappa, arma::mat mA, arma::mat mB, std::string Dist, std::string ScalingType);
-RcppExport SEXP GAS_SimulateGAS_univ(SEXP iTSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+RcppExport SEXP _GAS_SimulateGAS_univ(SEXP iTSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -504,7 +505,7 @@ END_RCPP
 }
 // SimulateGAS_multi
 List SimulateGAS_multi(int iT, int iN, arma::vec vKappa, arma::mat mA, arma::mat mB, std::string Dist, std::string ScalingType);
-RcppExport SEXP GAS_SimulateGAS_multi(SEXP iTSEXP, SEXP iNSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
+RcppExport SEXP _GAS_SimulateGAS_multi(SEXP iTSEXP, SEXP iNSEXP, SEXP vKappaSEXP, SEXP mASEXP, SEXP mBSEXP, SEXP DistSEXP, SEXP ScalingTypeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -521,7 +522,7 @@ END_RCPP
 }
 // NumberParameters
 int NumberParameters(std::string Dist, int iN);
-RcppExport SEXP GAS_NumberParameters(SEXP DistSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_NumberParameters(SEXP DistSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -533,7 +534,7 @@ END_RCPP
 }
 // build_vR
 arma::vec build_vR(arma::mat mR, int iN);
-RcppExport SEXP GAS_build_vR(SEXP mRSEXP, SEXP iNSEXP) {
+RcppExport SEXP _GAS_build_vR(SEXP mRSEXP, SEXP iNSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -542,4 +543,51 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(build_vR(mR, iN));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_GAS_mWCRPS_backtest", (DL_FUNC) &_GAS_mWCRPS_backtest, 8},
+    {"_GAS_EvaluateLogScore_Univ", (DL_FUNC) &_GAS_EvaluateLogScore_Univ, 4},
+    {"_GAS_EvaluateLogScore_Multi", (DL_FUNC) &_GAS_EvaluateLogScore_Multi, 5},
+    {"_GAS_ddist_univ", (DL_FUNC) &_GAS_ddist_univ, 4},
+    {"_GAS_ddist_multi", (DL_FUNC) &_GAS_ddist_multi, 5},
+    {"_GAS_rdist_univ", (DL_FUNC) &_GAS_rdist_univ, 2},
+    {"_GAS_rdist_multi", (DL_FUNC) &_GAS_rdist_multi, 3},
+    {"_GAS_pdist_univ", (DL_FUNC) &_GAS_pdist_univ, 3},
+    {"_GAS_qdist_univ", (DL_FUNC) &_GAS_qdist_univ, 3},
+    {"_GAS_mdist_univ", (DL_FUNC) &_GAS_mdist_univ, 2},
+    {"_GAS_mdist_multi_mean", (DL_FUNC) &_GAS_mdist_multi_mean, 3},
+    {"_GAS_mdist_multi_cov", (DL_FUNC) &_GAS_mdist_multi_cov, 3},
+    {"_GAS_GASFilter_univ", (DL_FUNC) &_GAS_GASFilter_univ, 8},
+    {"_GAS_GASFilter_multi", (DL_FUNC) &_GAS_GASFilter_multi, 9},
+    {"_GAS_uGASMultiForcast", (DL_FUNC) &_GAS_uGASMultiForcast, 10},
+    {"_GAS_mGASMultiForcast", (DL_FUNC) &_GAS_mGASMultiForcast, 11},
+    {"_GAS_IM_univ", (DL_FUNC) &_GAS_IM_univ, 2},
+    {"_GAS_Map_Vec", (DL_FUNC) &_GAS_Map_Vec, 3},
+    {"_GAS_unmapVec_C", (DL_FUNC) &_GAS_unmapVec_C, 3},
+    {"_GAS_MapParameters_univ", (DL_FUNC) &_GAS_MapParameters_univ, 3},
+    {"_GAS_UnmapParameters_univ", (DL_FUNC) &_GAS_UnmapParameters_univ, 3},
+    {"_GAS_MapR_C", (DL_FUNC) &_GAS_MapR_C, 2},
+    {"_GAS_UnMapR_C", (DL_FUNC) &_GAS_UnMapR_C, 2},
+    {"_GAS_MapParameters_multi", (DL_FUNC) &_GAS_MapParameters_multi, 4},
+    {"_GAS_UnmapParameters_multi", (DL_FUNC) &_GAS_UnmapParameters_multi, 4},
+    {"_GAS_EvalMoments_univ", (DL_FUNC) &_GAS_EvalMoments_univ, 2},
+    {"_GAS_EvalMoments_multi", (DL_FUNC) &_GAS_EvalMoments_multi, 3},
+    {"_GAS_rmvnorm_mat", (DL_FUNC) &_GAS_rmvnorm_mat, 3},
+    {"_GAS_StaticLLK_Univ", (DL_FUNC) &_GAS_StaticLLK_Univ, 4},
+    {"_GAS_StaticLLK_Multi", (DL_FUNC) &_GAS_StaticLLK_Multi, 5},
+    {"_GAS_EvaluatePit_Univ", (DL_FUNC) &_GAS_EvaluatePit_Univ, 4},
+    {"_GAS_Quantiles", (DL_FUNC) &_GAS_Quantiles, 3},
+    {"_GAS_Score_univ", (DL_FUNC) &_GAS_Score_univ, 3},
+    {"_GAS_Score_multi", (DL_FUNC) &_GAS_Score_multi, 4},
+    {"_GAS_SimulateGAS_univ", (DL_FUNC) &_GAS_SimulateGAS_univ, 6},
+    {"_GAS_SimulateGAS_multi", (DL_FUNC) &_GAS_SimulateGAS_multi, 7},
+    {"_GAS_NumberParameters", (DL_FUNC) &_GAS_NumberParameters, 2},
+    {"_GAS_build_vR", (DL_FUNC) &_GAS_build_vR, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_GAS(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

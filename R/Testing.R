@@ -3,18 +3,18 @@
 
 ############ PIT#################
 
-BinTest <- function(pit, g = 20, alpha = 0.05, plot = F) {
+BinTest <- function(pit, g = 20L, alpha = 0.05, plot = FALSE) {
 
-    h = hist(pit, nclass = g, plot = F)
+    h = hist(pit, nclass = g, plot = FALSE)
     n_i = h$counts
     test = sum((n_i - mean(n_i))^2/mean(n_i))
-    crit = qchisq(1 - alpha, g - 1)
-    pvalue = 1 - pchisq(test, g - 1)
+    crit = qchisq(1.0 - alpha, g - 1L)
+    pvalue = 1 - pchisq(test, g - 1L)
     confidence = mean(n_i) + c(-qnorm(1 - alpha) * sqrt(mean(n_i)), +qnorm(1 - alpha) * sqrt(mean(n_i)))
 
     if (plot) {
         plot(h, col = "blue", ylim = c(0, max(confidence * 1.2, n_i * 1.2)))
-        abline(h = confidence, col = "red", lwd = 2, xlim = c(0, 1))
+        abline(h = confidence, col = "red", lwd = 2L, xlim = c(0, 1))
     }
 
     out = list(test = test, crit = crit, pvalue = pvalue, hist = h, confidence = confidence)
@@ -31,18 +31,18 @@ iidTest <- function(pit, alpha = 0.05) {
     m4 = as.numeric((pit - mean(pit))^4)
 
     data1 = do.call(cbind, lapply(1:20, function(i) c(m1[-(1:i)], rep(NA, i))))
-    data1 = data.frame(head(data1, N - 20))
+    data1 = data.frame(head(data1, N - 20L))
     data2 = do.call(cbind, lapply(1:20, function(i) c(m2[-(1:i)], rep(NA, i))))
-    data2 = data.frame(head(data1, N - 20))
+    data2 = data.frame(head(data1, N - 20L))
     data3 = do.call(cbind, lapply(1:20, function(i) c(m3[-(1:i)], rep(NA, i))))
-    data3 = data.frame(head(data1, N - 20))
+    data3 = data.frame(head(data1, N - 20L))
     data4 = do.call(cbind, lapply(1:20, function(i) c(m4[-(1:i)], rep(NA, i))))
-    data4 = data.frame(head(data1, N - 20))
+    data4 = data.frame(head(data1, N - 20L))
 
-    m1 = head(m1, N - 20)
-    m2 = head(m2, N - 20)
-    m3 = head(m3, N - 20)
-    m4 = head(m4, N - 20)
+    m1 = head(m1, N - 20L)
+    m2 = head(m2, N - 20L)
+    m3 = head(m3, N - 20L)
+    m4 = head(m4, N - 20L)
 
     fit1 = lm(m1 ~ ., data = data1)
     fit2 = lm(m2 ~ ., data = data2)
@@ -54,12 +54,12 @@ iidTest <- function(pit, alpha = 0.05) {
     test3 = (N - 20) * summary(fit3)$r.squared
     test4 = (N - 20) * summary(fit4)$r.squared
 
-    crit = qchisq(1 - alpha, 20)
+    crit = qchisq(1 - alpha, 20L)
 
-    pvalue1 = 1 - pchisq(test1, 20)
-    pvalue2 = 1 - pchisq(test2, 20)
-    pvalue3 = 1 - pchisq(test3, 20)
-    pvalue4 = 1 - pchisq(test4, 20)
+    pvalue1 = 1 - pchisq(test1, 20L)
+    pvalue2 = 1 - pchisq(test2, 20L)
+    pvalue3 = 1 - pchisq(test3, 20L)
+    pvalue4 = 1 - pchisq(test4, 20L)
 
 
     out = list(test = c(test1 = test1, test2 = test2, test3 = test3, test4 = test4), crit = crit, pvalue = c(pvalue1,
@@ -67,14 +67,14 @@ iidTest <- function(pit, alpha = 0.05) {
     return(out)
 }
 
-PIT_test <- function(U, G = 20, alpha = 0.05, plot = FALSE) {
+PIT_test <- function(U, G = 20L, alpha = 0.05, plot = FALSE) {
 
     iG = G
     dAlpha = alpha
     vU = U
 
-    if (length(vU) < 100)
-        iG = 5
+    if (length(vU) < 100L)
+        iG = 5L
 
     Hist = BinTest(pit = vU, g = iG, alpha = dAlpha, plot = plot)
     IID = iidTest(pit = vU, alpha = dAlpha)
@@ -99,7 +99,7 @@ DQOOStest <- function(y, VaR, tau, cLags) {
 
     for (st in 1:cLags) {
 
-        mZ[, st] = vHit[st:(cT - (cLags + 1 - st))]
+        mZ[, st] = vHit[st:(cT - (cLags + 1L - st))]
 
     }
 
@@ -115,7 +115,7 @@ DQOOStest <- function(y, VaR, tau, cLags) {
 HitSequence <- function(returns_X, VaR_X) {
     N = length(returns_X)
     Hit_X = numeric(N)
-    Hit_X[which(returns_X <= VaR_X)] = 1
+    Hit_X[which(returns_X <= VaR_X)] = 1L
     return(Hit_X)
 }
 
@@ -138,13 +138,13 @@ Christoffersen <- function(Hit, tau) {
     n00 = n01 = n10 = n11 = 0
     N = length(Hit)
     for (i in 2:N) {
-        if (Hit[i] == 0 & Hit[i - 1] == 0)
+        if (Hit[i] == 0L & Hit[i - 1L] == 0L)
             n00 = n00 + 1
-        if (Hit[i] == 0 & Hit[i - 1] == 1)
+        if (Hit[i] == 0L & Hit[i - 1L] == 1L)
             n01 = n01 + 1
-        if (Hit[i] == 1 & Hit[i - 1] == 0)
+        if (Hit[i] == 1L & Hit[i - 1L] == 0L)
             n10 = n10 + 1
-        if (Hit[i] == 1 & Hit[i - 1] == 1)
+        if (Hit[i] == 1L & Hit[i - 1L] == 1L)
             n11 = n11 + 1
     }
     pi0 = n01/(n00 + n01)
@@ -157,8 +157,7 @@ Christoffersen <- function(Hit, tau) {
             log(pi0) - n10 * log(1 - pi1) - n11 * log(pi1))
     LRpof = Kupiec(Hit, tau)["Test"]
     LRcc = LRpof + LRind
-    # threshold = qchisq(alphaTest, df = 2)
-    pvalue = 1 - pchisq(LRcc, df = 2)
+    pvalue = 1 - pchisq(LRcc, df = 2L)
     LRcc = c(LRcc, pvalue)
     names(LRcc) = c("Test", "Pvalue")
     return(LRcc)
@@ -173,7 +172,7 @@ ActualOverExpected <- function(Hit, tau) {
 
 AbsoluteDeviation <- function(Hit, returns_X, VaR_X) {
     series = abs(VaR_X - returns_X)
-    series = series[which(Hit == 1)]
+    series = series[which(Hit == 1L)]
     ADmean = mean(series)
     ADmax = max(series)
 
@@ -208,7 +207,7 @@ JarqueBera <- function(vRes, dAlpha = 0.05) {
 
   dPval = 1.0 - pchisq(dStat, 2)
 
-  dCritical = qchisq(1.0 - dAlpha, 2)
+  dCritical = qchisq(1.0 - dAlpha, 2L)
 
   return(c("Statistic" = dStat, "p-Value" = dPval, "critical" = dCritical))
 
@@ -217,7 +216,7 @@ JarqueBera <- function(vRes, dAlpha = 0.05) {
 LjungBox <- function(vRes, vLag = c(10, 15, 20)) {
 
   iP    = length(vLag)
-  mTest = matrix(data = NA, iP, 2, dimnames =
+  mTest = matrix(data = NA, iP, 2L, dimnames =
                    list(vLag, c("Statistic", "p-Value")))
 
   for (p in 1:iP) {

@@ -1,4 +1,4 @@
-BacktestVaR <- function(data, VaR, alpha, Lags = 4) {
+BacktestVaR <- function(data, VaR, alpha, Lags = 4L) {
 
     vY = data
     vVaR = VaR
@@ -20,7 +20,7 @@ BacktestVaR <- function(data, VaR, alpha, Lags = 4) {
     return(lOut)
 }
 
-BacktestDensity <- function(Roll, lower, upper, K = 1000, a = NULL, b = NULL) {
+BacktestDensity <- function(Roll, lower, upper, K = 1000L, a = NULL, b = NULL) {
 
   dLower = lower
   dUpper = upper
@@ -51,7 +51,7 @@ BacktestDensity <- function(Roll, lower, upper, K = 1000, a = NULL, b = NULL) {
   mWCRPS = mWCRPS_backtest(vY_oos, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
   colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
 
-  vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2, mean))
+  vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2L, mean))
 
   lOut = list()
   lOut[["series"]] = list(LS = vLS, WCRPS = mWCRPS)

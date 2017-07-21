@@ -19,7 +19,9 @@ arma::vec Thresholding_vec(arma::vec vX, double dTol=1e50);
 double IndicatorLess(double dX, double dXBar);
 double signum(const double x);
 double Heaviside(const double x, const double a);
-double ModBesselFirst(double dX, double dNu, int iM = 1000);
-double ModBesselFirst_Deriv(double dX, double dNu, int iM = 1000);
+double ModBesselFirst(double dX, double dNu);
+double ModBesselFirst_Deriv(double dX, double dNu);
 double LogSum(double dLogX, double dLogY) ;
+double ModBesselThird_Deriv_X(double dX, double dNu, double dEps = 1e-4);
+double ModBesselThird_Deriv_Nu(double dX, double dNu, double dEps = 1e-4);
 #endif

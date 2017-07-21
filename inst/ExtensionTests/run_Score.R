@@ -139,8 +139,24 @@ vApprox = matrix(numDeriv::grad(function(vTheta, dY) {
 }, vTheta, dY = dY, method = "simple"), ncol = 1)
 
 
-
 vGAS = GAS:::Score_Uni(dY, vTheta, "skellam")
+
+
+# ghskt
+
+dY = 1.5
+dMu = 9.0
+dSigma = 1.7
+dBetaBar = 1.5
+dNu = 5.0
+
+vTheta = c(dMu, dSigma, dBetaBar, dNu)
+
+vApprox = matrix(numDeriv::grad(function(vTheta, dY) {
+  GAS::ddist_Uni(dY, vTheta, "ghskt", log = TRUE)
+}, vTheta, dY = dY), ncol = 1)
+
+vGAS = GAS:::Score_Uni(dY, vTheta, "ghskt")
 
 
 ## multivariate

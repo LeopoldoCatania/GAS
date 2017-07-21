@@ -13,6 +13,7 @@ int NumberParameters(std::string Dist, int iN = 1){
   if(Dist == "ast")  iK = 5;
   if(Dist == "ast1") iK = 4;
   if(Dist == "ald")  iK = 3;
+  if(Dist == "ghskt") iK = 4;
   if(Dist == "poi")  iK = 1;
   if(Dist == "ber")  iK = 1;
   if(Dist == "gamma")  iK = 2;
@@ -188,40 +189,33 @@ double Heaviside(const double x, const double a){
   return( (signum(x-a) + 1.0)/2.0 );
 }
 
-double ModBesselFirst(double dX, double dNu, int iM = 1000) {
+double ModBesselFirst(double dX, double dNu) {
 
-  double dOut = 0.0;
-  double dLogX = log(dX) - log(2.0);
-  int m;
-
-
-  for (m = 0; m < iM + 1; m++) {
-
-    dOut += exp((2.0 * m + dNu * 1.0) * dLogX - Rf_lgammafn(m * 1.0 + 1.0) - Rf_lgammafn(m * 1.0 + dNu + 1.0));
-  }
-
+  double dOut = Rf_bessel_i(dX, dNu, 1);
 
   return dOut;
 
 }
 
-double ModBesselFirst_Deriv(double dX, double dNu, int iM = 1000) {
+double ModBesselFirst_Deriv(double dX, double dNu) {
 
-  // double dDeriv = dNu/dX * ModBesselFirst(dX, dNu) + ModBesselFirst(dX, dNu + 1.0);
-
-  double dLogX = log(dX) - log(2.0);
-
-  double dDeriv = 0.0;
-
-  int m;
-  for (m = 0; m < iM; m++) {
-    dDeriv += exp(log(2.0 * m + dNu) + (2.0 * m + dNu - 1.0) * dLogX -
-      Rf_lgammafn(m * 1.0 + 1.0) - Rf_lgammafn(m * 1.0 + dNu + 1.0) +
-      log(0.5));
-  }
-
+  double dDeriv = dNu/dX * Rf_bessel_i(dX, dNu, 1) + Rf_bessel_i(dX, dNu + 1.0, 1);
 
   return dDeriv;
+
+}
+
+double ModBesselThird_Deriv_X(double dX, double dNu, double dEps = 1e-4) {
+
+  double dDeriv_X = (Rf_bessel_k(dX + dEps, dNu, 1.0) - Rf_bessel_k(dX - dEps, dNu, 1.0))/(2.0 * dEps);
+  return dDeriv_X;
+
+}
+
+double ModBesselThird_Deriv_Nu(double dX, double dNu, double dEps = 1e-4) {
+
+  double dDeriv_Nu = (Rf_bessel_k(dX, dNu + dEps, 1.0) - Rf_bessel_k(dX, dNu - dEps, 1.0))/(2.0 * dEps);
+  return dDeriv_Nu;
 
 }
 

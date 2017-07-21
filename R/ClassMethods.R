@@ -103,7 +103,7 @@ setMethod("show", "uGASFit", function(object) {
   cat(paste("\nConvergence:\t"))
   cat(convergence(object))
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("summary", "uGASFit", function(object) {
@@ -175,7 +175,7 @@ setMethod("summary", "uGASFit", function(object) {
   cat(paste("\nConvergence:\t"))
   cat(convergence(object))
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("show", "mGASFit", function(object) {
@@ -224,7 +224,7 @@ setMethod("show", "mGASFit", function(object) {
   cat(paste("\nConvergence:\t"))
   cat(convergence(object))
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("summary", "mGASFit", function(object) {
@@ -273,7 +273,7 @@ setMethod("summary", "mGASFit", function(object) {
   cat(paste("\nConvergence:\t"))
   cat(convergence(object))
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("show", "uGASSim", function(object) {
@@ -286,7 +286,7 @@ setMethod("show", "uGASSim", function(object) {
   iK = NumberParameters(Dist)
 
   mA = object@ModelInfo$mA
-  mB = object@ModelInfo$mA
+  mB = object@ModelInfo$mB
   vKappa = object@ModelInfo$vKappa
   names(vKappa) = ParNames
 
@@ -327,7 +327,7 @@ setMethod("show", "mGASSim", function(object) {
   iK = NumberParameters(Dist, iN)
 
   mA = object@ModelInfo$mA
-  mB = object@ModelInfo$mA
+  mB = object@ModelInfo$mB
   vKappa = object@ModelInfo$vKappa
   names(vKappa) = ParNames
 
@@ -382,10 +382,10 @@ setMethod("show", "uGASFor", function(object) {
   #
   cat(paste("\n------------------------------------------"))
   cat(paste("\nParameters forecast:\n"))
-  if (nrow(PointForecast) > 10 ) {
-    print(head(PointForecast, 5))
+  if (nrow(PointForecast) > 10L ) {
+    print(head(PointForecast, 5L))
     cat(paste("\n....................\n"))
-    print(tail(PointForecast, 5))
+    print(tail(PointForecast, 5L))
   } else {
     print(PointForecast)
   }
@@ -417,10 +417,10 @@ setMethod("show", "mGASFor", function(object) {
   #
   cat(paste("\n------------------------------------------"))
   cat(paste("\nParameters forecast:\n"))
-  if (nrow(PointForecast) > 10 ) {
-    print(head(PointForecast, 5))
+  if (nrow(PointForecast) > 10L) {
+    print(head(PointForecast, 5L))
     cat(paste("\n....................\n"))
-    print(tail(PointForecast, 5))
+    print(tail(PointForecast, 5L))
   } else {
     print(PointForecast)
   }
@@ -442,15 +442,15 @@ setMethod("show", "uGASRoll", function(object) {
   #
   cat(paste("\n------------------------------------------"))
   cat(paste("\nParameters forecast:\n"))
-  if (nrow(PointForecast) > 10 ) {
-    print(head(PointForecast, 5))
+  if (nrow(PointForecast) > 10L) {
+    print(head(PointForecast, 5L))
     cat(paste("\n....................\n"))
-    print(tail(PointForecast, 5))
+    print(tail(PointForecast, 5L))
   } else {
     print(PointForecast)
   }
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("show", "mGASRoll", function(object) {
@@ -469,15 +469,15 @@ setMethod("show", "mGASRoll", function(object) {
   #
   cat(paste("\n------------------------------------------"))
   cat(paste("\nParameters forecast:\n"))
-  if (nrow(PointForecast) > 10 ) {
-    print(head(PointForecast, 5))
+  if (nrow(PointForecast) > 10L) {
+    print(head(PointForecast, 5L))
     cat(paste("\n....................\n"))
-    print(tail(PointForecast, 5))
+    print(tail(PointForecast, 5L))
   } else {
     print(PointForecast)
   }
   cat(paste("\n------------------------------------------"))
-  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2), "mins"))
+  cat(paste("\n\nElapsed time:", round(as.double(elapsedTime, units = "mins"), 2L), "mins"))
 })
 
 setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, which = NULL) {
@@ -494,8 +494,8 @@ setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, which = N
   } else {
     vDates = 1:length(vY)
   }
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       vMenu = PlotMenu(x)
 
@@ -505,25 +505,25 @@ setMethod("plot", signature(x = "uGASFit", y = "missing"), function(x, which = N
       PlotType = which
     }
 
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(FilteredParameters, iK, iT, vDates)
     }
 
-    if (PlotType == 2) {
-      PlotMultipleSeries(Moments, 4, iT, vDates)
+    if (PlotType == 2L) {
+      PlotMultipleSeries(Moments, 4L, iT, vDates)
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       PlotPit(vU, x@Testing$PitTest$Hist)
     }
-    if (PlotType == 4) {
+    if (PlotType == 4L) {
       PlotSingleSeries(vY, iT, vDates)
     }
-    if (PlotType == 5) {
-      mRealVsFiltered = cbind(Moments[, 1], vY)
+    if (PlotType == 5L) {
+      mRealVsFiltered = cbind(Moments[, 1L], vY)
       PlotForecastVsRealized_Univ(mRealVsFiltered, vDates, x)
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -548,46 +548,46 @@ setMethod("plot", signature(x = "mGASFit", y = "missing"), function(x, which = N
       vDates = 1:nrow(mY)
     }
   }
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       cat(paste("Print 1-3 or 0 to exit"))
       PlotType = menu(PlotMenu(x))
     } else {
       PlotType = which
     }
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       series2plot = getFilteredParameters(x)[1:iT, , drop = FALSE]
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       lMoments = getMoments(x)
       mMean = lMoments[["mean"]][1:iT, , drop = FALSE]
       dimnames(mMean) = list(vDates, paste(vSeriesName, "mean", sep = "."))
 
       aCov  = lMoments[["cov"]][,, 1:iT, drop = FALSE]
       dimnames(aCov) = list(vSeriesName, vSeriesName, vDates)
-      mCov = Array2Matrix(aCov, type = 2)
+      mCov = Array2Matrix(aCov, type = 2L)
 
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       series2plot = mY
     }
 
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(series2plot, iK, iT, vDates)
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
 
       PlotMultipleSeries(mMean, iN, iT, vDates)
       foo = readline("Print enter to plot covariances\n:")
       PlotMultipleSeries(mCov, ncol(mCov), iT, vDates)
 
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       PlotMultipleSeries(series2plot, iN, iT, vDates)
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -599,35 +599,35 @@ setMethod("plot", signature(x = "uGASSim", y = "missing"), function(x, which = N
 
   vDates = 1:iT
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       cat(paste("Print 1-3 or 0 to exit"))
       PlotType = menu(PlotMenu(x))
     } else {
       PlotType = which
     }
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       series2plot = getFilteredParameters(x)[1:iT, , drop = FALSE]
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       series2plot = getMoments(x)[1:iT, , drop = FALSE]
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       series2plot = vY
     }
 
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(series2plot, iK, iT, vDates)
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       PlotMultipleSeries(series2plot, iK, iT, vDates)
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       PlotSingleSeries(series2plot, iT, vDates)
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -641,46 +641,46 @@ setMethod("plot", signature(x = "mGASSim", y = "missing"), function(x, which = N
   vDates = 1:iT
   vSeriesName = colnames(mY)
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       cat(paste("Print 1-3 or 0 to exit"))
       PlotType = menu(PlotMenu(x))
     } else {
       PlotType = which
     }
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       series2plot = getFilteredParameters(x)[1:iT, , drop = FALSE]
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       lMoments = getMoments(x)
       mMean = lMoments[["mean"]][1:iT, , drop = FALSE]
       dimnames(mMean) = list(vDates, paste(vSeriesName, "mean", sep = "."))
 
       aCov  = lMoments[["cov"]][,, 1:iT, drop = FALSE]
       dimnames(aCov) = list(vSeriesName, vSeriesName, vDates)
-      mCov = Array2Matrix(aCov, type = 2)
+      mCov = Array2Matrix(aCov, type = 2L)
 
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       series2plot = mY
     }
 
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(series2plot, iK, iT, vDates)
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
 
       PlotMultipleSeries(mMean, iN, iT, vDates)
       foo = readline("Print enter to plot covariances\n:")
       PlotMultipleSeries(mCov, ncol(mCov), iT, vDates)
 
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       PlotMultipleSeries(series2plot, iN, iT, vDates)
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -708,18 +708,18 @@ setMethod("plot", signature(x = "uGASFor", y = "missing"), function(x, which = N
     if (Roll) {
       vDates_os = as.Date(index(vOut))
     } else {
-      DiffTime = vDates_is[2] - vDates_is[1]
-      vDates_os = seq(tail(vDates_is, 1) + DiffTime, tail(vDates_is, 1) + DiffTime * iH, by = DiffTime)
+      DiffTime = vDates_is[2L] - vDates_is[1L]
+      vDates_os = seq(tail(vDates_is, 1L) + DiffTime, tail(vDates_is, 1L) + DiffTime * iH, by = DiffTime)
     }
     ParametersForecast = xts(ParametersForecast, vDates_os)
     FilteredParameters = xts(FilteredParameters, vDates_is)
   } else {
     vDates_is = 1:iT
-    vDates_os = (iT + 1):(iT + iH)
+    vDates_os = (iT + 1L):(iT + iH)
   }
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (!Roll) {
       if (is.null(which)) {
         cat(paste("Print 1-6 or 0 to exit"))
@@ -727,28 +727,28 @@ setMethod("plot", signature(x = "uGASFor", y = "missing"), function(x, which = N
       } else {
         PlotType = which
       }
-      if (PlotType == 1) {
+      if (PlotType == 1L) {
         PlotMultipleSeries(ParametersForecast, iK, iH, vDates_os)
       }
-      if (PlotType == 2) {
+      if (PlotType == 2L) {
         PlotMultipleSeries_Bands(ParametersForecast, iK, iH, vDates_os, cBands)
       }
-      if (PlotType == 3) {
+      if (PlotType == 3L) {
         PlotMultipleSeries_wis(FilteredParameters, ParametersForecast, iK, iH, vDates_os, vDates_is)
       }
-      if (PlotType == 4) {
+      if (PlotType == 4L) {
         PlotMultipleSeries_Bands_wis(FilteredParameters, ParametersForecast, iK, iH, vDates_os,
                                      vDates_is, cBands)
       }
-      if (PlotType == 5) {
+      if (PlotType == 5L) {
         Moments_is = getMoments(x)
-        PlotMultipleSeries(Moments_is, 4, iH, vDates_os)
+        PlotMultipleSeries(Moments_is, 4L, iH, vDates_os)
       }
-      if (PlotType == 6) {
+      if (PlotType == 6L) {
         Moments_os = getMoments(x)
         Moments_is = EvalMoments_univ(t(FilteredParameters), Dist)
         colnames(Moments_is) = paste("M", 1:4, sep = "")
-        PlotMultipleSeries_wis(Moments_is, Moments_os, 4, iH, vDates_os, vDates_is)
+        PlotMultipleSeries_wis(Moments_is, Moments_os, 4L, iH, vDates_os, vDates_is)
       }
     } else {
       if (is.null(which)) {
@@ -757,25 +757,25 @@ setMethod("plot", signature(x = "uGASFor", y = "missing"), function(x, which = N
       } else {
         PlotType = which
       }
-      if (PlotType == 1) {
+      if (PlotType == 1L) {
         PlotMultipleSeries(ParametersForecast, iK, iH, vDates_os)
       }
-      if (PlotType == 2) {
+      if (PlotType == 2L) {
         Moments_os = getMoments(x)
-        Mu = Moments_os[, 1]
+        Mu = Moments_os[, 1L]
         mRealVsForecast = cbind(Mu, vOut)
         PlotForecastVsRealized_Univ(mRealVsForecast, vDates_os, x)
       }
-      if (PlotType == 3) {
+      if (PlotType == 3L) {
         Moments_os = getMoments(x)
-        PlotMultipleSeries(Moments_os, 4, iH, vDates_os)
+        PlotMultipleSeries(Moments_os, 4L, iH, vDates_os)
       }
-      if (PlotType == 4) {
+      if (PlotType == 4L) {
         PlotSingleSeries(vLS, iH, vDates_os)
       }
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -801,18 +801,18 @@ setMethod("plot", signature(x = "mGASFor", y = "missing"), function(x, which = N
     if (Roll) {
       vDates_os = as.Date(index(mOut))
     } else {
-      DiffTime = vDates_is[2] - vDates_is[1]
-      vDates_os = seq(tail(vDates_is, 1) + DiffTime, tail(vDates_is, 1) + DiffTime * iH, by = DiffTime)
+      DiffTime = vDates_is[2L] - vDates_is[1L]
+      vDates_os = seq(tail(vDates_is, 1L) + DiffTime, tail(vDates_is, 1L) + DiffTime * iH, by = DiffTime)
     }
     ParametersForecast = xts(ParametersForecast, vDates_os)
     FilteredParameters = xts(FilteredParameters, vDates_is)
   } else {
     vDates_is = 1:iT
-    vDates_os = (iT + 1):(iT + iH)
+    vDates_os = (iT + 1L):(iT + iH)
   }
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (!Roll) {
       if (is.null(which)) {
         cat(paste("Print 1-4 or 0 to exit"))
@@ -820,16 +820,16 @@ setMethod("plot", signature(x = "mGASFor", y = "missing"), function(x, which = N
       } else {
         PlotType = which
       }
-      if (PlotType == 1) {
+      if (PlotType == 1L) {
         PlotMultipleSeries(ParametersForecast, iK, iH, vDates_os)
       }
-      if (PlotType == 2) {
+      if (PlotType == 2L) {
         PlotMultipleSeries_Bands(ParametersForecast, iK, iH, vDates_os, cBands)
       }
-      if (PlotType == 3) {
+      if (PlotType == 3L) {
         PlotMultipleSeries_wis(FilteredParameters, ParametersForecast, iK, iH, vDates_os, vDates_is)
       }
-      if (PlotType == 4) {
+      if (PlotType == 4L) {
         PlotMultipleSeries_Bands_wis(FilteredParameters, ParametersForecast, iK, iH, vDates_os,
                                      vDates_is, cBands)
       }
@@ -840,15 +840,15 @@ setMethod("plot", signature(x = "mGASFor", y = "missing"), function(x, which = N
       } else {
         PlotType = which
       }
-      if (PlotType == 1) {
+      if (PlotType == 1L) {
         PlotMultipleSeries(ParametersForecast, iK, iT, vDates_os)
       }
-      if (PlotType == 2) {
+      if (PlotType == 2L) {
         Moments_os = getMoments(x)
         mForcasted = Moments_os[["mean"]]
         PlotForecastVsRealized_Multi(t(mOut), mForcasted, iN, vDates_os, x)
       }
-      if (PlotType == 3) {
+      if (PlotType == 3L) {
         Moments_os = getMoments(x)
         mMean = Moments_os[["mean"]]
         colnames(mMean) = colnames(t(mOut))
@@ -858,12 +858,12 @@ setMethod("plot", signature(x = "mGASFor", y = "missing"), function(x, which = N
         foo = readline("Print enter to plot covariances\n:")
         PlotCovariances(cCov, iN, iH, vDates_os, colnames(t(mOut)))
       }
-      if (PlotType == 4) {
+      if (PlotType == 4L) {
         PlotSingleSeries(vLS, iH, vDates_os)
       }
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -885,32 +885,32 @@ setMethod("plot", signature(x = "uGASRoll", y = "missing"), function(x, which = 
     vDates_os = 1:iH
   }
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       cat(paste("Print 1-4 or 0 to exit"))
       PlotType = menu(PlotMenu(x))
     } else {
       PlotType = which
     }
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(ParametersForecast, iK, iT, vDates_os)
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       Moments_os = getMoments(x)
-      Mu = Moments_os[, 1]
+      Mu = Moments_os[, 1L]
       mRealVsForecast = cbind(Mu, vOut)
       PlotForecastVsRealized_Univ(mRealVsForecast, vDates_os, x)
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       Moments_os = getMoments(x)
-      PlotMultipleSeries(Moments_os, 4, iH, vDates_os)
+      PlotMultipleSeries(Moments_os, 4L, iH, vDates_os)
     }
-    if (PlotType == 4) {
+    if (PlotType == 4L) {
       PlotPit(vU, x@Testing$PitTest$Hist)
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -932,23 +932,23 @@ setMethod("plot", signature(x = "mGASRoll", y = "missing"), function(x, which = 
     vDates_os = 1:iH
   }
 
-  PlotType = 1
-  while (PlotType > 0) {
+  PlotType = 1L
+  while (PlotType > 0L) {
     if (is.null(which)) {
       cat(paste("Print 1-4 or 0 to exit"))
       PlotType = menu(PlotMenu(x))
     } else {
       PlotType = which
     }
-    if (PlotType == 1) {
+    if (PlotType == 1L) {
       PlotMultipleSeries(ParametersForecast, iK, iT, vDates_os)
     }
-    if (PlotType == 2) {
+    if (PlotType == 2L) {
       Moments_os = getMoments(x)
       mForcasted = Moments_os[["mean"]]
       PlotForecastVsRealized_Multi(t(mOut), mForcasted, iN, vDates_os, x)
     }
-    if (PlotType == 3) {
+    if (PlotType == 3L) {
       Moments_os = getMoments(x)
       mMean = Moments_os[["mean"]]
       colnames(mMean) = colnames(t(mOut))
@@ -959,7 +959,7 @@ setMethod("plot", signature(x = "mGASRoll", y = "missing"), function(x, which = 
       PlotCovariances(cCov, iN, iH, vDates_os, colnames(t(mOut)))
     }
     if (!is.null(which)) {
-      PlotType = 0
+      PlotType = 0L
     }
   }
 })
@@ -1160,10 +1160,10 @@ setMethod("residuals", signature(object = "uGASFit"), function(object, standardi
   iT = length(vY)
 
   mMoments = getMoments(object)[1:iT, ]
-  vRes     = vY - mMoments[, 1]
+  vRes     = vY - mMoments[, 1L]
 
   if (standardize) {
-    vRes = vRes/sqrt(mMoments[, 2])
+    vRes = vRes/sqrt(mMoments[, 2L])
   }
 
   return(vRes)
@@ -1195,10 +1195,10 @@ setMethod("residuals", signature(object = "uGASRoll"), function(object, standard
   vY = tail(object@Data$vY, iH)
 
   mMoments = getMoments(object)
-  vRes     = vY - mMoments[, 1]
+  vRes     = vY - mMoments[, 1L]
 
   if (standardize) {
-    vRes = vRes/sqrt(mMoments[, 2])
+    vRes = vRes/sqrt(mMoments[, 2L])
   }
 
   return(vRes)

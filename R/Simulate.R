@@ -1,5 +1,5 @@
 
-UniGASSim <- function(fit = NULL, T.sim = 1000, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
+UniGASSim <- function(fit = NULL, T.sim = 1000L, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
 
   if (!is.null(fit)) {
     lCoef = coef(fit, do.list = TRUE)
@@ -42,7 +42,7 @@ UniGASSim <- function(fit = NULL, T.sim = 1000, kappa = NULL, A = NULL, B = NULL
     return(Sim)
 }
 
-MultiGASSim <- function(fit = NULL, T.sim = 1000, N = NULL, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
+MultiGASSim <- function(fit = NULL, T.sim = 1000L, N = NULL, kappa = NULL, A = NULL, B = NULL, Dist = NULL, ScalingType = NULL) {
 
   if (!is.null(fit)) {
     lCoef = coef(fit, do.list = TRUE)

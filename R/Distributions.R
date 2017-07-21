@@ -6,6 +6,7 @@ DistLabels <- function() {
              "ast",
              "ast1",
              "ald",
+             "ghskt",
              "poi",
              "ber",
              "gamma",
@@ -32,6 +33,8 @@ DistName <- function(DistLabel) {
         return("Asymmetric Student-t with one tail decay parameter")
     if (DistLabel == "ald")
         return("Asymmetric Laplace Distribution")
+  if (DistLabel == "ghskt")
+    return("Generalized Hyperbolic Skew Student-t Distribution")
     if (DistLabel == "poi")
         return("Poisson")
     if (DistLabel == "ber")
@@ -69,6 +72,8 @@ DistNote <- function(DistLabel) {
         return("Constraint version of ast")
     if (DistLabel == "ald")
         return("The theta, sigma, kappa reparameterisation is used, see Kotz et al. (2001)")
+  if (DistLabel == "ghskt")
+    return("We use the same implementation of the rugarch package of Ghalanos (2016).")
     if (DistLabel == "poi")
         return("For the Poisson distribution 'location' means the usual intensity parameter")
     if (DistLabel == "ber")
@@ -106,6 +111,8 @@ DistReference <- function(DistLabel) {
         return("Zhu, D., & Galbraith, J. W. (2010). A generalized asymmetric Student-t distribution with application to financial econometrics. Journal of Econometrics, 157(2), 297-305.")
     if (DistLabel == "ald")
         return("Kotz, S., Kozubowski, T., & Podgorski, K. (2001). The Laplace distribution and generalizations: a revisit with applications to communications, economics, engineering, and finance. Springer Science & Business Media.")
+  if (DistLabel == "ghskt")
+    return("Aas, K. and Haff, I. H. (2006). The Generalized Hyperbolic Skew Student's t-Distribution. Journal of Financial Econometrics, 4(2), 275-309.")
     if (DistLabel == "poi")
         return("")
     if (DistLabel == "ber")
@@ -141,6 +148,8 @@ DistParameters <- function(DistLabel) {
         return(c("location", "scale", "skewness", "shape"))
     if (DistLabel == "ald")
         return(c("location", "scale", "skewness"))
+    if (DistLabel == "ghskt")
+        return(c("location", "scale", "skewness", "shape"))
     if (DistLabel == "poi")
         return(c("location"))
     if (DistLabel == "ber")
@@ -175,6 +184,8 @@ DistType <- function(DistLabel) {
     if (DistLabel == "ast1")
         return("univariate")
     if (DistLabel == "ald")
+        return("univariate")
+    if (DistLabel == "ghskt")
         return("univariate")
     if (DistLabel == "poi")
         return("univariate")
@@ -211,6 +222,8 @@ DistScalingType <- function(DistLabel) {
         return("Identity, Inv, InvSqrt")
     if (DistLabel == "ald")
         return("Identity, Inv, InvSqrt")
+    if (DistLabel == "ghskt")
+        return("Identity")
     if (DistLabel == "poi")
         return("Identity, Inv, InvSqrt")
     if (DistLabel == "ber")
@@ -231,7 +244,7 @@ DistScalingType <- function(DistLabel) {
         return("Identity")
 }
 
-DistInfo <- function(DistLabel = NULL, N = 2, FULL = TRUE) {
+DistInfo <- function(DistLabel = NULL, N = 2L, FULL = TRUE) {
     if (is.null(DistLabel))
         DistLabel = DistLabels()
     for (i in 1:length(DistLabel)) {

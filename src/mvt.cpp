@@ -68,12 +68,16 @@ arma::vec rigamma_vec(int iN, double dA, double dB){
 
 arma::mat rmvt_mat(int iN, arma::vec vMu, arma::mat mSigma, double dNu) {
   int dD=vMu.size();
-  arma::mat mZ = rmvnorm_mat(iN, vMu, mSigma);
+
+  arma::vec vZeros(dD);
+  vZeros.zeros();
+
+  arma::mat mZ = rmvnorm_mat(iN, vZeros, mSigma);
   arma::vec mW = rigamma_vec(iN, 0.5*dNu, 0.5*dNu);
   arma::mat mY(iN,dD);
 
   for(int i=0;i<iN;i++){
-    mY.row(i)=vMu.t() + sqrt(mW(i))*mZ.row(i);
+    mY.row(i) = vMu.t() + sqrt(mW(i))*mZ.row(i);
   }
   return mY;
 }

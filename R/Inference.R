@@ -4,7 +4,7 @@ InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
     vPn = vPw2vPn_Uni(vPw, iK)
     iK_s = length(vPn)
 
-    out = matrix(NA, iK_s, 4, dimnames = list(names(vPn), c("Estimate", "Std. Error", "t value", "Pr(>|t|)")))
+    out = matrix(NA, iK_s, 4L, dimnames = list(names(vPn), c("Estimate", "Std. Error", "t value", "Pr(>|t|)")))
 
     out[, "Estimate"] = vPn
 
@@ -31,7 +31,7 @@ InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters, Co
     vPn = vPw2vPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
     iK_s = length(vPn)
 
-    out = matrix(NA, iK_s, 4, dimnames = list(names(vPn), c("Estimate", "Std. Error", "t value", "Pr(>|t|)")))
+    out = matrix(NA, iK_s, 4L, dimnames = list(names(vPn), c("Estimate", "Std. Error", "t value", "Pr(>|t|)")))
 
     out[, "Estimate"] = vPn
 

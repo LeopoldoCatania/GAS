@@ -31,13 +31,13 @@ mvtParNames <- function(iN, ScalarParameters = FALSE) {
 }
 
 RhoNames <- function(iN) {
-    baz = numeric(iN * (iN - 1)/2)
-    iC = 1
+    baz = numeric(iN * (iN - 1L)/2L)
+    iC = 1L
     for (i in 1:iN) {
         for (j in i:iN) {
             if (i != j) {
                 baz[iC] = paste("rho", i, j, sep = "")
-                iC = iC + 1
+                iC = iC + 1L
             }
         }
     }
@@ -76,33 +76,35 @@ FullNamesUni <- function(Dist) {
     vNames = c("location", "scale", "skewness", "shape", "shape2")
 
     if (Dist == "norm")
-        vNames = vNames[c(1, 2)]
+        vNames = vNames[c(1L, 2L)]
     if (Dist == "snorm")
-        vNames = vNames[c(1, 2, 3)]
+        vNames = vNames[c(1L, 2L, 3L)]
     if (Dist == "std")
-        vNames = vNames[c(1, 2, 4)]
+        vNames = vNames[c(1L, 2L, 4L)]
     if (Dist == "sstd")
-        vNames = vNames[c(1, 2, 3, 4)]
+        vNames = vNames[c(1L, 2L, 3L, 4L)]
     if (Dist == "ast")
         vNames = vNames
     if (Dist == "ast1")
-        vNames = vNames[c(1, 2, 3, 4)]
+        vNames = vNames[c(1L, 2L, 3L, 4L)]
     if (Dist == "ald")
-        vNames = vNames[c(1, 2, 3)]
+        vNames = vNames[c(1L, 2L, 3L)]
+    if (Dist == "ghskt")
+      vNames = vNames[c(1L, 2L, 3L, 4L)]
     if (Dist == "poi")
-        vNames = vNames[1]
+        vNames = vNames[1L]
     if (Dist == "ber")
-        vNames = vNames[1]
+        vNames = vNames[1L]
     if (Dist == "gamma")
-        vNames = vNames[c(2, 4)]
+        vNames = vNames[c(2L, 4L)]
     if (Dist == "exp")
-        vNames = vNames[1]
+        vNames = vNames[1L]
     if (Dist == "beta")
-        vNames = vNames[c(2, 4)]
+        vNames = vNames[c(2L, 4L)]
     if (Dist == "negbin")
-      vNames = vNames[c(1, 2)]
+      vNames = vNames[c(1L, 2L)]
     if (Dist == "skellam")
-      vNames = vNames[c(1, 2)]
+      vNames = vNames[c(1L, 2L)]
     return(vNames)
 }
 

@@ -10,8 +10,6 @@ StaticMLFIT <- function(vY, Dist, fn.optimizer) {
                     iT      = iT,
                     iK      = iK)
 
-  # optimiser = fn.optimizer(par0 = vTheta_tilde, data = vY, GASSpec = lArguments, FUN = wrapper_StaticLLKoptimizer_Uni)
-
   optimiser = StaticOptimizationLink_Univ(vTheta_tilde, vY, lArguments, fn.optimizer)
 
   vTheta_tilde = optimiser$pars
@@ -76,6 +74,10 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   # optimise
   optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
+  if (optimiser$convergence != 0) {
+    warning(paste("solver failed to converge. Convergence flag:", optimiser$convergence))
+  }
+
   vPw = optimiser$pars
 
   if (is.null(names(vPw))) {
@@ -90,10 +92,10 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   if (Compute.SE) {
   if (is.null(mHessian)) {
     mHessian = numDeriv::hessian(UniGASOptimiser, vPw, data = vY, GASSpec = GASSpec)
-    if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values) < 0) {
-      mHessian = optim(vPw, UniGASOptimiser, data = vY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
+    if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values) < 0L) {
+      mHessian = optim(vPw, UniGASOptimiser, data = vY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1L))$hessian
     }
-    if (min(eigen(mHessian)$values) < 0) {
+    if (min(eigen(mHessian)$values) < 0L) {
       warning("Hessian matrix is not positive definite. Standard errors are not reliable")
     }
   }
@@ -106,7 +108,7 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   IC = ICfun(-optimiser$value, length(optimiser$pars), iT)
 
   vU = EvaluatePit_Univ(GASDyn$mTheta, vY, Dist, iT)
-  PitTest = PIT_test(vU, G = 20, alpha = 0.05, plot = FALSE)
+  PitTest = PIT_test(vU, G = 20L, alpha = 0.05, plot = FALSE)
 
   mMoments = EvalMoments_univ(GASDyn$mTheta, Dist)
 
@@ -166,6 +168,10 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   # optimise
   optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
 
+  if (optimiser$convergence != 0) {
+    warning(paste("solver failed to converge. Convergence flag:", optimiser$convergence))
+  }
+
   vPw = optimiser$pars
 
   if (is.null(names(vPw))) {
@@ -181,10 +187,10 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
 
     if (is.null(mHessian)) {
       mHessian = numDeriv::hessian(MultiGASOptimiser, vPw, data = mY, GASSpec = GASSpec)
-      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0)) {
-        mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1))$hessian
+      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0L)) {
+        mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1L))$hessian
       }
-      if (min(eigen(mHessian)$values) < 0) {
+      if (min(eigen(mHessian)$values) < 0L) {
       warning("Hessian matrix is not positive definite. Standard errors are not reliable")
       }
     }

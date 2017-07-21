@@ -132,8 +132,8 @@ test_that("Simulation", {
   tmp = getObs(Sim)
   expect_equal(dim(tmp), c(N, iT))
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.10000000, 0.20000000, 0.30000000, 0.92602321,
-                                            1.19364171, 0.31067896, 0.09627390, 0.05315015, 0.68293867, 7.00000000)))
+  tmp = max(abs(Sim@GASDyn$mTheta[, 100] - c(0.10000, 0.20000, 0.30000, 0.92775,
+                                             1.21015, 0.27259, 0.08726, 0.09672, 0.50185, 7.00000)))
   expect_true(tmp < tol)
 
 })

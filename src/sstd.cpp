@@ -5,7 +5,7 @@ using namespace arma;
 using namespace Rcpp;
 
 
-//// This Functions come principally from the rugarch package of Ghalanos (2016) and have been slightly
+//// These functions are taken principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
 

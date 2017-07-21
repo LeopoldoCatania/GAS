@@ -1,15 +1,15 @@
 StartingNu <- function(vY) {
-  dStart = c(unmapVec_C(12, LowerNu(), UpperNu()))
+  dStart = c(unmapVec_C(12.0, LowerNu(), UpperNu()))
   dNu = try(exp(solnp(dStart, function(x, vY) {
     dNu =  c(Map_Vec(x, LowerNu(), UpperNu()))
     - sum(dt(vY, dNu, log = TRUE))
   }, vY = vY, control = list(trace = 0))$pars) + LowerNu(), silent = TRUE)
 
   if (is(dNu, "try-error"))
-    dNu = 7
+    dNu = 7.0
 
   if (dNu > UpperNu())
-    dNu = UpperNu() - 1
+    dNu = UpperNu() - 1.0
   if (dNu <= LowerNu())
     dNu = LowerNu() + 0.02
 
@@ -21,8 +21,8 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
   if (Dist == "std") {
 
     dMu = mean(vY)
-    dNu = 8
-    dPhi2 = var(vY) * (dNu - 2)/dNu
+    dNu = 8.0
+    dPhi2 = var(vY) * (dNu - 2.0)/dNu
 
     vTheta = c(dMu, dPhi2, dNu)
 
@@ -31,9 +31,9 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
   if (Dist == "sstd") {
 
     dMu = mean(vY)
-    dNu = 8
+    dNu = 8.0
     dSigma = sd(vY)
-    dXi = 1
+    dXi = 1.0
 
     vTheta = c(dMu, dSigma, dXi, dNu)
 
@@ -51,7 +51,7 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
 
     dMu = mean(vY)
     dSigma = sd(vY)
-    dXi = 1
+    dXi = 1.0
 
     vTheta = c(dMu, dSigma, dXi)
 
@@ -65,7 +65,7 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
       dNu2 = dNu1 * 1.5
 
       if (dNu2 > UpperNu()) {
-        dNu2 = UpperNu() - 1
+        dNu2 = UpperNu() - 1.0
       }
 
     } else {
@@ -88,6 +88,18 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
 
     }
   }
+
+  if (Dist == "ghskt") {
+
+    dMu = mean(vY)
+    dNu = 10.0
+    dSigma = sd(vY)
+    dBetaBar = 1e-4
+
+    vTheta = c(dMu, dSigma, dBetaBar, dNu)
+
+  }
+
   if (Dist == "poi") {
 
     vTheta = mean(vY)
@@ -114,7 +126,7 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
 
   if (Dist == "exp") {
 
-    vTheta = c(1/mean(vY))
+    vTheta = c(1.0/mean(vY))
 
   }
   if (Dist == "beta") {
@@ -122,8 +134,8 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
     dMean = mean(vY)
     dSigma2 = var(vY)
 
-    dAlpha = dMean * (dMean * (1 - dMean)/dSigma2 - 1)
-    dBeta = (1 - dMean) * (dMean * (1 - dMean)/dSigma2 - 1)
+    dAlpha = dMean * (dMean * (1.0 - dMean)/dSigma2 - 1.0)
+    dBeta = (1.0 - dMean) * (dMean * (1.0 - dMean)/dSigma2 - 1.0)
 
     vTheta = c(dAlpha, dBeta)
   }
@@ -131,7 +143,7 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
 
     dTheta = mean(vY)
     dSigma = sd(vY)
-    dKappa = 1
+    dKappa = 1.0
 
     vTheta = c(dTheta, dSigma, dKappa)
 
@@ -177,8 +189,8 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
   vEmpRho = build_vR(cor(t(mY)), iN)
   vEmpPhi = UnMapR_C(vEmpRho, iN)
 
-  vEmpMu = apply(mY, 1, mean)
-  vEmpSigma = apply(mY, 1, sd)
+  vEmpMu = apply(mY, 1L, mean)
+  vEmpSigma = apply(mY, 1L, sd)
 
   if (Dist == "mvnorm") {
     vMu_tilde = vEmpMu
@@ -190,7 +202,7 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
     dNu = StartingNu(c(mY))
 
     vMu_tilde = vEmpMu
-    vSigma_tilde = log(vEmpSigma * (dNu - 2)/dNu)
+    vSigma_tilde = log(vEmpSigma * (dNu - 2.0)/dNu)
     vPw = c(vMu_tilde, vSigma_tilde, vEmpPhi, log(dNu - LowerNu()))
   }
 
@@ -205,7 +217,7 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
 
   names(vUncValues) = paste("kappa", 1:iK, sep = "")
 
-  if (iK > 1) {
+  if (iK > 1L) {
 
     vA = starting_vA_Uni(vY, vUncValues, mB = diag(rep(0.9, iK)), dA_foo = 1e-06, iT, iK, Dist,
                          ScalingType = ScalingType, GASPar)
@@ -220,7 +232,7 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
                          ScalingType = ScalingType, GASPar)
     vB = starting_vB_Uni(vY, vUncValues, dB_foo = 0.9, mA = matrix(vA, iK, iK), iT, iK, Dist, ScalingType = ScalingType,
                          GASPar)
-    vKappa = (1 - vB) * vUncValues
+    vKappa = (1.0 - vB) * vUncValues
     names(vKappa) = paste("kappa", 1:iK, sep = "")
 
   }
@@ -235,7 +247,7 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
 
 starting_vA_Uni <- function(vY, vUncValues, mB, dA_foo, iT, iK, Dist, ScalingType, GASPar) {
 
-  seq_alpha = c(seq(1e-04, 5.5, length.out = 30))
+  seq_alpha = c(seq(1e-04, 5.5, length.out = 30L))
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -268,7 +280,7 @@ starting_vA_Uni <- function(vY, vUncValues, mB, dA_foo, iT, iK, Dist, ScalingTyp
 
 starting_vB_Uni <- function(vY, vUncValues, dB_foo, mA, iT, iK, Dist, ScalingType, GASPar) {
 
-  seq_beta = c(seq(0.5, 0.98, length.out = 30))
+  seq_beta = c(seq(0.5, 0.98, length.out = 30L))
 
   mB = matrix(0, iK, iK)
 
@@ -307,8 +319,8 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
   vEmpRho = build_vR(cor(t(mY)), iN)
   vEmpPhi = UnMapR_C(vEmpRho, iN)
 
-  vEmpMu = apply(mY, 1, mean)
-  vEmpSigma = apply(mY, 1, sd)
+  vEmpMu = apply(mY, 1L, mean)
+  vEmpSigma = apply(mY, 1L, sd)
 
   vUncValues = c(vEmpMu, log(vEmpSigma), vEmpPhi)
   names(vUncValues) = paste("kappa.", mvnormParNames(iN), sep = "")
@@ -324,8 +336,8 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
     vKappa = (diag(iK) - mB) %*% vUncValues
     names(vKappa) = paste("kappa.", mvnormParNames(iN), sep = "")
 
-    vA = diag(mA)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
-    vB = diag(mB)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
+    vA = diag(mA)[c(1L, iN + 1L, 2L * iN + 1L, 2L * iN + iN * (iN - 1L)/2L + 1L)]
+    vB = diag(mB)[c(1L, iN + 1L, 2L * iN + 1L, 2L * iN + iN * (iN - 1L)/2L + 1L)]
 
     vA = vA[!is.na(vA)]  # nas arise when the distribution do not have shape pars
     vB = vB[!is.na(vB)]  # nas arise when the distribution do not have shape pars
@@ -362,8 +374,8 @@ StartingValues_mvt <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarParame
     vKappa = (diag(iK) - mB) %*% vUncValues
     names(vKappa) = paste("kappa.", mvtParNames(iN), sep = "")
 
-    vA = diag(mA)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
-    vB = diag(mB)[c(1, iN + 1, 2 * iN + 1, 2 * iN + iN * (iN - 1)/2 + 1)]
+    vA = diag(mA)[c(1L, iN + 1L, 2L * iN + 1L, 2L * iN + iN * (iN - 1L)/2L + 1L)]
+    vB = diag(mB)[c(1L, iN + 1L, 2L * iN + 1L, 2L * iN + iN * (iN - 1L)/2L + 1L)]
 
     vA = vA[!is.na(vA)]  # nas arise when the distribution do not have shape pars
     vB = vB[!is.na(vB)]  # nas arise when the distribution do not have shape pars
@@ -401,7 +413,7 @@ MultiGAS_Starting <- function(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarP
 
 starting_vA_Multi <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
 
-  seq_alpha = c(seq(1e-04, 0.5, length.out = 30))
+  seq_alpha = c(seq(1e-04, 0.5, length.out = 30L))
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -447,7 +459,7 @@ starting_vA_Multi <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, Scal
 
 starting_mA_Multi_Scalars <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, ScalingType, GASPar) {
 
-  seq_alpha = c(seq(1e-04, 0.5, length.out = 30))
+  seq_alpha = c(seq(1e-04, 0.5, length.out = 30L))
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -487,7 +499,7 @@ starting_mA_Multi_Scalars <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Di
 
 starting_vB_Multi <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
 
-  seq_beta = c(seq(0.5, 0.98, length.out = 30))
+  seq_beta = c(seq(0.5, 0.98, length.out = 30L))
   vBool = FixedDynamicPar_Multi(Dist, iN, GASPar)
 
   mB = matrix(0, iK, iK)
@@ -523,7 +535,7 @@ starting_vB_Multi <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, Scal
 
 starting_mB_Multi_Scalars <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, ScalingType, GASPar) {
 
-  seq_beta = c(seq(0.5, 0.98, length.out = 30))
+  seq_beta = c(seq(0.5, 0.98, length.out = 30L))
 
   vBool = unlist(GASPar)
   iK2 = length(GASPar)

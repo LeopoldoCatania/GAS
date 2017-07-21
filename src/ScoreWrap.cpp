@@ -12,6 +12,7 @@
 #include "beta.h"
 #include "negbin.h"
 #include "skellam.h"
+#include "ghskt.h"
 #include "mvnorm.h"
 #include "mvt.h"
 
@@ -36,6 +37,7 @@ arma::vec Score_univ(double dY, arma::vec vTheta,std::string Dist){
   if(Dist == "beta") vScore = beta_Score(dY,vTheta);
   if(Dist == "negbin") vScore = negbin_Score(dY, vTheta);
   if(Dist == "skellam") vScore = skellam_Score(dY, vTheta);
+  if(Dist == "ghskt") vScore = ghskt_Score(dY, vTheta);
 
   return vScore;
 
