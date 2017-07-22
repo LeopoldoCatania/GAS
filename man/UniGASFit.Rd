@@ -43,7 +43,7 @@ to be an object of the class \code{list} with four named elements: i) \code{pars
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
 evaluated at its minimum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
 the minimum of the negative log likelihood, this is used for inferential purposes, and iv) \code{convergence} a \code{numeric} variable  reporting information about the convergence of the optimization. This quantity is printed by the
-\code{show()} and \code{summary()} methods. \code{convergence = 0} has to indicates successful completion.
+\code{show()} and \code{summary()} methods. \code{convergence = 0} has to indicate successful completion.
 
 The user is allowed to not include the last two elements of the output of the \code{fn.optimizer} function, that is, the values
 \code{hessian = NULL} and \code{convergence = NULL} are admissible. In the case of \code{hessian = NULL}, the Hessian matrix is

@@ -106,6 +106,7 @@ David Ardia \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -269,6 +270,7 @@ Specification of GAS models is the first step the user needs to undertake. This 
 \code{ast} (iii) & Asymmetric Student-t with two tail decay parameters & univariate & \code{location, scale, skewness, shape, shape2} & 5 & \code{Identity, Inv, InvSqrt} \\
 \code{ast1} (iv) & Asymmetric Student-t with one tail decay parameter & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity, Inv, InvSqrt} \\
 \code{ald} (v) & Asymmetric Laplace Distribution & univariate & \code{location, scale, skewness} & 3 & \code{Identity, Inv, InvSqrt} \\
+\code{ghskt} (i) & Generalized Hyperbolic Skew Student-t Distribution & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity} \\
 \code{poi} (vi) & Poisson & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 %\code{ber} & Bernoulli & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{gamma} & Gamma & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
@@ -281,8 +283,8 @@ Specification of GAS models is the first step the user needs to undertake. This 
 			\bottomrule
 		\end{tabular}
 	}
-	\caption{Statistical distributions for which the  \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time--variation in its parameters. The fifth column, \#, reports the number of parameters of the distribution.\\
-\noindent Notes: (i) the reparameterized Skew--Gaussian and \SStudent for which the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \proglang{R} package \pkg{rugarch} \citep{rugarch}, (ii) the usual \Student distribution (not reparameterized in terms of the variance parameter), (iii) the Asymmetric \Student distribution of \cite{zhu_galbraith.2010}, (iv) the Asymmetric Student--t distribution of \cite{zhu_galbraith.2010} with equal tail decay parameters, (v) the \code{ald} distribution with the $\theta$, $\sigma$, $\kappa$ reparameterization, as specified in \citet{kotz_etal.2001}, (vi) for the Poisson distribution \code{location} means the usual intensity parameter, (vii) for the Exponential distribution \code{location} means the usual rate parameter, (viii) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (ix) The Skellam distribution reparameterized in terms of mean and variance, (x) for $N=3$.}
+	\caption{Statistical distributions for which the \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time--variation in its parameters. The fifth column, \#, reports the number of parameters of the distribution.\\
+\noindent Notes: (i) the reparameterized Skew--Gaussian, \SStudent and Generalized Hyperbolic \SStudent for which the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \proglang{R} package \pkg{rugarch} \citep{rugarch}, (ii) the usual \Student distribution (not reparameterized in terms of the variance parameter), (iii) the Asymmetric \Student distribution of \cite{zhu_galbraith.2010}, (iv) the Asymmetric Student--t distribution of \cite{zhu_galbraith.2010} with equal tail decay parameters, (v) the \code{ald} distribution with the $\theta$, $\sigma$, $\kappa$ reparameterization, as specified in \citet{kotz_etal.2001}, (vi) for the Poisson distribution \code{location} means the usual intensity parameter, (vii) for the Exponential distribution \code{location} means the usual rate parameter, (viii) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (ix) The Skellam distribution reparameterized in terms of mean and variance, (x) for $N=3$.}
 \label{tab:dist}
 \end{table}
 
@@ -400,7 +402,8 @@ Elapsed time: 0.02 mins
 \end{CodeOutput}
 \end{CodeChunk}
 %
-The output printed to the console is divided into: (i) the summary of the model, (ii) the estimated coefficients along with significance levels according to their asymptotic Gaussian distribution, (iii) the long--term value of the time--varying parameters, \emph{i.e.}, $\Lambda((\bI - \widehat{\bB})^{-1}\widehat{\bkappa})$, (iv) AIC and BIC information criteria in addition to the number of estimated parameters (\code{np}) and the log--likelihood (\code{llk}) evaluated at its optimum, (v) the convergence flag, and (vi) the computation time.\footnote{Convergence flag follows the nomenclature of the default \code{optim} optimizer, that is: solver has converged (0), or not (1 or 2); see \code{help("optim")}. For user--defined optimizers, the convergence flag changes accordingly.}
+The output printed to the console is divided into: (i) the summary of the model, (ii) the estimated coefficients along with significance levels according to their asymptotic Gaussian distribution, (iii) the long--term value of the time--varying parameters, \emph{i.e.}, $\Lambda((\bI - \widehat{\bB})^{-1}\widehat{\bkappa})$, (iv) AIC and BIC information criteria in addition to the number of estimated parameters (\code{np}) and the log--likelihood (\code{llk}) evaluated at its optimum, (v) the convergence flag, and (vi) the computation time.\footnote{Convergence flag follows the nomenclature of the default \code{optim} optimizer, that is: solver has converged (0), or not (1 or 2); see \code{help("optim")}. For user--defined optimizers, the definition of the convergence flag is flexible. The only requirement is that successful convergence is indicated with 0.}
+
 
 Concerning the estimated coefficients, \code{kappa1}, \code{kappa2} and \code{kappa3} are the elements of vector $\bkappa$ in~\eqref{eq:update_studentt}, \emph{i.e.}, $\kappa_\mu, \kappa_\phi$ and $\kappa_\nu$, respectively. Analogously, \code{a1} and \code{a2} are the estimates of $a_\mu$ and $a_\phi$ and \code{b1} and \code{b2} are estimates of $b_\mu$ and $b_\phi$, where $\phi$ refers to the scale parameter of the \Student distribution; see Appendix~\ref{sec:gas_t}. Note that, since we have specified \code{scale = FALSE} in the \code{UniGASSpec()} function, coefficients \code{a3} and \code{b3}, corresponding to $a_\nu$ and $b_\nu$ are not reported (and constrained to zero during the optimization).
 
@@ -506,11 +509,12 @@ There are two possibilities for simulating GAS models. The first is to simulate 
 		Label & \code{location} & \code{scale} & \code{skewness} & \code{shape} \\
 		\hline
 		\code{norm} & $\Re^{~~}$ & $\Re^+$ & -- & --  \\
-		\code{snorm} & $\Re^{~~}$ & $\Re^+$ & $\left(0.1,2.0\right)$ & --  \\
-		\code{std} & $\Re^{~~}$ & $\Re^+$ & -- & $\left(2.01,50.0\right)$  \\
-		\code{sstd} & $\Re^{~~}$ & $\Re^+$ & $\left(0.1,2.0\right)$ & $\left(2.01,50.0\right)$  \\
-        \code{ast1} (i) & $\Re^{~~}$ & $\Re^+$ & $\left(0.01,0.99\right)$ & $\left(2.01,50.0\right)$  \\
+		\code{snorm} & $\Re^{~~}$ & $\Re^+$ & $\left(0.5,1.5\right)$ & --  \\
+		\code{std} & $\Re^{~~}$ & $\Re^+$ & -- & $\left(4.01,50.0\right)$  \\
+		\code{sstd} & $\Re^{~~}$ & $\Re^+$ & $\left(0.5,1.5\right)$ & $\left(4.01,50.0\right)$  \\
+        \code{ast1} (i) & $\Re^{~~}$ & $\Re^+$ & $\left(0.01,0.99\right)$ & $\left(4.01,50.0\right)$  \\
         \code{ald} & $\Re^{~~}$ & $\Re^+$ & $\Re^+$ & --  \\
+        \code{ghskt} & $\Re^{~~}$ & $\Re^+$ & $\Re^{~~}$ & $\left(4.01,50.0\right)$ \\
 		\code{poi} & $\Re^+$ & -- & -- & --  \\
 		\code{gamma} & $\Re^+$ & $\Re^+$ & -- & --  \\
 		\code{exp} & $\Re^+$ & -- & -- & --  \\
@@ -548,7 +552,7 @@ R> Sim <- UniGASSim(T.sim = 1000, kappa = kappa, A = A,
 where \code{Sim} is an object of class \code{uGASSim} which comes with several methods such as \code{show}, \code{plot}, and \code{getMoments}, among others; see \code{help("uGASSim")}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section[Applications to financial returns]{Applications to financial returns}\label{sec:application}
+\section[Application to financial returns]{Application to financial returns}\label{sec:application}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In order to illustrate how the \proglang{R} package \pkg{GAS} can be used in practical situations, we present an empirical application with univariate and multivariate time series of financial returns. We consider daily log--returns (in percentage points) of the Dow Jones 30 constituents available in the \code{dji30ret} dataset. This dataset includes the closing value log--returns from March 3rd, 1987 to February 3rd, 2009 for a total of 5,521 observations per series. The dataset can be easily loaded in the workspace using:
@@ -655,36 +659,36 @@ plus the two \code{numeric} arguments, \code{a} and \code{b}, representing $a$ a
 		\toprule
 Asset & NLS & Uniform & Center & Tails & Tails--r & Tails--l\\
 \cmidrule(lr){1-1}\cmidrule(lr){2-7}
-AA & $-1.95^b$ & $-2.33^a$ & $-2.13^b$ & $-1.99^b$ & $-2.14^b$ & $-1.02^{~}$ \\
-AXP & $-2.83^a$ & $-2.20^b$ & $-3.00^a$ & $-1.10^{~}$ & $-1.47^c$ & $-1.47^c$ \\
-BA & $-0.06^{~}$ & $-0.82^{~}$ & $-1.36^c$ & $-0.37^{~}$ & $-0.81^{~}$ & $-0.38^{~}$ \\
-BAC & $-3.03^a$ & $-1.41^c$ & $-3.79^a$ & $ 0.10^{~}$ & $ 1.08^{~}$ & $-3.89^a$ \\
-C & $-3.98^a$ & $-2.98^a$ & $-5.09^a$ & $-1.18^{~}$ & $-2.30^b$ & $-1.85^b$ \\
-CAT & $-5.04^a$ & $-5.00^a$ & $-5.38^a$ & $-3.71^a$ & $-2.07^b$ & $-5.00^a$ \\
-CVX & $ 0.56^{~}$ & $ 1.13^{~}$ & $-0.20^{~}$ & $ 1.31^c$ & $ 0.59^{~}$ & $ 0.96^{~}$ \\
-DD & $-1.23^{~}$ & $-0.58^{~}$ & $-0.64^{~}$ & $-0.44^{~}$ & $ 0.37^{~}$ & $-1.09^{~}$ \\
-DIS & $-2.18^b$ & $-1.77^b$ & $-2.40^a$ & $-1.10^{~}$ & $-1.70^b$ & $-0.93^{~}$ \\
-GE & $-3.26^a$ & $-3.29^a$ & $-3.71^a$ & $-2.59^a$ & $-3.48^a$ & $-2.14^b$ \\
-GM & $ 1.40^c$ & $ 0.21^{~}$ & $ 0.18^{~}$ & $ 0.18^{~}$ & $-0.60^{~}$ & $ 0.78^{~}$ \\
-HD & $-3.42^a$ & $-2.55^a$ & $-1.86^b$ & $-2.74^a$ & $-1.45^c$ & $-1.94^b$ \\
-HPQ & $-2.43^a$ & $-2.68^a$ & $-2.08^b$ & $-2.79^a$ & $-1.40^c$ & $-2.52^a$ \\
-IBM & $-3.71^a$ & $-3.85^a$ & $-3.50^a$ & $-3.61^a$ & $-2.07^b$ & $-3.48^a$ \\
-INTC & $-3.17^a$ & $-1.67^b$ & $-1.68^b$ & $-1.32^c$ & $-2.93^a$ & $ 0.13^{~}$ \\
-JNJ & $-3.73^a$ & $-2.14^b$ & $-3.56^a$ & $-0.69^{~}$ & $-0.13^{~}$ & $-3.04^a$ \\
-JPM & $-1.32^c$ & $-1.89^b$ & $-2.65^a$ & $-1.05^{~}$ & $-1.09^{~}$ & $-1.39^c$ \\
-AIG & $ 0.00^{~}$ & $ 0.63^{~}$ & $-1.68^b$ & $ 0.71^{~}$ & $-0.85^{~}$ & $ 0.95^{~}$ \\
-KO & $-3.04^a$ & $-2.93^a$ & $-3.66^a$ & $-1.41^c$ & $-3.22^a$ & $-1.57^c$ \\
-MCD & $-1.88^b$ & $-1.76^b$ & $-2.05^b$ & $-1.33^c$ & $-1.58^c$ & $-1.04^{~}$ \\
-MMM & $-4.07^a$ & $-4.46^a$ & $-4.07^a$ & $-4.05^a$ & $-3.28^a$ & $-3.32^a$ \\
-MRK & $-2.98^a$ & $-3.62^a$ & $-4.15^a$ & $-3.07^a$ & $-4.56^a$ & $-1.92^b$ \\
-MSFT & $-3.42^a$ & $-2.75^a$ & $-3.15^a$ & $-1.65^b$ & $-2.65^a$ & $-1.70^b$ \\
-PFE & $-3.90^a$ & $-3.75^a$ & $-3.93^a$ & $-3.26^a$ & $-4.28^a$ & $-2.60^a$ \\
-PG & $-1.70^b$ & $-1.78^b$ & $-2.81^a$ & $-1.20^{~}$ & $-1.29^c$ & $-1.26^{~}$ \\
-T & $-0.38^{~}$ & $-0.22^{~}$ & $-1.21^{~}$ & $ 0.29^{~}$ & $ 0.36^{~}$ & $-0.63^{~}$ \\
-UTX & $-1.50^c$ & $-1.61^c$ & $-1.74^b$ & $-1.38^c$ & $-1.11^{~}$ & $-0.89^{~}$ \\
-VZ & $-2.02^b$ & $-1.99^b$ & $-1.52^c$ & $-2.01^b$ & $-1.39^c$ & $-1.55^c$ \\
-WMT & $ 0.61^{~}$ & $-0.25^{~}$ & $-0.50^{~}$ & $ 0.03^{~}$ & $-1.61^c$ & $ 1.12^{~}$ \\
-XOM & $ 0.16^{~}$ & $ 0.38^{~}$ & $-1.27^{~}$ & $ 0.72^{~}$ & $ 0.69^{~}$ & $-0.04^{~}$ \\
+AA & $-1.98^b$ & $-2.36^a$ & $-2.15^b$ & $-2.02^b$ & $-2.16^b$ & $-1.04^{~}$ \\
+AXP & $-2.98^a$ & $-2.35^a$ & $-3.14^a$ & $-1.21^{~}$ & $-1.53^c$ & $-1.60^c$ \\
+BA & $-1.44^c$ & $-1.91^b$ & $-2.79^a$ & $-1.13^{~}$ & $-1.21^{~}$ & $-1.39^c$ \\
+BAC & $-2.95^a$ & $-1.44^c$ & $-3.80^a$ & $ 0.22^{~}$ & $ 1.26^{~}$ & $-4.00^a$ \\
+C & $-0.66^{~}$ & $-0.55^{~}$ & $-1.82^b$ & $ 0.34^{~}$ & $-1.59^c$ & $ 0.40^{~}$ \\
+CAT & $-5.26^a$ & $-5.20^a$ & $-5.61^a$ & $-3.77^a$ & $-2.17^b$ & $-5.29^a$ \\
+CVX & $ 0.84^{~}$ & $ 1.26^{~}$ & $ 0.00^{~}$ & $ 1.41^c$ & $ 0.71^{~}$ & $ 1.04^{~}$ \\
+DD & $-1.09^{~}$ & $-0.57^{~}$ & $-0.53^{~}$ & $-0.51^{~}$ & $ 0.23^{~}$ & $-0.91^{~}$ \\
+DIS & $-2.10^b$ & $-1.69^b$ & $-2.40^a$ & $-1.00^{~}$ & $-1.69^b$ & $-0.84^{~}$ \\
+GE & $-3.29^a$ & $-3.33^a$ & $-3.76^a$ & $-2.61^a$ & $-3.44^a$ & $-2.21^b$ \\
+GM & $ 0.08^{~}$ & $-0.42^{~}$ & $-1.22^{~}$ & $-0.20^{~}$ & $-1.03^{~}$ & $ 0.39^{~}$ \\
+HD & $-3.39^a$ & $-2.53^a$ & $-1.84^b$ & $-2.72^a$ & $-1.44^c$ & $-1.91^b$ \\
+HPQ & $-4.25^a$ & $-4.50^a$ & $-3.58^a$ & $-4.53^a$ & $-3.08^a$ & $-3.50^a$ \\
+IBM & $-3.54^a$ & $-3.79^a$ & $-3.41^a$ & $-3.57^a$ & $-1.99^b$ & $-3.47^a$ \\
+INTC & $-3.17^a$ & $-1.71^b$ & $-1.70^b$ & $-1.39^c$ & $-2.93^a$ & $ 0.09^{~}$ \\
+JNJ & $-3.74^a$ & $-2.15^b$ & $-3.57^a$ & $-0.69^{~}$ & $-0.14^{~}$ & $-3.05^a$ \\
+JPM & $-2.05^b$ & $-2.12^b$ & $-2.91^a$ & $-1.21^{~}$ & $-1.22^{~}$ & $-1.55^c$ \\
+AIG & $ 1.07^{~}$ & $ 0.66^{~}$ & $-1.10^{~}$ & $ 0.71^{~}$ & $-0.79^{~}$ & $ 0.96^{~}$ \\
+KO & $-3.12^a$ & $-3.07^a$ & $-3.78^a$ & $-1.59^c$ & $-3.39^a$ & $-1.69^b$ \\
+MCD & $-2.03^b$ & $-1.86^b$ & $-2.21^b$ & $-1.39^c$ & $-1.67^b$ & $-1.10^{~}$ \\
+MMM & $-4.15^a$ & $-4.54^a$ & $-4.13^a$ & $-4.12^a$ & $-3.33^a$ & $-3.37^a$ \\
+MRK & $-2.98^a$ & $-3.63^a$ & $-4.15^a$ & $-3.08^a$ & $-4.56^a$ & $-1.91^b$ \\
+MSFT & $-3.42^a$ & $-2.74^a$ & $-3.14^a$ & $-1.64^c$ & $-2.64^a$ & $-1.69^b$ \\
+PFE & $-3.65^a$ & $-3.54^a$ & $-3.72^a$ & $-3.07^a$ & $-4.03^a$ & $-2.46^a$ \\
+PG & $-1.78^b$ & $-1.85^b$ & $-2.91^a$ & $-1.25^{~}$ & $-1.34^c$ & $-1.31^c$ \\
+T & $-0.41^{~}$ & $-0.24^{~}$ & $-1.19^{~}$ & $ 0.26^{~}$ & $ 0.35^{~}$ & $-0.65^{~}$ \\
+UTX & $-1.50^c$ & $-1.61^c$ & $-1.74^b$ & $-1.38^c$ & $-1.10^{~}$ & $-0.89^{~}$ \\
+VZ & $-1.99^b$ & $-1.94^b$ & $-1.50^c$ & $-1.95^b$ & $-1.35^c$ & $-1.52^c$ \\
+WMT & $ 2.11^b$ & $ 0.92^{~}$ & $ 0.84^{~}$ & $ 0.81^{~}$ & $-0.42^{~}$ & $ 1.68^b$ \\
+XOM & $ 0.15^{~}$ & $ 0.38^{~}$ & $-1.29^c$ & $ 0.72^{~}$ & $ 0.69^{~}$ & $-0.04^{~}$ \\
 		\bottomrule
 	\end{tabular}
 	%}
@@ -706,7 +710,7 @@ R> DensityBacktest$average
 \end{CodeOutput}
 \end{CodeChunk}
 
-Table~\ref{tab:BackDist} reports the test statistics for the \citet{diebold_mariano.1995} (DM) test of equal performance between the series of Negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample period. Negative values indicate that GAS models generate more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. We find that, for almost all the series, GAS outperforms GARCH at very high confidence levels according to both NLS and wCRPS. Interestingly, our results suggest that GAS delivers more accurate results whatever part of the conditional distribution the $\overline{wCRPS}$ emphasizes.
+Table~\ref{tab:BackDist} reports the test statistics for the \citet{diebold_mariano.1995} (DM) test of equal performance between the series of Negative Log Scores and weighed Continuous Ranked Probability Scores for univariate GAS and GARCH models across the out--of--sample period.\footnote{Results of Table~\ref{tab:BackDist} were obtained on a Windows platform with the setup described in the Section ``Computational details''. When computations were performed on Linux or Mac OS, the test statistics matched up to two digits, except for a couple of entries (up to one digit) and lead to the same conclusions in terms of relative performance of the GAS and GARCH models. We thank a referee for having noted these differences across platforms. For more details, we refer the reader to the Section ``Computational details''.}  Negative values indicate that GAS models generate more accurate predictions of the one--step ahead conditional distribution while positive values favour GARCH. We find that, for almost all the series, GAS outperforms GARCH at very high confidence levels according to both NLS and wCRPS. Interestingly, our results suggest that GAS delivers more accurate results whatever part of the conditional distribution the $\overline{wCRPS}$ emphasizes.
 
 For the multivariate analysis we only consider $\overline{NLS}$. In this case, the DM test statistic is $-3.34$, which strongly favours the GAS model against the DCC specification. To further investigate this result, we report in Figure~\ref{fig:cumlogscore} the Cumulative sum of the differences between the Log Scores (CLS) of GAS and DCC defined as:
 %
@@ -742,30 +746,29 @@ We introduced the model specification in a general way and illustrated the packa
 Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publications.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Computational details}
+\section*{Computational details}\label{sec:computational}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The results in this paper were obtained using \proglang{R} 3.4.0 \citep{R} with the
-packages: \pkg{GAS} version 0.2.1 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-47 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
-\pkg{Rcpp} version 0.12.11 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.800.2.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{rugarch} version 1.3-6 \citep{rugarch}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.9-7 \citep{xts}, and \pkg{zoo} version 1.8-0 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-8. Computations were performed on Windows 10 Pro, x86\_64-w64-mingw32/x64 (64-bit) with Intel(R) Xeon(R) CPUE3-1535M v6 Max Turbo Frequency \@4.20 GHz. Full output of the computations is available in the file \code{sink\_PART\_II\_R3.4.0\_mingw32.txt} in the folder \code{inst/doc}.
+The results in this paper were obtained using \proglang{R} 3.4.1 \citep{R} with the
+packages: \pkg{GAS} version 0.2.3 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-47 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
+\pkg{Rcpp} version 0.12.12 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.900.2.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{rugarch} version 1.3-6 \citep{rugarch}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.10-0 \citep{xts}, and \pkg{zoo} version 1.8-0 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-10. Computations were performed on Windows 10 Pro, x86\_64-w64-mingw32/x64 (64-bit) with Intel(R) Xeon(R) CPUE3-1535M v6 Max Turbo Frequency \@4.20 GHz. Full output of the computations is available in the file \code{sink\_PART\_II\_R3.4.1\_mingw32.txt} in the folder \code{inst/doc}.
 
 \proglang{R} itself and all packages used are available
 from \proglang{CRAN} at \url{http://CRAN.R-project.org/}. The
 package \pkg{GAS} is available from the CRAN repository at \url{https://cran.r-project.org/package=GAS}. The version under development is available in \proglang{GitHub} at \url{https://github.com/LeopoldoCatania/GAS}.
 
-The folder \code{inst/doc} inside the \pkg{GAS} package tarball contains additional technical documentations. A step by step guide on how to add a new statistical distribution in the \pkg{GAS} package is reported in the file \code{AddNewDistribution.pdf}.
+The folder \code{inst/doc} inside the \pkg{GAS} package tarball contains additional technical documentations. A step by step guide on how to add a new statistical distribution in the \pkg{GAS} package is reported in the file \code{AddNewDistribution.pdf}. To ensure replication of the results in Table~\ref{tab:BackDist} across the various platforms we report, in the folder \code{inst/doc}, the estimation results of Section~\ref{sec:application} obtained under Windows 10 Pro, Linux Ubuntu 12.04.5 LTS and Mac OS X 10.12 Sierra. We further provide the average negative log--scores of the individual models (see files \code{mGAS.txt} and \code{mGARCH.txt}). Estimation results match up to seven digits for GAS models and up to five digits for GARCH model across the platforms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgments}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The authors thank the Associate Editor (Paul Gilbert) and two referees for their comments.
-We also thank Alexios Ghalanos for his help regarding the platform dependence of \pkg{Rsolnp} and \pkg{rugarch} packages.
+We also thank Alexios Ghalanos for his help regarding the platform dependence of the \pkg{Rsolnp} and \pkg{rugarch} packages.
 The authors acknowledge Google for financial support via the
 Google Summer of Code 2016  project
 "GAS".
 Any remaining errors or shortcomings are the authors' responsibility.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % JSS has its own style
@@ -852,7 +855,7 @@ Catania L, {Bill{\'e}} AG (2017).
 \bibitem[{Catania \emph{et~al.}(2017)Catania, Boudt, and Ardia}]{GAS}
 Catania L, Boudt K, Ardia D (2017).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
-\newblock \proglang{R}~package version 0.2.1,
+\newblock \proglang{R}~package version 0.2.3,
   \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}
@@ -898,7 +901,7 @@ Eddelbuettel D, Fran\c{c}ois R, Allaire J, Ushey K, Kou Q, Bates D, Chambers J
   (2017{\natexlab{a}}).
 \newblock \emph{\pkg{Rcpp}: {S}eamless \proglang{R} and \proglang{C++}
   Integration}.
-\newblock \proglang{R}~package version 0.12.11,
+\newblock \proglang{R}~package version 0.12.12,
   \urlprefix\url{https://cran.r-project.org/package=Rcpp}.
 
 \bibitem[{Eddelbuettel \emph{et~al.}(2017{\natexlab{b}})Eddelbuettel,
@@ -906,7 +909,7 @@ Eddelbuettel D, Fran\c{c}ois R, Allaire J, Ushey K, Kou Q, Bates D, Chambers J
 Eddelbuettel D, Fran\c{c}ois R, Bates D (2017{\natexlab{b}}).
 \newblock \emph{\pkg{RcppArmadillo}: \pkg{Rcpp} Integration for the
   \pkg{Armadillo} Templated Linear Algebra Library}.
-\newblock \proglang{R}~package version 0.7.800.2.0,
+\newblock \proglang{R}~package version 0.7.900.2.0,
   \urlprefix\url{https://cran.r-project.org/package=RcppArmadillo}.
 
 \bibitem[{Eddelbuettel and Sanderson(2014)}]{RcppArmadillo.2014}
@@ -1085,7 +1088,7 @@ Pourahmadi M, Wang X (2015).
 \newblock \emph{\proglang{R}: {A} Language and Environment for Statistical
   Computing}.
 \newblock \proglang{R} Foundation for Statistical Computing, Vienna, Austria.
-\newblock \proglang{R}~version 3.4.0,
+\newblock \proglang{R}~version 3.4.1,
   \urlprefix\url{https://www.R-project.org/}.
 
 \bibitem[{Rapisarda \emph{et~al.}(2007)Rapisarda, Brigo, and
@@ -1105,13 +1108,13 @@ Ripley B (2016).
 \bibitem[{Ryan(2016)}]{quantmod}
 Ryan JA (2016).
 \newblock \emph{\pkg{quantmod}: {Q}uantitative Financial Modelling Framework}.
-\newblock \proglang{R}~package version 0.4-8,
+\newblock \proglang{R}~package version 0.4-10,
   \urlprefix\url{https://CRAN.R-project.org/package=quantmod}.
 
 \bibitem[{Ryan and Ulrich(2014)}]{xts}
 Ryan JA, Ulrich JM (2014).
 \newblock \emph{\pkg{xts}: {E}xtensible Time Series}.
-\newblock \proglang{R}~package version 0.9-7,
+\newblock \proglang{R}~package version 0.10-0,
   \urlprefix\url{https://CRAN.R-project.org/package=xts}.
 
 \bibitem[{Sanderson(2010)}]{sanderson.2010}

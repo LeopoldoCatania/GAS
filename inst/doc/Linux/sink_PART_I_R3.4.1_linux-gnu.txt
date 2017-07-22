@@ -1,32 +1,33 @@
-R version 3.4.0 (2017-04-21)
-Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS Sierra 10.12.5
+R version 3.4.1 (2017-06-30)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 14.04.5 LTS
 
 Matrix products: default
-BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+BLAS: /usr/lib/libblas/libblas.so.3.0
+LAPACK: /usr/lib/lapack/liblapack.so.3.0
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] methods   stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
-[1] GAS_0.2.1
+[1] GAS_0.2.3       devtools_1.13.2
 
 loaded via a namespace (and not attached):
- [1] pcaPP_1.9-61                Rcpp_0.12.11                compiler_3.4.0              nloptr_1.0.4               
- [5] ks_1.10.6                   xts_0.9-7                   tools_3.4.0                 bit_1.1-12                 
- [9] digest_0.6.12               jsonlite_1.5                lattice_0.20-35             ff_2.2-13                  
-[13] Matrix_1.2-10               rugarch_1.3-6               shiny_1.0.3                 multicool_0.1-10           
-[17] Bessel_0.5-5                parallel_3.4.0              mvtnorm_1.0-6               expm_0.999-2               
-[21] knitr_1.16                  htmlwidgets_0.8             DistributionUtils_0.5-1     lmtest_0.9-35              
-[25] grid_3.4.0                  R6_2.2.1                    rmgarch_1.3-0               rgl_0.98.1                 
-[29] Rsolnp_1.16                 magrittr_1.5                codetools_0.2-15            htmltools_0.3.6            
-[33] SkewHyperbolic_0.3-2        GeneralizedHyperbolic_0.8-1 MASS_7.3-47                 spd_2.0-1                  
-[37] misc3d_0.8-4                mime_0.5                    xtable_1.8-2                httpuv_1.3.3               
- [ reached getOption("max.print") -- omitted 6 entries ]
+ [1] Rcpp_0.12.12        lattice_0.20-35     zoo_1.8-0          
+ [4] digest_0.6.12       withr_1.0.2         truncnorm_1.0-7    
+ [7] MASS_7.3-47         grid_3.4.1          R6_2.2.2           
+[10] git2r_0.19.0        httr_1.2.1          curl_2.7           
+[13] xts_0.10-0          parallel_3.4.1      numDeriv_2016.8-1  
+[16] RcppNumerical_0.3-1 compiler_3.4.1      memoise_1.1.0      
+[19] Rsolnp_1.16        
 
 
 SECTION 3.1

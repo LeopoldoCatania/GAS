@@ -1,23 +1,24 @@
-R version 3.4.0 (2017-04-21)
+R version 3.4.1 (2017-06-30)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows >= 8 x64 (build 9200)
 
 Matrix products: default
 
 locale:
-[1] LC_COLLATE=Italian_Italy.1252  LC_CTYPE=Italian_Italy.1252    LC_MONETARY=Italian_Italy.1252
-[4] LC_NUMERIC=C                   LC_TIME=Italian_Italy.1252    
+[1] LC_COLLATE=Italian_Italy.1252  LC_CTYPE=Italian_Italy.1252    LC_MONETARY=Italian_Italy.1252 LC_NUMERIC=C                  
+[5] LC_TIME=Italian_Italy.1252    
 
 attached base packages:
 [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GAS_0.2.1       devtools_1.13.2
+[1] GAS_0.2.3       devtools_1.13.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.11      lattice_0.20-35   zoo_1.8-0         digest_0.6.12     withr_1.0.2       truncnorm_1.0-7  
- [7] MASS_7.3-47       grid_3.4.0        R6_2.2.1          git2r_0.18.0      httr_1.2.1        curl_2.6         
-[13] xts_0.9-7         tools_3.4.0       numDeriv_2016.8-1 compiler_3.4.0    memoise_1.1.0     Rsolnp_1.16      
+ [1] Rcpp_0.12.12        lattice_0.20-35     zoo_1.8-0           digest_0.6.12       withr_1.0.2         truncnorm_1.0-7    
+ [7] MASS_7.3-47         grid_3.4.1          R6_2.2.2            git2r_0.19.0        httr_1.2.1          curl_2.7           
+[13] xts_0.10-0          tools_3.4.1         numDeriv_2016.8-1   RcppNumerical_0.3-1 compiler_3.4.1      memoise_1.1.0      
+[19] Rsolnp_1.16        
 
 
 SECTION 3
@@ -33,6 +34,7 @@ sstd    "\\code{sstd}"    "Skew-Student-t"                                      
 ast     "\\code{ast}"     "Asymmetric Student-t with two tail decay parameters" "univariate"  
 ast1    "\\code{ast1}"    "Asymmetric Student-t with one tail decay parameter"  "univariate"  
 ald     "\\code{ald}"     "Asymmetric Laplace Distribution"                     "univariate"  
+ghskt   "\\code{ghskt}"   "Generalized Hyperbolic Skew Student-t Distribution"  "univariate"  
 poi     "\\code{poi}"     "Poisson"                                             "univariate"  
 ber     "%\\code{ber}"    "Bernoulli"                                           "univariate"  
 gamma   "\\code{gamma}"   "Gamma"                                               "univariate"  
@@ -50,6 +52,7 @@ sstd    "\\code{location, scale, skewness, shape}"         "4"              "\\c
 ast     "\\code{location, scale, skewness, shape, shape2}" "5"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ast1    "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ald     "\\code{location, scale, skewness}"                "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
+ghskt   "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity} \\\\"              
 poi     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ber     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 gamma   "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
@@ -1588,36 +1591,28 @@ UNIVARIATE COMPARISON
 ---------------------
 
 [[1]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[2]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[3]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[4]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[5]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[6]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[7]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 [[8]]
- [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-[10] "base"     
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
 
 
 

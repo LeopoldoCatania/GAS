@@ -1,0 +1,243 @@
+
+> print(tmp)
+R version 3.4.1 (2017-06-30)
+Platform: x86_64-apple-darwin16.6.0 (64-bit)
+Running under: macOS Sierra 10.12.5
+
+Matrix products: default
+BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+LAPACK: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] GAS_0.2.3
+
+loaded via a namespace (and not attached):
+ [1] pcaPP_1.9-72                Rcpp_0.12.12                compiler_3.4.1              nloptr_1.0.4               
+ [5] ks_1.10.7                   xts_0.10-0                  tools_3.4.1                 bit_1.1-12                 
+ [9] digest_0.6.12               jsonlite_1.5                lattice_0.20-35             ff_2.2-13                  
+[13] Matrix_1.2-10               rugarch_1.3-6               shiny_1.0.3                 multicool_0.1-10           
+[17] Bessel_0.5-5                parallel_3.4.1              mvtnorm_1.0-6               expm_0.999-2               
+[21] knitr_1.16                  htmlwidgets_0.9             DistributionUtils_0.5-1     lmtest_0.9-35              
+[25] grid_3.4.1                  R6_2.2.2                    rmgarch_1.3-0               rgl_0.98.1                 
+[29] Rsolnp_1.16                 magrittr_1.5                codetools_0.2-15            htmltools_0.3.6            
+[33] SkewHyperbolic_0.3-2        GeneralizedHyperbolic_0.8-1 MASS_7.3-47                 spd_2.0-1                  
+[37] misc3d_0.8-4                mime_0.5                    xtable_1.8-2                httpuv_1.3.5               
+ [ reached getOption("max.print") -- omitted 7 entries ]
+
+> ######################################################
+> cat("\n\n")
+
+
+
+> cat("SECTION 3.1\n")
+SECTION 3.1
+
+> cat("-----------\n\n")
+-----------
+
+
+> GASSpec <- UniGASSpec(Dist = "std", ScalingType = "Identity",
++                       GASPar = list(location = TRUE, scale = TRUE, shape = FALSE))
+
+> GASSpec
+
+-------------------------------------------------------
+-            Univariate GAS Specification             -
+-------------------------------------------------------
+Conditional distribution
+-------------------------------------------------------
+Name:	Student-t
+Label:	std
+Type:	univariate
+Parameters:	location, scale, shape
+Number of Parameters:	3
+References:	
+-------------------------------------------------------
+GAS specification
+-------------------------------------------------------
+Score scaling type:  Identity
+Time varying parameters:  location, scale
+-------------------------------------------------------
+> ######################################################
+> cat("\n\n")
+
+
+
+> cat("SECTION 3.2\n")
+SECTION 3.2
+
+> cat("-----------\n\n")
+-----------
+
+
+> data("cpichg", package = "GAS")
+
+> Fit <- UniGASFit(GASSpec, cpichg)
+
+> Fit
+
+------------------------------------------
+-          Univariate GAS Fit            -
+------------------------------------------
+
+Model Specification:	
+T =  276
+Conditional distribution:  std
+Score scaling type:  Identity
+Time varying parameters:  location, scale
+------------------------------------------
+Estimates:
+       Estimate Std. Error t value  Pr(>|t|)
+kappa1  0.03736    0.03110   1.201 1.148e-01
+kappa2 -0.25993    0.14084  -1.846 3.248e-02
+kappa3 -2.84547    0.79650  -3.572 1.768e-04
+a1      0.07173    0.01846   3.887 5.077e-05
+a2      0.45372    0.21392   2.121 1.696e-02
+b1      0.94317    0.02723  34.634 0.000e+00
+b2      0.85560    0.07430  11.515 0.000e+00
+
+------------------------------------------
+Unconditional Parameters:
+location    scale    shape 
+  0.6575   0.1653   6.5261 
+
+------------------------------------------
+Information Criteria:
+   AIC    BIC     np    llk 
+ 370.4  395.8    7.0 -178.2 
+
+------------------------------------------
+Convergence:	0
+------------------------------------------
+
+Elapsed time: 0.02 mins
+> ######################################################
+> cat("\n\n")
+
+
+
+> cat("SECTION 3.3\n")
+SECTION 3.3
+
+> cat("-----------\n\n")
+-----------
+
+
+> ### !!! Multi-step ahead forecasts are based on simulations,
+> ###     hence we need to set the seed of the random number generator for reproducibil .... [TRUNCATED] 
+
+> Forecast <- UniGASFor(Fit, H = 12)
+
+> Forecast
+
+------------------------------------------
+-        Univariate GAS Forecast         -
+------------------------------------------
+
+Model Specification
+Conditional distribution:  std
+Score scaling type:  Identity
+Horizon:  12
+Rolling forecast:  FALSE
+------------------------------------------
+Parameters forecast:
+    location  scale shape
+T+1  0.10130 0.1524 6.526
+T+2  0.09499 0.1737 6.526
+T+3  0.09382 0.2151 6.526
+T+4  0.09256 0.2577 6.526
+T+5  0.08747 0.3020 6.526
+
+....................
+     location  scale shape
+T+8   0.08345 0.4219 6.526
+T+9   0.07792 0.4575 6.526
+T+10  0.07383 0.4900 6.526
+T+11  0.07558 0.5199 6.526
+T+12  0.07507 0.5465 6.526
+
+> Roll <- UniGASRoll(cpichg, GASSpec, ForecastLength = 150,
++                    RefitEvery = 3, RefitWindow = "moving")
+
+> ######################################################
+> cat("\n\n")
+
+
+
+> cat("SECTION 3.4\n")
+SECTION 3.4
+
+> cat("-----------\n\n")
+-----------
+
+
+> A <- diag(c(0.1, 0.4, 0))
+
+> B <- diag(c(0.9, 0.95, 0))
+
+> ThetaStar <- c(0.1, 1.5, 7)
+
+> kappa <- (diag(3) - B) %*% UniUnmapParameters(ThetaStar, "std")
+
+> Sim <- UniGASSim(T.sim = 1000, kappa = kappa, A = A,
++                  B = B, Dist = "std", ScalingType = "Identity")
+
+> ######################################################
+> cat("\n\n")
+
+
+
+> cat("SECTION 4\n")
+SECTION 4
+
+> cat("---------\n\n")
+---------
+
+
+> library("GAS")
+
+> data("dji30ret", package = "GAS")
+
+> uGASSpec <- UniGASSpec(Dist = "sstd", ScalingType = "Identity",
++                        GASPar = list(scale = TRUE))
+
+> mGASSpec <- MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
++                          GASPar = list(scale = TRUE, correlation = TRUE))
+
+> library("parallel")
+
+> cluster <- makeCluster(4)
+
+> luGASRoll <- list()
+
+> N <- ncol(dji30ret)
+
+> for (i in 1:N) {
++   luGASRoll[[i]] <- UniGASRoll(data = dji30ret[, i],
++                                GASSpec = uGASSpec, ForecastLength = 3000,
+ .... [TRUNCATED] 
+
+> names(luGASRoll) <- colnames(dji30ret)
+
+> mGASRoll <- MultiGASRoll(data = dji30ret[, c("CAT", "MMM", "PFE")],
++                          GASSpec = mGASSpec, ForecastLength = 3000,
++          .... [TRUNCATED] 
+
+> stopCluster(cluster)
+
+> DensityBacktest <- BacktestDensity(luGASRoll[[1]],
++                                    lower = -100, upper = 100)
+
+> DensityBacktest$average
+    NLS uniform  center   tails  tail_r  tail_l 
+ 2.2163  1.3292  0.1767  0.5251  0.6522  0.6770 
+
+> LS_MGAS <- LogScore(mGASRoll)
+
+> sink() # end output printed in txt
