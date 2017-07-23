@@ -1,5 +1,3 @@
-
-> print(tmp)
 R version 3.4.1 (2017-06-30)
 Platform: x86_64-apple-darwin16.6.0 (64-bit)
 Running under: macOS Sierra 10.12.5
@@ -12,103 +10,21 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
 [1] GAS_0.2.4
 
 loaded via a namespace (and not attached):
- [1] pcaPP_1.9-72                Rcpp_0.12.12                compiler_3.4.1              nloptr_1.0.4               
- [5] ks_1.10.7                   xts_0.10-0                  tools_3.4.1                 bit_1.1-12                 
- [9] digest_0.6.12               jsonlite_1.5                lattice_0.20-35             ff_2.2-13                  
-[13] Matrix_1.2-10               rugarch_1.3-6               shiny_1.0.3                 multicool_0.1-10           
-[17] Bessel_0.5-5                mvtnorm_1.0-6               expm_0.999-2                knitr_1.16                 
-[21] htmlwidgets_0.9             DistributionUtils_0.5-1     lmtest_0.9-35               grid_3.4.1                 
-[25] R6_2.2.2                    rmgarch_1.3-0               rgl_0.98.1                  Rsolnp_1.16                
-[29] magrittr_1.5                codetools_0.2-15            htmltools_0.3.6             SkewHyperbolic_0.3-2       
-[33] GeneralizedHyperbolic_0.8-1 MASS_7.3-47                 spd_2.0-1                   misc3d_0.8-4               
-[37] mime_0.5                    xtable_1.8-2                httpuv_1.3.5                numDeriv_2016.8-1          
-[41] sandwich_2.3-4              KernSmooth_2.23-15          RcppNumerical_0.3-1         truncnorm_1.0-7            
-[45] FNN_1.1                     zoo_1.8-0                  
-
-> ######################################################
-> ### DIRECTORIES
-> 
-> ### Path where the file 'RecessionBarDaily_FRED.RData' is located
-> sD .... [TRUNCATED] 
-
-> ### Path where all the results are saved
-> sDir <- "./"
-
-> ### General folder to store tables and figures
-> sDir_Tables  <- paste(sDir, "Tables/", sep = "")
-
-> sDir_Figures <- paste(sDir, "Figures/", sep = "")
-
-> dir.create(sDir_Tables, showWarnings = FALSE)
-
-> dir.create(sDir_Figures, showWarnings = FALSE)
-
-> ### Folder for the empirical analysis
-> sDir_Empirical <- paste(sDir, "Empirical/", sep = "")
-
-> dir.create(sDir_Empirical, showWarnings = FALSE)
-
-> ######################################################
-> ### EXTRA FUNCTIONS
-> 
-> ### wCRPS_rugarch() implements the weighed Continuous Ranked Proba .... [TRUNCATED] 
-
-> ### mvt density
-> ### dmvt_new() reports the multivariate Student-t probability density function
-> ### with mean vector vMu, scale matrix mSigma and .... [TRUNCATED] 
-
-> ### Test() implements the Diebold and Mariano (1995) JBES test for Equal Predictive Ability
-> ### of two series of one step ahead forecasts.
-> Test  .... [TRUNCATED] 
-
-> ######################################################
-> cat("\n\n")
+ [1] MASS_7.3-47       zoo_1.8-0         compiler_3.4.1    parallel_3.4.1    tools_3.4.1       xts_0.10-0       
+ [7] Rcpp_0.12.12      grid_3.4.1        truncnorm_1.0-7   numDeriv_2016.8-1 Rsolnp_1.16       lattice_0.20-35  
 
 
-
-> cat("SECTION 3\n")
 SECTION 3
-
-> cat("---------\n\n")
 ---------
 
-
-> ### Create a vector with available distributions label
-> vLabels <- DistLabels()
-
-> iN <- 3
-
-> mDist <- matrix(data = NA, length(vLabels), 6,
-+                 dimnames = list(vLabels, c("Label", "Name", "Type",
-+                               .... [TRUNCATED] 
-
-> ### Populate the mDist matrix with distribution names DistName(), types DistType(),
-> ### number of parameters DistParameters(), and
-> ### available .... [TRUNCATED] 
-
-> mDist[, "Label"] <- paste("\\code{", mDist[, "Label"], "}", sep = "")
-
-> mDist[, "Parameters"] <- paste("\\code{", mDist[, "Parameters"], "}", sep = "")
-
-> mDist[, "Scaling Type"] <- paste("\\code{", mDist[, "Scaling Type"], "}", sep = "")
-
-> mDist[, ncol(mDist)] <- paste(mDist[, ncol(mDist)], "\\\\")
-
-> mDist[9, 1] <- paste("%", mDist[9, 1], sep = "")
-
-> cat(" \n")
  
-
-> cat("Table 1\n")
 Table 1
-
-> print(mDist)
         Label             Name                                                  Type          
 norm    "\\code{norm}"    "Gaussian"                                            "univariate"  
 snorm   "\\code{snorm}"   "Skew-Gaussian"                                       "univariate"  
@@ -117,9 +33,7 @@ sstd    "\\code{sstd}"    "Skew-Student-t"                                      
 ast     "\\code{ast}"     "Asymmetric Student-t with two tail decay parameters" "univariate"  
 ast1    "\\code{ast1}"    "Asymmetric Student-t with one tail decay parameter"  "univariate"  
 ald     "\\code{ald}"     "Asymmetric Laplace Distribution"                     "univariate"  
-ghskt   "\\code{ghskt}"   "Generalized Hyperbolic Skew Student-t Distribution"  "univariate"  
-poi     "%\\code{poi}"    "Poisson"                                             "univariate"  
-ber     "\\code{ber}"     "Bernoulli"                                           "univariate"  
+poi     "\\code{poi}"     "Poisson"                                             "univariate"  
 gamma   "\\code{gamma}"   "Gamma"                                               "univariate"  
 exp     "\\code{exp}"     "Exponential"                                         "univariate"  
 beta    "\\code{beta}"    "Beta"                                                "univariate"  
@@ -135,9 +49,7 @@ sstd    "\\code{location, scale, skewness, shape}"         "4"              "\\c
 ast     "\\code{location, scale, skewness, shape, shape2}" "5"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ast1    "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ald     "\\code{location, scale, skewness}"                "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ghskt   "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity} \\\\"              
 poi     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ber     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 gamma   "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
 exp     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 beta    "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
@@ -146,108 +58,19 @@ skellam "\\code{location, scale}"                          "2"              "\\c
 mvnorm  "\\code{location, scale, correlation}"             "9"              "\\code{Identity} \\\\"              
 mvt     "\\code{location, scale, correlation, shape}"      "10"             "\\code{Identity} \\\\"              
 
-> write.table(mDist, file = paste(sDir_Tables, "/Table1.txt", sep = ""),
-+             sep = " & ", quote = FALSE, row.names = FALSE, col.names = TRUE .... [TRUNCATED] 
 
-> ######################################################
-> cat("\n\n")
-
-
-
-> cat("SECTION 4\n")
 SECTION 4
-
-> cat("---------\n\n")
 ---------
 
 
-> library("rugarch")
 
-> library("rmgarch")
-
-> library("parallel")
-
-> data("dji30ret", package = "GAS")
-
-> ###########################
-> ### MODEL SPECIFICATION
-> 
-> ### GAS
-> 
-> ### Specify univariate UniGASSpec() and multivaiate MultiGASSpec() GAS model .... [TRUNCATED] 
-
-> mGASSpec <- MultiGASSpec(Dist = "mvt", ScalingType = "Identity",
-+                          GASPar = list(location = FALSE, scale = TRUE, correlatio .... [TRUNCATED] 
-
-> #### GARCH
-> 
-> ### Specify GARCH with skew Student-t conditional distribution
-> uGARCHSpec <- rugarch::ugarchspec(variance.model = list(model = "sG ..." ... [TRUNCATED] 
-
-> ### Specify GARCH with Student-t conditional distribution
-> uGARCHSpec_std <- rugarch::ugarchspec(variance.model = list(model = "sGARCH", garchOrder .... [TRUNCATED] 
-
-> ### Specify DCC with Multivariate Student-t conditional distribution
-> mDCCSpec <- rmgarch::dccspec(uspec = multispec(replicate(3, uGARCHSpec_std)), .... [TRUNCATED] 
-
-> ###########################
-> #### FORECAST DESIGN
-> 
-> ### The code made use of parallel computation.
-> ### Change the option iCluster = 30 to mana .... [TRUNCATED] 
-
-> iH          <- 3000     # out of sample period
-
-> RefitEvery  <- 100      # lengnth of refit window
-
-> RefitWindow <- "moving" # updating scheme
-
-> iN <- ncol(dji30ret)
-
-> #cluster = NULL
-> cluster <- parallel::makeCluster(iCluster)
-
-> ###########################
-> ### OPTIMIZER SELECTION
-> 
-> fn.optimizer <- GAS::fn.optim
-
-> ### GAS optimizer setup
-> ### !!! Uncomment this part if you want to use solnp instead of optim
-> ### !!! Note that solnp is faster but returns slig .... [TRUNCATED] 
-
-> solver.ctr <- list(trace = 0, rho = 1, outer.iter = 400, inner.iter = 1800, delta = 1e-08, tol = 1e-08)
-
-> ###########################
-> cat("\n\n")
-
-
-
-> cat("UNIVARIATE FORECAST\n")
 UNIVARIATE FORECAST
-
-> cat("-------------------\n\n")
 -------------------
 
 
-> ### !!! This is computationally expensive
-> 
-> luGASRoll <- list()
 
-> luGARCHRoll <- list()
-
-> cat("\n\n")
-
-
-
-> cat("Rolling forecast with univariate GAS\n\n")
 Rolling forecast with univariate GAS
 
-
-> for (i in 1:iN) {
-+   cat("\n\n")
-+   cat("GAS rolling estimation asset", i, "\n")
-+   luGASRoll[[i]] <- UniGASRoll(data = dji30ret[, i], GASSpec =  .... [TRUNCATED] 
 
 
 GAS rolling estimation asset 1 
@@ -999,18 +822,9 @@ T+2998  0.07134 2.081   0.9413 11.37
 T+2999  0.07134 2.015   0.9413 11.37
 T+3000  0.07134 1.940   0.9413 11.37
 
-> cat("\n\n")
 
-
-
-> cat("Rolling forecast with univariate GARCH\n\n")
 Rolling forecast with univariate GARCH
 
-
-> for (i in 1:iN) {
-+   cat("\n\n")
-+   cat("GARCH rolling estimation asset", i, "\n")
-+   luGARCHRoll[[i]] <- rugarch::ugarchroll(spec = uGARCHSpec,  .... [TRUNCATED] 
 
 
 GARCH rolling estimation asset 1 
@@ -1762,93 +1576,15 @@ GARCH parameters tail
 1985-02-11 01:00:00 0.06192 2.142 0.9196 11.05          0   0.2742
 1985-02-12 01:00:00 0.06192 2.071 0.9196 11.05          0   1.8475
 
-> names(luGASRoll)   <- colnames(dji30ret)
 
-> names(luGARCHRoll) <- colnames(dji30ret)
-
-> save(luGASRoll, file = paste(sDir_Empirical, "/luGASRoll.RData", sep = ""))
-
-> save(luGARCHRoll, file = paste(sDir_Empirical, "/luGARCHRoll.RData", sep = ""))
-
-> ###########################
-> cat("\n\n")
-
-
-
-> cat("MULTIVARIATE FORECAST\n")
 MULTIVARIATE FORECAST
-
-> cat("---------------------\n\n")
 ---------------------
 
 
-> ## !!! This is computationally expensive
-> 
-> vAsset_Multi <- c("CAT", "PFE", "HPQ")
 
-> #iN <- length(vAsset_Multi)
-> SubSample <- dji30ret[, vAsset_Multi]
-
-> ### Rolling forecast with multivariate GAS model
-> mGASRoll <- MultiGASRoll(data = SubSample, GASSpec = mGASSpec, ForecastLength = iH,
-+             .... [TRUNCATED] 
-
-> ### Rolling forecast with DCC model
-> DCCRoll <- rmgarch::dccroll(spec = mDCCSpec, data = SubSample, forecast.length = iH,
-+                         .... [TRUNCATED] 
-
-> save(mGASRoll, file = paste(sDir_Empirical, "/mGASRoll.RData", sep = ""))
-
-> save(DCCRoll, file = paste(sDir_Empirical, "/DCCRoll.RData", sep = ""))
-
-> ###########################
-> cat("\n\n")
-
-
-
-> cat("UNIVARIATE COMPARISON\n")
 UNIVARIATE COMPARISON
-
-> cat("---------------------\n\n")
 ---------------------
 
-
-> ### Density Forecast Analysis
-> 
-> vAsset <- names(luGASRoll)
-
-> lLogScores <- list()
-
-> ### Compute Log Scores for GAS and GARCH models
-> for (sAsset in vAsset) {
-+   lLogScores[[sAsset]] <- cbind(GAS = as.numeric(LogScore(luGASRoll[[sA .... [TRUNCATED] 
-
-> save(lLogScores, file = paste(sDir_Empirical, "/lLogScores.RData", sep = ""))
-
-> ### Weighed Continuos Ranked Probability Scores as in Gneiting and Ranjan (2011) JBES
-> ### !!! This is computationally expensive
-> 
-> dLower <- -10 .... [TRUNCATED] 
-
-> dUpper <- 100
-
-> vType  <- c("uniform", "center", "tails", "tail_r", "tail_l")
-
-> dji30ret_Out <- tail(dji30ret, iH)
-
-> dji30ret_In <- head(dji30ret, nrow(dji30ret) - iH)
-
-> lWCRPS = list()
-
-> lWCRPS[["GARCH"]] <- array(NA, dim = c(iH, ncol(dji30ret_Out), length(vType)),
-+                            dimnames = list(rownames(dji30ret_Out),  .... [TRUNCATED] 
-
-> lWCRPS[["GAS"]] <- array(NA, dim = c(iH, ncol(dji30ret_Out), length(vType)),
-+                          dimnames = list(rownames(dji30ret_Out), coln .... [TRUNCATED] 
-
-> # Evaluate wCRPS for GARCH wCRPS_rugarch() and GAS BacktestDensity() models.
-> 
-> clusterEvalQ(cluster, library("GAS"))
 [[1]]
  [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
 [10] "base"     
@@ -1865,151 +1601,35 @@ UNIVARIATE COMPARISON
  [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
 [10] "base"     
 
+[[5]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
 
-> clusterExport(cluster, c("luGASRoll", "luGARCHRoll", "dji30ret_Out", "wCRPS_rugarch", "dji30ret_In"))
+[[6]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
 
-> lWCRPS_GAS_cluster <- parallel::parLapply(cluster, vAsset, function(sAsset, dLower, dUpper) {
-+ 
-+   mOut <- BacktestDensity(luGASRoll[[sAsset]], lo .... [TRUNCATED] 
+[[7]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
 
-> lWCRPS_GARCH_cluster <- parallel::parLapply(cluster, vAsset, function(sAsset, dLower, dUpper) {
-+ 
-+   mPredictions_GARCH <- as.data.frame(luGARCHRo .... [TRUNCATED] 
-
-> names(lWCRPS_GAS_cluster) <- vAsset
-
-> names(lWCRPS_GARCH_cluster) <- vAsset
-
-> for (sAsset in vAsset) {
-+ 
-+   lWCRPS[["GAS"]][, sAsset, ]   <- lWCRPS_GAS_cluster[[sAsset]]
-+ 
-+   lWCRPS[["GARCH"]][, sAsset, ] <- lWCRPS_GARCH_c .... [TRUNCATED] 
-
-> save(lWCRPS, file = paste(sDir_Empirical, "/lWCRPS.RData", sep = ""))
-
-> parallel::stopCluster(cluster)
-
-> ###########################
-> cat("\n\n")
+[[8]]
+ [1] "rugarch"   "parallel"  "GAS"       "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[10] "base"     
 
 
 
-> cat("MULTIVARIATE COMPARISON\n")
 MULTIVARIATE COMPARISON
-
-> cat("-----------------------\n\n")
 -----------------------
 
 
-> mLogScores <- matrix(0, iH, 2)
 
-> colnames(mLogScores) <- c("GAS", "DCC")
-
-> ### Extract Log Score from Multivariate GAS forecasts
-> mLogScores[, "GAS"] <- LogScore(mGASRoll)
-
-> ## DCC
-> 
-> ### Extract predicted covariance matrices from DCC
-> aCov <- rmgarch::rcov(DCCRoll)
-
-> ### Extract predicted means from DCC
-> mMu <- rugarch::fitted(DCCRoll)
-
-> ### Extract estimated degrees of freedom for DCC at each subperiod
-> vShapes <- c(sapply(DCCRoll@mforecast, function(x) rep(x@model$pars["mshape", " ..." ... [TRUNCATED] 
-
-> vLLK <- numeric(iH)
-
-> ### Log Score evaluation for DCC
-> for (i in 1:iH) {
-+   dNu <- vShapes[i]
-+   vLLK[i] <- dmvt_new(t(as.numeric(dji30ret_Out[i, vAsset_Multi])),
-+   .... [TRUNCATED] 
-
-> mLogScores[, "DCC"] <- vLLK
-
-> save(mLogScores, file = paste(sDir_Empirical, "/mLogScores_Multi.RData", sep = ""))
-
-> ###########################
-> cat("\n\n")
-
-
-
-> cat("TABLES\n")
 TABLES
-
-> cat("------\n\n")
 ------
 
 
-> ### Testing difference in predictive ability between GAS and GARCH.
-> ### We use the general testing procedure of Giacomini and White (2006) ECMA.
-> .... [TRUNCATED] 
 
-> ### Log Scores Univ
-> load(paste(sDir_Empirical, "/lLogScores.RData", sep = ""))
-
-> ### wCRPS
-> load(paste(sDir_Empirical, "/lWCRPS.RData", sep = ""))
-
-> vAsset <- dimnames(lWCRPS[["GAS"]])[[2]]
-
-> vWType <- dimnames(lWCRPS[["GAS"]])[[3]]
-
-> iT <- dim(lWCRPS[["GAS"]])[[1]]
-
-> mTest <- matrix(data = NA, length(vAsset), length(vWType) + 1,
-+                 dimnames = list(vAsset, c("NLS", vWType)))
-
-> mPvalue <- matrix(data = NA, length(vAsset), length(vWType) + 1,
-+                   dimnames = list(vAsset, c("NLS", vWType)))
-
-> ## Table GAS
-> 
-> mGAS <- matrix(data = NA, length(vAsset), length(vWType) + 1,
-+                dimnames = list(vAsset, c("NLS", vWType)))
-
-> mGARCH <- matrix(data = NA, length(vAsset), length(vWType) + 1,
-+                dimnames = list(vAsset, c("NLS", vWType)))
-
-> ### WCRPS
-> ### Performn DM test on wCRPS series
-> for (sWType in vWType) {
-+   for (sAsset in vAsset) {
-+     Test_Foo = Test(lWCRPS[["GAS"]][, sAs .... [TRUNCATED] 
-
-> ### Log Score
-> ### Performn DM test on Log Score series
-> for (sAsset in vAsset) {
-+   Test_Foo <- Test(-lLogScores[[sAsset]][, "GAS"], -lLogScores .... [TRUNCATED] 
-
-> mGAS <- format(round(mGAS, 7), scientific = FALSE, digits = 7)
-
-> mGARCH <- format(round(mGARCH, 7), scientific = FALSE, digits = 7)
-
-> ### Format for .tex table
-> mTest <- format(round(mTest, 2), scientific = FALSE, digits = 3)
-
-> mTest[mPvalue < 0.01] <- paste("$", mTest[mPvalue < 0.01], "^a$", sep = "")
-
-> mTest[mPvalue > 0.01 & mPvalue < 0.05] <- paste("$", mTest[mPvalue > 0.01 & mPvalue < 0.05], "^b$", sep = "")
-
-> mTest[mPvalue > 0.05 & mPvalue < 0.1] <- paste("$", mTest[mPvalue > 0.05 & mPvalue < 0.1], "^c$", sep = "")
-
-> mTest[mPvalue > 0.1] <- paste("$", mTest[mPvalue > 0.1], "^{~}$", sep = "")
-
-> mTest[, ncol(mTest)] = paste(mTest[, ncol(mTest)], "\\\\")
-
-> cat("\n\n")
-
-
-
-> cat("Table 3\n")
 Table 3
-
-> print(mTest)
      NLS           uniform       center        tails         tail_r        tail_l            
 AA   "$-1.98^b$"   "$-2.36^a$"   "$-2.14^b$"   "$-2.02^b$"   "$-2.16^b$"   "$-1.04^{~}$ \\\\"
 AXP  "$-2.98^a$"   "$-2.35^a$"   "$-3.14^a$"   "$-1.21^{~}$" "$-1.53^c$"   "$-1.60^c$ \\\\"  
@@ -2041,104 +1661,15 @@ UTX  "$-1.50^c$"   "$-1.61^c$"   "$-1.74^b$"   "$-1.38^c$"   "$-1.10^{~}$" "$-0.
 VZ   "$-1.98^b$"   "$-1.94^b$"   "$-1.50^c$"   "$-1.95^b$"   "$-1.35^c$"   "$-1.52^c$ \\\\"  
 WMT  "$ 2.11^b$"   "$ 0.92^{~}$" "$ 0.84^{~}$" "$ 0.82^{~}$" "$-0.42^{~}$" "$ 1.68^b$ \\\\"  
 XOM  "$ 0.15^{~}$" "$ 0.38^{~}$" "$-1.29^c$"   "$ 0.72^{~}$" "$ 0.69^{~}$" "$-0.04^{~}$ \\\\"
-
-> write.table(mTest, file = paste(sDir_Tables, "/Table3.txt", sep = ""),
-+             quote = FALSE, sep = " & ", col.names = TRUE, row.names = TRUE)
-
-> write.table(mGAS, file = paste(sDir_Tables, "/mGAS.txt", sep = ""),
-+             quote = FALSE, sep = " & ", col.names = TRUE, row.names = TRUE)
-
-> write.table(mGARCH, file = paste(sDir_Tables, "/mGARCH.txt", sep = ""),
-+             quote = FALSE, sep = " & ", col.names = TRUE, row.names = TRUE .... [TRUNCATED] 
-
-> ## Multivariate analysis Log Scores
-> load(paste(sDir_Empirical, "/mLogScores_Multi.RData", sep = ""))
-
-> iH <- nrow(mLogScores)
-
-> ### Performn DM test on Log Score series for multivariate models
-> DM <- Test(-mLogScores[, "GAS"], -mLogScores[, "DCC"], iH)
-
-> DM
       test     pvalue 
--3.3370585  0.0004234 
-
-> ###########################
-> cat("\n\n")
+-3.3402157  0.0004186 
 
 
-
-> cat("FIGURES\n")
 FIGURES
-
-> cat("-------\n\n")
 -------
 
 
-> library("xts")
 
-> ### clear workspace
-> rm(list = ls()[-which(ls() %in% c("sDir", "sDir_Empirical", "sDir_Figures", "sDir_Fred", "sDir_Tables", "Test"))])
-
-> data("dji30ret", package = "GAS")
-
-> mY <- as.xts(dji30ret)
-
-> load(paste(sDir_Empirical, "/mLogScores_Multi.RData", sep = ""))
-
-> load(paste(sDir_Fred, "RecessionBarDaily_FRED.RData", sep = ""))
-
-> rgb = c("#D33F6A4D", "#E2E2E24D", "#4A6FE34D")
-
-> iH <- 3000
-
-> iT <- nrow(mY)
-
-> iS <- iT - iH
-
-> iN <- ncol(mY)
-
-> vDates <- index(mY)[(iS + 1):iT]
-
-> ### Cumulative Log Score difference between multivariate GAS and DCC
-> mGARCH_LS_Rel <- cumsum(mLogScores[, "GAS"] - mLogScores[, "DCC"])
-
-> mGARCH_LS_Rel <- xts(mGARCH_LS_Rel, order.by = vDates)
-
-> ones   <- rep(0, nrow(mGARCH_LS_Rel))
-
-> vDates <- as.Date(vDates)
-
-> cat("\n\n")
-
-
-
-> cat("Figure 1\n")
 Figure 1
-
-> pdf(paste(sDir_Figures, "/Figure1.pdf", sep = ""), width = 15, height = 10)
-
-> par(mar = c(2, 4, 0.1, 2))
-
-> vLim <- range(mGARCH_LS_Rel)
-
-> plot(vDates, ones, type = "n", xlab = "", ylab = "", xaxt = "n", ylim = vLim, tcl = -0.3, cex.axis = 1.5, las = 1)
-
-> grid(nx = 10, ny = 10, col = "gray", lty = "dotted")
-
-> lines(vDates, ones, type = "l", lwd = 2, lty = 2, col = "darkgray")
-
-> lines(vDates, mGARCH_LS_Rel, type = "l", lwd = 1, lty = 1, col = 1)
-
-> xblocks(Recessions == 1, col = rgb[3])
-
-> axis.Date(1, at = seq(min(vDates), max(vDates) + 300, "quarter"),
-+           labels = substr(seq(min(vDates), max(vDates) + 300, "quarter"), 1, 7), .... [TRUNCATED] 
-
-> axis.Date(1, at = seq(min(vDates), max(vDates) + 300, "month"), labels = FALSE, tcl = -0.2)
-
-> dev.off()
 null device 
           1 
-
-> sink() # end output printed in txt

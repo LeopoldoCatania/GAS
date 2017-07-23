@@ -12,13 +12,19 @@ attached base packages:
 [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GAS_0.2.4       devtools_1.13.2
+[1] xts_0.10-0     lmtest_0.9-35  zoo_1.8-0      sandwich_2.3-4 rmgarch_1.3-0  rugarch_1.3-6  GAS_0.2.4     
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.12        lattice_0.20-35     zoo_1.8-0           digest_0.6.12       withr_1.0.2         truncnorm_1.0-7    
- [7] MASS_7.3-47         grid_3.4.1          R6_2.2.2            git2r_0.19.0        httr_1.2.1          curl_2.7           
-[13] xts_0.10-0          tools_3.4.1         numDeriv_2016.8-1   RcppNumerical_0.3-1 compiler_3.4.1      memoise_1.1.0      
-[19] Rsolnp_1.16        
+ [1] pcaPP_1.9-72                Rcpp_0.12.12                compiler_3.4.1              nloptr_1.0.4               
+ [5] ks_1.10.7                   tools_3.4.1                 bit_1.1-12                  digest_0.6.12              
+ [9] jsonlite_1.5                lattice_0.20-35             ff_2.2-13                   Matrix_1.2-10              
+[13] shiny_1.0.3                 multicool_0.1-10            Bessel_0.5-5                mvtnorm_1.0-6              
+[17] expm_0.999-2                knitr_1.16                  htmlwidgets_0.9             DistributionUtils_0.5-1    
+[21] grid_3.4.1                  R6_2.2.2                    rgl_0.98.1                  Rsolnp_1.16                
+[25] magrittr_1.5                codetools_0.2-15            htmltools_0.3.6             SkewHyperbolic_0.3-2       
+[29] GeneralizedHyperbolic_0.8-1 MASS_7.3-47                 spd_2.0-1                   misc3d_0.8-4               
+[33] mime_0.5                    xtable_1.8-2                httpuv_1.3.5                numDeriv_2016.8-1          
+[37] KernSmooth_2.23-15          truncnorm_1.0-7             FNN_1.1                    
 
 
 SECTION 3
@@ -34,9 +40,7 @@ sstd    "\\code{sstd}"    "Skew-Student-t"                                      
 ast     "\\code{ast}"     "Asymmetric Student-t with two tail decay parameters" "univariate"  
 ast1    "\\code{ast1}"    "Asymmetric Student-t with one tail decay parameter"  "univariate"  
 ald     "\\code{ald}"     "Asymmetric Laplace Distribution"                     "univariate"  
-ghskt   "\\code{ghskt}"   "Generalized Hyperbolic Skew Student-t Distribution"  "univariate"  
 poi     "\\code{poi}"     "Poisson"                                             "univariate"  
-ber     "%\\code{ber}"    "Bernoulli"                                           "univariate"  
 gamma   "\\code{gamma}"   "Gamma"                                               "univariate"  
 exp     "\\code{exp}"     "Exponential"                                         "univariate"  
 beta    "\\code{beta}"    "Beta"                                                "univariate"  
@@ -52,9 +56,7 @@ sstd    "\\code{location, scale, skewness, shape}"         "4"              "\\c
 ast     "\\code{location, scale, skewness, shape, shape2}" "5"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ast1    "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ald     "\\code{location, scale, skewness}"                "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ghskt   "\\code{location, scale, skewness, shape}"         "4"              "\\code{Identity} \\\\"              
 poi     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ber     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 gamma   "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
 exp     "\\code{location}"                                 "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 beta    "\\code{scale, shape}"                             "2"              "\\code{Identity, Inv, InvSqrt} \\\\"

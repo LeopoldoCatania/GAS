@@ -270,9 +270,7 @@ Specification of GAS models is the first step the user needs to undertake. This 
 \code{ast} (iii) & Asymmetric Student-t with two tail decay parameters & univariate & \code{location, scale, skewness, shape, shape2} & 5 & \code{Identity, Inv, InvSqrt} \\
 \code{ast1} (iv) & Asymmetric Student-t with one tail decay parameter & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity, Inv, InvSqrt} \\
 \code{ald} (v) & Asymmetric Laplace Distribution & univariate & \code{location, scale, skewness} & 3 & \code{Identity, Inv, InvSqrt} \\
-\code{ghskt} (i) & Generalized Hyperbolic Skew Student-t Distribution & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity} \\
 \code{poi} (vi) & Poisson & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
-%\code{ber} & Bernoulli & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{gamma} & Gamma & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
 \code{exp} (vii) & Exponential & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{beta} (viii) & Beta & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
@@ -284,7 +282,7 @@ Specification of GAS models is the first step the user needs to undertake. This 
 		\end{tabular}
 	}
 	\caption{Statistical distributions for which the \proglang{R} package \pkg{GAS} provides the functionality to simulate, estimate and forecast the time--variation in its parameters. The fifth column, \#, reports the number of parameters of the distribution.\\
-\noindent Notes: (i) the reparameterized Skew--Gaussian, \SStudent and Generalized Hyperbolic \SStudent for which the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \proglang{R} package \pkg{rugarch} \citep{rugarch}, (ii) the usual \Student distribution (not reparameterized in terms of the variance parameter), (iii) the Asymmetric \Student distribution of \cite{zhu_galbraith.2010}, (iv) the Asymmetric Student--t distribution of \cite{zhu_galbraith.2010} with equal tail decay parameters, (v) the \code{ald} distribution with the $\theta$, $\sigma$, $\kappa$ reparameterization, as specified in \citet{kotz_etal.2001}, (vi) for the Poisson distribution \code{location} means the usual intensity parameter, (vii) for the Exponential distribution \code{location} means the usual rate parameter, (viii) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (ix) The Skellam distribution reparameterized in terms of mean and variance, (x) for $N=3$.}
+\noindent Notes: (i) the reparameterized Skew--Gaussian and \SStudent for which the location and scale parameters coincide with the mean and the standard deviation of the distribution as done in the \proglang{R} package \pkg{rugarch} \citep{rugarch}, (ii) the usual \Student distribution (not reparameterized in terms of the variance parameter), (iii) the Asymmetric \Student distribution of \cite{zhu_galbraith.2010}, (iv) the Asymmetric Student--t distribution of \cite{zhu_galbraith.2010} with equal tail decay parameters, (v) the \code{ald} distribution with the $\theta$, $\sigma$, $\kappa$ reparameterization, as specified in \citet{kotz_etal.2001}, (vi) for the Poisson distribution \code{location} means the usual intensity parameter, (vii) for the Exponential distribution \code{location} means the usual rate parameter, (viii) for the Beta distribution \code{shape} means the usual $\alpha$ parameter and \code{scale} means the usual $\beta$ parameter, (ix) The Skellam distribution reparameterized in terms of mean and variance, (x) for $N=3$.}
 \label{tab:dist}
 \end{table}
 

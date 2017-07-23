@@ -6,9 +6,7 @@ Label & Name & Type & Parameters & N. of Parameters & Scaling Type
 \code{ast} & Asymmetric Student-t with two tail decay parameters & univariate & \code{location, scale, skewness, shape, shape2} & 5 & \code{Identity, Inv, InvSqrt} \\
 \code{ast1} & Asymmetric Student-t with one tail decay parameter & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity, Inv, InvSqrt} \\
 \code{ald} & Asymmetric Laplace Distribution & univariate & \code{location, scale, skewness} & 3 & \code{Identity, Inv, InvSqrt} \\
-\code{ghskt} & Generalized Hyperbolic Skew Student-t Distribution & univariate & \code{location, scale, skewness, shape} & 4 & \code{Identity} \\
 \code{poi} & Poisson & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
-%\code{ber} & Bernoulli & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{gamma} & Gamma & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\
 \code{exp} & Exponential & univariate & \code{location} & 1 & \code{Identity, Inv, InvSqrt} \\
 \code{beta} & Beta & univariate & \code{scale, shape} & 2 & \code{Identity, Inv, InvSqrt} \\

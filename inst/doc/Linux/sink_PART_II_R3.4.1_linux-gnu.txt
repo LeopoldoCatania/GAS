@@ -19,16 +19,12 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] GAS_0.2.4       devtools_1.13.2
+[1] GAS_0.2.4
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.12        lattice_0.20-35     zoo_1.8-0          
- [4] digest_0.6.12       withr_1.0.2         truncnorm_1.0-7    
- [7] MASS_7.3-47         grid_3.4.1          R6_2.2.2           
-[10] git2r_0.19.0        httr_1.2.1          curl_2.7           
-[13] xts_0.10-0          tools_3.4.1         numDeriv_2016.8-1  
-[16] RcppNumerical_0.3-1 compiler_3.4.1      memoise_1.1.0      
-[19] Rsolnp_1.16        
+ [1] MASS_7.3-47       zoo_1.8-0         compiler_3.4.1    tools_3.4.1      
+ [5] xts_0.10-0        Rcpp_0.12.12      grid_3.4.1        truncnorm_1.0-7  
+ [9] numDeriv_2016.8-1 Rsolnp_1.16       lattice_0.20-35  
 
 
 SECTION 3
@@ -44,9 +40,7 @@ sstd    "\\code{sstd}"    "Skew-Student-t"
 ast     "\\code{ast}"     "Asymmetric Student-t with two tail decay parameters"
 ast1    "\\code{ast1}"    "Asymmetric Student-t with one tail decay parameter" 
 ald     "\\code{ald}"     "Asymmetric Laplace Distribution"                    
-ghskt   "\\code{ghskt}"   "Generalized Hyperbolic Skew Student-t Distribution" 
 poi     "\\code{poi}"     "Poisson"                                            
-ber     "%\\code{ber}"    "Bernoulli"                                          
 gamma   "\\code{gamma}"   "Gamma"                                              
 exp     "\\code{exp}"     "Exponential"                                        
 beta    "\\code{beta}"    "Beta"                                               
@@ -62,9 +56,7 @@ sstd    "univariate"   "\\code{location, scale, skewness, shape}"
 ast     "univariate"   "\\code{location, scale, skewness, shape, shape2}"
 ast1    "univariate"   "\\code{location, scale, skewness, shape}"        
 ald     "univariate"   "\\code{location, scale, skewness}"               
-ghskt   "univariate"   "\\code{location, scale, skewness, shape}"        
 poi     "univariate"   "\\code{location}"                                
-ber     "univariate"   "\\code{location}"                                
 gamma   "univariate"   "\\code{scale, shape}"                            
 exp     "univariate"   "\\code{location}"                                
 beta    "univariate"   "\\code{scale, shape}"                            
@@ -80,9 +72,7 @@ sstd    "4"              "\\code{Identity} \\\\"
 ast     "5"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ast1    "4"              "\\code{Identity, Inv, InvSqrt} \\\\"
 ald     "3"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ghskt   "4"              "\\code{Identity} \\\\"              
 poi     "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
-ber     "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 gamma   "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
 exp     "1"              "\\code{Identity, Inv, InvSqrt} \\\\"
 beta    "2"              "\\code{Identity, Inv, InvSqrt} \\\\"
