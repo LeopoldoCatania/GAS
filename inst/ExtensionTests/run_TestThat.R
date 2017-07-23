@@ -1,6 +1,6 @@
 ## TestThat comparison
-## Obtained with R 3.4.1 & GAS 0.2.3
-## 20170721
+## Obtained with R 3.4.1 & GAS 0.2.4
+## 20170723
 
 rm(list = ls())
 library("GAS")

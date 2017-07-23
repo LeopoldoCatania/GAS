@@ -19,7 +19,7 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] GAS_0.2.3       devtools_1.13.2
+[1] GAS_0.2.4       devtools_1.13.2
 
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.12        lattice_0.20-35     zoo_1.8-0          

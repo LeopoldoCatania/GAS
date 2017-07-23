@@ -15,7 +15,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] GAS_0.2.3
+[1] GAS_0.2.4
 
 loaded via a namespace (and not attached):
  [1] pcaPP_1.9-72                Rcpp_0.12.12                compiler_3.4.1              nloptr_1.0.4               

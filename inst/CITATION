@@ -6,7 +6,7 @@ citEntry(entry="Manual",
                              person(given="Kris", family="Boudt"),
                              person(given="David", family="Ardia")),
          year = "2017",
-         note = "R package version 0.2.3",
+         note = "R package version 0.2.4",
          url  = "https://CRAN.R-project.org/package=GAS",
          textVersion = "Catania, L., Boudt, K., Ardia, D. (2016). GAS: Generalized Autoregressive Score Models.
          R package. URL https://CRAN.R-project.org/package=GAS")
