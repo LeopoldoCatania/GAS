@@ -5,7 +5,7 @@ Version: 0.2.4
 Author: Leopoldo Catania [aut,cre], Kris Boudt [ctb], David Ardia [ctb]
 Maintainer: Leopoldo Catania <leopoldo.catania@uniroma2.it>
 Description: Simulate, estimate and forecast using univariate and multivariate GAS models 
-  as described in Ardia et al. (2016) <url:https://ssrn.com/abstract=2825380>
+  as described in Ardia et al. (2016) <url:https://ssrn.com/abstract=2825380>.
 License: GPL-3
 BugReports: https://github.com/LeopoldoCatania/GAS/issues
 URL: https://github.com/LeopoldoCatania/GAS
