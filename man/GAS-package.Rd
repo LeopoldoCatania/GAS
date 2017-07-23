@@ -15,8 +15,8 @@ A detailed implementation of the package functionalities are reported in Ardia e
 \tabular{ll}{
 Package: \tab GAS\cr
 Type: \tab Package\cr
-Version: \tab 0.2.3\cr
-Date: \tab 2017-07-18\cr
+Version: \tab 0.2.4\cr
+Date: \tab 2017-07-23\cr
 License: \tab GPL (>= 2)\cr
 }
 The authors acknowledge Google for financial support via the Google Summer of

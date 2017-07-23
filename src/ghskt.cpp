@@ -1,10 +1,10 @@
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppNumerical)]]
+//// [[Rcpp::depends(RcppEigen)]]
+//// [[Rcpp::depends(RcppNumerical)]]
 #include <RcppArmadillo.h>
 #include "Utils.h"
-#include <RcppNumerical.h>
+// #include <RcppNumerical.h>
 
-using namespace Numer;
+//using namespace Numer;
 using namespace arma;
 using namespace Rcpp;
 
@@ -120,23 +120,23 @@ double dGHSKT(double dY, double dMuBar, double dSigma, double dBetaBar, double d
   return dPDF;
 }
 
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::depends(RcppNumerical)]]
-class GHSKTPDF: public Func
-{
-private:
-  double dMu;
-  double dSigma;
-  double dBetaBar;
-  double dNu;
-public:
-  GHSKTPDF(double dMu_, double dSigma_, double dBetaBar_, double dNu_) : dMu(dMu_), dSigma(dSigma_), dBetaBar(dBetaBar_), dNu(dNu_) {}
-
-  double operator()(const double& dY) const
-  {
-    return dGHSKT(dY, dMu, dSigma, dBetaBar, dNu, false);
-  }
-};
+//// [[Rcpp::depends(RcppEigen)]]
+//// [[Rcpp::depends(RcppNumerical)]]
+// class GHSKTPDF: public Func
+// {
+// private:
+//   double dMu;
+//   double dSigma;
+//   double dBetaBar;
+//   double dNu;
+// public:
+//   GHSKTPDF(double dMu_, double dSigma_, double dBetaBar_, double dNu_) : dMu(dMu_), dSigma(dSigma_), dBetaBar(dBetaBar_), dNu(dNu_) {}
+//
+//   double operator()(const double& dY) const
+//   {
+//     return dGHSKT(dY, dMu, dSigma, dBetaBar, dNu, false);
+//   }
+// };
 
 double pGHSKT(double dY, double dMuBar, double dSigma, double dBetaBar, double dNu){
 
@@ -146,14 +146,16 @@ double pGHSKT(double dY, double dMuBar, double dSigma, double dBetaBar, double d
     lower = upper - 50 * dSigma;
   }
 
-  double err_est;
-  int err_code;
+  // double err_est;
+  // int err_code;
+  //
+  // GHSKTPDF f(dMuBar, dSigma, dBetaBar, dNu);
+  //
+  // const double res = integrate(f, lower, upper, err_est, err_code);
 
-  GHSKTPDF f(dMuBar, dSigma, dBetaBar, dNu);
+  // double out = res;
 
-  const double res = integrate(f, lower, upper, err_est, err_code);
-
-  double out = res;
+  double out = NA_REAL;
 
   return out;
 

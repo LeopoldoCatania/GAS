@@ -63,3 +63,6 @@
   * DESCRIPTION (Version): New version is 0.2.3.
 2017-21-07
   * Added warning if the optimizer does not converge.
+2017-23-07
+  * DESCRIPTION (Version): New version is 0.2.4.
+  * ghskt distribution removed. This will be insered in a future release.

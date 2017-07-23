@@ -99,25 +99,25 @@ Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "sstd", ScalingType = "Ident
 
 # plot(Sim)
 
-# ghskt
-
-iT = 1e3
-
-A = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
-             0.0 , 0.1 , 0.0 , 0.0,
-             0.0 , 0.0 , 0.00,  0.0,
-             0.0 , 0.0 , 0.00,  0.0),4,byrow = T)
-
-B = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
-             0.0 , 0.98, 0.0 , 0.0,
-             0.0 , 0.0 , 0.00, 0.0,
-             0.0 , 0.0 , 0.00, 0.0),4,byrow = T)
-
-Kappa = (diag(4) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1, 8), "ghskt")
-
-Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "ghskt", ScalingType = "Identity")
-
-plot(Sim)
+# # ghskt
+#
+# iT = 1e3
+#
+# A = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
+#              0.0 , 0.1 , 0.0 , 0.0,
+#              0.0 , 0.0 , 0.00,  0.0,
+#              0.0 , 0.0 , 0.00,  0.0),4,byrow = T)
+#
+# B = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
+#              0.0 , 0.98, 0.0 , 0.0,
+#              0.0 , 0.0 , 0.00, 0.0,
+#              0.0 , 0.0 , 0.00, 0.0),4,byrow = T)
+#
+# Kappa = (diag(4) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1, 8), "ghskt")
+#
+# Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "ghskt", ScalingType = "Identity")
+#
+# plot(Sim)
 
 # poi
 

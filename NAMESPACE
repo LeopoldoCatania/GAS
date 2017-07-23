@@ -2,7 +2,7 @@
 #importFrom(Rcpp, evalCpp)      #remove before CRAN
 useDynLib(GAS, .registration = TRUE)
 import(methods)
-import(RcppNumerical)
+#import(RcppNumerical)
 importFrom(Rcpp,evalCpp)
 importFrom(xts,xts)
 importFrom(zoo,index)

@@ -6,7 +6,7 @@ DistLabels <- function() {
              "ast",
              "ast1",
              "ald",
-             "ghskt",
+             # "ghskt",
              "poi",
              "ber",
              "gamma",
