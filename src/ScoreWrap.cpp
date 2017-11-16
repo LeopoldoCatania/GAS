@@ -16,7 +16,6 @@
 #include "mvnorm.h"
 #include "mvt.h"
 
-
 using namespace Rcpp;
 using namespace arma;
 

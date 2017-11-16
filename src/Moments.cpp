@@ -4,7 +4,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-
 //[[Rcpp::export]]
 arma::mat EvalMoments_univ(arma::mat mTheta, std::string Dist){
   int iT = mTheta.n_cols;

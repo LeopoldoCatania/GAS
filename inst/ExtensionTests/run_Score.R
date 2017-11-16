@@ -162,6 +162,7 @@ vGAS = GAS:::Score_Uni(dY, vTheta, "skellam")
 ## multivariate
 
 # mvt
+set.seed(123)
 
 iN = 3
 

@@ -4,7 +4,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-
 double dSKELLAM(double dY, double dMu, double dSigma2, bool bLog = false) {
 
   double dMu1 = 0.5 * (dSigma2 + dMu);

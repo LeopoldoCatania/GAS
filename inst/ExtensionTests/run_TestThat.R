@@ -1,5 +1,5 @@
 ## TestThat comparison
-## Obtained with R 3.4.1 & GAS 0.2.4
+## Obtained with R 3.4.1 & GAS 0.2.5
 ## 20170723
 
 rm(list = ls())
@@ -67,3 +67,4 @@ testthat::expect_true(max(est.sd - exp.sd) < tol)
 # average log-score
 est.als <- GAS::BacktestDensity(uGASRoll, lower = -100, upper = 100)$average
 testthat::expect_true(max(est.als - exp.als) < tol)
+

@@ -95,7 +95,7 @@ DQOOStest <- function(y, VaR, tau, cLags) {
     vHIT = vHit[(cLags + 1):cT]
     vVaRforecast = VaR[(cLags + 1):cT]
     mZ = matrix(0, cT - cLags, cLags)
-
+    vY2_lag = y[cLags:(cT - 1)]^2
 
     for (st in 1:cLags) {
 
@@ -103,9 +103,9 @@ DQOOStest <- function(y, VaR, tau, cLags) {
 
     }
 
-    mX = cbind(vConstant, vVaRforecast, mZ)
+    mX = cbind(vConstant, vVaRforecast, mZ, vY2_lag)
 
-    dDQstatOut = (t(vHIT) %*% mX %*% ginv(t(mX) %*% mX) %*% t(mX) %*% (vHIT))/(tau * (1 - tau))
+    dDQstatOut = (t(vHIT) %*% mX %*% MASS::ginv(t(mX) %*% mX) %*% t(mX) %*% (vHIT))/(tau * (1 - tau))
 
     dDQpvalueOut = 1 - pchisq(dDQstatOut, ncol(mX))
 

@@ -141,19 +141,20 @@ Fit.NM.optim
 # Estimate time-varying Negative Binomial distribution for the Goals dataset.
 # Let's use the gosolnp() optimizer for the time-varying model estimation and
 # the solnp() optimizer for estimation of the static model for the choice of
-# the starting value. The logical is(GASSpec, "list") is TRUE when the function
+# the starting values. The logical is(GASSpec, "list") is TRUE when the function
 # is evaluated for the choice of starting values, and FALSE when the function
 # is evaluated for the time-varying model.
 # We can also make use of parallel computation calling a cluster object defined
 # in the Global environment.
 
+library("Rsolnp")
 fn.gosolnp <- function(par0, data, GASSpec, FUN) {
 
   if (is(GASSpec, "list")) {
 
     optimiser = suppressWarnings(solnp(par0, FUN, data = data,
-                                        GASSpec = GASSpec,
-                                        control = list(trace = 0)))
+                                       GASSpec = GASSpec,
+                                       control = list(trace = 0)))
 
   } else {
 
@@ -182,7 +183,9 @@ fn.gosolnp <- function(par0, data, GASSpec, FUN) {
 
 data("Goals")
 
-cluster = makeCluster(8)
+library("parallel")
+
+cluster = makeCluster(2)
 
 GASSpec = UniGASSpec(Dist = "negbin", ScalingType = "Inv",
                      GASPar = list(location = TRUE, scale = FALSE))
@@ -194,65 +197,8 @@ Fit = UniGASFit(GASSpec, vY, fn.optimizer = fn.gosolnp)
 
 Fit
 
-# Estimate the model with the Differential Evolution algoritm implemented
-# in the DEoptim package. We can also make use of parallel computation
-# calling a cluster object defined in the Global environment.
-
-library(DEoptim)
-library(Rsolnp)
-
-fn.DEoptim <- function(par0, data, GASSpec, FUN) {
-
-  if (is(GASSpec, "list")) {
-
-    optimizer = suppressWarnings(solnp(par0, FUN, data = data,
-                                       GASSpec = GASSpec,
-                                       control = list(trace = 0)))
-
-  } else {
-
-    cluster = get("cluster", envir = globalenv())
-
-    optimizer.DE = DEoptim(FUN, lower = rep(-10, length(par0)), upper = rep(10, length(par0)),
-                           data = data, GASSpec = GASSpec,
-                           control = DEoptim.control(cluster = cluster))
-
-    par = optimizer.DE$optim$bestmem
-
-    names(par) = names(par0)
-
-    optimizer = list(par = par,
-                     value = optimizer.DE$optim$bestval,
-                     hessian = NULL,
-                     convergence = 0)
-
-  }
-
-
-
-  out = list(pars = optimizer$par,
-             value = optimizer$value,
-             hessian = optimizer$hessian,
-             convergence = optimizer$convergence)
-
-  return(out)
-
-}
-
-data("tqdata")
-
-cluster = makeCluster(8)
-
-GASSpec = UniGASSpec(Dist = "negbin", ScalingType = "Identity",
-                     GASPar = list(location = TRUE, scale = TRUE))
-
-vY = abs(tqdata[, 6] - tqdata[, 5]) * 100  # absolute bid-ask spread
-
-Fit.DEoptim = UniGASFit(GASSpec, vY, fn.optimizer = fn.DEoptim)
-
-Fit.DEoptim
-
 stopCluster(cluster)
+rm("cluster")
 
 }
 }

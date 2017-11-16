@@ -66,3 +66,11 @@
 2017-23-07
   * DESCRIPTION (Version): New version is 0.2.4.
   * ghskt distribution removed. This will be insered in a future release.
+2017-07-09
+  * DESCRIPTION (Version): New version is 0.2.5.
+  * DQ test now also includes one lagged value of y^2 with other regressors.
+2017-10-20
+  * Bug: "recipe for target `Moments.o' failed" present with some compiler has been
+  solved.
+2017-11-16
+  * Bugs fixed related to R CMD check --test-dir=inst/ExtensionTests and R CMD check run-dontrun

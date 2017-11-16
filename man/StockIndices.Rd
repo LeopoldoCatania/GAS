@@ -14,25 +14,4 @@ in percentage points from 2007-01-03 to 2016-06-24. Missing values are simply re
 Yahoo finance.
 }
 \keyword{datasets}
-\examples{
-\dontrun{
-library("quantmod")
 
-Ticker = c( "^GDAXI", "FTSEMIB.MI", "^FCHI" )
-
-From = "2007-01-01"
-To = "2016-06-24"
-
-StockEnv = new.env(has = TRUE)
-
-getSymbols(Ticker, from = From, to = To, env = StockEnv)
-
-mPrices = do.call(cbind, eapply(StockEnv, Ad ))
-
-mRet = diff( log( mPrices ) )
-
-colnames(mRet) = c( "DAX", "FTSEMIB", "CAC40" )
-
-StockIndices = mRet[-1, ]
-}
-}

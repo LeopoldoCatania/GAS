@@ -61,7 +61,7 @@
 \author{%
 David Ardia\\University of Neuch\^atel\\Laval University \And
 Kris Boudt\\ Vrije Universiteit Brussel\\Vrije Universiteit Amsterdam\\\And
-Leopoldo Catania\\University of Rome\\ \qmo Tor Vergata\qmcsp}
+Leopoldo Catania\\Aarhus BSS\\ CREATES}
 \Plainauthor{David Ardia, Kris Boudt, Leopoldo Catania} %% comma-separated
 
 \title{Generalized Autoregressive Score Models in \proglang{R}:\\ The \pkg{GAS} Package}
@@ -92,12 +92,11 @@ David Ardia \\
   E-mail:  \email{kris.boudt@vub.ac.be}\\
   \\
   Leopoldo Catania (corresponding author)\\
-  Department of Economics and Finance\\
-  Faculty of Economics\\
-  University of Rome, \qmo Tor Vergata\qmcsp\\
-  Via Columbia, 2\\
-  00133 Rome, Italy\\
-  E-mail: \email{leopoldo.catania@uniroma2.it}\\
+  Department of Economics and Business Economics\\
+  Aarhus BSS, Denmark\\
+  and\\
+  CREATES\\
+  E-mail: \email{leopoldo.catania@econ.au.dk}\\
   %
 }
 
@@ -403,7 +402,7 @@ Elapsed time: 0.02 mins
 The output printed to the console is divided into: (i) the summary of the model, (ii) the estimated coefficients along with significance levels according to their asymptotic Gaussian distribution, (iii) the long--term value of the time--varying parameters, \emph{i.e.}, $\Lambda((\bI - \widehat{\bB})^{-1}\widehat{\bkappa})$, (iv) AIC and BIC information criteria in addition to the number of estimated parameters (\code{np}) and the log--likelihood (\code{llk}) evaluated at its optimum, (v) the convergence flag, and (vi) the computation time.\footnote{Convergence flag follows the nomenclature of the default \code{optim} optimizer, that is: solver has converged (0), or not (1 or 2); see \code{help("optim")}. For user--defined optimizers, the definition of the convergence flag is flexible. The only requirement is that successful convergence is indicated with 0.}
 
 
-Concerning the estimated coefficients, \code{kappa1}, \code{kappa2} and \code{kappa3} are the elements of vector $\bkappa$ in~\eqref{eq:update_studentt}, \emph{i.e.}, $\kappa_\mu, \kappa_\phi$ and $\kappa_\nu$, respectively. Analogously, \code{a1} and \code{a2} are the estimates of $a_\mu$ and $a_\phi$ and \code{b1} and \code{b2} are estimates of $b_\mu$ and $b_\phi$, where $\phi$ refers to the scale parameter of the \Student distribution; see Appendix~\ref{sec:gas_t}. Note that, since we have specified \code{scale = FALSE} in the \code{UniGASSpec()} function, coefficients \code{a3} and \code{b3}, corresponding to $a_\nu$ and $b_\nu$ are not reported (and constrained to zero during the optimization).
+Concerning the estimated coefficients, \code{kappa1}, \code{kappa2} and \code{kappa3} are the elements of vector $\bkappa$ in~\eqref{eq:update_studentt}, \emph{i.e.}, $\kappa_\mu, \kappa_\phi$ and $\kappa_\nu$, respectively. Analogously, \code{a1} and \code{a2} are the estimates of $a_\mu$ and $a_\phi$ and \code{b1} and \code{b2} are estimates of $b_\mu$ and $b_\phi$, where $\phi$ refers to the scale parameter of the \Student distribution; see Appendix~\ref{sec:gas_t}. Note that, since we have specified \code{shape = FALSE} in the \code{UniGASSpec()} function, coefficients \code{a3} and \code{b3}, corresponding to $a_\nu$ and $b_\nu$ are not reported (and constrained to zero during the optimization).
 
 The \proglang{R} package \pkg{GAS} provides several methods to extract the relevant estimated quantities for objects of class \code{uGASFit} or \code{mGASFit}. They allow us to: (i) calculate several quantities of the estimated conditional distribution at each point in time, such as: quantiles, conditional moments and filtered parameters (see \code{quantile(Fit)}, \code{getMoments(Fit)} and \code{getFilteredParameters(Fit)}, respectively), (ii) extract the estimated coefficients (\code{coef(Fit)}), (iii) generate a graphical representation of the results (\code{plot(Fit)}); see \code{help("uGASFit")} for details.
 
@@ -748,7 +747,7 @@ Finally, if you use \proglang{R} or \pkg{GAS}, please cite the software in publi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The results in this paper were obtained using \proglang{R} 3.4.1 \citep{R} with the
-packages: \pkg{GAS} version 0.2.4 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-47 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
+packages: \pkg{GAS} version 0.2.5 \citep{GAS}, \pkg{lmtest} version 0.9-35 \citep{lmtest},  \pkg{MASS} version 7.3-47 \citep{MASS.2002,MASS}, \pkg{numDeriv} version 2016.8-1 \citep{numDeriv},
 \pkg{Rcpp} version 0.12.12 \citep{Rcpp.2011,Rcpp}, \pkg{RcppArmadillo} version 0.7.900.2.0 \citep{RcppArmadillo.2014,RcppArmadillo}, \pkg{rugarch} version 1.3-6 \citep{rugarch}, \pkg{sandwich} version 2.3-4 \citep{zeileis.2004}, \pkg{xts} version 0.10-0 \citep{xts}, and \pkg{zoo} version 1.8-0 \citep{zoo}. Some datasets available in the package were downloaded using the \pkg{quantmod} package \citep{quantmod}, version 0.4-10. Computations were performed on Windows 10 Pro, x86\_64-w64-mingw32/x64 (64-bit) with Intel(R) Xeon(R) CPUE3-1535M v6 Max Turbo Frequency \@4.20 GHz. Full output of the computations is available in the file \code{sink\_PART\_II\_R3.4.1\_mingw32.txt} in the folder \code{inst/doc}.
 
 \proglang{R} itself and all packages used are available
@@ -853,7 +852,7 @@ Catania L, {Bill{\'e}} AG (2017).
 \bibitem[{Catania \emph{et~al.}(2017)Catania, Boudt, and Ardia}]{GAS}
 Catania L, Boudt K, Ardia D (2017).
 \newblock \emph{\pkg{GAS}: {G}eneralised Autoregressive Score Models}.
-\newblock \proglang{R}~package version 0.2.4,
+\newblock \proglang{R}~package version 0.2.5,
   \urlprefix\url{https://cran.r-project.org/package=GAS}.
 
 \bibitem[{Creal \emph{et~al.}(2011)Creal, Koopman, and Lucas}]{creal_etal.2011}

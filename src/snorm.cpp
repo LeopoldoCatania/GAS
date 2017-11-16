@@ -8,7 +8,6 @@ using namespace Rcpp;
 //// These functions are taken principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
-
 double dnormstd(const double x)
 {
   double pdf;

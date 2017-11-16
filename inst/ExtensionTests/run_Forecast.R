@@ -42,13 +42,14 @@ LogScore(Forecast)
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-cluster = makeCluster(7)
+cluster = makeCluster(2)
 
 help(UniGASRoll)
 Roll = UniGASRoll(as.numeric(cpichg), GASSpec, ForecastLength = 50, RefitEvery = 2, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
 
+stopCluster(cluster)
 ########################
 #    MULTIVARIATE      #
 ########################
@@ -73,7 +74,7 @@ Forecast  = MultiGASFor(Fit, H = 50)
 
 Forecast
 
-plot(Forecast)
+# plot(Forecast)
 
 # Perform 1-Step ahead rolling forecast
 
@@ -87,14 +88,15 @@ Forecast  = MultiGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
 
-plot(Forecast)
+# plot(Forecast)
 
 # Perform 1-step ahead rolling forecast with refit
 library(parallel)
 
-cluster = makeCluster(5)
+cluster = makeCluster(2)
 
 Roll    = MultiGASRoll(mY, GASSpec, ForecastLength = 500, RefitEvery = 100, RefitWindow = c("moving"), cluster = cluster)
 
 Roll
 
+stopCluster(cluster)

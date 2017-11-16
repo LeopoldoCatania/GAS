@@ -3,11 +3,8 @@
 
 using namespace arma;
 using namespace Rcpp;
-
-
 //// These functions are taken principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
-
 
 double xdt(const double x, const double nu)
 {

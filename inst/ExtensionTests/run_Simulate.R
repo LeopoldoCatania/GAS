@@ -1,6 +1,6 @@
 library("GAS")
 ## Simulate GAS process
-
+set.seed(123)
 ################################
 #         UNIVARIATE           #
 ################################
@@ -21,14 +21,6 @@ Kappa = (diag(2) - B) %*% UniUnmapParameters(c(0, 0.1), "norm")
 help(UniGASSim)
 Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "norm", ScalingType = "Identity")
 
-# plot(Sim)
-
-vY = Sim@Data$vY
-
-GASSpec = UniGASSpec()
-
-Fit = UniGASFit(GASSpec, vY)
-
 # snorm
 
 iT = 1e3
@@ -47,15 +39,6 @@ Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "snorm", ScalingType = "Iden
 
 # plot(Sim)
 
-# Sim@Data$vY
-
-vY = Sim@Data$vY
-
-GASSpec = UniGASSpec(Dist = "snorm")
-
-Fit = UniGASFit(GASSpec, vY)
-
-Fit
 # std
 
 iT = 1e3
@@ -72,12 +55,6 @@ Kappa = (diag(3) - B) %*% UniUnmapParameters(c(0, 0.1, 8), "std")
 Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "std", ScalingType = "Identity")
 
 # plot(Sim)
-
-vY = Sim@Data$vY
-
-GASSpec = UniGASSpec(Dist = "std")
-
-Fit = UniGASFit(GASSpec, vY)
 
 # sstd
 
@@ -96,28 +73,6 @@ B = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
 Kappa = (diag(4) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1, 8), "sstd")
 
 Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "sstd", ScalingType = "Identity")
-
-# plot(Sim)
-
-# # ghskt
-#
-# iT = 1e3
-#
-# A = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
-#              0.0 , 0.1 , 0.0 , 0.0,
-#              0.0 , 0.0 , 0.00,  0.0,
-#              0.0 , 0.0 , 0.00,  0.0),4,byrow = T)
-#
-# B = matrix(c(0.0 , 0.0 , 0.0 , 0.0,
-#              0.0 , 0.98, 0.0 , 0.0,
-#              0.0 , 0.0 , 0.00, 0.0,
-#              0.0 , 0.0 , 0.00, 0.0),4,byrow = T)
-#
-# Kappa = (diag(4) - B) %*% UniUnmapParameters(c(0, 0.1, 1.1, 8), "ghskt")
-#
-# Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "ghskt", ScalingType = "Identity")
-#
-# plot(Sim)
 
 # poi
 
@@ -162,7 +117,6 @@ Kappa = (diag(2) - B) %*% c(log(0.8/0.2), log(2))
 
 Sim = UniGASSim(fit = NULL, iT, Kappa, A, B, Dist = "negbin", ScalingType = "Inv")
 
-
 # plot(Sim)
 
 ################################
@@ -174,9 +128,9 @@ library(GAS)
 
 set.seed(786)
 
-iT     = 1000 # number of observations to simulate
-N     = 3     # trivariate series
-Dist   = "mvt" # conditional Multivariate Studen-t distribution
+iT   = 1000 # number of observations to simulate
+N    = 3     # trivariate series
+Dist = "mvt" # conditional Multivariate Studen-t distribution
 
 # build unconditional vector of reparametrised parameters
 
@@ -200,7 +154,7 @@ Kappa = (diag(length(Theta)) - B) %*% MultiUnmapParameters(Theta, Dist, N)
 
 help(MultiGASSim)
 
-Sim = MultiGASSim(iT, N, Kappa, A, B, Dist, ScalingType = "Identity")
+Sim = MultiGASSim(fit = NULL, iT, N, Kappa, A, B, Dist, ScalingType = "Identity")
 
 Sim
 
