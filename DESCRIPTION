@@ -3,7 +3,7 @@ Type: Package
 Title: Generalized Autoregressive Score Models 
 Version: 0.2.5
 Author: Leopoldo Catania [aut,cre], Kris Boudt [ctb], David Ardia [ctb]
-Maintainer: Leopoldo Catania <leopoldo.catania@uniroma2.it>
+Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>
 Description: Simulate, estimate and forecast using univariate and multivariate GAS models 
   as described in Ardia et al. (2016) <https://ssrn.com/abstract=2825380>.
 License: GPL-3
