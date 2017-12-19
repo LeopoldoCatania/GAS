@@ -170,15 +170,20 @@ MultiFixedCorrelation <- function(iN, ScalarParameters) {
 GetFixedPar_Multi <- function(Dist, GASPar, iN, ScalarParameters) {
     FixedPar = NULL
 
-    if (!GASPar$location)
+    if (!GASPar$location) {
         FixedPar = c(FixedPar, MultiFixedLocation(iN, ScalarParameters))
-    if (!GASPar$scale)
+    }
+    if (!GASPar$scale) {
         FixedPar = c(FixedPar, MultiFixedScale(iN, Dist, ScalarParameters))
-    if (!GASPar$correlation)
+    }
+    if (!GASPar$correlation) {
         FixedPar = c(FixedPar, MultiFixedCorrelation(iN, ScalarParameters))
-
-    if (!GASPar$shape)
+    }
+    if (Dist == "mvt") {
+      if (!GASPar$shape) {
         FixedPar = c(FixedPar, a.nu = 0, b.nu = 0)
+      }
+    }
 
     return(FixedPar)
 }
@@ -201,14 +206,20 @@ FixedDynamicPar_Multi <- function(Dist, iN, GASPar) {
     vBool = rep(FALSE, length(ParNames))
     names(vBool) = ParNames
 
-    if (GASPar$location)
+    if (GASPar$location) {
         vBool[1:iN] = TRUE
-    if (GASPar$scale)
+    }
+    if (GASPar$scale) {
         vBool[(iN + 1L):(2L * iN)] = TRUE
-    if (GASPar$correlation)
+    }
+    if (GASPar$correlation) {
         vBool[(2L * iN + 1L):(2L * iN + iN * (iN - 1L)/2L)] = TRUE
-    if (GASPar$shape)
+    }
+    if (Dist == "mvt") {
+      if (GASPar$shape) {
         vBool[2L * iN + iN * (iN - 1L)/2L + 1L] = TRUE
+      }
+    }
 
     return(vBool)
 }
@@ -220,14 +231,20 @@ MatrixCoefficientStructure_Multi <- function(Dist, iN, iK, GASPar) {
 
     for (i in 1:length(GASPar)) lStructure[[names(GASPar)[i]]] = matrix(FALSE, iK, iK)
 
-    if (GASPar$location)
+    if (GASPar$location) {
         diag(lStructure[["location"]])[1:iN] = TRUE
-    if (GASPar$scale)
+    }
+    if (GASPar$scale) {
         diag(lStructure[["scale"]])[(iN + 1L):(2L * iN)] = TRUE
-    if (GASPar$correlation)
+    }
+    if (GASPar$correlation) {
         diag(lStructure[["correlation"]])[(2L * iN + 1L):(2L * iN + iN * (iN - 1L)/2L)] = TRUE
-    if (GASPar$shape)
+    }
+    if (Dist == "mvt") {
+      if (GASPar$shape) {
         diag(lStructure[["shape"]])[(1L + 2L * iN + iN * (iN - 1L)/2L)] = TRUE
+      }
+    }
 
     return(lStructure)
 

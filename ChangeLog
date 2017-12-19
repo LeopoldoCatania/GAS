@@ -74,3 +74,6 @@
   solved.
 2017-11-16
   * Bugs fixed related to R CMD check --test-dir=inst/ExtensionTests and R CMD check run-dontrun
+2017-11-16
+  * DESCRIPTION (Version): New version is 0.2.6.
+  * Bug fix when Dist = "mvnorm"

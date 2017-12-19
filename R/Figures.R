@@ -2,7 +2,7 @@ PlotMenu <- function(x) {
     if (is(x, "uGASFit")) {
         vplotMenu = c("Filtered Parameters",
                       "Conditional Moments",
-                      "Probability Integral Transformation",
+                      "Probability Integral Transform",
                       "Data",
                       "Data + Filtered Mean")
     }
@@ -53,7 +53,7 @@ PlotMenu <- function(x) {
         vplotMenu = c("Parameters Forecast",
                       "Forecast vs Realized",
                       "Conditional Moments",
-                      "Probability Integral Transformation")
+                      "Probability Integral Transform")
     }
     if (is(x, "mGASRoll")) {
         vplotMenu = c("Parameters Forecast",

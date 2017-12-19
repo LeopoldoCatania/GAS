@@ -353,6 +353,11 @@ StartingValues_mvnorm <- function(mY, iT, iN, iK, GASPar, ScalingType, ScalarPar
     names(vKappa) = paste("kappa.", mvnormParNames(iN), sep = "")
   }
 
+  vA = unmapVec_C(vA, LowerA(), UpperA())
+  names(vA) = paste("a.", mvnormParNames(iN, ScalarParameters), sep = "")
+  vB = unmapVec_C(vB, LowerB(), UpperB())
+  names(vB) = paste("b.", mvnormParNames(iN, ScalarParameters), sep = "")
+
   pw = c(vKappa, vA, vB)
   return(pw)
 }
