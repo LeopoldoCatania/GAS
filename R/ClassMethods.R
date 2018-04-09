@@ -1110,27 +1110,44 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
 .getQuantile_Sim <- function(x, probs = c(0.01, 0.05)) {
 
+  bRoll = x@Info$Roll
+
   iH = x@Info$iH
 
-  mDraws = x@Draws
+  if (bRoll) {
 
-  if (is.null(mDraws) & iH > 1) {
-    stop("ReturnDraws = TRUE needs to be selected in the
-            UniGASFor function for multistep ahead quantile evaluation.")
-  }
+    mTheta_tph = getForecast(x)
 
-  mQuantile = matrix(NA, iH, length(probs), dimnames = list(paste("T+", 1:iH, sep = ""),
-                                                            paste("q.", probs, sep = "")))
+    mQuantile = matrix(NA, iH, length(probs), dimnames = list(paste("T+", 1:iH, sep = ""),
+                                                              paste("q.", probs, sep = "")))
 
-  ## one step ahead
-  vTheta_tp1 = getForecast(x)[1, ,drop = FALSE]
-  mQuantile[1, ] = Quantiles(t(vTheta_tp1), Dist = getDist(x), probs)
-
-  ## multi step ahead
-  if (iH > 1) {
-    for (h in 2:iH) {
-      mQuantile[h, ] = quantile(mDraws[, h], probs)
+    for (h in 1:iH) {
+      mQuantile[h, ] = Quantiles(t(mTheta_tph[h, , drop = FALSE]), Dist = getDist(x), probs)
     }
+
+  } else {
+
+    mDraws = x@Draws
+
+    if (is.null(mDraws) & iH > 1) {
+      stop("ReturnDraws = TRUE needs to be selected in the
+            UniGASFor function for multistep ahead quantile evaluation.")
+    }
+
+    mQuantile = matrix(NA, iH, length(probs), dimnames = list(paste("T+", 1:iH, sep = ""),
+                                                              paste("q.", probs, sep = "")))
+
+    ## one step ahead
+    vTheta_tp1 = getForecast(x)[1, ,drop = FALSE]
+    mQuantile[1, ] = Quantiles(t(vTheta_tp1), Dist = getDist(x), probs)
+
+    ## multi step ahead
+    if (iH > 1) {
+      for (h in 2:iH) {
+        mQuantile[h, ] = quantile(mDraws[, h], probs)
+      }
+    }
+
   }
 
   return(mQuantile)
@@ -1173,31 +1190,55 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
   iH = object@Info$iH
 
-  mDraws = object@Draws
+  bRoll = x@Info$Roll
 
-  if (is.null(mDraws) & iH > 1) {
-    stop("ReturnDraws = TRUE needs to be selected in the
-         UniGASFor function for multistep ahead quantile evaluation.")
-  }
+  iH = x@Info$iH
 
   Dist = getDist(object)
 
-  mQuantile = quantile(object, probs)
-  mES = mQuantile
+  if (bRoll) {
 
-  ## one step ahead
-  vTheta_tp1 = getForecast(object)[1, ,drop = FALSE]
-  for (j in 1:ncol(mES)) {
-    mES[1, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
-                       mTheta = t(vTheta_tp1), Dist = Dist)$value/probs[j]
-  }
+    mTheta_tph = getForecast(x)
 
-  ## multi step ahead
-  if (iH > 1) {
-    for (h in 2:iH) {
-      vDraws = mDraws[, h]
+    mQuantile = quantile(object, probs)
+
+    mES = mQuantile
+
+    vTheta_tp1 = getForecast(object)[1, ,drop = FALSE]
+
+    for (h in 1:iH) {
       for (j in 1:ncol(mES)) {
-        mES[h, j] = mean(vDraws[vDraws < mQuantile[h, j]])
+        mES[h, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
+                              mTheta = t(mTheta_tph[h, , drop = FALSE]), Dist = Dist)$value/probs[j]
+      }
+    }
+
+  } else {
+
+    mDraws = object@Draws
+
+    if (is.null(mDraws) & iH > 1) {
+      stop("ReturnDraws = TRUE needs to be selected in the
+         UniGASFor function for multistep ahead quantile evaluation.")
+    }
+
+    mQuantile = quantile(object, probs)
+    mES = mQuantile
+
+    ## one step ahead
+    vTheta_tp1 = getForecast(object)[1, ,drop = FALSE]
+    for (j in 1:ncol(mES)) {
+      mES[1, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
+                            mTheta = t(vTheta_tp1), Dist = Dist)$value/probs[j]
+    }
+
+    ## multi step ahead
+    if (iH > 1) {
+      for (h in 2:iH) {
+        vDraws = mDraws[, h]
+        for (j in 1:ncol(mES)) {
+          mES[h, j] = mean(vDraws[vDraws < mQuantile[h, j]])
+        }
       }
     }
   }

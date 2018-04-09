@@ -59,3 +59,23 @@ BacktestDensity <- function(Roll, lower, upper, K = 1000L, a = NULL, b = NULL) {
 
   return(lOut)
 }
+
+FZLoss <- function(data, VaR, ES, alpha) {
+
+  vY = data
+  vVaR = VaR
+  dTau = alpha
+  vES  = ES
+
+  vY = as.numeric(vY)
+  vVaR = as.numeric(vVaR)
+  vES  = as.numeric(vES)
+
+  vHit = HitSequence(vY, vVaR)
+
+  vLoss = -vHit/(dTau * vES) * (vVaR - vY) + vVaR/vES + log(-vES) - 1.0
+
+  return(vLoss)
+
+}
+
