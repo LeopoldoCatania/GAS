@@ -1096,8 +1096,6 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
     mTheta = getFilteredParameters(x)
   if (is(x, "uGASSim"))
     mTheta = getFilteredParameters(x)
-  if (is(x, "uGASFor"))
-    mTheta = getForecast(x)
   if (is(x, "uGASRoll"))
     mTheta = getForecast(x)
 
@@ -1110,10 +1108,117 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
 }
 
+.getQuantile_Sim <- function(x, probs = c(0.01, 0.05)) {
+
+  iH = x@Info$iH
+
+  mDraws = x@Draws
+
+  if (is.null(mDraws) & iH > 1) {
+    stop("ReturnDraws = TRUE needs to be selected in the
+            UniGASFor function for multistep ahead quantile evaluation.")
+  }
+
+  mQuantile = matrix(NA, iH, length(probs), dimnames = list(paste("T+", 1:iH, sep = ""),
+                                                            paste("q.", probs, sep = "")))
+
+  ## one step ahead
+  vTheta_tp1 = getForecast(x)[1, ,drop = FALSE]
+  mQuantile[1, ] = Quantiles(t(vTheta_tp1), Dist = getDist(x), probs)
+
+  ## multi step ahead
+  if (iH > 1) {
+    for (h in 2:iH) {
+      mQuantile[h, ] = quantile(mDraws[, h], probs)
+    }
+  }
+
+  return(mQuantile)
+
+}
+
+.getES <- function(object, probs = c(0.01, 0.05)) {
+
+  if (is(object, "uGASFit"))
+    mTheta = getFilteredParameters(object)
+  if (is(object, "uGASSim"))
+    mTheta = getFilteredParameters(object)
+  if (is(object, "uGASFor"))
+    mTheta = getForecast(object)
+  if (is(object, "uGASRoll"))
+    mTheta = getForecast(object)
+
+  Dist = getDist(object)
+
+  mQuantile = Quantiles(t(mTheta), Dist, probs)
+  colnames(mQuantile) = paste("q.", probs, sep = "")
+
+  mES = mQuantile
+
+  for (i in 1:nrow(mES)) {
+    for (j in 1:ncol(mES)) {
+      mES[i, j] = adaptIntegrate(Quantiles, lower = 1e-7, upper = probs[j],
+                            mTheta = t(mTheta[i, , drop = FALSE]), Dist = Dist)$integral
+
+    }
+  }
+
+  mES = t(t(mES) / probs)
+
+  return(mES)
+
+}
+
+.getES_Sim <- function(object, probs = c(0.01, 0.05)) {
+
+  iH = object@Info$iH
+
+  mDraws = object@Draws
+
+  if (is.null(mDraws) & iH > 1) {
+    stop("ReturnDraws = TRUE needs to be selected in the
+         UniGASFor function for multistep ahead quantile evaluation.")
+  }
+
+  Dist = getDist(object)
+
+  mQuantile = quantile(object, probs)
+  mES = mQuantile
+
+  ## one step ahead
+  vTheta_tp1 = getForecast(object)[1, ,drop = FALSE]
+  for (j in 1:ncol(mES)) {
+    mES[1, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
+                       mTheta = t(vTheta_tp1), Dist = Dist)$value/probs[j]
+  }
+
+  ## multi step ahead
+  if (iH > 1) {
+    for (h in 2:iH) {
+      vDraws = mDraws[, h]
+      for (j in 1:ncol(mES)) {
+        mES[h, j] = mean(vDraws[vDraws < mQuantile[h, j]])
+      }
+    }
+  }
+
+  return(mES)
+
+}
+
 setMethod("quantile", signature(x = "uGASFit"), .getQuantile)
 setMethod("quantile", signature(x = "uGASSim"), .getQuantile)
-setMethod("quantile", signature(x = "uGASFor"), .getQuantile)
+setMethod("quantile", signature(x = "uGASFor"), .getQuantile_Sim)
 setMethod("quantile", signature(x = "uGASRoll"), .getQuantile)
+
+ES = function(object, ...) {
+  UseMethod("ES")
+}
+
+setMethod("ES", signature(object = "uGASFit"), .getES)
+setMethod("ES", signature(object = "uGASSim"), .getES)
+setMethod("ES", signature(object = "uGASFor"), .getES_Sim)
+setMethod("ES", signature(object = "uGASRoll"), .getES)
 
 pit = function(object) {
   UseMethod("pit")

@@ -11,6 +11,7 @@
 \alias{pit,uGASRoll-method}
 \alias{plot,uGASRoll,missing-method}
 \alias{quantile,uGASRoll-method}
+\alias{ES,uGASRoll-method}
 \alias{show,uGASRoll-method}
 \alias{LogScore}
 \alias{getForecast}
@@ -46,6 +47,8 @@ Class for the univariate GAS rolling object.
 \item \code{pit} \code{signature(object = 'uGASRoll')}: Extract Probability Integral Transformation,
 only if \code{Roll = TRUE}
 \item \code{quantile} \code{signature(object = 'uGASRoll')}: Extract quantile forecasts.
+It accepts the addional argument \code{probs} representing the vector of probabilities.
+\item \code{ES} \code{signature(object = 'uGASRoll')}: Extract Expected Shortfall forecasts.
 It accepts the addional argument \code{probs} representing the vector of probabilities.
 \item \code{getMoments} \code{signature(object = 'uGASRoll')}: Extract moments forecasts.
 \item \code{LogScore} \code{signature(object = 'uGASRoll')}: Extract Log Scores.

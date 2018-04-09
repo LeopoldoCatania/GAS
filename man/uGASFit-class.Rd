@@ -12,6 +12,7 @@
 \alias{pit,uGASFit-method}
 \alias{plot,uGASFit,missing-method}
 \alias{quantile,uGASFit-method}
+\alias{ES,uGASFit-method}
 \alias{show,uGASFit-method}
 \alias{summary,uGASFit-method}
 \alias{getMoments}
@@ -65,6 +66,8 @@ are organized in a list with arguments: \code{vKappa} the intercept vector, \cod
 Also accepts the additional logical argument \code{standardize}. If \code{standardize = TRUE},
 residuals are standardized by the filtered standard deviation. By default \code{standardize = FALSE}.
 \item \code{convergence} \code{signature(object = 'uGASFit')}: Extract convergence information.
+\item \code{quantile} \code{signature(object = 'uGASSim')}: Compute quantiles of the filtered estimated density at each point in time. It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{ES} \code{signature(object = 'uGASSim')}: Compute Expected Shortfall of the filtered estimated density at each point in time. It accepts the additional argument \code{probs} representing the vector of probabilities.
 }
 }
 \author{Leopoldo Catania}

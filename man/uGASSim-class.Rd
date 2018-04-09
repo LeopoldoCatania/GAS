@@ -9,6 +9,7 @@
 \alias{getObs,uGASSim-method}
 \alias{plot,uGASSim,missing-method}
 \alias{quantile,uGASSim-method}
+\alias{ES,uGASSim-method}
 \alias{show,uGASSim-method}
 \title{Class for Univariate GAS Simulation}
 \description{
@@ -40,6 +41,8 @@ Class for Univariate GAS model Simulation.
 \item \code{getFilteredParameters} \code{signature(object = 'uGASSim')}: Extract simulated parameters.
 \item \code{getObs} \code{signature(object = 'uGASSim')}: Extract simulated observations.
 \item \code{coef} \code{signature(object = 'uGASSim')}: Extract delivered coefficients.
+\item \code{quantile} \code{signature(object = 'uGASSim')}: Compute quantiles of the filtered simulated density at each point in time. It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{ES} \code{signature(object = 'uGASSim')}: Compute the Expected Shortfall of the filtered simulated density at each point in time. It accepts the additional argument \code{probs} representing the vector of probabilities.
 }
 }
 \author{Leopoldo Catania}

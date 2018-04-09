@@ -9,6 +9,7 @@
 \alias{getObs,uGASFor-method}
 \alias{pit,uGASFor-method}
 \alias{quantile,uGASFor-method}
+\alias{ES,uGASFor-method}
 \alias{plot,uGASFor,missing-method}
 \alias{show,uGASFor-method}
 \title{Class for the univariate GAS forecast object}
@@ -40,8 +41,8 @@ Class for the univariate GAS forecast object.
 \item \code{getForecast} \code{signature(object = 'uGASFor')}: Extract parameters forecast.
 \item \code{getObs} \code{signature(object = 'uGASFor')}: Extract original observations.
 \item \code{pit} \code{signature(object = 'uGASFor')}: Extract Probability Integral Transformation, only if \code{Roll = TRUE}.
-\item \code{quantile} \code{signature(object = 'uGASFor')}: Extract quantile forecasts. 
-It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{quantile} \code{signature(object = 'uGASFor')}: Extract quantile forecasts. For multistep ahead prediction ES is computed by simulation and \code{ReturnsDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{ES} \code{signature(object = 'uGASFor')}: Extract Expected Shortfall forecasts. For multistep ahead prediction ES is computed by simulation and \code{ReturnsDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
 \item \code{getMoments} \code{signature(object = 'uGASFor')}: Extract moments forecasts.
 \item \code{LogScore} \code{signature(object = 'uGASFor')}: Extract Log Scores.
 }

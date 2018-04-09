@@ -132,8 +132,6 @@ arma::vec mSKELLAM(double dMu, double dSigma2) {
 
 arma::vec skellam_Score(double dY, arma::vec vTheta) {
 
-
-
   double dMu = vTheta(0);
   double dSigma2 = vTheta(1);
 
