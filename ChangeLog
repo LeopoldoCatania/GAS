@@ -77,3 +77,5 @@
 2017-11-16
   * DESCRIPTION (Version): New version is 0.2.6.
   * Bug fix when Dist = "mvnorm"
+  * New dependence from cubature.
+  * New method ES is defined for objects of the class uGASFit, uGASSim, uGASRoll, and uGASFor.
