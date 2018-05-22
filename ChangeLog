@@ -81,3 +81,6 @@
   * DESCRIPTION (Version): New version is 0.2.7.
   * New dependence from cubature.
   * New method ES is defined for objects of the class uGASFit, uGASSim, uGASRoll, and uGASFor.
+2018-05-22
+  * DESCRIPTION (Version): New version is 0.2.8.
+  * Bug fix for CRPS evaluation: labels for left and right tails were switched.

@@ -49,7 +49,7 @@ BacktestDensity <- function(Roll, lower, upper, K = 1000L, a = NULL, b = NULL) {
   vLS = EvaluateLogScore_Univ(t(mTheta), vY_oos, Dist, iT)
 
   mWCRPS = mWCRPS_backtest(vY_oos, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
-  colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
+  colnames(mWCRPS) = c("uniform", "center", "tails", "tail_l", "tail_r")
 
   vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2L, mean))
 
