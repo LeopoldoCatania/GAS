@@ -84,3 +84,4 @@
 2018-05-22
   * DESCRIPTION (Version): New version is 0.2.8.
   * Bug fix for CRPS evaluation: labels for left and right tails were switched.
+  * Bug fix in iidTest for PIT
