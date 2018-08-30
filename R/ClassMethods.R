@@ -1174,7 +1174,7 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
   for (i in 1:nrow(mES)) {
     for (j in 1:ncol(mES)) {
-      mES[i, j] = adaptIntegrate(Quantiles, lower = 1e-7, upper = probs[j],
+      mES[i, j] = adaptIntegrate(Quantiles, lowerLimit = 1e-7, upperLimit = probs[j],
                             mTheta = t(mTheta[i, , drop = FALSE]), Dist = Dist)$integral
 
     }
@@ -1190,15 +1190,15 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
   iH = object@Info$iH
 
-  bRoll = x@Info$Roll
+  bRoll = object@Info$Roll
 
-  iH = x@Info$iH
+  iH = object@Info$iH
 
   Dist = getDist(object)
 
   if (bRoll) {
 
-    mTheta_tph = getForecast(x)
+    mTheta_tph = getForecast(object)
 
     mQuantile = quantile(object, probs)
 

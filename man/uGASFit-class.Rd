@@ -18,6 +18,7 @@
 \alias{getMoments}
 \alias{getObs}
 \alias{pit}
+\alias{ES}
 \alias{getFilteredParameters}
 \alias{convergence,uGASFit-method}
 \title{Class for the univariate GAS fitted object}

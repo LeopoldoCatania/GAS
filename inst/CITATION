@@ -5,33 +5,32 @@ citEntry(entry="Manual",
          author = personList(person(given="Leopoldo", family="Catania"),
                              person(given="Kris", family="Boudt"),
                              person(given="David", family="Ardia")),
-         year = "2017",
-         note = "R package version 0.2.5",
+         year = "2018",
+         note = "R package version 0.2.8",
          url  = "https://CRAN.R-project.org/package=GAS",
-         textVersion = "Catania, L., Boudt, K., Ardia, D. (2016). GAS: Generalized Autoregressive Score Models.
+         textVersion = "Catania, L., Boudt, K., Ardia, D. (2018). GAS: Generalized Autoregressive Score Models.
          R package. URL https://CRAN.R-project.org/package=GAS")
 
 
 citEntry(entry="Article",
-         title = "GAS: Generalized Autoregressive Score Models in R",
+         title = "Generalized autoregressive score models in R: The GAS package",
          author = personList(person(given="David", family="Ardia"),
                              person(given="Kris", family="Boudt"),
-                             person(given="Leopoldo", family="Catania")
-         ),
-         year = "2016",
-         journal = "Working paper",
-         url  = "https://ssrn.com/abstract=2825380",
-         textVersion = "Ardia, D., Boudt, K., Catania, L. (2016a). Generalized autoregressive score models in R: The GAS package.
-         Working paper. https://ssrn.com/abstract=2825380")
+                             person(given="Leopoldo", family="Catania")),
+         year = "2018",
+         journal = "Journal of Statistical Software (forthcoming)",
+         url  = "http://dx.doi.org/10.2139/ssrn.2825380",
+         textVersion = "Ardia, D., Boudt, K., Catania, L. (2018). Generalized autoregressive score models in R: The GAS package.
+         Journal of Statistical Software (forthcoming)")
 
 citEntry(entry="Article",
-         title = "Value-at-Risk prediction in R with the GAS package",
+         title = "Downside Risk Evaluation with the R Package GAS",
          author = personList(person(given="David", family="Ardia"),
                              person(given="Kris", family="Boudt"),
                              person(given="Leopoldo", family="Catania")
          ),
-         year = "2016",
+         year = "2018",
          journal = "Working paper",
          url  = "https://ssrn.com/abstract=2871444",
-         textVersion = "Ardia, D., Boudt, K., Catania, L. (2016b). Value-at-Risk prediction in R with the GAS package.
+         textVersion = "Ardia, D., Boudt, K., Catania, L. (2018). Downside Risk Evaluation with the R Package GAS.
          Working paper. https://ssrn.com/abstract=2871444")
