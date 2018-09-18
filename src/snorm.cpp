@@ -11,7 +11,7 @@ using namespace Rcpp;
 double dnormstd(const double x)
 {
   double pdf;
-  pdf = exp ( -0.5 * x * x ) / sqrt ( 2.0 * PI );
+  pdf = exp ( -0.5 * x * x ) / sqrt ( 2.0 * M_PI );
   if(pdf == 0.0) pdf = 0.0 + 2.22507e-24;
   return pdf;
 }
@@ -23,7 +23,7 @@ double rsnorm(const double xi)
   z =  Rf_runif(-weight, 1.0 - weight);
   xx = (z < 0)? 1.0/xi : xi;
   rr = -1.0 * abs3(Rf_rnorm(0.0, 1.0))/xx * sign_C(z);
-  m1 = 2.0/sqrt(2.0 * PI);
+  m1 = 2.0/sqrt(2.0 * M_PI);
   mu = m1 * (xi - 1.0/xi);
   sigma = sqrt((1 - (m1 * m1)) * ( (xi * xi) + 1.0/(xi* xi) ) + 2 * (m1 * m1) - 1.0);
   ans = (rr - mu ) / sigma;
@@ -34,7 +34,7 @@ double dsnormstd(const double x, const double xi)
 {
   double pdf;
   double mu, sigma,z, xxi, g;
-  double m1 = 2.0/sqrt(2.0*PI);
+  double m1 = 2.0/sqrt(2.0*M_PI);
   double m12 = m1*m1;
   double xi2 = xi*xi;
   mu = m1*(xi-1.0/xi);
@@ -49,7 +49,7 @@ double dsnormstd(const double x, const double xi)
 double psnorm(const double q, const double mu, const double sigma, const double xi)
 {
   double qx = (q-mu)/sigma;
-  double m1 = 2.0/sqrt(2*PI);
+  double m1 = 2.0/sqrt(2*M_PI);
   double mux = m1 * (xi - 1.0/xi);
   double sig = sqrt((1.0-m1*m1)*(xi*xi+1.0/(xi*xi)) + 2.0*m1*m1 - 1.0);
   double z = qx*sig + mux;
@@ -61,7 +61,7 @@ double psnorm(const double q, const double mu, const double sigma, const double 
 
 double qsnorm(const double p, const double xi)
 {
-  double m1 = 2.0/sqrt(2*PI);
+  double m1 = 2.0/sqrt(2*M_PI);
   double mu = m1 * (xi - 1.0/xi);
   double sigma = sqrt((1.0-m1*m1)*(xi*xi+1.0/(xi*xi)) + 2.0*m1*m1 - 1.0);
   double g = 2.0/(xi + 1.0/xi);
@@ -143,7 +143,7 @@ arma::vec snorm_Score(double dY, arma::vec vTheta){
   double ddK_mu = -1.0/dSigma;
   double ddK_sigma = -dK/dSigma;
 
-  double m1 = 2.0/sqrt(2.0*PI);
+  double m1 = 2.0/sqrt(2.0*M_PI);
   double m12 = m1*m1;
   double xi2 = dXi * dXi;
 
