@@ -23,7 +23,7 @@ Generalized autoregressive score models in R: The GAS package.
 Journal of Statistical Software, 88(6), 1–28.       
 [http://dx.doi.org/10.18637/jss.v088.i06](http://dx.doi.org/10.18637/jss.v088.i06)    
 
-Ardia, D., Boudt, K., Catania, L. (2018b).  
+Ardia, D., Boudt, K., Catania, L. (2018).  
 Downside Risk Evaluation with the R Package GAS.     
-The R Journal, 10(2), 410–421.   
+R Journal, 10(2), 410–421.   
 [http://dx.doi.org/10.32614/RJ-2018-064](http://dx.doi.org/10.32614/RJ-2018-064)    
