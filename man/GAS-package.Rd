@@ -9,7 +9,7 @@ Generalized Autoregressive Score models in R
 The GAS package allows us to simulate, estimate and forecast using univariate and multivariate Generalized
 Autoregressive Score (GAS) models (also known as Dynamic Conditional Score (DCS) models),
 see e.g., Creal et. al. (2013) and Harvey (2013) and the website \url{www.gasmodel.com}.
-A detailed implementation of the package functionalities are reported in Ardia et. al. (2016a,b).
+A detailed implementation of the package functionalities are reported in Ardia et. al. (2018, 2019).
 }
 \details{
 \tabular{ll}{
@@ -35,13 +35,13 @@ Leopoldo Catania [aut,cre], Kris Boudt [ctb], David Ardia [ctb]
 Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>
 }
 \references{
-Ardia D, Boudt K and Catania L (2016a).
+Ardia D, Boudt K and Catania L (2019).
 "Generalized Autoregressive Score Models in R: The GAS Package."
-\url{http://ssrn.com/abstract=2825380}.\cr
+\url{http://doi.org/10.18637/jss.v088.i06}.\cr
 
-Ardia D, Boudt K and Catania L (2016b).
-"Value-at-Risk Prediction in R with the GAS Package."
-\url{https://ssrn.com/abstract=2871444}.\cr
+Ardia D, Boudt K and Catania L (2018).
+"Downside Risk Evaluation with the R Package GAS."
+\url{https://journal.r-project.org/archive/2018/RJ-2018-064/index.html}.\cr
 
 Creal D, Koopman SJ, Lucas A (2013).
 "Generalized Autoregressive Score Models with Applications."

@@ -6,24 +6,6 @@
 
 using namespace Rcpp;
 
-// mWCRPS_backtest
-arma::mat mWCRPS_backtest(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper, int iB, double dA, double dB);
-RcppExport SEXP _GAS_mWCRPS_backtest(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
-    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
-    Rcpp::traits::input_parameter< double >::type dLower(dLowerSEXP);
-    Rcpp::traits::input_parameter< double >::type dUpper(dUpperSEXP);
-    Rcpp::traits::input_parameter< int >::type iB(iBSEXP);
-    Rcpp::traits::input_parameter< double >::type dA(dASEXP);
-    Rcpp::traits::input_parameter< double >::type dB(dBSEXP);
-    rcpp_result_gen = Rcpp::wrap(mWCRPS_backtest(vY, mTheta, Dist, dLower, dUpper, iB, dA, dB));
-    return rcpp_result_gen;
-END_RCPP
-}
 // EvaluateLogScore_Univ
 arma::vec EvaluateLogScore_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
 RcppExport SEXP _GAS_EvaluateLogScore_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
@@ -390,19 +372,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rmvnorm_mat
-arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma);
-RcppExport SEXP _GAS_rmvnorm_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type vMu(vMuSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type mSigma(mSigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(rmvnorm_mat(iN, vMu, mSigma));
-    return rcpp_result_gen;
-END_RCPP
-}
 // StaticLLK_Univ
 double StaticLLK_Univ(arma::vec vY, arma::vec vTheta, int iT, std::string Dist);
 RcppExport SEXP _GAS_StaticLLK_Univ(SEXP vYSEXP, SEXP vThetaSEXP, SEXP iTSEXP, SEXP DistSEXP) {
@@ -543,9 +512,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mWCRPS_backtest
+arma::mat mWCRPS_backtest(arma::vec vY, arma::mat mTheta, std::string Dist, double dLower, double dUpper, int iB, double dA, double dB);
+RcppExport SEXP _GAS_mWCRPS_backtest(SEXP vYSEXP, SEXP mThetaSEXP, SEXP DistSEXP, SEXP dLowerSEXP, SEXP dUpperSEXP, SEXP iBSEXP, SEXP dASEXP, SEXP dBSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type vY(vYSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mTheta(mThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< double >::type dLower(dLowerSEXP);
+    Rcpp::traits::input_parameter< double >::type dUpper(dUpperSEXP);
+    Rcpp::traits::input_parameter< int >::type iB(iBSEXP);
+    Rcpp::traits::input_parameter< double >::type dA(dASEXP);
+    Rcpp::traits::input_parameter< double >::type dB(dBSEXP);
+    rcpp_result_gen = Rcpp::wrap(mWCRPS_backtest(vY, mTheta, Dist, dLower, dUpper, iB, dA, dB));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rmvnorm_mat
+arma::mat rmvnorm_mat(int iN, arma::vec vMu, arma::mat mSigma);
+RcppExport SEXP _GAS_rmvnorm_mat(SEXP iNSEXP, SEXP vMuSEXP, SEXP mSigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type vMu(vMuSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mSigma(mSigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmvnorm_mat(iN, vMu, mSigma));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_GAS_mWCRPS_backtest", (DL_FUNC) &_GAS_mWCRPS_backtest, 8},
     {"_GAS_EvaluateLogScore_Univ", (DL_FUNC) &_GAS_EvaluateLogScore_Univ, 4},
     {"_GAS_EvaluateLogScore_Multi", (DL_FUNC) &_GAS_EvaluateLogScore_Multi, 5},
     {"_GAS_ddist_univ", (DL_FUNC) &_GAS_ddist_univ, 4},
@@ -572,7 +571,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_GAS_UnmapParameters_multi", (DL_FUNC) &_GAS_UnmapParameters_multi, 4},
     {"_GAS_EvalMoments_univ", (DL_FUNC) &_GAS_EvalMoments_univ, 2},
     {"_GAS_EvalMoments_multi", (DL_FUNC) &_GAS_EvalMoments_multi, 3},
-    {"_GAS_rmvnorm_mat", (DL_FUNC) &_GAS_rmvnorm_mat, 3},
     {"_GAS_StaticLLK_Univ", (DL_FUNC) &_GAS_StaticLLK_Univ, 4},
     {"_GAS_StaticLLK_Multi", (DL_FUNC) &_GAS_StaticLLK_Multi, 5},
     {"_GAS_EvaluatePit_Univ", (DL_FUNC) &_GAS_EvaluatePit_Univ, 4},
@@ -583,6 +581,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_GAS_SimulateGAS_multi", (DL_FUNC) &_GAS_SimulateGAS_multi, 7},
     {"_GAS_NumberParameters", (DL_FUNC) &_GAS_NumberParameters, 2},
     {"_GAS_build_vR", (DL_FUNC) &_GAS_build_vR, 2},
+    {"_GAS_mWCRPS_backtest", (DL_FUNC) &_GAS_mWCRPS_backtest, 8},
+    {"_GAS_rmvnorm_mat", (DL_FUNC) &_GAS_rmvnorm_mat, 3},
     {NULL, NULL, 0}
 };
 

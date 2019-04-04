@@ -1,36 +1,20 @@
-citHeader("To cite package 'GAS' in publications use:")
+bibentry(bibtype = "Article",
+  title        = "Generalized Autoregressive Score Models in {R}: The {GAS} Package",
+  author       = c(person(given = "David",
+                          family = "Ardia",
+                          email = "david.ardia@unine.ch"),
+                   person(given = "Kris",
+                          family = "Boudt",
+                          email = "kris.boudt@vub.ac.be"),
+                   person(given = "Leopoldo",
+                          family = "Catania")),
+  journal      = "Journal of Statistical Software",
+  year         = "2019",
+  volume       = "88",
+  number       = "6",
+  pages        = "1--28",
+  doi          = "10.18637/jss.v088.i06",
 
-citEntry(entry="Manual",
-         title = "GAS: Generalized Autoregressive Score Models",
-         author = personList(person(given="Leopoldo", family="Catania"),
-                             person(given="Kris", family="Boudt"),
-                             person(given="David", family="Ardia")),
-         year = "2018",
-         note = "R package version 0.2.8",
-         url  = "https://CRAN.R-project.org/package=GAS",
-         textVersion = "Catania, L., Boudt, K., Ardia, D. (2018). GAS: Generalized Autoregressive Score Models.
-         R package. URL https://CRAN.R-project.org/package=GAS")
+  header       = "To cite GAS in publications use:"
+)
 
-
-citEntry(entry="Article",
-         title = "Generalized autoregressive score models in R: The GAS package",
-         author = personList(person(given="David", family="Ardia"),
-                             person(given="Kris", family="Boudt"),
-                             person(given="Leopoldo", family="Catania")),
-         year = "2018",
-         journal = "Journal of Statistical Software (forthcoming)",
-         url  = "http://dx.doi.org/10.2139/ssrn.2825380",
-         textVersion = "Ardia, D., Boudt, K., Catania, L. (2018). Generalized autoregressive score models in R: The GAS package.
-         Journal of Statistical Software (forthcoming)")
-
-citEntry(entry="Article",
-         title = "Downside Risk Evaluation with the R Package GAS",
-         author = personList(person(given="David", family="Ardia"),
-                             person(given="Kris", family="Boudt"),
-                             person(given="Leopoldo", family="Catania")
-         ),
-         year = "2018",
-         journal = "Working paper",
-         url  = "https://ssrn.com/abstract=2871444",
-         textVersion = "Ardia, D., Boudt, K., Catania, L. (2018). Downside Risk Evaluation with the R Package GAS.
-         Working paper. https://ssrn.com/abstract=2871444")
