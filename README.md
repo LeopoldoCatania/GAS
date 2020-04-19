@@ -12,6 +12,13 @@ The latest development version of `GAS` is available at [https://github.com/Leop
 
 **Please cite `GAS` in publications!**
 
+Ardia, D., Boudt, K., Catania, L. (2019).  
+Generalized autoregressive score models in R: The GAS package.  
+Journal of Statistical Software.      
+[http://doi.org/10.18637/jss.v088.i06](http://doi.org/10.18637/jss.v088.i06)   
+
+## Other references
+
 Catania, L., Boudt, K., Ardia, D. (2018a).  
 _GAS: Generalized Autoregressive Score Models_.  
 R package.  
@@ -22,9 +29,6 @@ Downside Risk Evaluation with the R Package GAS.
 The R Journal.   
 [https://journal.r-project.org/archive/2018/RJ-2018-064/index.html](https://journal.r-project.org/archive/2018/RJ-2018-064/index.html)    
 
-Ardia, D., Boudt, K., Catania, L. (2019).  
-Generalized autoregressive score models in R: The GAS package.  
-Journal of Statistical Software.      
-[http://doi.org/10.18637/jss.v088.i06](http://doi.org/10.18637/jss.v088.i06)    
+ 
 
 
