@@ -1,9 +1,11 @@
 # GAS
+[![JSS](https://img.shields.io/badge/JSS-10.18637%2Fjss.v088.i06-brightgreen)](https://doi.org/10.18637/jss.v088.i06)
+[![CRAN](http://www.r-pkg.org/badges/version/GAS)](https://cran.r-project.org/package=GAS) [![Downloads](http://cranlogs.r-pkg.org/badges/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)
 
 `GAS` ([Catania et al., 2018a](https://CRAN.R-project.org/package=GAS)) implements the Generalized Autoregressive 
 Score (GAS) framework in R. The GAS package provides 
 functions to simulate univariate and multivariate GAS processes,
-estimate the GAS parameters and to make time series forecasts. Full description of the algorithm and numerous applications are available in [Ardia et al. (2019)](http://doi.org/10.18637/jss.v088.i06) and [Ardia et al. (2018b)](https://journal.r-project.org/archive/2018/RJ-2018-064/index.html).
+estimate the GAS parameters and to make time series forecasts. Full description of the algorithm and numerous applications are available in [Ardia et al. (2019)](https://doi.org/10.18637/jss.v088.i06) and [Ardia et al. (2018b)](https://doi.org/10.32614/RJ-2018-064).
 
 ## Please cite the package in publications!
 
