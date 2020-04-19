@@ -11,7 +11,7 @@ estimate the GAS parameters and to make time series forecasts. Full description 
 
 By using `GAS` you agree to the following rules: 
 
-1) You must cite Ardia et al. (2019) in working papers and published papers that use `GAS`.
+1) You must cite [Ardia et al. (2019)](https://doi.org/10.18637/jss.v088.i06) in working papers and published papers that use `GAS`.
 2) You must place the following URL in a footnote to help others find `GAS`: https://CRAN.R-project.org/package=GAS. 
 3) You assume all risk for the use of `GAS`.
 
