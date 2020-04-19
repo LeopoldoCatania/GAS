@@ -1,5 +1,4 @@
 # GAS
-[![JSS](https://img.shields.io/badge/JSS-10.18637%2Fjss.v088.i06-brightgreen)](https://doi.org/10.18637/jss.v088.i06)
 [![CRAN](http://www.r-pkg.org/badges/version/GAS)](https://cran.r-project.org/package=GAS) [![Downloads](http://cranlogs.r-pkg.org/badges/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)
 
 `GAS` ([Catania et al., 2018a](https://CRAN.R-project.org/package=GAS)) implements the Generalized Autoregressive 
