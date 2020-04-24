@@ -10,7 +10,7 @@ Authors@R: c(person("Leopoldo", "Catania", role = c("aut", "cre"),
       			 comment = c(ORCID = "0000-0003-2823-782X")),
             person("Kris", "Boudt", role = c("ctb"),
              email = "kris.boudt@ugent.be",
-             comment = c(ORCID = "0000-0002-1000-5142"))
+             comment = c(ORCID = "0000-0002-1000-5142")))
 Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>
 Description: Simulate, estimate and forecast using univariate and multivariate GAS models 
   as described in Ardia et al. (2019) <doi:10.18637/jss.v088.i06>.
