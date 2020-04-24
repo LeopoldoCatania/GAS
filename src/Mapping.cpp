@@ -649,7 +649,12 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
   }
 
   arma::vec vJ_safe =  InfRemover_vec(mJ.diag());
-  mJ.diag() = vJ_safe;
+
+  // mJ.diag() = vJ_safe;
+  for (int k = 0; k < iK; k++) {
+    mJ(k, k) = vJ_safe(k);
+  }
+
   return mJ;
 }
 

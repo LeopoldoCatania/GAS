@@ -9,5 +9,5 @@ double pdist_univ(double dQ, arma::vec vTheta, std::string Dist);
 double qdist_univ(double dP, arma::vec vTheta, std::string Dist);
 arma::vec mdist_univ(arma::vec vTheta, std::string Dist);
 arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN);
-arma::vec mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN);
+arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN);
 #endif

@@ -88,3 +88,6 @@
 2018-09-18
   * DESCRIPTION (Version): New version is 0.2.9.
   * Moving towards STRICT_R_HEADERS by default
+2020-04-24
+  * DESCRIPTION (Version): New version is 0.3.1.
+  * Bug fix "violates the C++ One Definition Rule"
