@@ -14,7 +14,6 @@ bibentry(bibtype = "Article",
   number       = "6",
   pages        = "1--28",
   doi          = "10.18637/jss.v088.i06",
-
   header       = "To cite GAS in publications use:"
 )
 
