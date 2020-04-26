@@ -54,7 +54,7 @@ The second element \code{IID} concerns the iid assumption, it is a \code{list} w
 Diebold FX, Gunther TA and Tay AS (1998).
 "Evaluating Density Forecasts with Applications to Financial Risk Management."
 International Economic Review, 39(4), 863-883.
-\doi{10.2307/2527342}.\cr
+\url{https://www.jstor.org/stable/2527342?origin=crossref}.\cr
 
 Jondeau E and Rockinger M (2006).
 "The Copula-Garch Model of Conditional Dependencies: An International Stock Market Application."
