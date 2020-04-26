@@ -1,14 +1,14 @@
 Package: GAS
 Type: Package
 Title: Generalized Autoregressive Score Models 
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: c(person("Leopoldo", "Catania", role = c("aut", "cre"),
              email = "leopoldo.catania@econ.au.dk",
              comment = c(ORCID = "0000-0002-1000-5142")),
              person("David", "Ardia", role = c("ctb"),
              email = "david.ardia.ch@gmail.com",
-      			 comment = c(ORCID = "0000-0003-2823-782X")),
-            person("Kris", "Boudt", role = c("ctb"),
+             comment = c(ORCID = "0000-0003-2823-782X")),
+             person("Kris", "Boudt", role = c("ctb"),
              email = "kris.boudt@ugent.be",
              comment = c(ORCID = "0000-0002-1000-5142")))
 Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>

@@ -96,3 +96,8 @@
   * README modified (point directly to JSS).
   * Remove GAS website because not conform with https.
   * Update doc with citation GAS.
+2020-04-26
+  * DESCRIPTION (Version): New version is 0.3.3.
+  * Removed bin.
+  * Simplified README.md
+  * Fix mis-spelled words in DESCRIPTION

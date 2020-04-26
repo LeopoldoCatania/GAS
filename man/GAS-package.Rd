@@ -8,7 +8,7 @@ Generalized Autoregressive Score models in R
 \description{
 The GAS package allows us to simulate, estimate and forecast using univariate and multivariate Generalized
 Autoregressive Score (GAS) models (also known as Dynamic Conditional Score (DCS) models),
-see e.g., Creal et. al. (2013) and Harvey (2013). A detailed implementation of the package functionalities are reported in Ardia et. al. (2018, 2019).
+see e.g., Creal et. al. (2013) and Harvey (2013). A detailed implementation of the package functionalities are reported in Ardia et al. (2018, 2019).
 }
 \details{
 The authors acknowledge Google for financial support via the Google Summer of
