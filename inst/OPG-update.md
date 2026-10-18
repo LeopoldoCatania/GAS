@@ -67,3 +67,32 @@ with nu between 2 and 3 has a finite variance but undefined skewness and kurtosi
   bands, invalid optimizer Hessians and Compute.SE = FALSE.
 
 No C++ code is changed by this OPG update. Package version remains 0.4.1.
+
+## Display update: average filtered parameters
+
+The show and summary methods for univariate and multivariate fits now report
+Average Filtered Parameters. These are the row means of GASDyn$mTheta over
+columns 1 through T, excluding the next-period forecast in column T+1.
+This replaces the mapped fixed point previously labeled Unconditional Parameters.
+It is computed from the stored filtered path, so existing fitted objects
+also display the new summary after loading this package version.
+
+## Conditional inference for nearly inactive dynamics
+
+UniGASFit and MultiGASFit accept SE.A.tol = 1e-5. Only if the full OPG
+fails, estimated a coefficients with absolute value <= SE.A.tol on the reported
+scale are excluded together with their matching b coefficients. Set SE.A.tol=0
+to disable this fallback. The principal OPG submatrix of the other coefficients
+must pass the same information checks before it is inverted. Point estimates
+and log likelihood are unchanged; excluded coefficients have NA standard
+errors, test statistics and p-values. Other standard errors are conditional
+on the excluded fitted coefficients, not a full joint covariance estimator.
+No reparameterization, refit, generalized inverse or eigenvalue repair is used.
+
+The optimiser retains the full scores and opg. Its inference_parameters and
+excluded_parameters record the selection. covariance is a full-sized matrix
+with the reduced inverse in the retained block and NA in excluded rows/columns.
+Diagnostics distinguish full_information_ok from information_ok and record
+conditional_inference and se_a_tol. Convergence and gradient checks still apply.
+Fit displays explicitly mark conditional standard errors. ConfidenceBands uses
+the same retained block and holds excluded coefficients fixed, with a warning.

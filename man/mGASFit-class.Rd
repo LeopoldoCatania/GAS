@@ -42,6 +42,12 @@ estimates for the constant model, \code{Inference} inferential results for the e
 %
   }
   }
+\details{
+The \code{show} and \code{summary} methods report \emph{Average Filtered
+Parameters}: the arithmetic average of each mapped distribution parameter
+in \code{GASDyn$mTheta} over the first \code{ModelInfo$iT} columns.
+The final column, containing the next-period forecast, is excluded.
+}
 \section{Methods}{
 \itemize{
 \item \code{show} \code{signature(object = 'mGASFit')}: print object information.

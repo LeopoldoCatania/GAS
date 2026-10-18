@@ -21,11 +21,23 @@ ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99),
     gradient <- GAS_objective_gradient(objective, vPw, Data, object@ModelInfo$Spec)
     if (any(!is.finite(gradient)) || max(abs(gradient)) > 1e-5)
       stop("Confidence bands require an adequately optimized likelihood.")
-    vCov <- GAS_checked_covariance(object@Estimates$optimiser$opg, length(vPw))
+    opt <- object@Estimates$optimiser
+    included <- opt$inference_parameters
+    if (is.null(included)) included <- names(vPw)
+    ix <- match(included, names(vPw))
+    if (!isTRUE(opt$diagnostics$inference_ok) || !length(ix) || anyNA(ix) ||
+        is.null(opt$opg))
+      stop("Confidence bands require valid OPG inference. Refit with Compute.SE = TRUE.")
+    vCov <- GAS_checked_covariance(opt$opg[ix, ix, drop = FALSE], length(ix))
     if (is.null(vCov)) stop("Confidence bands require a finite, nonsingular OPG information matrix. Refit with Compute.SE = TRUE.")
+    if (length(opt$excluded_parameters))
+      warning(paste0("Conditional confidence bands: holding ",
+        paste(opt$excluded_parameters, collapse = ", "),
+        " at their fitted values."), call. = FALSE)
     # Use the checked covariance directly; do not repair it with chol_safe().
-    mPw <- sweep(matrix(stats::rnorm(iB*length(vPw)), nrow = iB) %*%
-                   chol(vCov), 2L, vPw, "+")
+    mPw <- matrix(rep(vPw, each = iB), nrow = iB)
+    mPw[, ix] <- sweep(matrix(stats::rnorm(iB*length(ix)), nrow = iB) %*%
+                        chol(vCov), 2L, vPw[ix], "+")
 
     mTheta = getFilteredParameters(object)
 

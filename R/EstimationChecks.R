@@ -68,8 +68,64 @@ GAS_opg <- function(par, data, GASSpec) {
   list(scores = S, opg = crossprod(S))
 }
 
+GAS_validate_se_a_tol <- function(tol) {
+  if (!is.numeric(tol) || length(tol) != 1L || !is.finite(tol) || tol < 0)
+    stop("SE.A.tol must be one finite, nonnegative number.")
+  invisible(tol)
+}
+
+# Fall back only when the full OPG fails. Fix near-zero score loadings and
+# their matching persistence coefficients at their fitted values. Invert the
+# principal submatrix for the remaining parameters, not a generalized inverse.
+GAS_opg_inference <- function(opg, par, GASSpec, SE.A.tol = 1e-5) {
+  GAS_validate_se_a_tol(SE.A.tol)
+  nm <- names(par)
+  full_info <- GAS_information_info(opg, length(par))
+  info <- full_info
+  included <- nm
+  excluded <- character()
+  if (!full_info$ok && SE.A.tol > 0 && is.matrix(opg) &&
+      identical(dim(opg), c(length(par), length(par))) && all(is.finite(opg))) {
+    Dist <- getDist(GASSpec)
+    if (is(GASSpec, "uGASSpec")) {
+      an <- paste0("a", seq_len(NumberParameters(Dist)))
+    } else if (is(GASSpec, "mGASSpec")) {
+      # Names encode scalar or diagonal grouping, without expanding state indices.
+      an <- grep("^a\\.", nm, value = TRUE)
+    } else {
+      stop("OPG inference requires a univariate or multivariate GAS specification.")
+    }
+    an <- intersect(an, nm)
+    if (length(an)) {
+      a <- as.numeric(Map_Vec(par[an], LowerA(), UpperA()))
+      near_zero <- an[is.finite(a) & abs(a) <= SE.A.tol]
+      excluded <- nm[nm %in% c(near_zero, sub("^a", "b", near_zero))]
+      included <- nm[!nm %in% excluded]
+      if (length(excluded) && length(included)) {
+        ix <- match(included, nm)
+        info <- GAS_information_info(opg[ix, ix, drop = FALSE], length(ix),
+                                      label = "Reduced OPG information matrix")
+      }
+    }
+  }
+  covariance <- NULL
+  if (info$ok) {
+    ix <- match(included, nm)
+    reduced_covariance <- GAS_checked_covariance(opg[ix, ix, drop = FALSE], length(ix))
+    if (is.null(reduced_covariance)) {
+      info <- list(ok = FALSE, reason = "The inverse OPG is non-finite.")
+    } else {
+      covariance <- matrix(NA_real_, length(par), length(par), dimnames = list(nm, nm))
+      covariance[ix, ix] <- reduced_covariance
+    }
+  }
+  list(info = info, full_info = full_info, covariance = covariance,
+       included = included, excluded = excluded,
+       conditional = info$ok && length(excluded) > 0L)
+}
+
 GAS_finalize_optimiser <- function(optimiser, par0, data, GASSpec, FUN,
-                                  Compute.SE, grad_tol = 1e-5) {
+                                  Compute.SE, grad_tol = 1e-5, SE.A.tol = 1e-5) {
   flag <- optimiser$convergence
   if (is.null(flag)) {
     flag <- NA_real_
@@ -105,25 +161,39 @@ GAS_finalize_optimiser <- function(optimiser, par0, data, GASSpec, FUN,
   optimiser$opg <- NULL
   optimiser$covariance <- NULL
   optimiser$covariance_method <- "OPG"
+  optimiser$inference_parameters <- names(p)
+  optimiser$excluded_parameters <- character()
   info <- list(ok = FALSE, reason = "Standard errors were not requested.")
+  full_info <- info
+  conditional <- FALSE
   if (Compute.SE) {
     result <- tryCatch(GAS_opg(p, data, GASSpec), error = function(e) e)
     if (inherits(result, "error")) {
       info <- list(ok = FALSE, reason = paste("OPG calculation failed:", conditionMessage(result)))
+      full_info <- info
     } else {
       optimiser$scores <- result$scores
       optimiser$opg <- result$opg
-      info <- GAS_information_info(result$opg, length(p))
-      if (info$ok)
-        optimiser$covariance <- GAS_checked_covariance(result$opg, length(p))
-      if (info$ok && is.null(optimiser$covariance))
-        info <- list(ok = FALSE, reason = "The inverse OPG is non-finite.")
+      selection <- GAS_opg_inference(result$opg, p, GASSpec, SE.A.tol)
+      info <- selection$info
+      full_info <- selection$full_info
+      conditional <- selection$conditional
+      optimiser$covariance <- selection$covariance
+      optimiser$inference_parameters <- selection$included
+      optimiser$excluded_parameters <- selection$excluded
     }
   }
   optimiser$diagnostics <- list(gradient_per_observation = g,
     max_gradient_per_observation = if (all(is.finite(g))) max(abs(g)) else NA_real_,
     gradient_ok = stationary, information_ok = info$ok, information_reason = info$reason,
+    full_information_ok = full_info$ok, full_information_reason = full_info$reason,
+    conditional_inference = conditional, se_a_tol = SE.A.tol,
     inference_ok = Compute.SE && isTRUE(flag == 0) && stationary && info$ok)
+  if (isTRUE(optimiser$diagnostics$inference_ok) && conditional)
+    warning(paste0("Conditional OPG standard errors: holding ",
+      paste(optimiser$excluded_parameters, collapse = ", "),
+      " at their fitted values; their standard errors are NA (SE.A.tol = ",
+      format(SE.A.tol), ")."), call. = FALSE)
   if (Compute.SE && !info$ok)
     warning(paste0("Standard errors are unavailable: ", info$reason, "."), call. = FALSE)
   optimiser

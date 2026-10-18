@@ -47,7 +47,9 @@ StaticMLFIT_Multiv <- function(mY, Dist, fn.optimizer) {
   return(out)
 }
 
-UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE) {
+UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5) {
+
+  GAS_validate_se_a_tol(SE.A.tol)
 
   vY = data
 
@@ -75,7 +77,7 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
   optimiser <- GAS_finalize_optimiser(optimiser, vPw, vY, GASSpec,
-                                      UniGASOptimiser, Compute.SE)
+                                      UniGASOptimiser, Compute.SE, SE.A.tol = SE.A.tol)
 
   vPw = optimiser$pars
 
@@ -89,7 +91,8 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   mInformation = optimiser$opg
   valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  Inference = InferenceFun_Uni(mInformation, vPw, iK, valid_inference)
+  Inference = InferenceFun_Uni(mInformation, vPw, iK, valid_inference,
+                                 optimiser$inference_parameters)
 
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
@@ -124,7 +127,9 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
 }
 
 # mY is NxT
-MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE) {
+MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5) {
+
+  GAS_validate_se_a_tol(SE.A.tol)
 
   mY = t(data)
 
@@ -172,7 +177,7 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   }
 
   optimiser <- GAS_finalize_optimiser(optimiser, vPw, mY, GASSpec,
-                                      MultiGASOptimiser, Compute.SE)
+                                      MultiGASOptimiser, Compute.SE, SE.A.tol = SE.A.tol)
 
   vPw = optimiser$pars
 
@@ -186,7 +191,8 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   mInformation = optimiser$opg
   valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  Inference = InferenceFun_Multi(mInformation, Dist, vPw, iK, iN, ScalarParameters, valid_inference)
+  Inference = InferenceFun_Multi(mInformation, Dist, vPw, iK, iN, ScalarParameters,
+                                   valid_inference, optimiser$inference_parameters)
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 

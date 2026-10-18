@@ -7,7 +7,8 @@
 	Estimate multivariate GAS models by Maximum Likelihood.
 }
 \usage{
-MultiGASFit(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
+MultiGASFit(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE,
+          SE.A.tol = 1e-5)
 }
 \arguments{
 \item{GASSpec}{
@@ -22,6 +23,11 @@ By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
 a wrapper to the \link{optim} function. See Details for user defined optimization routines.}
 %
 \item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = TRUE}}
+\item{SE.A.tol}{Finite nonnegative threshold for near-zero score loadings on
+ their reported coefficient scale. If the full OPG fails its numerical checks,
+ loadings with absolute value at most this threshold and their matching
+ persistence coefficients are held fixed for conditional inference.
+ The default is \code{1e-5}; zero disables this fallback.}
 }
 \details{
 For a fully static multivariate Gaussian model, the analytical sample-mean
@@ -61,18 +67,35 @@ sample-size divisor. The delta method transforms this covariance to the
 reported coefficient scale. This is the OPG covariance for correctly specified
 maximum likelihood, not a sandwich covariance under misspecification.
 
+If the full OPG is numerically singular or otherwise fails its checks,
+\code{SE.A.tol} permits conditional inference after excluding near-zero
+\eqn{a_i} coefficients and their matching \eqn{b_i} coefficients. The principal
+OPG submatrix for the remaining coefficients is inverted only if it passes the
+same checks. Standard errors, test statistics and p-values for the excluded
+coefficients are \code{NA}. Their estimates are unchanged; no refitting occurs.
+The remaining standard errors condition on the excluded coefficients at their
+fitted values and do not represent the full joint covariance or uncertainty
+from selecting the reduced set. A warning and a note in the fit display
+identify conditional inference. If the reduced matrix also fails, all
+inferential entries remain \code{NA}.
+
 A missing convergence flag is recorded as unknown. A zero solver flag that
 fails the numerical gradient check is replaced by code 52. The original
 flag is retained in \code{Estimates$optimiser$solver_convergence}.
 The maximized objective is checked against the starting objective.
 Standard errors, test statistics and p-values are returned as \code{NA}
-when convergence or OPG checks fail. No generalized inverse or automatic
+when convergence checks fail or neither the full nor the permitted reduced OPG passes. No generalized inverse or automatic
 positive-definiteness repair is used. The coefficient estimates remain available.
 The score matrix, summed OPG matrix and its inverse are stored in
 \code{Estimates$optimiser$scores}, \code{Estimates$optimiser$opg} and
-\code{Estimates$optimiser$covariance}, respectively, when available.
+\code{Estimates$optimiser$covariance}, respectively, when available. Under conditional inference, \code{covariance}
+is the reduced inverse embedded in a full-sized matrix with \code{NA} in
+excluded rows and columns. \code{inference_parameters} and
+\code{excluded_parameters} identify the retained and excluded coefficients.
+\code{opg} and \code{scores} still contain all coefficients.
 The \code{covariance_method} field is \code{"OPG"}; validation results are in
-\code{diagnostics}, including \code{information_ok} and \code{inference_ok}.
+\code{diagnostics}, including \code{full_information_ok}, \code{information_ok},
+\code{conditional_inference}, \code{se_a_tol} and \code{inference_ok}.
 With \code{Compute.SE = FALSE}, these matrices are not computed and
 \code{inference_ok} is false.
 

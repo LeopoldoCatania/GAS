@@ -1,3 +1,10 @@
+GAS_print_inference_note <- function(optimiser) {
+  if (isTRUE(optimiser$diagnostics$inference_ok) &&
+      isTRUE(optimiser$diagnostics$conditional_inference))
+    cat("\nConditional standard errors (fixed coefficients: ",
+        paste(optimiser$excluded_parameters, collapse = ", "), ").\n", sep = "")
+}
+
 setClass("uGASFit", representation(ModelInfo = "list", GASDyn = "list", Estimates = "list", Testing = "list",
                                    Data = "list"))
 setClass("mGASFit", representation(ModelInfo = "list", GASDyn = "list", Estimates = "list", Data = "list"))
@@ -72,12 +79,10 @@ setMethod("show", "uGASFit", function(object) {
 
   Inference = object@Estimates$Inference
 
-  vKappa = object@Estimates$lParList$vKappa
-  mB = object@Estimates$lParList$mB
-  vTheta_Tilde_Unc = solve(diag(iK) - mB) %*% vKappa
-
-  vTheta_Unc = c(MapParameters_univ(vTheta_Tilde_Unc, Dist, iK))
-  names(vTheta_Unc) = ParNames
+  # Average the mapped parameters for observed periods only; column T+1
+  # contains the next-period forecast.
+  vTheta_Avg = rowMeans(object@GASDyn$mTheta[, seq_len(iT), drop = FALSE])
+  names(vTheta_Avg) = ParNames
 
   elapsedTime = object@ModelInfo$elapsedTime
 
@@ -93,9 +98,10 @@ setMethod("show", "uGASFit", function(object) {
   cat(paste("\n------------------------------------------"))
   cat(paste("\nEstimates:\n"))
   print(Inference)
+  GAS_print_inference_note(object@Estimates$optimiser)
   cat(paste("\n------------------------------------------"))
-  cat(paste("\nUnconditional Parameters:\n"))
-  print(vTheta_Unc)
+  cat(paste("\nAverage Filtered Parameters:\n"))
+  print(vTheta_Avg)
   cat(paste("\n------------------------------------------"))
   cat(paste("\nInformation Criteria:\n"))
   print(IC)
@@ -122,12 +128,10 @@ setMethod("summary", "uGASFit", function(object) {
 
   Inference = object@Estimates$Inference
 
-  vKappa = object@Estimates$lParList$vKappa
-  mB = object@Estimates$lParList$mB
-  vTheta_Tilde_Unc = solve(diag(iK) - mB) %*% vKappa
-
-  vTheta_Unc = c(MapParameters_univ(vTheta_Tilde_Unc, Dist, iK))
-  names(vTheta_Unc) = ParNames
+  # Average the mapped parameters for observed periods only; column T+1
+  # contains the next-period forecast.
+  vTheta_Avg = rowMeans(object@GASDyn$mTheta[, seq_len(iT), drop = FALSE])
+  names(vTheta_Avg) = ParNames
 
   elapsedTime = object@ModelInfo$elapsedTime
 
@@ -162,9 +166,10 @@ setMethod("summary", "uGASFit", function(object) {
   cat(paste("\n------------------------------------------"))
   cat(paste("\nEstimates:\n"))
   print(Inference)
+  GAS_print_inference_note(object@Estimates$optimiser)
   cat(paste("\n------------------------------------------"))
-  cat(paste("\nUnconditional Parameters:\n"))
-  print(vTheta_Unc)
+  cat(paste("\nAverage Filtered Parameters:\n"))
+  print(vTheta_Avg)
   cat(paste("\n------------------------------------------"))
   cat(paste("\nInformation Criteria:\n"))
   print(IC)
@@ -193,12 +198,10 @@ setMethod("show", "mGASFit", function(object) {
 
   ParNames = FullNamesMulti(iN, Dist)
 
-  vKappa = object@Estimates$lParList$vKappa
-  mB = object@Estimates$lParList$mB
-  vTheta_Tilde_Unc = solve(diag(iK) - mB) %*% vKappa
-
-  vTheta_Unc = c(MapParameters_multi(vTheta_Tilde_Unc, Dist, iN, iK))
-  names(vTheta_Unc) = ParNames
+  # Average the mapped parameters for observed periods only; column T+1
+  # contains the next-period forecast.
+  vTheta_Avg = rowMeans(object@GASDyn$mTheta[, seq_len(iT), drop = FALSE])
+  names(vTheta_Avg) = ParNames
   Inference = object@Estimates$Inference
   elapsedTime = object@ModelInfo$elapsedTime
 
@@ -214,9 +217,10 @@ setMethod("show", "mGASFit", function(object) {
   cat(paste("\n------------------------------------------"))
   cat(paste("\nEstimates:\n"))
   print(Inference)
+  GAS_print_inference_note(object@Estimates$optimiser)
   cat(paste("\n------------------------------------------"))
-  cat(paste("\nUnconditional Parameters:\n"))
-  print(vTheta_Unc)
+  cat(paste("\nAverage Filtered Parameters:\n"))
+  print(vTheta_Avg)
   cat(paste("\n------------------------------------------"))
   cat(paste("\nInformation Criteria:\n"))
   print(IC)
@@ -242,12 +246,10 @@ setMethod("summary", "mGASFit", function(object) {
 
   ParNames = FullNamesMulti(iN, Dist)
 
-  vKappa = object@Estimates$lParList$vKappa
-  mB = object@Estimates$lParList$mB
-  vTheta_Tilde_Unc = solve(diag(iK) - mB) %*% vKappa
-
-  vTheta_Unc = c(MapParameters_multi(vTheta_Tilde_Unc, Dist, iN, iK))
-  names(vTheta_Unc) = ParNames
+  # Average the mapped parameters for observed periods only; column T+1
+  # contains the next-period forecast.
+  vTheta_Avg = rowMeans(object@GASDyn$mTheta[, seq_len(iT), drop = FALSE])
+  names(vTheta_Avg) = ParNames
   Inference = object@Estimates$Inference
   elapsedTime = object@ModelInfo$elapsedTime
 
@@ -263,9 +265,10 @@ setMethod("summary", "mGASFit", function(object) {
   cat(paste("\n------------------------------------------"))
   cat(paste("\nEstimates:\n"))
   print(Inference)
+  GAS_print_inference_note(object@Estimates$optimiser)
   cat(paste("\n------------------------------------------"))
-  cat(paste("\nUnconditional Parameters:\n"))
-  print(vTheta_Unc)
+  cat(paste("\nAverage Filtered Parameters:\n"))
+  print(vTheta_Avg)
   cat(paste("\n------------------------------------------"))
   cat(paste("\nInformation Criteria:\n"))
   print(IC)

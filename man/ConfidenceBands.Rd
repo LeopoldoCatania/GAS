@@ -46,6 +46,12 @@ positive-definiteness repair is used. Refit older objects, or objects fitted
 with \code{Compute.SE = FALSE}, with \code{Compute.SE = TRUE} before calling
 this function.
 
+For a fit using conditional OPG inference, only the retained coefficients
+are sampled, using the inverse of their principal OPG submatrix. Excluded
+coefficients stay fixed at their fitted values in every draw. A warning marks
+these bands as conditional on those coefficients. The retained OPG must pass
+the usual checks; the singular full matrix is not inverted.
+
 Each sampled coefficient vector is transformed using the mapping
 appropriate to the fitted model. For multivariate models, the
 fitted \code{ScalarParameters} specification is respected.
