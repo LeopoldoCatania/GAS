@@ -1,3 +1,21 @@
+# Use sparse calendar ticks rather than one tick per observation (or per
+# fraction of a day). Adapt the target count to the current panel width.
+GAS_plot_time_axis <- function(dates) {
+  dates <- dates[is.finite(dates)]
+  if (!length(dates)) return(invisible(NULL))
+  n <- max(3L, min(8L, floor(graphics::par("pin")[1L]/1.1)))
+  limits <- range(dates)
+  ticks <- if (limits[1L] == limits[2L]) dates[1L] else pretty(limits, n = n)
+  if (inherits(dates, "Date")) {
+    graphics::axis.Date(1L, at = ticks, las = 1L)
+  } else if (inherits(dates, "POSIXt")) {
+    graphics::axis.POSIXct(1L, at = ticks, las = 1L)
+  } else {
+    graphics::axis(1L, at = ticks, labels = ticks, las = 1L)
+  }
+  invisible(ticks)
+}
+
 PlotMenu <- function(x) {
     if (is(x, "uGASFit")) {
         vplotMenu = c("Filtered Parameters",
@@ -83,14 +101,7 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
             lines(vDates, mTheta[, i])
             axis(4, at = mean(vLim), labels = colnames(mTheta)[i], tick = F, padj = -1)
         }
-        if (!is(vDates, "integer")) {
-            DiffTime = vDates[2] - vDates[1]
-            axis.Date(1, at = seq(min(vDates), max(vDates), DiffTime * iT/20))
-            axis.Date(1, at = seq(min(vDates), max(vDates), DiffTime * iT/5), labels = FALSE, tcl = -0.2)
-        } else {
-            foo = vDates[c(1L, seq(0L, iT, ceiling((iT)/20))[-1])]
-            axis(1, at = foo, labels = foo)
-        }
+        GAS_plot_time_axis(vDates)
     } else {
         nPlot = ceiling(iK/10)
         plotSeq = seq(1, iK + 1, 5)
@@ -122,14 +133,7 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
 
                     if (any(i == plotSeq - 1L) | (i == iK)) {
 
-                      if (!is(vDates, "integer")) {
-                        axis.Date(1L, at = seq(min(vDates), max(vDates), "year"))
-                        axis.Date(1L, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE,
-                          tcl = -0.2)
-                      } else {
-                        foo = vDates[c(1, seq(0, iT, ceiling((iT)/20))[-1])]
-                        axis(1L, at = foo, labels = foo)
-                      }
+                      GAS_plot_time_axis(vDates)
 
                     }
                   }
@@ -176,14 +180,7 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
             abline(v = tail(vDates_is, 1L), lty = 2L)
             axis(4L, at = mean(vLim), labels = colnames(mTheta_is)[i], tick = FALSE, padj = -1)
         }
-        if (!is(vDateFull, "integer")) {
-            axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2L] - vDateFull[1L]))
-            axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2L] - vDateFull[1L])),
-                labels = FALSE, tcl = -0.2)
-        } else {
-            foo = vDateFull[c(1, seq(0, iS + iH, ceiling((iS + iH)/20))[-1])]
-            axis(1, at = foo, labels = foo)
-        }
+        GAS_plot_time_axis(vDateFull)
     } else {
         nPlot = ceiling(iK/10)
         plotSeq = seq(1L, iK + 1L, 5)
@@ -218,14 +215,7 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
 
                     if (any(i == plotSeq - 1L) | (i == iK)) {
 
-                      if (!is(vDateFull, "integer")) {
-                        axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2L] - vDateFull[1L]))
-                        axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2L] -
-                          vDateFull[1L])), labels = FALSE, tcl = -0.2)
-                      } else {
-                        foo = vDateFull[c(1, seq(0, (iS + iH), ceiling((iS + iH)/20))[-1])]
-                        axis(1L, at = foo, labels = foo)
-                      }
+                      GAS_plot_time_axis(vDateFull)
 
                     }
                   }
@@ -253,13 +243,7 @@ PlotSingleSeries <- function(vTheta, iT, vDates) {
     lines(vDates, vTheta)
     axis(4L, at = mean(vLim), labels = "vY", tick = FALSE, padj = -1, las = 1L)
 
-    if (!is(vDates, "integer")) {
-        axis.Date(1L, at = seq(min(vDates), max(vDates), "year"))
-        axis.Date(1L, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, tcl = -0.2)
-    } else {
-        foo = vDates[c(1, seq(0, iT, ceiling((iT)/20))[-1])]
-        axis(1L, at = foo, labels = foo)
-    }
+    GAS_plot_time_axis(vDates)
 
 }
 
@@ -285,14 +269,7 @@ PlotForecastVsRealized_Univ <- function(mRealVsForecast, vDates_os, object) {
         legend("topright", legend = c("Realized", "Filtered"), col = c("black", "red"), lty = c(1L, 1L))
     }
 
-    if (!is(vDates_os, "integer")) {
-        axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), vDates_os[2L] - vDates_os[1L]))
-        axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), 0.25 * (vDates_os[2L] - vDates_os[1L])),
-            labels = FALSE, tcl = -0.2)
-    } else {
-        foo = vDates_os[c(1, seq(0, iH, ceiling((iH)/20))[-1])]
-        axis(1, at = foo, labels = foo)
-    }
+    GAS_plot_time_axis(vDates_os)
 }
 
 PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, object) {
@@ -329,13 +306,7 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
                     1L))
             }
         }
-        if (!is(vDates_os, "integer")) {
-            axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), "year"))
-            axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), "quarter"), labels = FALSE, tcl = -0.2)
-        } else {
-            foo = vDates_os[c(1, seq(0, iH, ceiling((iH)/20))[-1])]
-            axis(1, at = foo, labels = foo)
-        }
+        GAS_plot_time_axis(vDates_os)
     } else {
 
         nPlot = ceiling(iN/10)
@@ -377,14 +348,7 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
                     }
                   }
                 }
-                if (!is(vDates_os, "integer")) {
-                  axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), "year"))
-                  axis.Date(1L, at = seq(min(vDates_os), max(vDates_os), "quarter"), labels = FALSE,
-                    tcl = -0.2)
-                } else {
-                  foo = vDates_os[c(1L, seq(0L, iH, ceiling((iH)/20))[-1])]
-                  axis(1L, at = foo, labels = foo)
-                }
+                GAS_plot_time_axis(vDates_os)
                 Start = Start + 10L
                 if (j < nPlot)
                   PlotType2 = readline("Print enter for next figures or 0 to exit\n:")
@@ -419,13 +383,7 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
 
             axis(4L, at = mean(vLim), labels = colnames(mTheta)[i], tick = FALSE, padj = -1)
         }
-        if (!is(vDates, "integer")) {
-            axis.Date(1L, at = seq(min(vDates), max(vDates), "year"))
-            axis.Date(1L, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE, tcl = -0.2)
-        } else {
-            foo = vDates[c(1L, seq(0L, iT, ceiling((iT)/20))[-1])]
-            axis(1L, at = foo, labels = foo)
-        }
+        GAS_plot_time_axis(vDates)
     } else {
         nPlot = ceiling(iK/10)
         plotSeq = seq(1L, iK + 1, 5)
@@ -460,14 +418,7 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
 
                     if (any(i == plotSeq - 1L) | (i == iK)) {
 
-                      if (!is(vDates, "integer")) {
-                        axis.Date(1L, at = seq(min(vDates), max(vDates), "year"))
-                        axis.Date(1L, at = seq(min(vDates), max(vDates), "quarter"), labels = FALSE,
-                          tcl = -0.2)
-                      } else {
-                        foo = vDates[c(1, seq(0, iT, ceiling((iT)/20))[-1])]
-                        axis(1L, at = foo, labels = foo)
-                      }
+                      GAS_plot_time_axis(vDates)
 
                     }
                   }
@@ -519,14 +470,7 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
             abline(v = tail(vDates_is, 1L), lty = 2L)
             axis(4L, at = mean(vLim), labels = colnames(mTheta_is)[i], tick = FALSE, padj = -1)
         }
-        if (!is(vDateFull, "integer")) {
-            axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2L] - vDateFull[1L]))
-            axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2L] - vDateFull[1L])),
-                labels = FALSE, tcl = -0.2)
-        } else {
-            foo = vDateFull[c(1L, seq(0L, iH + iS, ceiling((iH + iS)/20))[-1L])]
-            axis(1L, at = foo, labels = foo)
-        }
+        GAS_plot_time_axis(vDateFull)
     } else {
         nPlot = ceiling(iK/10)
         plotSeq = seq(1L, iK + 1L, 5L)
@@ -568,14 +512,7 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
 
                     if (any(i == plotSeq - 1L) | (i == iK)) {
 
-                      if (!is(vDateFull, "integer")) {
-                        axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = vDateFull[2L] - vDateFull[1L]))
-                        axis.Date(1L, at = seq(min(vDateFull), max(vDateFull), by = 0.25 * (vDateFull[2L] -
-                          vDateFull[1L])), labels = FALSE, tcl = -0.2)
-                      } else {
-                        foo = vDateFull[c(1L, seq(0L, (iH + iS), ceiling((iH + iS)/20))[-1L])]
-                        axis(1L, at = foo, labels = foo)
-                      }
+                      GAS_plot_time_axis(vDateFull)
 
                     }
                   }
