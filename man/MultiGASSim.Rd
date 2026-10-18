@@ -89,7 +89,8 @@ Dist  = "mvt" # Conditional Multivariate Studen-t distribution.
 Mu  = c(0.1, 0.2, 0.3) # Vector of location parameters (this is not transformed).
 Phi = c(1.0, 1.2, 0.3) # Vector of scale parameters for the firs, second and third variables.
 
-Rho = c(0.1, 0.2, 0.3) # This represents the distinct correlations in the order \(\rho_{12},\rho_{13},\rho_{23}\).
+# Distinct correlations, ordered as rho12, rho13, rho23.
+Rho = c(0.1, 0.2, 0.3)
 
 Theta = c(Mu, Phi, Rho, 7) # Vector of parameters such that the degrees of freedom are 7.
 
