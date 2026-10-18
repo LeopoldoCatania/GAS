@@ -240,23 +240,24 @@ arma::mat ast1_IM(arma::vec vTheta){
 
 }
 
-double rAST(double dMu, double dSigma,double dAlpha, double dNu1, double dNu2){
-  double dU  = Rf_runif(0.0,1.0);
-  double dT1 = Rf_rt(dNu1);
-  double dT2 = Rf_rt(dNu2);
+double rAST(double dMu, double dSigma, double dAlpha,
+            double dNu1, double dNu2) {
 
-  double K1=Kast(dNu1);
-  double K2=Kast(dNu2);
+  if (Rf_runif(0.0, 1.0) < dAlpha) {
 
-  double dAlpha_star = dAlpha * K1 / (dAlpha*K1+(1-dAlpha)*K2);
+    return dMu -
+      2.0 * dAlpha * dSigma * Kast(dNu1) *
+      abs3(Rf_rt(dNu1));
 
-  double dSign = sign_C(dU-dAlpha);
+  } else {
 
-  double dY = dMu + dSigma * (dAlpha_star * abs3(dT1)* (dSign-1) +
-                              (1-dAlpha_star)*abs3(dT2) * (dSign+1) );
+    return dMu +
+      2.0 * (1.0 - dAlpha) * dSigma * Kast(dNu2) *
+      abs3(Rf_rt(dNu2));
 
-  return dY;
+  }
 }
+
 double pAST(double dY, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2) {
 
   double dLogK = 0.0;
@@ -278,31 +279,100 @@ double pAST(double dY, double dMu, double dSigma, double dAlpha, double dNu1, do
   return dCdf;
 }
 
-arma::vec mAST(double dMu, double dSigma, double dAlpha, double dNu1, double dNu2){
-  arma::vec vMoments(4);
+static double astAbsoluteTMoment(double nu, int order) {
 
-  double dK1 = Kast(dNu1);
-  double dK2 = Kast(dNu2);
+  const double k = static_cast<double>(order);
 
-  double dAlpha_star = dAlpha*dK1/(dAlpha*dK1+(1.0-dAlpha)*dK2);
-  double dB          = dAlpha*dK1 + (1.0-dAlpha)*dK2;
+  // Called only when nu > order.
+  const double logMoment =
+    0.5 * k * log(nu) +
+    Rf_lgammafn(0.5 * (k + 1.0)) +
+    Rf_lgammafn(0.5 * (nu - k)) -
+    0.5 * log(M_PI) -
+    Rf_lgammafn(0.5 * nu);
 
-  double dEY = 4.0 * dB* (-pow(dAlpha_star,2.0)*(dNu1/(dNu1-1.0))+ pow(1.0-dAlpha_star,2.0)*dNu2/(dNu2 - 1.0));
-
-  vMoments(0) = dMu + dSigma * dEY;
-
-
-  vMoments(1) = (4.0 * (dAlpha * pow(dAlpha_star,2.0)*dNu1/(dNu1-2.0) +
-                (1.0-dAlpha)*pow(1.0-dAlpha_star,2.0)*dNu2/(dNu2-2.0)) -
-                16.0*pow(dB,2.0)*pow(-pow(dAlpha_star,2.0)*dNu1/(dNu1-1.0) +
-                pow(1.0 - dAlpha_star,2.0)*dNu2/(dNu2-1.0),2.0) ) * pow(dSigma, 2.0);
-
-  // TODO
-  vMoments(2) = 0.0;
-  vMoments(3) = 0.0;
-  return vMoments;
+  return exp(logMoment);
 }
 
+arma::vec mAST(double dMu, double dSigma, double dAlpha,
+               double dNu1, double dNu2) {
+
+  arma::vec vMoments(4);
+  vMoments.fill(NA_REAL);
+
+  const double minNu = (dNu1 < dNu2) ? dNu1 : dNu2;
+
+  // No finite mean.
+  if (minNu <= 1.0) {
+    return vMoments;
+  }
+
+  const double leftScale =
+    2.0 * dAlpha * Kast(dNu1);
+
+  const double rightScale =
+    2.0 * (1.0 - dAlpha) * Kast(dNu2);
+
+  // Raw moments of Z = (Y - dMu) / dSigma.
+  double raw[5] = {1.0, 0.0, 0.0, 0.0, 0.0};
+
+  for (int k = 1; k <= 4; ++k) {
+
+    if (minNu <= static_cast<double>(k)) {
+      break;
+    }
+
+    const double leftSign = (k % 2 == 0) ? 1.0 : -1.0;
+
+    raw[k] =
+      leftSign * dAlpha * pow(leftScale, k) *
+      astAbsoluteTMoment(dNu1, k) +
+      (1.0 - dAlpha) * pow(rightScale, k) *
+      astAbsoluteTMoment(dNu2, k);
+  }
+
+  const double meanZ = raw[1];
+
+  vMoments(0) = dMu + dSigma * meanZ;
+
+  // Finite mean but infinite variance.
+  if (minNu <= 2.0) {
+    vMoments(1) = R_PosInf;
+    return vMoments;
+  }
+
+  const double varianceZ = raw[2] - meanZ * meanZ;
+
+  vMoments(1) = dSigma * dSigma * varianceZ;
+
+  if (minNu > 3.0) {
+
+    const double central3 =
+      raw[3] -
+      3.0 * meanZ * raw[2] +
+      2.0 * pow(meanZ, 3.0);
+
+    vMoments(2) = central3 / pow(varianceZ, 1.5);
+  }
+
+  if (minNu > 4.0) {
+
+    const double central4 =
+      raw[4] -
+      4.0 * meanZ * raw[3] +
+      6.0 * meanZ * meanZ * raw[2] -
+      3.0 * pow(meanZ, 4.0);
+
+    vMoments(3) = central4 / (varianceZ * varianceZ);
+
+  } else {
+
+    // Finite variance but infinite fourth central moment.
+    vMoments(3) = R_PosInf;
+  }
+
+  return vMoments;
+}
 double qAST(double dP, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2,
                         double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
   double a=lower;

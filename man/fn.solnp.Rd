@@ -1,10 +1,10 @@
 \name{fn.solnp}
 \alias{fn.solnp}
 \title{
-	A wrapper to the \link{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
+	A wrapper to the \link[Rsolnp]{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
 }
 \description{
-	This function is a wrapper to the \link{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
+	This function is a wrapper to the \link[Rsolnp]{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
 }
 \usage{
  fn.solnp(par0, data, GASSpec, FUN)
@@ -24,14 +24,14 @@ A \link{function} to optimize.}
 }
 \details{
 The following control parameters are used: \code{trace = 0}, \code{rho = 1}, \code{outer.iter = 400},
-\code{inner.iter = 1800}, \code{delta = 1e-08}, \code{tol = 1e-08}. See the documentation of \link{solnp}.
+\code{inner.iter = 1800}, \code{delta = 1e-08}, \code{tol = 1e-08}. See the documentation of \link[Rsolnp]{solnp}.
 }
 \value{
 It returns a named list with four elements: i) \code{pars}: a \code{numeric} vector
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
 evaluated at its minumum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
 the minimum of the negative log likelihood, and iv) \code{convergence} a \code{numeric} element indicating the convergence results of
-\link{solnp}.
+\link[Rsolnp]{solnp}.
 }
 \author{Leopoldo Catania}
 \references{

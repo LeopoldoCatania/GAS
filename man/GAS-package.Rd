@@ -14,13 +14,6 @@ see e.g., Creal et. al. (2013) and Harvey (2013). A detailed implementation of t
 The authors acknowledge Google for financial support via the Google Summer of
 Code 2016 project "GAS"; see \url{https://summerofcode.withgoogle.com/archive/2016/projects/4537082387103744/}.\cr
 %
-
-Current limitations:
-\itemize{
-\item The multivariate GAS model for N>4 does not report the exact update for the
-correlation parameters since the Jacobian of the hyperspherical coordinates transformation
-needs to be coded for the case N>4. The Jacobian for N>4 is replaced by the identity matrix.
-}
 }
 \note{
 By using \code{GAS}  you agree to the following rules:

@@ -22,9 +22,6 @@ LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 3.4.0), methods
 Suggests: testthat
 NeedsCompilation: yes
-Packaged: 2024-08-19 08:41:50 UTC; hornik
-Repository: CRAN
-Date/Publication: 2024-08-19 09:00:52 UTC
 Author: Leopoldo Catania [aut, cre] (<https://orcid.org/0000-0002-0981-1921>),
   David Ardia [ctb] (<https://orcid.org/0000-0003-2823-782X>),
   Kris Boudt [ctb] (<https://orcid.org/0000-0002-1000-5142>)

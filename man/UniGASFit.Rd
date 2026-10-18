@@ -47,7 +47,7 @@ the minimum of the negative log likelihood, this is used for inferential purpose
 
 The user is allowed to not include the last two elements of the output of the \code{fn.optimizer} function, that is, the values
 \code{hessian = NULL} and \code{convergence = NULL} are admissible. In the case of \code{hessian = NULL}, the Hessian matrix is
-evaluated numerically using the \link{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
+evaluated numerically using the \link[numDeriv]{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
 
 By default, the \code{optim} optimizer with \code{method = "BFGS"} is employed.
 
@@ -62,17 +62,17 @@ Ardia D, Boudt K and Catania L (2016a).
 
 Blasques F, Koopman SJ, Lucas A (2014a).
 "Maximum Likelihood Estimation for Correctly Specified Generalized Autoregressive Score Models: Feedback Effects, Contraction Conditions and Asymptotic Properties." techreport TI 14-074/III, Tinbergen Institute.
-\url{https://www.tinbergen.nl/discussionpaper/?paper=2332}.
+\url{https://tinbergen.nl/discussionpaper/?paper=2332}.
 
 Blasques F, Koopman SJ, Lucas A (2014b).
 "Maximum Likelihood Estimation for Generalized Autoregressive Score Models."
 techreport TI 2014-029/III, Tinbergen Institute.
-\url{https://www.tinbergen.nl/discussionpaper/?paper=2286}.\cr
+\url{https://tinbergen.nl/discussionpaper/?paper=2286}.\cr
 
 Blasques F, Koopman SJ, Lucas A, Schaumburg J (2014c).
 "Spillover Dynamics for Systemic Risk Measurement using Spatial Financial Time Series Models."
 techreport TI 2014-103/III, Tinbergen Institute.
-\url{https://www.tinbergen.nl/discussionpaper/?paper=2369}.\cr
+\url{https://tinbergen.nl/discussionpaper/?paper=2369}.\cr
 
 Creal D, Koopman SJ, Lucas A (2013).
 "Generalized Autoregressive Score Models with Applications."

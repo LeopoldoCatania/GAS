@@ -58,18 +58,19 @@ arma::vec beta_Score(double dY, arma::vec vTheta){
   return vScore;
 
 }
-arma::mat beta_IM( arma::vec vTheta){
+arma::mat beta_IM(arma::vec vTheta) {
 
   double dAlpha = vTheta(0);
   double dBeta  = vTheta(1);
 
-  arma::mat mIM = zeros(2,2);
+  double dTrig = Rf_trigamma(dAlpha + dBeta);
 
-  double dTrig =  Rf_trigamma(dAlpha + dBeta);
+  arma::mat mIM(2, 2);
 
-  mIM(0,0) = Rf_trigamma(dAlpha) - dTrig;
-  mIM(1,1) = Rf_trigamma(dBeta)  - dTrig;
-  mIM(1,0) = - dTrig;
+  mIM(0, 0) = Rf_trigamma(dAlpha) - dTrig;
+  mIM(1, 1) = Rf_trigamma(dBeta)  - dTrig;
+  mIM(0, 1) = -dTrig;
+  mIM(1, 0) = mIM(0, 1);
 
   return mIM;
 }

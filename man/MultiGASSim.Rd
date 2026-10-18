@@ -18,7 +18,9 @@ An estimated object of the class \link{mGASFit}. By default \code{fit = NULL}.
 \code{numeric} Length of the simulated time series.}
 %
 \item{N}{
-\code{numeric} Cross sectional dimension (Only N<5 supported for now).}
+An integer greater than or equal to 2 giving the cross-sectional
+dimension. Dimensions greater than four are supported.
+}
 %
 \item{kappa}{
 \code{numeric} vector of unconditional level for the reparametrized vector of parameters.}
@@ -87,9 +89,7 @@ Dist  = "mvt" # Conditional Multivariate Studen-t distribution.
 Mu  = c(0.1, 0.2, 0.3) # Vector of location parameters (this is not transformed).
 Phi = c(1.0, 1.2, 0.3) # Vector of scale parameters for the firs, second and third variables.
 
-Rho = c(0.1, 0.2, 0.3) # This represents vec(R), where R is the correlation matrix.
-                       # Note that is up to the user to ensure that vec(R) implies a
-                       # proper correlation matrix.
+Rho = c(0.1, 0.2, 0.3) # This represents the distinct correlations in the order \(\rho_{12},\rho_{13},\rho_{23}\).
 
 Theta = c(Mu, Phi, Rho, 7) # Vector of parameters such that the degrees of freedom are 7.
 

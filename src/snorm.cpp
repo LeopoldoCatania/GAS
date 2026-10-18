@@ -72,7 +72,6 @@ double qsnorm(const double p, const double xi)
   return( q );
 }
 
-
 double snormskew( double dXi )
 {
   double m1 = 2.0/sqrt(2.0 * M_PI);
@@ -117,17 +116,37 @@ double qSNORM(double dP, double dMu, double dSigma, double dXi) {
   return dQ;
 }
 
-arma::vec mSNORM(double dMu, double dSigma, double dXi){
+arma::vec mSNORM(double dMu, double dSigma, double dXi) {
+
+  const double c = sqrt(2.0 / M_PI);
+  const double c2 = c * c;
+
+  const double delta = dXi - 1.0 / dXi;
+  const double delta2 = delta * delta;
+
+  // Variance and central moments of the unstandardized
+  // two-piece normal variable.
+  const double variance =
+    1.0 + (1.0 - c2) * delta2;
+
+  const double central3 =
+    c * delta * (1.0 + (2.0 * c2 - 1.0) * delta2);
+
+  const double central4 =
+    3.0 +
+    (9.0 - 10.0 * c2) * delta2 +
+    (3.0 - 2.0 * c2 - 3.0 * c2 * c2) * delta2 * delta2;
 
   arma::vec vMoments(4);
 
+  // The package standardizes the two-piece variable before
+  // applying dMu and dSigma.
   vMoments(0) = dMu;
-  vMoments(1) = pow(dSigma, 2.0);
-  vMoments(2) = snormskew(dXi);
-  vMoments(3) = 0.0;
+  vMoments(1) = dSigma * dSigma;
+  vMoments(2) = central3 / pow(variance, 1.5);
+  vMoments(3) = central4 / (variance * variance);
 
   return vMoments;
-
 }
 
 arma::vec snorm_Score(double dY, arma::vec vTheta){
@@ -167,7 +186,7 @@ arma::vec snorm_Score(double dY, arma::vec vTheta){
 
   double ddG_xi = -2.0*(1.0 - 1.0/pow(dXi, 2.0))/pow(dXi + 1.0/dXi, 2.0);
   double ddXi_Star_xi = (dZ<0)? -1.0/pow(dXi, 2.0) : 1.0;
-  double ddSigma_tilde_xi = -(1.0 - m12)*(dXi - 1.0/pow(dXi, 3.0))/dSigma_tilde;
+  double ddSigma_tilde_xi = (1.0 - m12) * (dXi - pow(dXi, -3.0)) / dSigma_tilde;
   double ddMu_tilde_xi = m1 * (1.0 + 1.0/pow(dXi, 2.0));
 
   double ddZ_xi = dK * ddSigma_tilde_xi + ddMu_tilde_xi;

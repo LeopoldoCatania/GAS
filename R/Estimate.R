@@ -74,8 +74,35 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   # optimise
   optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
-  if (optimiser$convergence != 0) {
-    warning(paste("solver failed to converge. Convergence flag:", optimiser$convergence))
+  flag <- optimiser$convergence
+
+  if (is.null(flag)) {
+
+    optimiser$convergence <- NA_real_
+
+    warning(
+      "The optimizer did not report convergence; status is unknown.",
+      call. = FALSE
+    )
+
+  } else if (
+    !is.numeric(flag) ||
+    length(flag) != 1L ||
+    !is.finite(flag)
+  ) {
+
+    stop(
+      "The optimizer's convergence flag must be NULL or one finite number.",
+      call. = FALSE
+    )
+
+  } else if (flag != 0) {
+
+    warning(
+      paste("Solver failed to converge. Convergence flag:", flag),
+      call. = FALSE
+    )
+
   }
 
   vPw = optimiser$pars
@@ -168,8 +195,35 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   # optimise
   optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
 
-  if (optimiser$convergence != 0) {
-    warning(paste("solver failed to converge. Convergence flag:", optimiser$convergence))
+  flag <- optimiser$convergence
+
+  if (is.null(flag)) {
+
+    optimiser$convergence <- NA_real_
+
+    warning(
+      "The optimizer did not report convergence; status is unknown.",
+      call. = FALSE
+    )
+
+  } else if (
+    !is.numeric(flag) ||
+    length(flag) != 1L ||
+    !is.finite(flag)
+  ) {
+
+    stop(
+      "The optimizer's convergence flag must be NULL or one finite number.",
+      call. = FALSE
+    )
+
+  } else if (flag != 0) {
+
+    warning(
+      paste("Solver failed to converge. Convergence flag:", flag),
+      call. = FALSE
+    )
+
   }
 
   vPw = optimiser$pars

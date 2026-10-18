@@ -7,7 +7,7 @@ Daily logarithmic returns in percentage points of the  S&P500 index from 1950-01
 obtained from yahoo finance.
 }
 \usage{data("sp500ret")}
-\format{A \link{xts} object of dimension 16,727 x 1 containing the daily logarithmic
+\format{A \link[xts]{xts} object of dimension 16,727 x 1 containing the daily logarithmic
 returns in percentage points from 1950-01-04 to 2016-06-24.}
 \source{Yahoo Finance}
 \keyword{datasets}

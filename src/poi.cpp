@@ -37,7 +37,7 @@ arma::vec mPOI(double dMu){
   vMoments(0) = dMu;
   vMoments(1) = dMu;
   vMoments(2) = pow(dMu, - 0.5);
-  vMoments(3) = 1.0/dMu;
+  vMoments(3) = 3.0 + 1.0 / dMu;
   return vMoments;
 }
 

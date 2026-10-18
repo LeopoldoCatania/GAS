@@ -40,11 +40,13 @@ double rALD(double dTheta, double dSigma, double dKappa){
   double dU1 = Rf_runif(0.0, 1.0);
   double dU2 = Rf_runif(0.0, 1.0);
 
-  double dY = dTheta + dSigma * ( dKappa*log(dU1) - log(dU2)/dKappa );
+  double dY = dTheta + dSigma / sqrt(2.0) * (dKappa * log(dU1) - log(dU2) / dKappa);
 
   return dY;
 
 }
+
+
 double qALD(double dP, double dTheta, double dSigma, double dKappa,
             double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
   double a=lower;
@@ -94,8 +96,7 @@ arma::vec mALD(double dTheta, double dSigma, double dKappa){
   vMoments(0) = dTheta + dSigma*(1.0/dKappa - dKappa)/pow(2.0, 0.5);
   vMoments(1) = pow(dSigma,2.0)*(1.0/pow(dKappa,2.0) + pow(dKappa,2.0))/2.0;
   vMoments(2) = 2.0*(1.0/pow(dKappa, 3.0) - pow(dKappa, 3.0))/pow(1.0/pow(dKappa,2.0) + pow(dKappa, 2.0), 1.5);
-  vMoments(3) = 6.0 - 12.0/pow( 1.0/pow(dKappa, 2.0) + pow(dKappa, 2.0)  , 2.0);
-
+  vMoments(3) = 9.0 - 12.0 / pow(pow(dKappa, -2.0) + pow(dKappa, 2.0), 2.0);
   return vMoments;
 }
 arma::vec ald_Score(double dY, arma::vec vTheta){

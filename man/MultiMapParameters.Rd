@@ -3,11 +3,9 @@
 \alias{build_mR}
 \alias{MapR_C}
 \alias{build_vR}
-\title{
-	Mapping function for univariate distributions
-}
+\title{Mapping function for multivariate distributions}
 \description{
-	Map unrestricted vector of parameters into the proper space. This function transforms 
+	Map unrestricted vector of parameters into the proper space. This function transforms
 	the parameters updated using the GAS recursion into their proper space.
 	}
 \usage{
@@ -21,51 +19,63 @@ MultiMapParameters(Theta_tilde, Dist, N)
 \code{character} Label of the conditional distribution, see \link{DistInfo}.}
 %
 \item{N}{
-\code{numeric} Cross sectional dimension. Note that only \code{iN<5} is supported.}
+An integer greater than or equal to 2 giving the cross-sectional
+dimension. Dimensions greater than four are supported.
+}
 %
 }
 \details{
-	The order of the parameters is generally: locations, scales, correlations, shape. When the 
-	distribution defined by \code{Dist} does not have, say, the shape parameter, this should be simply omitted. 
-	See also \link{DistInfo} for specific distributions.
+The input vector contains, in order, N location parameters,
+N log-scale parameters, N(N-1)/2 correlation angles, and,
+for the multivariate Student-t distribution, one transformed
+degrees-of-freedom parameter.
+
+Locations are unchanged and scales are obtained by exponentiation,
+subject to the package's numerical safeguards. The Student-t
+degrees-of-freedom parameter uses the bounded transformation
+implemented by the package. Use \code{\link{MultiUnmapParameters}}
+to construct the transformed vector from distribution parameters.
+
+The correlation angles are ordered as
+\eqn{\phi_{12},\phi_{13},\ldots,\phi_{1N},
+\phi_{23},\ldots,\phi_{2N},\ldots,\phi_{N-1,N}}.
+They define an upper-triangular matrix X through
+\deqn{X_{rb}=\cos(\phi_{rb})\prod_{s<r}\sin(\phi_{sb}),\quad r<b,}
+\deqn{X_{bb}=\prod_{s<b}\sin(\phi_{sb}),\qquad X_{rb}=0,\quad r>b,}
+where empty products equal one. The correlation matrix is
+\deqn{R=X^\top X.}
+
+The returned correlation entries follow the same pair ordering.
+They contain only the distinct off-diagonal entries, rather than
+the full vectorization of R.
+
+This construction gives a positive semidefinite matrix with unit
+diagonal. It is positive definite when all diagonal entries of X
+are nonzero. In particular, angles strictly between zero and pi
+give a positive definite matrix in exact arithmetic. Angles near
+singular configurations can cause numerical ill-conditioning.
+
+The correlation Jacobian is computed analytically for every
+supported dimension by differentiating \eqn{R=X^\top X}.
 }
+
 \value{A \code{numeric} vector of parameters.}
 \author{Leopoldo Catania}
 \examples{
-# Map unrestricted parameters for the Multivariate Student-t distribution with N=3
-library("GAS")
+N <- 5L
+Dist <- "mvt"
 
-N = 3
+# Equicorrelation matrix with correlation 0.2.
+# Parameter order: locations, scales, correlations, degrees of freedom.
+Theta <- c(
+    rep(0, N),
+    rep(1, N),
+    rep(0.2, N * (N - 1L) / 2L),
+    8
+)
 
-Dist = "mvt"
+Theta_tilde <- MultiUnmapParameters(Theta, Dist, N)
+Theta_back <- MultiMapParameters(Theta_tilde, Dist, N)
 
-# Vector of location parameters (this is not transformed).
-Mu_tilde  = c(0.1,0.2,0.3)
-
-# Vector of unrestricted scales parameters such that
-# the scales will be equal to 1.0, 1.2 and 0.3, for the first, second and
-# third variables, respectively.
-Phi_tilde = c(log(1.0), log(1.2), log(0.3))
-
-# The vector c(0.1,0.2,0.3) represents vec(R),
-# where R is the correlation matrix.
-# Note that is up to the user to ensure that
-# vec(R) implies a proper correlation matrix
-# The function UnMapR_C transforms vec(R) in a vector of unrestricted parameters. It is
-# the inverse of the hyperspherical coordinates transformration.
-
-Rho_tilde = UnMapR_C(c(0.1,0.2,0.3), N)
-
-# Vector of unconditional reparametrised parameters such that the
-# degrees of freedom are 7.
-#
-# LowerNu() prints the lower bound numerical parameter for the degree
-# of freedom, see help(LowerNu)
-#
-
-Theta_tilde = c(Mu_tilde, Phi_tilde , Rho_tilde, log(7 - LowerNu()))
-
-Theta = MultiMapParameters(Theta_tilde, Dist, N)
-
-Theta
+stopifnot(max(abs(Theta_back - Theta)) < 1e-10)
 }

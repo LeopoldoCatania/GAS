@@ -36,8 +36,8 @@ arma::vec mNEGBIN(double dPi, double dNu){
   arma::vec vMoments(4);
   vMoments(0) = dNu * (1.0 - dPi)/dPi;
   vMoments(1) = vMoments(0) + pow(vMoments(0), 2.0)/dNu;
-  vMoments(2) = (1.0 + dPi)/pow(dPi * dNu, 0.5);
-  vMoments(3) = 6.0/dNu + pow(1.0 - dPi, 2.0)/(dPi * dNu) + 3.0;
+  vMoments(2) = (2.0 - dPi) / sqrt(dNu * (1.0 - dPi));
+  vMoments(3) = 3.0 + 6.0 / dNu + pow(dPi, 2.0) / (dNu * (1.0 - dPi));
   return vMoments;
 }
 

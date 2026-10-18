@@ -36,7 +36,7 @@ arma::vec mGAMMA(double dAlpha, double dBeta){
   arma::vec vMoments(4);
   vMoments(0) = dAlpha/dBeta;
   vMoments(1) = dAlpha/pow(dBeta,2.0);
-  vMoments(2) = 2.0*pow(dAlpha,0.5);
+  vMoments(2) = 2.0 / sqrt(dAlpha);
   vMoments(3) = 6.0/dAlpha + 3.0;
   return vMoments;
 }
@@ -57,19 +57,18 @@ arma::vec gamma_Score(double dY, arma::vec vTheta){
   return vScore;
 
 }
-arma::mat gamma_IM(arma::vec vTheta){
+arma::mat gamma_IM(arma::vec vTheta) {
 
-  double dAlpha = vTheta(0);
-  double dBeta  = vTheta(1);
+  double dAlpha = vTheta(0);  // Shape
+  double dBeta  = vTheta(1);  // Rate
 
-  arma::mat mIM(2,2);
+  arma::mat mIM(2, 2);
 
-  mIM(0,0) = - Rf_trigamma(dAlpha);
-  mIM(0,1) = 1.0/dBeta;
-  mIM(1,0) = mIM(0,1);
-  mIM(1,1) = -dAlpha/pow(dBeta,2.0);
+  mIM(0, 0) = Rf_trigamma(dAlpha);
+  mIM(0, 1) = -1.0 / dBeta;
+  mIM(1, 0) = mIM(0, 1);
+  mIM(1, 1) = dAlpha / pow(dBeta, 2.0);
 
   return mIM;
 }
-
 

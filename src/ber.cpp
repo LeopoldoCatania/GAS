@@ -48,7 +48,7 @@ arma::vec mBER(double dPi){
   vMoments(0) = dPi;
   vMoments(1) = dPi*(1.0 - dPi);
   vMoments(2) = (1.0 - 2.0 * dPi)/pow(dPi*(1.0 - dPi), 0.5);
-  vMoments(3) = (1.0 - 6.0 * dPi*(1.0 - dPi))/dPi*(1.0 - dPi) + 3.0;
+  vMoments(3) =  3.0 + (1.0 - 6.0 * dPi * (1.0 - dPi)) / (dPi * (1.0 - dPi));
   return vMoments;
 }
 

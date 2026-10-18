@@ -11,11 +11,11 @@ InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
     if (Compute.SE) {
       mJacob = jacobian(vPw2vPn_Uni, vPw, iK = iK)
       mInvHessian = ginv(mHessian)
-      mSandwitch = t(mJacob) %*% mInvHessian %*% mJacob
+      mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
 
       vSE = sqrt(diag(mSandwitch))
       vTest = vPn/vSE
-      vPvalues = 1 - pnorm(abs(vTest))
+      vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)
 
 
       out[, "Std. Error"] = vSE
@@ -39,11 +39,11 @@ InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters, Co
 
       mJacob = jacobian(vPw2vPn_Multi, vPw, iK = iK, iN = iN, Dist = Dist, ScalarParameters = ScalarParameters)
       mInvHessian = ginv(mHessian)
-      mSandwitch = t(mJacob) %*% mInvHessian %*% mJacob
+      mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
 
       vSE = sqrt(diag(mSandwitch))
       vTest = vPn/vSE
-      vPvalues = 1 - pnorm(abs(vTest))
+      vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)
 
       out[, "Pr(>|t|)"] = vPvalues
       out[, "Std. Error"] = vSE

@@ -13,25 +13,21 @@ double dEXP(double dY, double dMu, bool bLog=false) {
 }
 double pEXP(double dY, double dMu) {
 
-  double dP = Rf_pexp(dY,dMu,1,0);
-
-  return dP;
+  // dMu is the rate; Rmath expects the scale.
+  return Rf_pexp(dY, 1.0 / dMu, 1, 0);
 
 }
 double qEXP(double dP, double dMu) {
 
-  double dQ = Rf_qexp(dP,dMu, 1,0);
-
-  return dQ;
+  return Rf_qexp(dP, 1.0 / dMu, 1, 0);
 
 }
-//
-double rEXP(double dMu){
-  double dY = Rf_rexp(dMu);
+double rEXP(double dMu) {
 
-  return dY;
+  return Rf_rexp(1.0 / dMu);
+
 }
-//
+
 arma::vec mEXP(double dMu){
   arma::vec vMoments(4);
   vMoments(0) = 1.0/dMu;

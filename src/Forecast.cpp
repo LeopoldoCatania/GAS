@@ -23,7 +23,7 @@ List uGASMultiForcast(arma::vec vTheta_tp1, arma::vec vKappa, arma::mat mA, arma
   arma::vec vTheta_tilde_t(iK);
   arma::vec vTheta_tilde_tp1(iK);
 
-  arma::vec vIntercept = ( eye(iK,iK) - mB) * vKappa;
+  arma::vec vIntercept = vKappa;
 
   for(h=1;h<iH;h++){
      for(b=0;b<iB;b++){
@@ -63,7 +63,7 @@ List mGASMultiForcast(arma::vec vTheta_tp1, arma::vec vKappa, arma::mat mA, arma
   arma::vec vTheta_tilde_t(iK);
   arma::vec vTheta_tilde_tp1(iK);
 
-  arma::vec vIntercept = ( eye(iK,iK) - mB) * vKappa;
+  arma::vec vIntercept = vKappa;
 
   for(h=1;h<iH;h++){
     for(b=0;b<iB;b++){

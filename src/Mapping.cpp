@@ -876,64 +876,65 @@ arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist,int iN, int i
   return InfRemover_vec(vTheta);
 }
 
-arma::mat Jacobian_MapR(arma::vec vPhi, int iN){
+arma::mat Jacobian_MapR(arma::vec vPhi, int iN) {
+  if (iN < 2)
+    Rcpp::stop("iN must be at least 2.");
 
-  int i,j,iC=0,iK = iN*(iN-1)/2;
+  const int q = iN * (iN - 1) / 2;
 
-  arma::mat mPhi=zeros(iN,iN);
-  arma::mat mC=zeros(iN,iN);
-  arma::mat mS=zeros(iN,iN);
+  if (vPhi.n_elem != static_cast<arma::uword>(q) ||
+      !vPhi.is_finite())
+      Rcpp::stop("vPhi must contain N*(N-1)/2 finite angles.");
 
-  for(i = 0;i<iN;i++){
-    for(j = i;j<iN;j++){
-      if(i!=j){
-        mPhi(i,j) = vPhi(iC);
-        mC(i,j) = cos(vPhi(iC));
-        mS(i,j) = sin(vPhi(iC));
-        iC+=1;
+  // Angles and correlations use row-wise upper-triangle order.
+  const arma::mat phi = FillUpperTriangular(vPhi, iN);
+  const arma::mat C = arma::cos(phi);
+  const arma::mat S = arma::sin(phi);
+  const arma::mat X = HalfR(vPhi); // R = X.t() * X
+
+  arma::mat J(q, q, arma::fill::zeros);
+
+  int col = 0;
+
+  for (int a = 0; a < iN - 1; ++a) {
+    for (int b = a + 1; b < iN; ++b, ++col) {
+
+      // Only column b of X depends on phi(a,b).
+      arma::vec dx(iN, arma::fill::zeros);
+
+      double p = 1.0;  // Product of preceding sines.
+      double dp = 0.0; // Derivative of that product.
+
+      for (int r = 0; r < b; ++r) {
+        const double c = C(r, b);
+        const double s = S(r, b);
+
+        dx(r) = c * dp - (r == a ? s * p : 0.0);
+
+        dp = s * dp + (r == a ? c * p : 0.0);
+        p *= s;
+      }
+
+      dx(b) = dp;
+
+      // dR = dX.t()*X + X.t()*dX.
+      // Pack its upper triangle in the order used by build_vR().
+      int row = 0;
+
+      for (int i = 0; i < iN - 1; ++i) {
+        for (int j = i + 1; j < iN; ++j, ++row) {
+          if (i == b)
+            J(row, col) += arma::dot(dx, X.col(j));
+
+          if (j == b)
+            J(row, col) += arma::dot(X.col(i), dx);
+        }
       }
     }
   }
 
-  //
-  // int iK = iN*(iN-1)/2;
-  arma::mat mJ = zeros(iK,iK);
-
-  if(iN==2){
-    mJ(0,0) = -sin(mPhi(0,1));
-  }
-
-  if(iN==3){
-    mJ(0,0) = -sin(mPhi(0,1));
-    //
-    mJ(1,1) = -sin(mPhi(0,2));
-    mJ(2,0) = -mC(0,2) * sin(mPhi(0,1)) + mS(0,2)*mC(1,2)*cos(mPhi(0,1));
-    mJ(2,1) = -mC(0,1) * sin(mPhi(0,2)) + mS(0,1)*mC(1,2)*cos(mPhi(0,2));
-    mJ(2,2) = -mS(0,1)*mS(0,2)*sin(mPhi(1,2));
-  }
-  if(iN==4){
-    mJ(0,0) = -sin(mPhi(0,1));
-    mJ(1,1) = -sin(mPhi(0,2));
-    mJ(3,0) = -mC(0,2) * sin(mPhi(0,1)) + mS(0,2)*mC(1,2)*cos(mPhi(0,1));
-    mJ(3,1) = -mC(0,1) * sin(mPhi(0,2)) + mS(0,1)*mC(1,2)*cos(mPhi(0,2));
-    mJ(2,2) = -mS(0,1)*mS(0,2)*sin(mPhi(1,2));
-    //
-    mJ(3,3) = -sin(mPhi(0,3));
-    mJ(4,0) = -mC(0,3)*sin(mPhi(0,1)) + mC(1,3)*mS(0,1)*cos(mPhi(0,1));
-    mJ(4,2) = -sin(mPhi(0,3))*mC(0,1) + mC(1,3)*cos(mPhi(0,3))*mS(0,1);
-    mJ(4,4) = sin(mPhi(1,3))*mS(0,3)*mS(0,1);
-    mJ(5,1) = -sin(mPhi(0,2))*mC(0,3) + mC(1,2)*mC(1,3)*cos(mPhi(0,2))*mS(0,3) + mS(1,2)*cos(mPhi(0,2))*mS(0,3)*mS(1,3)*mC(2,3);
-    mJ(5,3) = -sin(mPhi(1,2))*mC(1,3)*mS(0,2)*mS(0,3) + cos(mPhi(1,2))*mS(0,2)*mS(0,3)*mS(1,3)*mC(2,3);
-    mJ(5,2) = -sin(mPhi(0,3))*mC(0,2) + cos(mPhi(0,3))*mC(1,2)*mC(1,3)*mS(0,2) + cos(mPhi(0,3))*mS(1,2)*mS(0,2)*mS(1,3)*mC(2,3);
-    mJ(5,4) = -sin(mPhi(1,3))*mC(1,2)*mS(0,2)*mS(0,3) + cos(mPhi(1,3))*mS(1,2)*mS(0,2)*mS(0,3)*mC(2,3);
-    mJ(5,5) = -sin(mPhi(2,3))*mS(1,2)*mS(0,2)*mS(0,3)*mS(1,3);
-  }
-
-  if(iN>4) mJ.diag().ones();
-  // mJ.diag().ones();
-  return mJ;
+  return J;
 }
-
 
 arma::vec IndexesFinder(int iC, int iN){
   int l,m,iC_c = 0;

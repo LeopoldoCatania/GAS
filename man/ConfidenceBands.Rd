@@ -1,34 +1,80 @@
 \name{ConfidenceBands}
 \alias{ConfidenceBands}
-\title{
-	Build confidence bands for the filtered parameters
-}
+\title{Pointwise confidence bands for time-varying parameters}
+
 \description{
-	Build confidence bands for the filtered parameters sampling the coefficients
-	from the asymptotic distribution as in Blasques et al. (2016).
+Construct pointwise confidence bands for time-varying distribution
+parameters by sampling model coefficients from their estimated
+asymptotic normal distribution and filtering the observed data
+for each draw.
 }
+
 \usage{
-ConfidenceBands(object, B = 10000, probs = c(0.01,0.1,0.9,0.99), ...)
+ConfidenceBands(object, B = 10000L,
+                probs = c(0.01, 0.1, 0.9, 0.99), ...)
 }
+
 \arguments{
 \item{object}{
-An object of the class \link{uGASFit} or \link{mGASFit}}
-%
+A fitted object of class \code{\link{uGASFit}} or
+\code{\link{mGASFit}}.
+}
 \item{B}{
-\code{numeric} Number of draws from the asymptotic distributions.}
-%
+A positive integer giving the number of coefficient draws.
+}
 \item{probs}{
-\code{numeric} Quantiles to returns.}
-%
+A nonempty numeric vector of probabilities between zero and one.
+The returned quantiles follow the supplied order.
+}
 \item{...}{
-Additional arguments.}
+Currently unused.
 }
+}
+
 \details{
-	This function implements the "In-Sample Simulation-Based Bands" Section 3.3 of Blasques et al. (2016).
+The function implements the in-sample simulation-based approach
+described in Section 3.3 of Blasques et al. (2016).
+
+Model coefficients are sampled on the unrestricted estimation
+scale. The covariance estimate is constructed from the Hessian
+stored in the fitted object's optimiser output. Reliable use of
+the normal approximation requires a finite, positive definite
+Hessian at an interior optimum.
+
+Each sampled coefficient vector is transformed using the mapping
+appropriate to the fitted model. For multivariate models, the
+fitted \code{ScalarParameters} specification is respected.
+The observed data are then filtered under each sampled vector.
+
+Quantiles are computed separately for each time point and each
+distribution parameter, using the B simulated paths. The fitted
+path is not included as an additional simulation draw.
+
+These are pointwise parameter confidence bands. They are not
+simultaneous bands over the full path or prediction intervals
+for future observations.
+
+For a central 95 percent pointwise interval, use
+\code{probs = c(0.025, 0.975)}.
 }
-\value{An object of the class \code{array} of dimension (T+1) x B x K, where T is the length of
-the time series, K is the number of parameters and B the number of draws. The first slice reports
-the estimated filtered parameters. The one step ahead prediction is also reported, this why T+1.}
+
+\value{
+A numeric array with dimensions
+\code{c(T + 1L, length(probs), K)}, where T is the number of
+observations and K is the number of distribution parameters.
+
+The first dimension indexes time. Its first T entries correspond
+to the in-sample parameter path, and its final entry corresponds
+to the one-step-ahead parameter prediction.
+
+The second dimension indexes the requested quantile probabilities.
+The third dimension indexes the distribution parameters, in the
+order returned by \code{\link{getFilteredParameters}}.
+
+The array contains quantiles only. The fitted parameter path is
+available separately through
+\code{getFilteredParameters(object)}.
+}
 \author{Leopoldo Catania}
 \references{
 Blasques F, Koopman SJ, Lasak K, and Lucas, A (2016).
@@ -39,7 +85,6 @@ International Journal of Forecasting, 32(3), 875-887.
 \examples{
 \dontrun{
 
-# show the information of all the supported distributions
 library("GAS")
 
 data("cpichg")
@@ -50,6 +95,16 @@ GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
 
 Fit = UniGASFit(GASSpec, cpichg)
 
-Bands = ConfidenceBands(Fit)
+Bands <- ConfidenceBands(
+    Fit,
+    B = 1000L,
+    probs = c(0.025, 0.975)
+)
+
+lower <- Bands[, 1L, ]
+upper <- Bands[, 2L, ]
+
+# Fitted path, returned separately:
+fitted_path <- getFilteredParameters(Fit)
 }
 }

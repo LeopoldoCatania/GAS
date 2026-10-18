@@ -10,7 +10,7 @@ ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99),
     DType = DistType(Dist)
     ScalingType = getScalingType(object)
 
-    vCov = ginv(object@Estimates$optimiser$hessian)/iT
+    vCov = ginv(object@Estimates$optimiser$hessian)
 
     mPw = rmvnorm_mat(iB, vPw, vCov)
 
@@ -23,8 +23,26 @@ ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99),
         vPw_foo = mPw[b - 1L, ]
         names(vPw_foo) = names(vPw)
 
-        lParList = vPw2lPn_Uni(vPw_foo, iK)
-        lParList = AddFixedPar(lParList)
+        if (DType == "univariate") {
+
+          lParList <- vPw2lPn_Uni(vPw_foo, iK)
+
+        } else if (DType == "multivariate") {
+
+          lParList <- vPw2lPn_Multi(
+            vPw = vPw_foo,
+            Dist = Dist,
+            iK = iK,
+            iN = object@ModelInfo$iN,
+            ScalarParameters =
+              object@ModelInfo$Spec@Spec$ScalarParameters
+          )
+
+        } else {
+          stop("Unsupported distribution type: ", DType)
+        }
+
+        lParList <- AddFixedPar(lParList)
 
         if (DType == "univariate")
             cTheta[, b, ] = t(GASFilter_univ(Data, lParList$vKappa, lParList$mA, lParList$mB, iT, iK,
@@ -38,9 +56,18 @@ ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99),
     cQuantile = array(0, dim = c(iT + 1L, length(probs), iK), dimnames = list(1:(iT + 1L), paste("q",
         probs, sep = ""), colnames(mTheta)))
 
-    for (k in 1:iK) {
-        cQuantile[, , k] = t(apply(cTheta[, , k], 1L, quantile, probs = probs))
+    for (k in seq_len(iK)) {
+      simulated_paths <- matrix(
+        cTheta[, -1L, k, drop = FALSE],
+        nrow = iT + 1L,
+        ncol = iB
+      )
+
+      cQuantile[, , k] <- t(
+        apply(simulated_paths, 1L, quantile, probs = probs)
+      )
     }
+
     return(cQuantile)
 }
 
