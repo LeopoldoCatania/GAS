@@ -3,7 +3,7 @@
 \alias{tqdata}
 \title{Data from Bien et al (2011).}
 \description{
-From the readme.bnp.txt file in the JAE Data Archive available at \url{http://qed.econ.queensu.ca/jae/datasets/bien001/}:
+From the readme.bnp.txt file in the JAE Data Archive available at \url{http://qed.econ.queensu.ca/jae/2011-v26.4/bien-nolte-pohlmeier/}:
 
 The high-frequency data used in the paper come from the Trades and Quotation
 (TAQ) database. The data contains time-stamped quotations of Citicorp stock
@@ -27,9 +27,9 @@ The data contains 3080 rows and eight columns - in order:
 \usage{data("tqdata")}
 \format{A \link{data.frame} object containing 3,080 observat. ions.}
 \references{
-Bien K, Nolte, I, Pohlmeier W (2011). 
-"An Inflated Multivariate Integer Count Hurdle Model: An Application to Bid and Ask Quote Dynamics". 
-Journal of Applied Econometrics, 26(4), 669-707. 
+Bien K, Nolte, I, Pohlmeier W (2011).
+"An Inflated Multivariate Integer Count Hurdle Model: An Application to Bid and Ask Quote Dynamics".
+Journal of Applied Econometrics, 26(4), 669-707.
 \doi{10.1002/jae.1122}
 }
 \keyword{datasets}

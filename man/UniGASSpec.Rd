@@ -46,7 +46,7 @@ An object of the class \link{uGASSpec}.
 \references{
 Ardia D, Boudt K and Catania L (2016).
 "Generalized Autoregressive Score Models in R: The GAS Package."
-\url{http://ssrn.com/abstract=2825380}.\cr
+\url{https://www.ssrn.com/abstract=2825380}.\cr
 
 Creal D, Koopman SJ, Lucas A (2013).
 "Generalized Autoregressive Score Models with Applications."

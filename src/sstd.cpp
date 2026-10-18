@@ -9,7 +9,7 @@ using namespace Rcpp;
 double xdt(const double x, const double nu)
 {
   double a, b, pdf;
-  a = Rf_gammafn((nu+1.0)/2.0)/sqrt(PI*nu);
+  a = Rf_gammafn((nu+1.0)/2.0)/sqrt(M_PI*nu);
   b = Rf_gammafn(nu/2.0)*pow((1.0+(x*x)/nu),((nu+1.0)/2.0));
   pdf = a/b;
   return pdf;

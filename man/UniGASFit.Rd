@@ -58,21 +58,21 @@ An object of the class \link{uGASFit}
 \references{
 Ardia D, Boudt K and Catania L (2016a).
 "Generalized Autoregressive Score Models in R: The GAS Package."
-\url{http://ssrn.com/abstract=2825380}.\cr
+\url{https://www.ssrn.com/abstract=2825380}.\cr
 
 Blasques F, Koopman SJ, Lucas A (2014a).
 "Maximum Likelihood Estimation for Correctly Specified Generalized Autoregressive Score Models: Feedback Effects, Contraction Conditions and Asymptotic Properties." techreport TI 14-074/III, Tinbergen Institute.
-\url{http://www.tinbergen.nl/discussionpaper/?paper=2332}.
+\url{https://www.tinbergen.nl/discussionpaper/?paper=2332}.
 
 Blasques F, Koopman SJ, Lucas A (2014b).
 "Maximum Likelihood Estimation for Generalized Autoregressive Score Models."
 techreport TI 2014-029/III, Tinbergen Institute.
-\url{http://www.tinbergen.nl/discussionpaper/?paper=2286}.\cr
+\url{https://www.tinbergen.nl/discussionpaper/?paper=2286}.\cr
 
 Blasques F, Koopman SJ, Lucas A, Schaumburg J (2014c).
 "Spillover Dynamics for Systemic Risk Measurement using Spatial Financial Time Series Models."
 techreport TI 2014-103/III, Tinbergen Institute.
-\url{http://www.tinbergen.nl/discussionpaper/?paper=2369}.\cr
+\url{https://www.tinbergen.nl/discussionpaper/?paper=2369}.\cr
 
 Creal D, Koopman SJ, Lucas A (2013).
 "Generalized Autoregressive Score Models with Applications."

@@ -36,8 +36,7 @@ See also Fissler et al. (2015).
 
 Fissler, T., Ziegel, J.F., (2016).
 "Higher order elicitability and Osband's principle."
-The Annals of Statistics 44, 1680-1707.
-\doi{10.1214/16-AOS1439}.\cr
+The Annals of Statistics 44, 1680-1707.\cr
 %
 Fissler, T., Ziegel, J.F., Tilmann, G. (2015).
 "Expected Shortfall is jointly elicitable with Value at Risk - Implications for backtesting."

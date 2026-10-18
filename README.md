@@ -1,4 +1,5 @@
 # GAS
+[![CRAN](https://www.r-pkg.org/badges/version/GAS)](https://cran.r-project.org/package=GAS) [![Downloads](https://cranlogs.r-pkg.org/badges/GAS?color=brightgreen)](https://www.r-pkg.org/pkg/GAS)[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/GAS?color=brightgreen)](https://www.r-pkg.org/pkg/GAS)
 
 [`GAS`](https://CRAN.R-project.org/package=GAS) implements the Generalized Autoregressive 
 Score (GAS) framework in R. The GAS package provides 

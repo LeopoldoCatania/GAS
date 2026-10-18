@@ -1,17 +1,16 @@
 Package: GAS
 Type: Package
-Title: Generalized Autoregressive Score Models 
-Version: 0.3.3
+Title: Generalized Autoregressive Score Models
+Version: 0.3.4.1
 Authors@R: c(person("Leopoldo", "Catania", role = c("aut", "cre"),
              email = "leopoldo.catania@econ.au.dk",
-             comment = c(ORCID = "0000-0002-1000-5142")),
+             comment = c(ORCID = "0000-0002-0981-1921")),
              person("David", "Ardia", role = c("ctb"),
              email = "david.ardia.ch@gmail.com",
-             comment = c(ORCID = "0000-0003-2823-782X")),
-             person("Kris", "Boudt", role = c("ctb"),
+      			 comment = c(ORCID = "0000-0003-2823-782X")),
+            person("Kris", "Boudt", role = c("ctb"),
              email = "kris.boudt@ugent.be",
              comment = c(ORCID = "0000-0002-1000-5142")))
-Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>
 Description: Simulate, estimate and forecast using univariate and multivariate GAS models 
   as described in Ardia et al. (2019) <doi:10.18637/jss.v088.i06>.
 License: GPL-3
@@ -22,3 +21,11 @@ Imports: Rcpp (>= 0.12.2), Rsolnp, MASS, xts, numDeriv, zoo, cubature
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 3.4.0), methods
 Suggests: testthat
+NeedsCompilation: yes
+Packaged: 2024-08-19 08:41:50 UTC; hornik
+Repository: CRAN
+Date/Publication: 2024-08-19 09:00:52 UTC
+Author: Leopoldo Catania [aut, cre] (<https://orcid.org/0000-0002-0981-1921>),
+  David Ardia [ctb] (<https://orcid.org/0000-0003-2823-782X>),
+  Kris Boudt [ctb] (<https://orcid.org/0000-0002-1000-5142>)
+Maintainer: Leopoldo Catania <leopoldo.catania@econ.au.dk>

@@ -23,7 +23,7 @@ double dSKELLAM(double dY, double dMu, double dSigma2, bool bLog = false) {
 
 // This code has been taken from the R code of the skellam package of
 // Jerry W Lewis, Patrick E Brown and Michail Tsagris (see
-// see http://r-forge.r-project.org/projects/healthqueues) and slightly modified to fit the GAS package.
+// see https://r-forge.r-project.org/projects/healthqueues) and slightly modified to fit the GAS package.
 double pSKELLAM(double dY, double dMu, double dSigma2) {
 
   // double xm = -floor(dY) - 0.5;
@@ -63,7 +63,7 @@ double pSKELLAM(double dY, double dMu, double dSigma2) {
 
 // This code has been taken from the R code of the skellam package of
 // Jerry W Lewis, Patrick E Brown and Michail Tsagris (see
-// see http://r-forge.r-project.org/projects/healthqueues) and
+// see https://r-forge.r-project.org/projects/healthqueues) and
 // slightly modified to fit the GAS package.
 double qSKELLAM(double dP, double dMu, double dSigma2) {
 

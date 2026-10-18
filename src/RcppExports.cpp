@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // EvaluateLogScore_Univ
 arma::vec EvaluateLogScore_Univ(arma::mat mTheta, arma::vec vY, std::string Dist, int iT);
 RcppExport SEXP _GAS_EvaluateLogScore_Univ(SEXP mThetaSEXP, SEXP vYSEXP, SEXP DistSEXP, SEXP iTSEXP) {
