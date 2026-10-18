@@ -73,3 +73,9 @@ residuals are standardized by the filtered standard deviation. By default \code{
 }
 \author{Leopoldo Catania}
 \keyword{classes}
+
+\note{
+For Bernoulli, Poisson, negative-binomial and Skellam models, stored
+PITs are randomized. Set \code{set.seed()} before constructing the
+object for reproducibility. See \code{\link{PIT_test}}.
+}

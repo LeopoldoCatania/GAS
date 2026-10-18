@@ -19,6 +19,21 @@ UniUnmapParameters(Theta, Dist)
 %
 }
 \details{
+
+For \code{Dist = "skellam"}, the public distribution parameters are
+mean \eqn{\mu} and variance \eqn{v>|\mu|}. The state coordinates are
+\deqn{f_1=\mu,\qquad f_2=\tfrac12\log(v^2-\mu^2).}
+The forward map is
+\deqn{\mu=f_1,\qquad v=\sqrt{f_1^2+\exp(2f_2)}.}
+Its Jacobian, with parameter coordinates in rows and state coordinates
+in columns, is
+\deqn{J=\begin{pmatrix}1&0\\f_1/v&\exp(2f_2)/v\end{pmatrix}.}
+States that cannot represent a finite interior parameter pair in
+floating-point arithmetic return \code{NA}; the coordinates are not
+clipped independently. Models estimated using the previous Skellam
+mapping must be refitted.
+
+
 The order of the parameters is generally: \code{location}, \code{scale}, \code{skewness}, \code{shape}, \code{shape2}. 
 When the distribution defined by \code{Dist} does not have, say, the \code{shape} parameter, this should be simply omitted. 
 See also \link{DistInfo} for specific distributions.

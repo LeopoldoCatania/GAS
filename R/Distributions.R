@@ -85,7 +85,10 @@ DistNote <- function(DistLabel) {
     if (DistLabel == "exp")
         return("For the Exponential distribution 'location' means the usual rate parameter")
     if (DistLabel == "skellam")
-        return("The Skellam distribution reparameterized in terms of mean and variance.")
+        return("Skellam parameters are mean mu and variance v > abs(mu).
+The states are f1=mu and f2=log(sqrt(v^2-mu^2)). Location controls f1;
+scale controls f2. With a dynamic location, variance may change even
+when scale=FALSE. Existing models using the old map must be refitted.")
     if (DistLabel == "negbin")
         return("The negative binomial distribution with size = nu and prob = pi. Both parameters can be time-varying,
                 however, only pi can be be used with a scaled score. For the Negative Binomial distribution 'location'

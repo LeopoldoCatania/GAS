@@ -5,21 +5,27 @@
 using namespace arma;
 using namespace Rcpp;
 
-double WeightFun(double dZ, std::string sType, double dA = 0.0, double dB = 1.0){
-  double dW = 0.0;
-
-  if(sType=="uniform")  dW = 1.0;
-  if(sType=="center")   dW = Rf_dnorm4(dZ, dA, dB, 0.0);
-  if(sType=="tails")    dW = (1.0 - Rf_dnorm4(dZ, dA, dB, 0.0)/Rf_dnorm4(0.0, dA, dB, 0.0));
-  if(sType=="tail_r")  dW = Rf_pnorm5(dZ, dA, dB, 1.0, 0.0);
-  if(sType=="tail_l")  dW = (1.0 - Rf_pnorm5(dZ, dA, dB, 1.0, 0.0));
-
-  return dW;
+double WeightFun(double dZ, std::string sType, double dA=0.0, double dB=1.0) {
+  if (!R_FINITE(dA) || !R_FINITE(dB) || dB <= 0)
+    Rcpp::stop("Weight location must be finite and scale must be finite and positive.");
+  if (sType=="uniform") return 1.0;
+  if (sType=="center") return Rf_dnorm4(dZ,dA,dB,0);
+  if (sType=="tails") {
+    const double z=(dZ-dA)/dB;
+    return -expm1(-0.5*z*z);
+  }
+  if (sType=="tail_r") return Rf_pnorm5(dZ,dA,dB,1,0);
+  if (sType=="tail_l") return Rf_pnorm5(dZ,dA,dB,0,0);
+  Rcpp::stop("Unknown CRPS weight.");
+  return NA_REAL;
 }
 
 double wCRPS_internal(double dY, arma::vec vTheta, std::string Dist, double dLower, double dUpper,
              std::string sType = "uniform", int iB = 1000,  double dA = 0.0, double dB = 1.0){
 
+  if (iB < 1 || !R_FINITE(dLower) || !R_FINITE(dUpper) || dLower >= dUpper ||
+      !R_FINITE(dUpper-dLower))
+    Rcpp::stop("CRPS requires a positive grid size and finite ordered bounds.");
   double dY_i = 0.0;
 
   double dWCRPS = 0.0;
@@ -41,7 +47,7 @@ double wCRPS_internal(double dY, arma::vec vTheta, std::string Dist, double dLow
     dWCRPS += dW * dBrierPS;
   }
 
-  dWCRPS *= (dUpper - dLower)/(iB - 1.0);
+  dWCRPS *= (dUpper - dLower)/iB;
 
   return dWCRPS;
 }

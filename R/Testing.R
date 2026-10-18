@@ -3,83 +3,73 @@
 
 ############ PIT#################
 
+
+.validatePIT <- function(pit, alpha) {
+    if (!is.numeric(pit) || !length(pit) || any(!is.finite(pit)) ||
+        any(pit < 0 | pit > 1))
+        stop("PIT values must be a nonempty finite numeric vector in [0,1].")
+    if (length(alpha) != 1L || !is.finite(alpha) || alpha <= 0 || alpha >= 1)
+        stop("alpha must lie strictly between zero and one.")
+}
+
 BinTest <- function(pit, g = 20L, alpha = 0.05, plot = FALSE) {
-
-    h = hist(pit, nclass = g, plot = FALSE)
-    n_i = h$counts
-    test = sum((n_i - mean(n_i))^2/mean(n_i))
-    crit = qchisq(1.0 - alpha, g - 1L)
-    pvalue = 1 - pchisq(test, g - 1L)
-    confidence = mean(n_i) + c(-qnorm(1 - alpha) * sqrt(mean(n_i)), +qnorm(1 - alpha) * sqrt(mean(n_i)))
-
+    .validatePIT(pit, alpha)
+    if (length(g) != 1L || !is.finite(g) || g < 2 || g != floor(g) ||
+        g >= .Machine$integer.max) stop("g must be an integer of at least two.")
+    h <- hist(pit, breaks = seq(0, 1, length.out = g + 1L),
+              include.lowest = TRUE, right = TRUE, plot = FALSE)
+    expected <- length(pit) / g
+    test <- sum((h$counts - expected)^2 / expected)
+    adequate <- expected >= 5
+    crit <- if (adequate) qchisq(1 - alpha, g - 1L) else NA_real_
+    pvalue <- if (adequate) pchisq(test, g - 1L, lower.tail = FALSE) else NA_real_
+    # Marginal bin counts have binomial, not Poisson, variance.
+    confidence <- expected + c(-1, 1) * qnorm(1 - alpha/2) *
+        sqrt(length(pit) / g * (1 - 1/g))
+    confidence <- pmin(length(pit), pmax(0, confidence))
     if (plot) {
-        plot(h, col = "blue", ylim = c(0, max(confidence * 1.2, n_i * 1.2)))
-        abline(h = confidence, col = "red", lwd = 2L, xlim = c(0, 1))
+        plot(h, freq = TRUE, col = "blue",
+             ylim = c(0, max(1, confidence, h$counts) * 1.2))
+        abline(h = confidence, col = "red", lwd = 2L)
     }
-
-    out = list(test = test, crit = crit, pvalue = pvalue, hist = h, confidence = confidence)
-    return(out)
+    list(test = test, crit = crit, pvalue = pvalue, hist = h,
+         confidence = confidence,
+         reason = if (adequate) NULL else
+             "Chi-squared calibration unavailable: expected bin count is below five.")
 }
 
 iidTest <- function(pit, alpha = 0.05) {
-
-    N = length(pit)
-
-    m1 = as.numeric(pit - mean(pit))
-    m2 = as.numeric((pit - mean(pit))^2)
-    m3 = as.numeric((pit - mean(pit))^3)
-    m4 = as.numeric((pit - mean(pit))^4)
-
-    data1 = do.call(cbind, lapply(1:20, function(i) c(m1[-(1:i)], rep(NA, i))))
-    data1 = data.frame(head(data1, N - 20L))
-    data2 = do.call(cbind, lapply(1:20, function(i) c(m2[-(1:i)], rep(NA, i))))
-    data2 = data.frame(head(data2, N - 20L))
-    data3 = do.call(cbind, lapply(1:20, function(i) c(m3[-(1:i)], rep(NA, i))))
-    data3 = data.frame(head(data3, N - 20L))
-    data4 = do.call(cbind, lapply(1:20, function(i) c(m4[-(1:i)], rep(NA, i))))
-    data4 = data.frame(head(data4, N - 20L))
-
-    m1 = head(m1, N - 20L)
-    m2 = head(m2, N - 20L)
-    m3 = head(m3, N - 20L)
-    m4 = head(m4, N - 20L)
-
-    fit1 = lm(m1 ~ ., data = data1)
-    fit2 = lm(m2 ~ ., data = data2)
-    fit3 = lm(m3 ~ ., data = data3)
-    fit4 = lm(m4 ~ ., data = data4)
-
-    test1 = (N - 20) * summary(fit1)$r.squared
-    test2 = (N - 20) * summary(fit2)$r.squared
-    test3 = (N - 20) * summary(fit3)$r.squared
-    test4 = (N - 20) * summary(fit4)$r.squared
-
-    crit = qchisq(1 - alpha, 20L)
-
-    pvalue1 = 1 - pchisq(test1, 20L)
-    pvalue2 = 1 - pchisq(test2, 20L)
-    pvalue3 = 1 - pchisq(test3, 20L)
-    pvalue4 = 1 - pchisq(test4, 20L)
-
-
-    out = list(test = c(test1 = test1, test2 = test2, test3 = test3, test4 = test4), crit = crit, pvalue = c(pvalue1,
-        pvalue2, pvalue3, pvalue4))
-    return(out)
+    .validatePIT(pit, alpha)
+    L <- 20L
+    tests <- setNames(rep(NA_real_, 4L), paste0("test", 1:4))
+    pvalues <- setNames(rep(NA_real_, 4L), paste0("pvalue", 1:4))
+    reasons <- rep(NA_character_, 4L)
+    # The lagged design has an intercept plus L regressors.
+    if (length(pit) - L <= L + 1L)
+        return(list(test = tests, crit = NA_real_, pvalue = pvalues,
+                    reason = "Insufficient observations for the 20-lag regressions."))
+    z <- as.numeric(pit - mean(pit))
+    for (k in 1:4) {
+        dat <- embed(z^k, L + 1L)
+        y <- dat[, 1L]
+        X <- cbind(1, dat[, -1L, drop = FALSE])
+        fit <- lm.fit(X, y)
+        tss <- sum((y - mean(y))^2)
+        if (fit$rank != ncol(X) || !is.finite(tss) || tss <= 0) {
+            reasons[k] <- "Rank-deficient lag regression or constant dependent variable."
+            next
+        }
+        r2 <- max(0, min(1, 1 - sum(fit$residuals^2)/tss))
+        tests[k] <- nrow(X) * r2
+        pvalues[k] <- pchisq(tests[k], L, lower.tail = FALSE)
+    }
+    list(test = tests, crit = qchisq(1 - alpha, L), pvalue = pvalues,
+         reason = reasons)
 }
 
 PIT_test <- function(U, G = 20L, alpha = 0.05, plot = FALSE) {
-
-    iG = G
-    dAlpha = alpha
-    vU = U
-
-    if (length(vU) < 100L)
-        iG = 5L
-
-    Hist = BinTest(pit = vU, g = iG, alpha = dAlpha, plot = plot)
-    IID = iidTest(pit = vU, alpha = dAlpha)
-
-    return(list(Hist = Hist, IID = IID))
+    list(Hist = BinTest(U, g = G, alpha = alpha, plot = plot),
+         IID = iidTest(U, alpha = alpha))
 }
 
 ############################### QUANTILE #

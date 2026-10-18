@@ -18,7 +18,7 @@ MultiGASRoll(data, GASSpec, ForecastLength = 500, Nstart = NULL,
 \item{GASSpec}{ An object of the class \link{mGASSpec} created using the function \link{MultiGASSpec}}
 %
 \item{ForecastLength}{ \code{numeric} Length of the out of sample}
-\item{Nstart}{ \code{numeric} Period when perform the first forecast. Ignored if \code{ForecastLength} is supplied.}
+\item{Nstart}{ \code{numeric} Number of observations in the first estimation sample. Ignored if \code{ForecastLength} is supplied.}
 \item{RefitEvery}{ \code{numeric} Number of periods before model coefficients re-estimation.}
 \item{RefitWindow}{ \code{character} Type of window. If \code{RefitWindow = "recursive"} all
 the observations are used when the model is re-estimated. If \code{RefitWindow = "moving"} old observations are eliminated.}
@@ -58,4 +58,16 @@ Roll = MultiGASRoll(mY, GASSpec, ForecastLength = 250,
 
 Roll
 }
+}
+
+\details{
+
+If ForecastLength is explicitly supplied, it determines the forecast
+horizon and Nstart is ignored. Otherwise, a supplied Nstart is the
+number of observations in the first estimation sample, and the
+horizon is the sample size minus Nstart. If neither is supplied,
+ForecastLength defaults to 500. The resulting forecast horizon must
+be positive and smaller than the sample size. RefitEvery must be a
+positive integer.
+
 }

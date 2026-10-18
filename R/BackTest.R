@@ -22,6 +22,8 @@ BacktestVaR <- function(data, VaR, alpha, Lags = 4L) {
 
 BacktestDensity <- function(Roll, lower, upper, K = 1000L, a = NULL, b = NULL) {
 
+  if (length(K) != 1L || !is.finite(K) || K < 1 || K != floor(K) ||
+      K > .Machine$integer.max) stop("K must be a positive integer.")
   dLower = lower
   dUpper = upper
   iK = K
@@ -49,7 +51,7 @@ BacktestDensity <- function(Roll, lower, upper, K = 1000L, a = NULL, b = NULL) {
   vLS = EvaluateLogScore_Univ(t(mTheta), vY_oos, Dist, iT)
 
   mWCRPS = mWCRPS_backtest(vY_oos, t(mTheta), Dist, dLower, dUpper, iK, dA, dB)
-  colnames(mWCRPS) = c("uniform", "center", "tails", "tail_l", "tail_r")
+  colnames(mWCRPS) = c("uniform", "center", "tails", "tail_r", "tail_l")
 
   vAvg = c(NLS = -mean(vLS), apply(mWCRPS, 2L, mean))
 

@@ -169,12 +169,12 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
   }
 
   if (Dist == "skellam") {
-
-    dMu = mean(vY)
-    dSigma2 = var(vY)
-
-    vTheta = c(dMu, dSigma2)
-
+    if (length(vY) < 2L || any(!is.finite(vY)) || any(vY != floor(vY)))
+      stop("Skellam observations must be finite integers; at least two are required.")
+    dMu <- mean(vY)
+    # Empirical moments can violate the interior parameter restriction.
+    dSigma2 <- max(var(vY), abs(dMu) + max(0.1, 0.01 * abs(dMu)))
+    vTheta <- c(dMu, dSigma2)
   }
 
   vTheta_tilde = as.numeric(UnmapParameters_univ(vTheta, Dist, iK = iK))

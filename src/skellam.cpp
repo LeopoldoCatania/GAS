@@ -4,20 +4,18 @@
 using namespace Rcpp;
 using namespace arma;
 
-double dSKELLAM(double dY, double dMu, double dSigma2, bool bLog = false) {
+static bool validSkellam(double mu, double v) {
+  return R_FINITE(mu) && R_FINITE(v) && v > fabs(mu);
+}
 
-  double dMu1 = 0.5 * (dSigma2 + dMu);
-  double dMu2 = 0.5 * (dSigma2 - dMu);
-
-  double dB = ModBesselFirst(2.0 * pow(dMu1 * dMu2, 0.5), abs3(dY));
-
-  double dPDF = -(dMu1 + dMu2) + 0.5 * dY * log(dMu1/dMu2) + log(dB);
-
-  if (!bLog) {
-    dPDF = exp(dPDF);
-  }
-
-  return dPDF;
+double dSKELLAM(double dY, double dMu, double dSigma2, bool bLog=false) {
+  if (!validSkellam(dMu,dSigma2) || ISNAN(dY)) return NA_REAL;
+  if (!R_FINITE(dY) || dY != floor(dY)) return bLog ? R_NegInf : 0.0;
+  const double l1 = 0.5*(dSigma2+dMu), l2 = 0.5*(dSigma2-dMu);
+  const double a = sqrt(l1), b = sqrt(l2), z = 2*a*b;
+  const double scaledI = Rf_bessel_i(z,fabs(dY),2);
+  const double ld = -(a-b)*(a-b)+0.5*dY*(log(l1)-log(l2))+log(scaledI);
+  return bLog ? ld : exp(ld);
 }
 
 
@@ -25,40 +23,13 @@ double dSKELLAM(double dY, double dMu, double dSigma2, bool bLog = false) {
 // Jerry W Lewis, Patrick E Brown and Michail Tsagris (see
 // see https://r-forge.r-project.org/projects/healthqueues) and slightly modified to fit the GAS package.
 double pSKELLAM(double dY, double dMu, double dSigma2) {
-
-  // double xm = -floor(dY) - 0.5;
-  // double s  = log(0.5 * (xm + pow(pow(xm, 2.0) + 4.0 * dMu1 * dMu2, 0.5))/dMu2);
-  // double K  = dMu2 * (exp(s) - 1.0) + dMu1 * (exp(-s) - 1.0);
-  // double K2 = dMu2 * exp(s) + dMu1 * exp(-s);
-  // double u2 = 2.0 * sinh(0.5 * s) * pow(K2, 0.5);
-  // double w2 = pow(2 * (s * xm - K), 0.5);
-  // if (s < 0) {
-  //   w2 = -w2;
-  // }
-  // double xe = (xm + (dMu1 - dMu2))/pow(dMu1 + dMu2, 0.5);
-  // double g1 = (dMu1 - dMu2)/pow(dMu1 + dMu2, 1.5);
-  //
-  // double dCDF = 0.0;
-  //
-  // if (abs3(xe) < 1e-4) {
-  //   dCDF = Rf_pnorm5(-xe, 0.0, 1.0, 1, 0) + Rf_dnorm4(xe, 0.0, 1.0, 0) * g1/6.0 * (1.0 - pow(xe, 2.0));
-  // } else {
-  //   dCDF = Rf_pnorm5(-w2, 0.0, 1.0, 1, 0) - Rf_dnorm4(w2, 0.0, 1.0, 0) * (1.0/w2 - 1.0/u2);
-  // }
-
-  double dMu1 = 0.5 * (dSigma2 + dMu);
-  double dMu2 = 0.5 * (dSigma2 - dMu);
-
-  double dCDF = 0.0;
-
-  if (dY < 0) {
-    dCDF = Rf_pnchisq(2.0 * dMu2, -2 * dY, 2.0 * dMu1, 1, 0);
-  } else {
-    dCDF = Rf_pnchisq(2.0 * dMu1, 2 * (dY + 1.0), 2.0 * dMu2, 0, 0);
-  }
-
-  return dCDF;
-
+  if (!validSkellam(dMu,dSigma2) || ISNAN(dY)) return NA_REAL;
+  if (dY == R_NegInf) return 0.0;
+  if (dY == R_PosInf) return 1.0;
+  const double y=floor(dY);
+  const double l1=0.5*(dSigma2+dMu), l2=0.5*(dSigma2-dMu);
+  return y < 0 ? Rf_pnchisq(2*l2,-2*y,2*l1,1,0)
+               : Rf_pnchisq(2*l1,2*(y+1),2*l2,0,0);
 }
 
 // This code has been taken from the R code of the skellam package of
@@ -66,44 +37,47 @@ double pSKELLAM(double dY, double dMu, double dSigma2) {
 // see https://r-forge.r-project.org/projects/healthqueues) and
 // slightly modified to fit the GAS package.
 double qSKELLAM(double dP, double dMu, double dSigma2) {
-
-  double dMu1 = 0.5 * (dSigma2 + dMu);
-  double dMu2 = 0.5 * (dSigma2 - dMu);
-
-  double p = dP * (1 - 64 * 2.22e-16);
-
-  double z = Rf_qnorm5(dP, 0.0, 1.0, 1, 0);
-  double mu = dMu1 - dMu2;
-  double vr = dMu1 + dMu2;
-
-  double sg = pow(vr, 0.5);
-  double c0 = mu + z * sg;
-  double c1 = (pow(z, 2.0) - 1.0) * mu/vr/6.0;
-  double c2 = -(c1 * mu - 2.0 * dMu1 * dMu2 * (pow(z, 2.0) - 3.0)/vr) *  z/12.0/vr/sg;
-
-  double q0 = round(c0 + c1 + c2);
-  double p0 = pSKELLAM(q0, dMu1, dMu2);
-
-  if (p0 < p) {
-  while (p0 < p) {
-    q0 += 1;
-    p0 = pSKELLAM(q0, dMu1, dMu2);
+  if (!validSkellam(dMu,dSigma2) || !R_FINITE(dP) || dP < 0 || dP > 1)
+    return NA_REAL;
+  if (dP == 0) return R_NegInf;
+  if (dP == 1) return R_PosInf;
+  // Limit the search to exactly representable integer arithmetic.
+  const double limit=4503599627370496.0;
+  double q=floor(dMu+sqrt(dSigma2)*Rf_qnorm5(dP,0,1,1,0));
+  if (!R_FINITE(q) || fabs(q)>=limit) return NA_REAL;
+  double f=pSKELLAM(q,dMu,dSigma2), lo=q, hi=q, step=1.0;
+  if (!R_FINITE(f)) return NA_REAL;
+  bool bracketed=false;
+  for (int j=0;j<64;++j) {
+    if (f < dP) {
+      hi=q+step;
+      if (fabs(hi)>=limit) return NA_REAL;
+      const double fh=pSKELLAM(hi,dMu,dSigma2);
+      if (!R_FINITE(fh)) return NA_REAL;
+      if (fh>=dP) { bracketed=true; break; }
+      lo=hi;
+    } else {
+      lo=q-step;
+      if (fabs(lo)>=limit) return NA_REAL;
+      const double fl=pSKELLAM(lo,dMu,dSigma2);
+      if (!R_FINITE(fl)) return NA_REAL;
+      if (fl<dP) { bracketed=true; break; }
+      hi=lo;
     }
-  } else {
-
-    p0 = pSKELLAM(q0 - 1, dMu1, dMu2);
-
-    while (p0 > p) {
-      q0 -= 1;
-      p0 = pSKELLAM(q0 - 1, dMu1, dMu2);
-    }
+    step*=2.0;
   }
-
-  return q0;
-
+  if (!bracketed) return NA_REAL;
+  for (int j=0;j<64 && hi-lo>1.0;++j) {
+    const double mid=lo+floor((hi-lo)/2.0);
+    const double fm=pSKELLAM(mid,dMu,dSigma2);
+    if (!R_FINITE(fm)) return NA_REAL;
+    if (fm>=dP) hi=mid; else lo=mid;
+  }
+  return hi-lo<=1.0 ? hi : NA_REAL;
 }
 
 double rSKELLAM(double dMu, double dSigma2) {
+  if (!validSkellam(dMu,dSigma2)) return NA_REAL;
 
   double dMu1 = 0.5 * (dSigma2 + dMu);
   double dMu2 = 0.5 * (dSigma2 - dMu);
@@ -119,7 +93,8 @@ double rSKELLAM(double dMu, double dSigma2) {
 
 arma::vec mSKELLAM(double dMu, double dSigma2) {
 
-  arma::vec vMoments(4);
+  arma::vec vMoments(4); vMoments.fill(NA_REAL);
+  if (!validSkellam(dMu,dSigma2)) return vMoments;
 
   vMoments(0) = dMu;
   vMoments(1) = dSigma2;
@@ -134,13 +109,16 @@ arma::vec skellam_Score(double dY, arma::vec vTheta) {
 
   double dMu = vTheta(0);
   double dSigma2 = vTheta(1);
+  if (!validSkellam(dMu,dSigma2) || !R_FINITE(dY) || dY != floor(dY)) {
+    arma::vec out(2); out.fill(NA_REAL); return out;
+  }
 
   double dMu1 = 0.5 * (dSigma2 + dMu);
   double dMu2 = 0.5 * (dSigma2 - dMu);
 
-  double dDerivBessel = ModBesselFirst_Deriv(2.0 * pow(dMu1 * dMu2, 0.5), abs3(dY));
-
-  double dBessel = ModBesselFirst(2.0 * pow(dMu1 * dMu2, 0.5), abs3(dY));
+  const double z=2.0*sqrt(dMu1)*sqrt(dMu2);
+  const double dBessel=Rf_bessel_i(z,fabs(dY),2);
+  const double dDerivBessel=fabs(dY)/z*dBessel+Rf_bessel_i(z,fabs(dY)+1.0,2);
 
   double dMu1_s = 0.5 * dY / dMu1 - 1.0 + pow(dMu2/dMu1, 0.5) * dDerivBessel / dBessel;
   double dMu2_s = - 0.5 * dY / dMu2 - 1.0 + pow(dMu1/dMu2, 0.5) * dDerivBessel / dBessel;

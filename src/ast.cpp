@@ -373,45 +373,20 @@ arma::vec mAST(double dMu, double dSigma, double dAlpha,
 
   return vMoments;
 }
-double qAST(double dP, double dMu, double dSigma, double dAlpha, double dNu1, double dNu2,
-                        double lower=-150, double upper=150, int maxiter=1e4, double eps=1e-7) {
-  double a=lower;
-  double b=upper;
-
-  double x=lower;
-  double x1=upper;
-  int iter = 1;
-  double fa,fx;
-  //check
-  fa=pAST(a, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
-  fx=pAST(x1, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
-
-  if(fa*fx>0){
-    Rprintf("Bisection Error: upper and lower function evaluations have same sign");
-    return NA_LOGICAL;
-  }
-
-  do
-  {
-    fa=pAST(a, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
-    fx=pAST(x, dMu, dSigma, dAlpha, dNu1, dNu2) - dP;
-
-    if (fa*fx < 0){
-      b=x;
-    }else{
-      a=x;
-    }
-
-    x1=(a+b)/2.0;
-    iter++;
-
-    if (abs3(x1-x) < eps)
-    {
-      return x1;
-    }
-    x=x1;
-  }while(iter<maxiter);
-
-  Rprintf("Bisection Warning: Maximum numeber of iteration reached");
-  return NA_LOGICAL;
+double qAST(double dP, double dMu, double dSigma, double dAlpha,
+            double dNu1, double dNu2, double lower=-150, double upper=150,
+            int maxiter=1e4, double eps=1e-7) {
+  // Legacy bisection arguments are retained for source compatibility only.
+  if (!R_FINITE(dP) || dP < 0 || dP > 1 || !R_FINITE(dMu) ||
+      !R_FINITE(dSigma) || dSigma <= 0 || !R_FINITE(dAlpha) ||
+      dAlpha <= 0 || dAlpha >= 1 || !R_FINITE(dNu1) || dNu1 <= 0 ||
+      !R_FINITE(dNu2) || dNu2 <= 0) return NA_REAL;
+  if (dP == 0) return R_NegInf;
+  if (dP == 1) return R_PosInf;
+  if (dP == dAlpha) return dMu;
+  if (dP < dAlpha)
+    return dMu + 2*dAlpha*dSigma*Kast(dNu1)*
+      Rf_qt(dP/(2*dAlpha), dNu1, 1, 0);
+  return dMu + 2*(1-dAlpha)*dSigma*Kast(dNu2)*
+    Rf_qt((1-dP)/(2*(1-dAlpha)), dNu2, 0, 0);
 }

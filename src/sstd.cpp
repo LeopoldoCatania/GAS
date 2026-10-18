@@ -1,30 +1,18 @@
 #include <RcppArmadillo.h>
 #include "Utils.h"
+#include "TwoPiece.h"
 
 using namespace arma;
 using namespace Rcpp;
 //// These functions are taken principally from the rugarch package of Ghalanos (2016) and have been slightly
 //// modified to fit the GAS package
 
-double xdt(const double x, const double nu)
-{
-  double a, b, pdf;
-  a = Rf_gammafn((nu+1.0)/2.0)/sqrt(M_PI*nu);
-  b = Rf_gammafn(nu/2.0)*pow((1.0+(x*x)/nu),((nu+1.0)/2.0));
-  pdf = a/b;
-  return pdf;
-}
+double xdt(const double x, const double nu) { return Rf_dt(x, nu, 0); }
 
-double dstdstd(const double x, const double nu)
-{
-  double pdf, s;
-  if(nu<=2){
-    pdf = 999;
-  } else{
-    s = sqrt(nu/(nu-2.0));
-    pdf = s*xdt(x*s,nu);
-  }
-  return pdf;
+double dstdstd(const double x, const double nu) {
+  if (!R_FINITE(nu) || nu <= 2) return NA_REAL;
+  const double s = sqrt(nu/(nu-2.0));
+  return exp(log(s)+Rf_dt(x*s,nu,1));
 }
 
 double qstd(const double p, const double mu, const double sigma, const double nu)
@@ -68,53 +56,42 @@ double rsstd(const double xi, const double nu)
   return(ans);
 }
 
-double dsstdstd(const double x, const double xi, const double nu)
-{
-  double mu, m1,beta, sigma, z, g,pdf,a,b, xxi;
-  xxi=xi;
-  a = 1.0/2.0;
-  b = nu/2.0;
-  beta = (Rf_gammafn(a)/Rf_gammafn(a+b))*Rf_gammafn(b);
-  m1 = 2.0*sqrt(nu-2.0)/(nu-1.0)/beta;
-  mu = m1*(xi-1.0/xi);
-  sigma = sqrt( (1.0-pow(m1,2))*( pow(xi,2)+1.0/(pow(xi,2)) )+2.0*pow(m1,2)-1.0 );
-  z = x*sigma + mu;
-  if(z==0){
-    xxi=1;
-  }
-  if(z<0){
-    xxi = 1/xi;
-  }
-  g = 2.0/(xi+1.0/xi);
-  pdf = g*dstdstd(z/xxi,nu)*sigma;
-  return pdf;
-}
 
-double psstd(const double q, const double mu, const double sigma, const double xi, const double nu)
-{
-  double qx = (q-mu)/sigma;
-  double m1 = 2.0 * sqrt(nu-2.0) / (nu-1.0) / Rf_beta(0.5, nu/2.0);
-  double mux = m1*(xi-1.0/xi);
-  double sig =  sqrt((1-m1*m1)*(xi*xi+1/(xi*xi)) + 2*m1*m1 - 1);
-  double z = qx*sig+mux;
-  double Xi = (z<0)?1.0/xi:xi;
-  double g = 2.0 / (xi + 1.0/xi);
-  double p = Heaviside(z, 0) - signum(z) * g * Xi * pstd(-fabs(z)/Xi, 0, 1, nu);
-  return( p );
+double GAS_log_sstd(double x, double xi, double nu) {
+  if (ISNAN(x) || !R_FINITE(xi) || xi <= 0 || !R_FINITE(nu) || nu <= 2) return NA_REAL;
+  const GAS_TwoPiece t(xi, GAS_t_absmean(nu));
+  const double z = x*t.sd+t.mean;
+  const double u = z < 0 ? z*xi : z/xi;
+  return log(2.0)-log(xi+1.0/xi)+log(t.sd)+Rf_dt(u*sqrt(nu/(nu-2.0)),nu,1)+0.5*log(nu/(nu-2.0));
+}
+double dsstdstd(const double x, const double xi, const double nu) { return exp(GAS_log_sstd(x, xi, nu)); }
+
+double psstd(const double q, const double mu, const double sigma, const double xi, const double nu) {
+  if (ISNAN(q) || !R_FINITE(mu) || !R_FINITE(sigma) || sigma <= 0 ||
+      !R_FINITE(xi) || xi <= 0 || !R_FINITE(nu) || nu <= 2) return NA_REAL;
+  const GAS_TwoPiece t(xi, GAS_t_absmean(nu));
+  const double z = (q-mu)/sigma*t.sd + t.mean;
+  if (z <= 0) return exp(log(2.0)+t.logleft+Rf_pt(z*xi*sqrt(nu/(nu-2.0)),nu,1,1));
+  return -expm1(log(2.0)+t.logright+Rf_pt(-z/xi*sqrt(nu/(nu-2.0)),nu,1,1));
 }
 
 
-double qsstd(const double p, const double xi, const double nu)
-{
-  double m1 = 2.0 * sqrt(nu-2.0) / (nu-1.0) / Rf_beta(0.5, nu/2.0);
-  double mu = m1*(xi-1.0/xi);
-  double sigma =  sqrt((1-m1*m1)*(xi*xi+1/(xi*xi)) + 2*m1*m1 - 1);
-  double g = 2.0 / (xi + 1.0/xi);
-  double z = p-0.5;
-  double Xi = (z<0)?1.0/xi:xi;
-  double tmp = (Heaviside(z, 0) - signum(z)*p)/(g*Xi);
-  double q = (-signum(z)*qstd(tmp, 0, 1, nu)*Xi - mu)/sigma;
-  return( q );
+double qsstd(const double p, const double xi, const double nu) {
+  if (!R_FINITE(p) || p < 0 || p > 1 || !R_FINITE(xi) || xi <= 0 || !R_FINITE(nu) || nu <= 2)
+    return NA_REAL;
+  if (p == 0) return R_NegInf;
+  if (p == 1) return R_PosInf;
+  const GAS_TwoPiece t(xi, GAS_t_absmean(nu));
+  double z;
+  if (p == exp(t.logleft)) z = 0.0;
+  else if (log(p) < t.logleft) {
+    const double lp = log(p)-log(2.0)-t.logleft;
+    z = (Rf_qt(lp,nu,1,1)*sqrt((nu-2.0)/nu))/xi;
+  } else {
+    const double lp = log1p(-p)-log(2.0)-t.logright;
+    z = -xi*(Rf_qt(lp,nu,1,1)*sqrt((nu-2.0)/nu));
+  }
+  return (z-t.mean)/t.sd;
 }
 
 
@@ -122,7 +99,7 @@ double sstdskew(double dXi, double dNu){
   // Theoretical moments based on bijection betweeen Fernandez and Steel verions
   // and Hansen's Generalized Skew-T (credit due to Michael Rockinger)
   double m3 = 0.0;
-  if (dNu > 2.0) {
+  if (dNu > 3.0) {
     double eta = dNu;
     double k2  = pow(dXi, 2.0);
     double lda = (k2-1.0)/(k2+1.0);
@@ -162,18 +139,15 @@ double sstdexkurt( double dXi, double dNu )
     // double m3  = (my3-3.0*a*my2+2.0*pow(a,3.0) )/pow(b,3.0);
     m4  = -3.0 + (my4-4.0*a*my3+6.0*pow(a,2.0)*my2-3.0*pow(a,4.0) )/pow(b,4.0);
   } else{
-    m4 = NA_REAL;
+    m4 = dNu > 2.0 ? R_PosInf : NA_REAL;
   }
   return m4;
 }
 
-double dSSTD(double dY, double dMu, double dSigma, double dXi, double dNu, bool bLog = false ){
-  double dZ = (dY - dMu)/dSigma;
-  double dPDF = dsstdstd(dZ, dXi, dNu)/dSigma;
-
-  if(bLog) dPDF = log(dPDF);
-
-  return dPDF;
+double dSSTD(double dY, double dMu, double dSigma, double dXi, double dNu, bool bLog=false) {
+  if (!R_FINITE(dMu) || !R_FINITE(dSigma) || dSigma <= 0) return NA_REAL;
+  const double ld = GAS_log_sstd((dY-dMu)/dSigma, dXi, dNu)-log(dSigma);
+  return bLog ? ld : exp(ld);
 }
 
 double pSSTD(double dY, double dMu, double dSigma, double dXi, double dNu){
@@ -188,16 +162,16 @@ double rSSTD(double dMu, double dSigma, double dXi, double dNu){
   return dY;
 }
 
-double qSSTD(double dP, double dMu, double dSigma, double dXi, double dNu){
-
-  double dQ = qsstd(dP, dXi, dNu)*dSigma + dMu;
-
-  return dQ;
+double qSSTD(double dP, double dMu, double dSigma, double dXi, double dNu) {
+  if (!R_FINITE(dMu) || !R_FINITE(dSigma) || dSigma <= 0) return NA_REAL;
+  return dMu+dSigma*qsstd(dP,dXi, dNu);
 }
 
 arma::vec mSSTD(double dMu, double dSigma, double dXi, double dNu){
-  arma::vec vMoments(4);
-
+  arma::vec vMoments(4); vMoments.fill(NA_REAL);
+  if (!R_FINITE(dMu) || !R_FINITE(dSigma) || dSigma <= 0 ||
+      !R_FINITE(dXi) || dXi <= 0 || !R_FINITE(dNu) || dNu <= 2)
+    return vMoments;
   vMoments(0) = dMu;
   vMoments(1) = pow(dSigma, 2.0);
   vMoments(2) = sstdskew( dXi, dNu );
@@ -237,10 +211,8 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 
   double dC = 1.0 + pow(dZ, 2.0)/(pow(dXi_star, 2.0) * (dNu - 2.0));
 
-  double dA = 0.5*Rf_gammafn(0.5*(dNu + 1.0)) * ( pow(dNu - 2.0, -0.5) + pow(dNu - 2.0, 0.5)*Rf_digamma(0.5*(dNu + 1.0)));
-  double dB = Rf_gammafn(0.5 * dNu) + (dNu - 1.0)*Rf_digamma(0.5*dNu)*Rf_gammafn(0.5*dNu) * 0.5;
-  double ddMu1_nu = (dA*(dNu - 1.0)*Rf_gammafn(0.5*dNu) - dB*pow(dNu-2.0, 0.5)*Rf_gammafn(0.5*(dNu+1.0)))/pow( (dNu - 1.0)*Rf_gammafn(0.5*dNu), 2.0)*2.0/Rf_gammafn(0.5);
-
+  const double ddMu1_nu = dMu1*(0.5/(dNu-2.0)-1.0/(dNu-1.0)
+    + 0.5*Rf_digamma((dNu+1.0)/2.0)-0.5*Rf_digamma(dNu/2.0));
 
   double ddSigma_tilde_nu = (ddMu1_nu*( -(pow(dXi, 2.0) + pow(dXi, -2.0)) + 2.0 )*dMu1)/dSigma_tilde;
 

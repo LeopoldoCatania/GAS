@@ -6,7 +6,7 @@
 \description{
 The \code{BacktestDensity()} function accepts an object of the class \link{uGASRoll}, and returns a \code{list} with
 two elements: (i) the averages Negative Log Score (NLS) and  weighted Continuous Ranked Probability Score (wCRPS)
-introduced by Gneiting and Ranjan (2012), and (ii) their values at each point in time. The wCRPS is
+introduced by Gneiting and Ranjan (2011), and (ii) their values at each point in time. The wCRPS is
 evaluated using 5 weight functions, see Details.
 }
 \usage{
@@ -17,17 +17,17 @@ BacktestDensity(Roll, lower, upper, K = 1000, a = NULL, b = NULL)
 an object of the class \link{uGASRoll}.}
 %
 \item{lower}{
-\code{numeric} the lower bound used to approximate the wCRSP by Monte Carlo integration as
-detailed in Gneiting and Ranjan (2012).  This coincides with \eqn{y_{l}} in Equation 16 of
-Gneiting and Ranjan (2012).}
+\code{numeric} the lower bound used to approximate the wCRSP by deterministic numerical integration as
+detailed in Gneiting and Ranjan (2011).  This coincides with \eqn{y_{l}} in Equation 16 of
+Gneiting and Ranjan (2011).}
 %
 \item{upper}{
-\code{numeric} the upper bound used to approximate the wCRSP by Monte Carlo integration as detailed
-in Gneiting and Ranjan (2012).  This coincides with \eqn{y_{u}} in Equation 16 of Gneiting and Ranjan (2012).}
+\code{numeric} the upper bound used to approximate the wCRSP by deterministic numerical integration as detailed
+in Gneiting and Ranjan (2011).  This coincides with \eqn{y_{u}} in Equation 16 of Gneiting and Ranjan (2011).}
 %
 \item{K}{
 \code{numeric} integer representing the number of points used to discretize the wCRPS integral.
-This is \eqn{I} in Equation 16 of Gneiting and Ranjan (2012). By default \code{K = 1000.}}
+This is \eqn{I} in Equation 16 of Gneiting and Ranjan (2011). By default \code{K = 1000.}}
 %
 \item{a}{
 \code{numeric}. mean of the normal distribution used in the weight function. By default \code{a = NULL}, which
@@ -39,15 +39,26 @@ means that it is set equal to the empircial standard deviation of the in sample 
 %
 }
 \details{
+
+The integral is approximated on [lower,upper] by a left-endpoint
+Riemann sum with K points and spacing (upper-lower)/K. K must be a
+positive integer, bounds must be finite with lower less than upper,
+and b must be finite and strictly positive. The finite integration
+range truncates the full CRPS integral.
+The tail weight equals \eqn{1-\exp(-\tfrac12((z-a)/b)^2)} and is
+nonnegative. The returned columns are ordered as uniform, center,
+tails, tail_r and tail_l.
+
+
 The average Negative Log Score (NLS) is computed as the negative of the average of the log scores evaluated
 during the out-of-sample period. The average weighted Continuous Ranked Probability Score (wCRPS) is computed as
-the average of the wCRPS evaluated during the out-of-sample period, see Gneiting and Ranjan (2012).\cr
+the average of the wCRPS evaluated during the out-of-sample period, see Gneiting and Ranjan (2011).\cr
 %
-The wCRPS is evaluated using Equation 16 of Gneiting and Ranjan (2012). The weights functions implemented are:
+The wCRPS is evaluated using Equation 16 of Gneiting and Ranjan (2011). The weights functions implemented are:
 \itemize{
 \item \eqn{w(z) = 1}: Uniform,
 \item \eqn{w(z) = \phi_{a,b}(z)}: Center,
-\item \eqn{w(z) = 1 - \phi_{a,b}(z)}:  Tails,
+\item \eqn{w(z) = 1 - \phi_{a,b}(z)/\phi_{a,b}(a)}:  Tails,
 \item \eqn{w(z) = \Phi_{a,b}(z)}: Right tail,
 \item \eqn{w(z) = 1 - \Phi_{a,b}(z)}:  Left tail,
 }

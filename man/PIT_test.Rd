@@ -14,15 +14,45 @@ PIT_test(U, G = 20, alpha = 0.05, plot = FALSE)
 \code{numeric} Vector of Probability Integral Transformation (PIT).}
 %
 \item{G}{
-\code{numeric} Number of bins of the empirical cumulative density function of the PIT.}
+Integer of at least two giving the number of equal-width histogram bins on [0,1]. The supplied value is retained for all sample sizes.}
 %
 \item{alpha}{
-\code{numeric} Test confidence level.}
+Significance level strictly between zero and one.}
 %
 \item{plot}{
-\code{logical} Indicates whether the istogram of the PIT has to be displaied. By defauld \code{plot = FALSE}.}
+Logical; whether to display the PIT histogram. Default is \code{FALSE}.}
 }
 \details{
+
+All input values must be finite and lie in [0,1]. The histogram uses
+G fixed equal-width bins over this entire interval. Its Pearson
+statistic uses expected counts length(U)/G and a chi-squared reference
+distribution with G-1 degrees of freedom. If an expected count is below
+five, the statistic is returned but its critical value and p-value are
+\code{NA}, with an explanation in \code{reason}.
+The plotted count limits are approximate two-sided marginal limits
+with binomial variance; they are not simultaneous limits across bins.
+
+The dependence diagnostics regress each of the first four centered
+PIT powers on an intercept and its twenty lags. They require more than
+41 observations and a full-rank design. Unavailable tests are reported
+as \code{NA}, with a \code{reason}, and do not abort model fitting.
+
+For discrete distributions, ordinary CDF values F(Y) are not uniform.
+The package computes randomized PITs for \code{ber}, \code{poi},
+\code{negbin} and \code{skellam}:
+\deqn{U_t=F_t(Y_t-1)+V_t\{F_t(Y_t)-F_t(Y_t-1)\},}
+where the V variables are independent Uniform(0,1) random variables.
+Set \code{set.seed()} before fitting or forecasting for reproducibility.
+This consumes random numbers. Calls to \code{pit()} extract the stored
+realization without drawing new random variables.
+
+The reference distributions are asymptotic diagnostics. Estimated
+in-sample parameters and dependence can affect their finite-sample
+calibration; randomized PITs correct the discrete-CDF issue but do not
+remove parameter-estimation effects.
+
+
 This function implements density goodness of fit procedure of Diebold et al. (1998). The test relays on the
 result that, if the series of estimated conditional distributions is the true one, then the PIT series
 evaluated accordingly are iid Unif(0, 1) distributed.  The test of the iid Uniform(0, 1) assumption

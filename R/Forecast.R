@@ -6,6 +6,10 @@ UniGASFor <- function(uGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
         H = length(vOut)
     }
 
+    if (length(H) != 1L || !is.finite(H) || H < 1 || H != floor(H))
+        stop("H (or the out-of-sample length) must be a positive integer.")
+    if (length(B) != 1L || !is.finite(B) || B < 1 || B != floor(B))
+        stop("B must be a positive integer.")
     iH = H
     iB = B
 
@@ -29,7 +33,7 @@ UniGASFor <- function(uGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
 
         GASDyn = GASFilter_univ(vYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
-        PointForecast = t(GASDyn$mTheta[, (iT - iH + 1L):(iT)])
+        PointForecast = t(GASDyn$mTheta[, (iT - iH + 1L):iT, drop = FALSE])
         cBands = array(0, dim = c(1L, 1L, 1L))
         mY = matrix(0, 1L, 1L)
         vU = EvaluatePit_Univ(t(PointForecast), vOut, Dist, iH)
@@ -47,9 +51,9 @@ UniGASFor <- function(uGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
 
         if (iH > 1L) {
             for (k in 1:iK) {
-                PointForecast[, k] = apply(Forc$cTheta[k, , ], 1L, function(x) median(na.omit(x)))
+                PointForecast[, k] = apply(matrix(Forc$cTheta[k, , , drop = FALSE], nrow = iH, ncol = iB), 1L, function(x) median(na.omit(x)))
                 for (q in vBands) {
-                  cBands[, paste("q.", q, sep = ""), k] = apply(Forc$cTheta[k, , ], 1L, function(x, q) quantile(na.omit(x),
+                  cBands[, paste("q.", q, sep = ""), k] = apply(matrix(Forc$cTheta[k, , , drop = FALSE], nrow = iH, ncol = iB), 1L, function(x, q) quantile(na.omit(x),
                     probs = q), q = q)
                 }
             }
@@ -127,6 +131,10 @@ MultiGASFor <- function(mGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
         vOutDate = paste("T+", 1:H, sep = "")
     }
 
+    if (length(H) != 1L || !is.finite(H) || H < 1 || H != floor(H))
+        stop("H (or the out-of-sample length) must be a positive integer.")
+    if (length(B) != 1L || !is.finite(B) || B < 1 || B != floor(B))
+        stop("B must be a positive integer.")
     iH = H
     iB = B
 
@@ -152,7 +160,7 @@ MultiGASFor <- function(mGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
 
         GASDyn = GASFilter_multi(mYf, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 
-        PointForecast = t(GASDyn$mTheta[, (iT - iH + 1L):(iT)])
+        PointForecast = t(GASDyn$mTheta[, (iT - iH + 1L):iT, drop = FALSE])
         cBands = array(0, dim = c(1L, 1L, 1L))
         cY = array(0, dim = c(1L, 1L, 1L))
         vLS = GASDyn$vLLK[(iT - iH + 1L):(iT)]
@@ -169,9 +177,9 @@ MultiGASFor <- function(mGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
 
         if (iH > 1L) {
             for (k in 1:iK) {
-                PointForecast[, k] = apply(Forc$cTheta[k, , ], 1L, function(x) median(na.omit(x)))
+                PointForecast[, k] = apply(matrix(Forc$cTheta[k, , , drop = FALSE], nrow = iH, ncol = iB), 1L, function(x) median(na.omit(x)))
                 for (q in vBands) {
-                  cBands[, paste("q.", q, sep = ""), k] = apply(Forc$cTheta[k, , ], 1L, function(x, q) quantile(na.omit(x),
+                  cBands[, paste("q.", q, sep = ""), k] = apply(matrix(Forc$cTheta[k, , , drop = FALSE], nrow = iH, ncol = iB), 1L, function(x, q) quantile(na.omit(x),
                     probs = q), q = q)
                 }
             }
@@ -239,11 +247,24 @@ UniGASRoll <- function(data, GASSpec, ForecastLength = 500L, Nstart = NULL, Refi
             library(GAS)
         })
     }
-    if (!is.null(Nstart)) {
-        iStart = Nstart
+    RefitWindow <- match.arg(RefitWindow)
+    if (length(RefitEvery) != 1L || !is.finite(RefitEvery) ||
+        RefitEvery < 1 || RefitEvery != floor(RefitEvery))
+        stop("RefitEvery must be a positive integer.")
+    # An explicitly supplied ForecastLength takes precedence over Nstart.
+    if (!missing(ForecastLength) || is.null(Nstart)) {
+        if (length(ForecastLength) != 1L || !is.finite(ForecastLength) ||
+            ForecastLength != floor(ForecastLength) || ForecastLength < 1 ||
+            ForecastLength >= iT)
+            stop("ForecastLength must be an integer between 1 and length(data)-1.")
+        iStart <- iT - ForecastLength
     } else {
-        iStart = iT - ForecastLength
+        if (length(Nstart) != 1L || !is.finite(Nstart) ||
+            Nstart != floor(Nstart) || Nstart < 1 || Nstart >= iT)
+            stop("Nstart must be an integer between 1 and the sample size minus one.")
+        iStart <- Nstart
     }
+    ForecastLength <- iT - iStart
 
     FitIndex = seq(iStart, iT, RefitEvery)
     if (tail(FitIndex, 1L) == iT) {
@@ -351,11 +372,24 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500L, Nstart = NULL, Re
         clusterEvalQ(cluster, {
             library(GAS)
         })
-    if (!is.null(Nstart)) {
-        iStart = Nstart
+    RefitWindow <- match.arg(RefitWindow)
+    if (length(RefitEvery) != 1L || !is.finite(RefitEvery) ||
+        RefitEvery < 1 || RefitEvery != floor(RefitEvery))
+        stop("RefitEvery must be a positive integer.")
+    # An explicitly supplied ForecastLength takes precedence over Nstart.
+    if (!missing(ForecastLength) || is.null(Nstart)) {
+        if (length(ForecastLength) != 1L || !is.finite(ForecastLength) ||
+            ForecastLength != floor(ForecastLength) || ForecastLength < 1 ||
+            ForecastLength >= iT)
+            stop("ForecastLength must be an integer between 1 and length(data)-1.")
+        iStart <- iT - ForecastLength
     } else {
-        iStart = iT - ForecastLength
+        if (length(Nstart) != 1L || !is.finite(Nstart) ||
+            Nstart != floor(Nstart) || Nstart < 1 || Nstart >= iT)
+            stop("Nstart must be an integer between 1 and the sample size minus one.")
+        iStart <- Nstart
     }
+    ForecastLength <- iT - iStart
 
     FitIndex = seq(iStart, iT, RefitEvery)
     if (tail(FitIndex, 1) == iT)
@@ -368,12 +402,12 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500L, Nstart = NULL, Re
 
     if (RefitWindow[1L] == "recursive") {
         for (i in 1:length(FitIndex)) {
-            lData[[i]] = t(mY[, 1:FitIndex[i]])
+            lData[[i]] = t(mY[, 1:FitIndex[i], drop = FALSE])
         }
     }
     if (RefitWindow[1L] == "moving") {
         for (i in 1:length(FitIndex)) {
-            lData[[i]] = t(mY[, (FitIndex[i] - iStart + 1L):FitIndex[i]])
+            lData[[i]] = t(mY[, (FitIndex[i] - iStart + 1L):FitIndex[i], drop = FALSE])
         }
     }
     # fits
@@ -398,9 +432,9 @@ MultiGASRoll <- function(data, GASSpec, ForecastLength = 500L, Nstart = NULL, Re
 
         for (i in 1:length(FitIndex)) {
             if (i != length(FitIndex)) {
-                lOut[[i]] = t(mY[, (FitIndex[i] + 1L):(FitIndex[i + 1L])])
+                lOut[[i]] = t(mY[, (FitIndex[i] + 1L):FitIndex[i + 1L], drop = FALSE])
             } else {
-                lOut[[i]] = t(mY[, (FitIndex[i] + 1L):iT])
+                lOut[[i]] = t(mY[, (FitIndex[i] + 1L):iT, drop = FALSE])
             }
         }
 

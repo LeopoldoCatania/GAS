@@ -3,13 +3,8 @@ using namespace Rcpp;
 using namespace arma;
 
 double dEXP(double dY, double dMu, bool bLog=false) {
-
-  double dLPDF = log(dMu) - dMu*dY;
-
-  if(!bLog) dLPDF=exp(dLPDF);
-
-  return dLPDF;
-
+  if (!R_FINITE(dMu) || dMu <= 0) return NA_REAL;
+  return Rf_dexp(dY, 1.0/dMu, bLog ? 1 : 0);
 }
 double pEXP(double dY, double dMu) {
 

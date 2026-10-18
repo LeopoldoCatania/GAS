@@ -37,6 +37,15 @@ See the \link{DistInfo} function for more details.}
 %
 }
 \details{
+
+For \code{skellam}, \code{location} controls the mean-state coordinate
+\eqn{f_1=\mu}, whereas \code{scale} controls
+\eqn{f_2=\tfrac12\log(v^2-\mu^2)}. Thus a dynamic mean may change the
+variance even when \code{scale = FALSE}. See
+\code{\link{UniMapParameters}}. Coefficients for the old Skellam
+state parameterization are not interchangeable with these coefficients.
+
+
 	All the information regarding the supported univariate conditional distributions
 	can be investigated using the \link{DistInfo} function.
 }

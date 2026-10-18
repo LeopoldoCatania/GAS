@@ -29,7 +29,7 @@ Class for the univariate GAS forecast object.
 }
  \item{\code{Bands}:}{\code{array} with confidence bands parameters forecasts. Available only if \code{Roll = TRUE}.}
 %
-\item{\code{Draws}:}{If \code{ReturnsDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.}
+\item{\code{Draws}:}{If \code{ReturnDraws = TRUE} it is a iH x iB \code{matrix} of draws from the predictive distribution.}
 \item{\code{Info}:}{\code{list} with forecast information.}
 \item{\code{Data}:}{\code{list} with original data.}
 }
@@ -41,11 +41,17 @@ Class for the univariate GAS forecast object.
 \item \code{getForecast} \code{signature(object = 'uGASFor')}: Extract parameters forecast.
 \item \code{getObs} \code{signature(object = 'uGASFor')}: Extract original observations.
 \item \code{pit} \code{signature(object = 'uGASFor')}: Extract Probability Integral Transformation, only if \code{Roll = TRUE}.
-\item \code{quantile} \code{signature(object = 'uGASFor')}: Extract quantile forecasts. For multistep ahead prediction ES is computed by simulation and \code{ReturnsDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
-\item \code{ES} \code{signature(object = 'uGASFor')}: Extract Expected Shortfall forecasts. For multistep ahead prediction ES is computed by simulation and \code{ReturnsDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{quantile} \code{signature(object = 'uGASFor')}: Extract quantile forecasts. For multistep ahead prediction quantiles are computed by simulation and \code{ReturnDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
+\item \code{ES} \code{signature(object = 'uGASFor')}: Extract Expected Shortfall forecasts. For multistep ahead prediction quantiles are computed by simulation and \code{ReturnDraws = TRUE} should have been selected. It accepts the additional argument \code{probs} representing the vector of probabilities.
 \item \code{getMoments} \code{signature(object = 'uGASFor')}: Extract moments forecasts.
 \item \code{LogScore} \code{signature(object = 'uGASFor')}: Extract Log Scores.
 }
 }
 \author{Leopoldo Catania}
 \keyword{classes}
+
+\note{
+For Bernoulli, Poisson, negative-binomial and Skellam models, stored
+PITs are randomized. Set \code{set.seed()} before constructing the
+object for reproducibility. See \code{\link{PIT_test}}.
+}

@@ -67,3 +67,14 @@ Forecast = UniGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
 }
+
+\details{
+
+Parameter point forecasts retain an H by K matrix structure, including
+H=1 and K=1. For non-rolling forecasts beyond one step,
+\code{quantile()} and \code{ES()} require simulations retained with
+\code{ReturnDraws = TRUE}; otherwise they report an explanatory error.
+Rolling one-step forecasts and non-rolling one-step forecasts do not
+require retained simulations for these methods.
+
+}

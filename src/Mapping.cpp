@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+#include <cmath>
 #include "Utils.h"
 
 using namespace Rcpp;
@@ -294,14 +295,15 @@ arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK){
 
   }
   if(Dist == "skellam"){
-    double dMu_tilde = vTheta_tilde(0);
-    double dSigma2_tilde = vTheta_tilde(1);
-
-    double dMu = dMu_tilde;
-    double dSigma2 = exp(dSigma2_tilde);
-
-    vTheta(0) = dMu;
-    vTheta(1) = CheckScale(dSigma2);
+    const double mu=vTheta_tilde(0), gap=exp(vTheta_tilde(1));
+    const double v=std::hypot(mu,gap);
+    if (!R_FINITE(mu) || !R_FINITE(gap) || gap <= 0 ||
+        !R_FINITE(v) || v <= fabs(mu)) {
+      vTheta.fill(NA_REAL); return vTheta;
+    }
+    vTheta(0)=mu;
+    vTheta(1)=v;
+    return vTheta; // Do not clip the coupled coordinates separately.
   }
   return InfRemover_vec(vTheta);
 }
@@ -484,14 +486,12 @@ arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK = -999
     vTheta_tilde(3) = dNu_tilde;
   }
   if(Dist == "skellam"){
-    double dMu = vTheta(0);
-    double dSigma2 = vTheta(1);
-
-    double dMu_tilde = dMu;
-    double dSigma2_tilde = log(dSigma2);
-
-    vTheta_tilde(0) = dMu_tilde;
-    vTheta_tilde(1) = CheckScale(dSigma2_tilde);
+    const double mu=vTheta(0), v=vTheta(1);
+    if (!R_FINITE(mu) || !R_FINITE(v) || v <= fabs(mu)) {
+      vTheta_tilde.fill(NA_REAL); return vTheta_tilde;
+    }
+    vTheta_tilde(0)=mu;
+    vTheta_tilde(1)=0.5*(log(v-fabs(mu))+log(v)+log1p(fabs(mu)/v));
   }
   if(Dist == "negbin"){
 
@@ -639,13 +639,17 @@ arma::mat MapParametersJacobian_univ(arma::vec vTheta_tilde, std::string Dist, i
     mJ(1,1) = CheckScale(exp(dNu_tilde));
 
   }
-  if(Dist=="skellam"){
-
-    double dSigma2_tilde = vTheta_tilde(1);
-
-    mJ(0,0) = 1.0;
-    mJ(1,1) = CheckScale(exp(dSigma2_tilde));
-
+  if(Dist == "skellam"){
+    const double mu=vTheta_tilde(0), gap=exp(vTheta_tilde(1));
+    const double v=std::hypot(mu,gap);
+    if (!R_FINITE(mu) || !R_FINITE(gap) || gap <= 0 ||
+        !R_FINITE(v) || v <= fabs(mu)) {
+      mJ.fill(NA_REAL); return mJ;
+    }
+    mJ(0,0)=1.0;
+    mJ(1,0)=mu/v;
+    mJ(1,1)=gap*(gap/v);
+    return mJ;
   }
 
   arma::vec vJ_safe =  InfRemover_vec(mJ.diag());

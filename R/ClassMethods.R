@@ -1129,7 +1129,9 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
     mDraws = x@Draws
 
-    if (is.null(mDraws) & iH > 1) {
+    if (iH > 1L && (!isTRUE(x@Info$bReturnDraws) ||
+        !is.matrix(mDraws) || nrow(mDraws) != x@Info$iB ||
+        ncol(mDraws) != iH || any(!is.finite(mDraws)))) {
       stop("ReturnDraws = TRUE needs to be selected in the
             UniGASFor function for multistep ahead quantile evaluation.")
     }
@@ -1174,7 +1176,7 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
   for (i in 1:nrow(mES)) {
     for (j in 1:ncol(mES)) {
-      mES[i, j] = adaptIntegrate(Quantiles, lowerLimit = 1e-7, upperLimit = probs[j],
+      mES[i, j] = adaptIntegrate(function(vProbs, mTheta, Dist) as.numeric(Quantiles(mTheta, Dist, vProbs)), lowerLimit = 1e-7, upperLimit = probs[j],
                             mTheta = t(mTheta[i, , drop = FALSE]), Dist = Dist)$integral
 
     }
@@ -1208,7 +1210,7 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
     for (h in 1:iH) {
       for (j in 1:ncol(mES)) {
-        mES[h, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
+        mES[h, j] = integrate(function(vProbs, mTheta, Dist) as.numeric(Quantiles(mTheta, Dist, vProbs)), lower = 1e-7, upper = probs[j],
                               mTheta = t(mTheta_tph[h, , drop = FALSE]), Dist = Dist)$value/probs[j]
       }
     }
@@ -1217,7 +1219,9 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
 
     mDraws = object@Draws
 
-    if (is.null(mDraws) & iH > 1) {
+    if (iH > 1L && (!isTRUE(object@Info$bReturnDraws) ||
+        !is.matrix(mDraws) || nrow(mDraws) != object@Info$iB ||
+        ncol(mDraws) != iH || any(!is.finite(mDraws)))) {
       stop("ReturnDraws = TRUE needs to be selected in the
          UniGASFor function for multistep ahead quantile evaluation.")
     }
@@ -1228,7 +1232,7 @@ setMethod("coef", signature(object = "mGASSim"), .getCoef)
     ## one step ahead
     vTheta_tp1 = getForecast(object)[1, ,drop = FALSE]
     for (j in 1:ncol(mES)) {
-      mES[1, j] = integrate(Quantiles, lower = 1e-7, upper = probs[j],
+      mES[1, j] = integrate(function(vProbs, mTheta, Dist) as.numeric(Quantiles(mTheta, Dist, vProbs)), lower = 1e-7, upper = probs[j],
                             mTheta = t(vTheta_tp1), Dist = Dist)$value/probs[j]
     }
 
