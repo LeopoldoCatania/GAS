@@ -5,4 +5,9 @@
 src/*.o
 src/*.so
 src/*.dll
-
+# Compiled objects and temporary compilation files
+src/*.o
+src/*.so
+src/*.dll
+src/*.o.tmp
+/build/
