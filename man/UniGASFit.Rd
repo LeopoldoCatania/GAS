@@ -45,9 +45,19 @@ evaluated at its minimum, iii) \code{hessian}, a \code{numeric} matrix containin
 the minimum of the negative log likelihood, this is used for inferential purposes, and iv) \code{convergence} a \code{numeric} variable  reporting information about the convergence of the optimization. This quantity is printed by the
 \code{show()} and \code{summary()} methods. \code{convergence = 0} has to indicate successful completion.
 
-The user is allowed to not include the last two elements of the output of the \code{fn.optimizer} function, that is, the values
-\code{hessian = NULL} and \code{convergence = NULL} are admissible. In the case of \code{hessian = NULL}, the Hessian matrix is
-evaluated numerically using the \link[numDeriv]{hessian} function in the \code{numDeriv} package of Gilbert and Varadhan (2016). If the provided hessian is not positive definite, a try with the hessian evaluation used by the BFGS quasi-Newton implementation in the function \link{optim} is made.
+When \code{Compute.SE = TRUE}, the Hessian is recomputed at the final
+reported estimate using \code{numDeriv::hessian}, with
+\code{stats::optimHess} as a fallback if that calculation fails or is non-finite.
+No additional optimization step is used for Hessian evaluation.
+A missing convergence flag is recorded as unknown. A zero solver flag that
+fails the numerical gradient check is replaced by code 52. The original
+flag is retained in \code{Estimates$optimiser$solver_convergence}.
+The maximized objective is checked against the starting objective.
+Standard errors, test statistics and p-values are returned as \code{NA}
+when convergence or Hessian checks fail. The coefficient estimates remain
+available. Diagnostics and the Hessian used are stored in
+\code{Estimates$optimiser}.
+
 
 By default, the \code{optim} optimizer with \code{method = "BFGS"} is employed.
 

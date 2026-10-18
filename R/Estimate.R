@@ -74,36 +74,8 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   # optimise
   optimiser = fn.optimizer(par0 = vPw, data = vY, GASSpec = GASSpec, FUN = UniGASOptimiser)
 
-  flag <- optimiser$convergence
-
-  if (is.null(flag)) {
-
-    optimiser$convergence <- NA_real_
-
-    warning(
-      "The optimizer did not report convergence; status is unknown.",
-      call. = FALSE
-    )
-
-  } else if (
-    !is.numeric(flag) ||
-    length(flag) != 1L ||
-    !is.finite(flag)
-  ) {
-
-    stop(
-      "The optimizer's convergence flag must be NULL or one finite number.",
-      call. = FALSE
-    )
-
-  } else if (flag != 0) {
-
-    warning(
-      paste("Solver failed to converge. Convergence flag:", flag),
-      call. = FALSE
-    )
-
-  }
+  optimiser <- GAS_finalize_optimiser(optimiser, vPw, vY, GASSpec,
+                                      UniGASOptimiser, Compute.SE)
 
   vPw = optimiser$pars
 
@@ -115,20 +87,9 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   lParList = AddFixedPar(lParList)
 
   mHessian = optimiser$hessian
+  valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  if (Compute.SE) {
-  if (is.null(mHessian)) {
-    mHessian = numDeriv::hessian(UniGASOptimiser, vPw, data = vY, GASSpec = GASSpec)
-    if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values) < 0L) {
-      mHessian = optim(vPw, UniGASOptimiser, data = vY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1L))$hessian
-    }
-    if (min(eigen(mHessian)$values) < 0L) {
-      warning("Hessian matrix is not positive definite. Standard errors are not reliable")
-    }
-  }
-  }
-
-  Inference = InferenceFun_Uni(mHessian, vPw, iK, Compute.SE)
+  Inference = InferenceFun_Uni(mHessian, vPw, iK, valid_inference)
 
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
@@ -183,48 +144,35 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
     rownames(mY) = paste("Series", 1:iN)
   }
 
-  # starting par
-  vPw = MultiGAS_Starting(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters, fn.optimizer)
-
-  # fixed par
-  FixedPar = GetFixedPar_Multi(Dist, GASPar, iN, ScalarParameters)
-  vPw = RemoveFixedPar(vPw, FixedPar)
+  analytic_gaussian <- Dist == "mvnorm" && !any(unlist(GASPar))
+  if (analytic_gaussian) {
+    mu <- rowMeans(mY)
+    centered <- sweep(mY, 1L, mu)
+    S <- tcrossprod(centered)/iT
+    if (any(!is.finite(S)) || is.null(tryCatch(chol(S), error = function(e) NULL)))
+      stop("A static multivariate Gaussian MLE requires a full-rank sample covariance.")
+    Theta <- c(mu, sqrt(diag(S)), as.numeric(build_vR(stats::cov2cor(S), iN)))
+    vPw <- as.numeric(MultiUnmapParameters(Theta, Dist, iN))
+    names(vPw) <- paste0("kappa.", FullNamesMulti(iN, Dist))
+  } else {
+    vPw = MultiGAS_Starting(mY, iT, iN, iK, Dist, GASPar, ScalingType, ScalarParameters, fn.optimizer)
+    FixedPar = GetFixedPar_Multi(Dist, GASPar, iN, ScalarParameters)
+    vPw = RemoveFixedPar(vPw, FixedPar)
+  }
 
   GASSpec@Spec$PwNames = names(vPw)
 
   # optimise
-  optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
-
-  flag <- optimiser$convergence
-
-  if (is.null(flag)) {
-
-    optimiser$convergence <- NA_real_
-
-    warning(
-      "The optimizer did not report convergence; status is unknown.",
-      call. = FALSE
-    )
-
-  } else if (
-    !is.numeric(flag) ||
-    length(flag) != 1L ||
-    !is.finite(flag)
-  ) {
-
-    stop(
-      "The optimizer's convergence flag must be NULL or one finite number.",
-      call. = FALSE
-    )
-
-  } else if (flag != 0) {
-
-    warning(
-      paste("Solver failed to converge. Convergence flag:", flag),
-      call. = FALSE
-    )
-
+  if (analytic_gaussian) {
+    optimiser <- list(pars = vPw,
+      value = MultiGASOptimiser(vPw, data = mY, GASSpec = GASSpec),
+      convergence = 0L, hessian = NULL, method = "analytical Gaussian MLE")
+  } else {
+    optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
   }
+
+  optimiser <- GAS_finalize_optimiser(optimiser, vPw, mY, GASSpec,
+                                      MultiGASOptimiser, Compute.SE)
 
   vPw = optimiser$pars
 
@@ -236,22 +184,9 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   lParList = AddFixedPar(lParList)
 
   mHessian = optimiser$hessian
+  valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  if (Compute.SE) {
-
-    if (is.null(mHessian)) {
-      mHessian = numDeriv::hessian(MultiGASOptimiser, vPw, data = mY, GASSpec = GASSpec)
-      if (any(!is.finite(mHessian)) || min(eigen(mHessian)$values < 0L)) {
-        mHessian = optim(vPw, MultiGASOptimiser, data = mY, GASSpec = GASSpec, hessian = TRUE, control = list(maxit = 1L))$hessian
-      }
-      if (min(eigen(mHessian)$values) < 0L) {
-      warning("Hessian matrix is not positive definite. Standard errors are not reliable")
-      }
-    }
-
-  }
-
-  Inference = InferenceFun_Multi(mHessian, Dist, vPw, iK, iN, ScalarParameters, Compute.SE)
+  Inference = InferenceFun_Multi(mHessian, Dist, vPw, iK, iN, ScalarParameters, valid_inference)
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 

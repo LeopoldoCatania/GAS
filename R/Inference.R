@@ -10,9 +10,17 @@ InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
 
     if (Compute.SE) {
       mJacob = jacobian(vPw2vPn_Uni, vPw, iK = iK)
-      mInvHessian = ginv(mHessian)
+      mInvHessian = GAS_checked_covariance(mHessian, length(vPw))
+      if (is.null(mInvHessian)) {
+        warning("Hessian is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
+        return(out)
+      }
       mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
 
+      if (any(!is.finite(mSandwitch)) || any(diag(mSandwitch) <= 0)) {
+        warning("Delta-method covariance is unsuitable for inference; returning NA standard errors.", call. = FALSE)
+        return(out)
+      }
       vSE = sqrt(diag(mSandwitch))
       vTest = vPn/vSE
       vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)
@@ -38,9 +46,17 @@ InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters, Co
     if (Compute.SE) {
 
       mJacob = jacobian(vPw2vPn_Multi, vPw, iK = iK, iN = iN, Dist = Dist, ScalarParameters = ScalarParameters)
-      mInvHessian = ginv(mHessian)
+      mInvHessian = GAS_checked_covariance(mHessian, length(vPw))
+      if (is.null(mInvHessian)) {
+        warning("Hessian is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
+        return(out)
+      }
       mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
 
+      if (any(!is.finite(mSandwitch)) || any(diag(mSandwitch) <= 0)) {
+        warning("Delta-method covariance is unsuitable for inference; returning NA standard errors.", call. = FALSE)
+        return(out)
+      }
       vSE = sqrt(diag(mSandwitch))
       vTest = vPn/vSE
       vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)

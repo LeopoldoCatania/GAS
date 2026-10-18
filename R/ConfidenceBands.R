@@ -1,5 +1,12 @@
 ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99), ...) {
 
+    if (!is.numeric(B) || length(B) != 1L || !is.finite(B) || B < 1 ||
+        B != floor(B) || B > .Machine$integer.max)
+      stop("B must be a positive integer.")
+    if (!is.numeric(probs) || !length(probs) || any(!is.finite(probs)) ||
+        any(probs < 0 | probs > 1)) stop("probs must contain finite probabilities in [0,1].")
+    if (!isTRUE(convergence(object) == 0))
+      stop("Confidence bands require a fit that passed convergence checks.")
     iB = B
 
     vPw = object@Estimates$optimiser$pars
@@ -10,9 +17,15 @@ ConfidenceBands <- function(object, B = 10000L, probs = c(0.01, 0.1, 0.9, 0.99),
     DType = DistType(Dist)
     ScalingType = getScalingType(object)
 
-    vCov = ginv(object@Estimates$optimiser$hessian)
-
-    mPw = rmvnorm_mat(iB, vPw, vCov)
+    objective <- if (DType == "univariate") UniGASOptimiser else MultiGASOptimiser
+    gradient <- GAS_objective_gradient(objective, vPw, Data, object@ModelInfo$Spec)
+    if (any(!is.finite(gradient)) || max(abs(gradient)) > 1e-5)
+      stop("Confidence bands require an adequately optimized likelihood.")
+    vCov <- GAS_checked_covariance(object@Estimates$optimiser$hessian, length(vPw))
+    if (is.null(vCov)) stop("Confidence bands require a finite positive-definite, nonsingular Hessian.")
+    # Use the checked covariance directly; do not repair it with chol_safe().
+    mPw <- sweep(matrix(stats::rnorm(iB*length(vPw)), nrow = iB) %*%
+                   chol(vCov), 2L, vPw, "+")
 
     mTheta = getFilteredParameters(object)
 

@@ -14,18 +14,53 @@ fn.solnp <- function(par0, data, GASSpec, FUN) {
 }
 
 fn.optim <- function(par0, data, GASSpec, FUN) {
-
-  solver.ctr <- list(trace = 0, abstol = 1e-8, reltol = 1e-8)
-
-  optimiser = suppressWarnings(optim(par0, FUN, data = data, GASSpec = GASSpec,
-                                     method = "BFGS",
-                                     control = solver.ctr,  hessian = TRUE))
-
-  out = list(pars = optimiser$par,
-             value = optimiser$value,
-             hessian = optimiser$hessian,
-             convergence = optimiser$convergence)
-
-  return(out)
-
+  nm <- names(par0)
+  n <- GAS_sample_size(data, GASSpec)
+  objective <- function(x) {
+    names(x) <- nm
+    FUN(x, data = data, GASSpec = GASSpec)/n
+  }
+  value0 <- objective(par0)
+  if (!is.finite(value0)) stop("The starting objective is non-finite.")
+  # Retain the start as a safeguard, without labeling it converged.
+  candidates <- list(list(par = par0, value = value0, convergence = 1L,
+                          method = "starting values"))
+  add <- function(z, method) {
+    if (!is.null(z) && length(z$par) == length(par0) && all(is.finite(z$par))) {
+      val <- tryCatch(objective(z$par), error = function(e) Inf)
+      if (is.finite(val)) candidates[[length(candidates)+1L]] <<-
+        list(par = z$par, value = val, convergence = z$convergence, method = method)
+    }
+  }
+  first <- tryCatch(stats::optim(par0, objective, method = "BFGS",
+    control = list(maxit = 2000L, reltol = 1e-11, abstol = -Inf)), error = function(e) NULL)
+  add(first, "BFGS")
+  best <- candidates[[which.min(vapply(candidates, function(x) x$value, numeric(1)))]]
+  g <- GAS_objective_gradient(FUN, stats::setNames(best$par, nm), data, GASSpec)
+  Hmean <- tryCatch(stats::optimHess(best$par, objective), error = function(e) NULL)
+  needs_retry <- !isTRUE(best$convergence == 0) || any(!is.finite(g)) ||
+    max(abs(g)) > 1e-5 || !GAS_hessian_info(Hmean, length(par0))$ok
+  if (needs_retry) {
+    # A deterministic alternative solver; always retain the best objective.
+    second <- tryCatch(stats::nlminb(best$par, objective,
+      control = list(iter.max = 2000L, eval.max = 5000L, rel.tol = 1e-11)),
+      error = function(e) NULL)
+    add(second, "nlminb")
+    if (!is.null(second)) {
+      third <- tryCatch(stats::optim(second$par, objective, method = "BFGS",
+        control = list(maxit = 2000L, reltol = 1e-12, abstol = -Inf)), error = function(e) NULL)
+      add(third, "BFGS refinement")
+    }
+  }
+  vals <- vapply(candidates, function(x) x$value, numeric(1))
+  # On numerically equal objectives, prefer a solver that reported convergence.
+  ix <- which(vals <= min(vals) + 1e-12*(1+abs(min(vals))))
+  converged <- ix[vapply(candidates[ix], function(x) isTRUE(x$convergence == 0), logical(1))]
+  if (length(converged)) ix <- converged
+  best <- candidates[[ix[which.min(vals[ix])]]]
+  names(best$par) <- nm
+  # Return TOTAL objective and Hessian, preserving the package's SE scaling.
+  H <- tryCatch(n*stats::optimHess(best$par, objective), error = function(e) NULL)
+  list(pars = best$par, value = n*best$value, hessian = H,
+       convergence = best$convergence, method = best$method)
 }

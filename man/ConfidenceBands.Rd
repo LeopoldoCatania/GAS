@@ -39,7 +39,10 @@ Model coefficients are sampled on the unrestricted estimation
 scale. The covariance estimate is constructed from the Hessian
 stored in the fitted object's optimiser output. Reliable use of
 the normal approximation requires a finite, positive definite
-Hessian at an interior optimum.
+Hessian at an interior optimum. The function rejects fits failing the
+convergence or gradient checks and rejects invalid or numerically singular
+Hessians. It uses the inverse of the validated Hessian without generalized
+inversion or automatic positive-definiteness repair.
 
 Each sampled coefficient vector is transformed using the mapping
 appropriate to the fitted model. For multivariate models, the

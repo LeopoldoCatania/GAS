@@ -1,14 +1,14 @@
 StartingNu <- function(vY) {
   dStart = c(unmapVec_C(12.0, LowerNu(), UpperNu()))
-  dNu = try(exp(solnp(dStart, function(x, vY) {
+  dNu = try(c(Map_Vec(solnp(dStart, function(x, vY) {
     dNu =  c(Map_Vec(x, LowerNu(), UpperNu()))
     - sum(dt(vY, dNu, log = TRUE))
-  }, vY = vY, control = list(trace = 0))$pars) + LowerNu(), silent = TRUE)
+  }, vY = vY, control = list(trace = 0))$pars, LowerNu(), UpperNu())), silent = TRUE)
 
-  if (is(dNu, "try-error"))
+  if (is(dNu, "try-error") || length(dNu) != 1L || !is.finite(dNu))
     dNu = 7.0
 
-  if (dNu > UpperNu())
+  if (dNu >= UpperNu())
     dNu = UpperNu() - 1.0
   if (dNu <= LowerNu())
     dNu = LowerNu() + 0.02
@@ -202,8 +202,8 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
     dNu = StartingNu(c(mY))
 
     vMu_tilde = vEmpMu
-    vSigma_tilde = log(vEmpSigma * (dNu - 2.0)/dNu)
-    vPw = c(vMu_tilde, vSigma_tilde, vEmpPhi, log(dNu - LowerNu()))
+    Theta = c(vEmpMu, vEmpSigma * sqrt((dNu - 2.0)/dNu), vEmpRho, dNu)
+    vPw = as.numeric(MultiUnmapParameters(Theta, "mvt", iN))
   }
 
   return(as.numeric(vPw))
@@ -247,7 +247,8 @@ UniGAS_Starting <- function(vY, iT, iK, Dist, ScalingType, GASPar, fn.optimizer)
 
 starting_vA_Uni <- function(vY, vUncValues, mB, dA_foo, iT, iK, Dist, ScalingType, GASPar) {
 
-  seq_alpha = c(seq(1e-04, 5.5, length.out = 30L))
+  seq_alpha = c(1e-4, 1e-3, .005, .01, .02, .05, .1,
+                seq(.2, 5.5, length.out = 30L))
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -259,6 +260,7 @@ starting_vA_Uni <- function(vY, vUncValues, mB, dA_foo, iT, iK, Dist, ScalingTyp
 
   for (i in 1:iK) {
     if (GASPar[[i]]) {
+      dAlpha_best = dA_foo
       for (l in 1:length(seq_alpha)) {
         dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
         if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
@@ -284,8 +286,7 @@ starting_vB_Uni <- function(vY, vUncValues, dB_foo, mA, iT, iK, Dist, ScalingTyp
 
   mB = matrix(0, iK, iK)
 
-  # diag(mB)[unlist(GASPar)] = dB_foo
-  diag(mB) = dB_foo
+  diag(mB)[unlist(GASPar)] = dB_foo
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -293,6 +294,7 @@ starting_vB_Uni <- function(vY, vUncValues, dB_foo, mA, iT, iK, Dist, ScalingTyp
 
   for (i in 1:iK) {
     if (GASPar[[i]]) {
+      dB_best = dB_foo
       for (l in 1:length(seq_beta)) {
         dLLK_foo = try(GASFilter_univ(vY, vKappa, mA, mB, iT, iK, Dist, ScalingType)$dLLK, silent = TRUE)
         if (is.numeric(dLLK_foo) & !is.nan(dLLK_foo)) {
@@ -432,6 +434,7 @@ starting_vA_Multi <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Dist, Scal
   for (i in 1:iK) {
 
     if (vBool[i]) {
+      dAlpha_best = dA_foo
 
       for (l in 1:length(seq_alpha)) {
 
@@ -480,6 +483,7 @@ starting_mA_Multi_Scalars <- function(mY, vUncValues, mB, dA_foo, iT, iK, iN, Di
 
   for (i in 1:iK2) {
     if (vBool[i]) {
+      dAlpha_best = dA_foo
       for (l in 1:length(seq_alpha)) {
         dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK,
                        silent = TRUE)
@@ -508,7 +512,7 @@ starting_vB_Multi <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, Scal
   vBool = FixedDynamicPar_Multi(Dist, iN, GASPar)
 
   mB = matrix(0, iK, iK)
-  diag(mB) = dB_foo
+  diag(mB)[vBool] = dB_foo
 
   vKappa = (diag(iK) - mB) %*% vUncValues
 
@@ -516,6 +520,7 @@ starting_vB_Multi <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Dist, Scal
 
   for (i in 1:iK) {
     if (vBool[i]) {
+      dB_best = dB_foo
       for (l in 1:length(seq_beta)) {
         dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK,
                        silent = TRUE)
@@ -556,6 +561,7 @@ starting_mB_Multi_Scalars <- function(mY, vUncValues, dB_foo, mA, iT, iK, iN, Di
 
   for (i in 1:iK2) {
     if (vBool[i]) {
+      dBeta_best = dB_foo
       for (l in 1:length(seq_beta)) {
         dLLK_foo = try(GASFilter_multi(mY, vKappa, mA, mB, iT, iN, iK, Dist, ScalingType)$dLLK,
                        silent = TRUE)

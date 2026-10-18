@@ -4,7 +4,7 @@
 	A wrapper to the \link{optim} function.
 }
 \description{
-	This function is a wrapper to the standard \link{optim}  optimizer with \code{method = "BFGS"}.
+	Minimize the negative log likelihood using BFGS, with a deterministic alternative solver when numerical checks fail.
 }
 \usage{
  fn.optim(par0, data, GASSpec, FUN)
@@ -23,22 +23,20 @@ An object of the class \link{uGASSpec} or \link{mGASSpec}, created via the \link
 A \link{function} to optimize.}
 }
 \details{
-The following control parameters are used for \code{control}:
-%
-\itemize{
-   \item \code{trace = 0}
-   \item \code{abstol = 1e-8}
-}
-%
-See the documentation of \link{optim}.
-%
+Optimization uses the average negative log likelihood to stabilize the
+numerical scale across sample sizes. The primary BFGS controls are
+\code{maxit = 2000L}, \code{reltol = 1e-11}, and \code{abstol = -Inf}.
+The starting point is retained as a candidate. If convergence, gradient
+or curvature diagnostics fail, \code{stats::nlminb} and a subsequent
+BFGS refinement are attempted. The best finite objective is retained.
+The reported value and Hessian refer to the summed negative log likelihood.
+The additional \code{method} field identifies the selected candidate.
 }
 \value{
-It returns a named list with four elements: i) \code{pars}: a \code{numeric} vector
+It returns a named list including the following four elements: i) \code{pars}: a \code{numeric} vector
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
 evaluated at its minumum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
-the minimum of the negative log likelihood, iv) \code{convergence} a \code{numeric} element indicating the convergence results of
-\link{optim}.
+the minimum of the negative log likelihood, iv) \code{convergence} a \code{numeric} element indicating the selected solver convergence result.
 }
 \author{Leopoldo Catania}
 %
