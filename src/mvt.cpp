@@ -12,18 +12,17 @@ double dmvt(arma::vec vY,
             double dNu,
             bool bLog= false) {
 
-  double dDetSigma = det(mSigma);
-  if(dDetSigma<1e-50){
-    dDetSigma = 1e-50;
-  }
+  arma::mat U = chol_safe(mSigma);
+  double logDetSigma = 2.0*arma::sum(arma::log(U.diag()));
   double dN = vMu.size()*1.0;
 
-  arma::vec vZ = arma::inv(arma::trans(chol_safe(mSigma)))*(vY-vMu);
+  arma::vec vZ = arma::solve(arma::trimatl(U.t()), vY-vMu,
+                             arma::solve_opts::no_approx);
 
   double dFoo = as_scalar(vZ.t()*vZ);
 
-  double dLLK = Rf_lgammafn((dNu + dN)*0.5) - Rf_lgammafn(dNu*0.5) - 0.5*dN * log(dNu) - 0.5*dN*log(M_PI*1.0) - 0.5*log(dDetSigma) -
-    0.5*(dN+dNu)*log(1.0 + dFoo/dNu);
+  double dLLK = Rf_lgammafn((dNu + dN)*0.5) - Rf_lgammafn(dNu*0.5) - 0.5*dN * log(dNu) - 0.5*dN*log(M_PI*1.0) - 0.5*logDetSigma -
+    0.5*(dN+dNu)*std::log1p(dFoo/dNu);
 
   if (!bLog) {
     dLLK = exp(dLLK);

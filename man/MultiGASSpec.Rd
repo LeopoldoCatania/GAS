@@ -19,7 +19,10 @@ can be displayed using the function \link{DistInfo}. Default value \code{Dist = 
 %
 \item{ScalingType}{
 \code{character} indicating the scaling mechanism for the conditional score. 
-Only \code{ScalingType = "Identity"} is supported for multivariate distributions.}
+The choices are \code{"Identity"}, \code{"Inv"}, and \code{"InvSqrt"}.
+The latter two use the full expected Fisher information in transformed state
+coordinates, including the cross terms with shape for Student-t models.
+For \code{"InvSqrt"}, Cholesky whitening is used, as in univariate models.}
 %
 \item{GASPar}{
 \code{list} containing information about which parameters of the conditional distribution have to 

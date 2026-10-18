@@ -37,7 +37,8 @@ conditional score in the GAS updating recursion, see Details.}
 %
 \item{ScalingType}{
 \code{character} indicating the scaling mechanism for the conditional score.
-Only \code{ScalingType = "Identity"} is supported for multivariate distributions, see the function \link{DistInfo}.}
+The choices are \code{"Identity"}, \code{"Inv"}, and \code{"InvSqrt"};
+the last uses Cholesky whitening of the transformed score. See \link{MultiGASSpec}.}
 %
 }
 \details{

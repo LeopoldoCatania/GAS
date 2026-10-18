@@ -65,6 +65,10 @@ IM_univ <- function(vTheta, Dist) {
     .Call(`_GAS_IM_univ`, vTheta, Dist)
 }
 
+IM_multi <- function(vTheta, Dist, iN) {
+    .Call(`_GAS_IM_multi`, vTheta, Dist, iN)
+}
+
 LowerNu_cpp <- function(Dist) {
     .Call(`_GAS_LowerNu_cpp`, Dist)
 }

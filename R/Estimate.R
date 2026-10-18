@@ -129,6 +129,7 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE,
 # mY is NxT
 MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5) {
 
+  GAS_validate_multi_scaling(getScalingType(GASSpec))
   GAS_validate_se_a_tol(SE.A.tol)
 
   mY = t(data)

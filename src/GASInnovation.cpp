@@ -80,6 +80,21 @@ arma::vec GASInnovation_multi(arma::vec vY, arma::vec vTheta, arma::vec vTheta_t
   arma::mat mJ       = MapParametersJacobian_multi(vTheta_tilde, Dist, iN, iK);
   arma::vec vS_tilde = mJ.t() * vScore ;
 
+  if (ScalingType == "Inv" || ScalingType == "InvSqrt") {
+    arma::mat information = mJ.t() * IM_multi(vTheta, Dist, iN) * mJ;
+    arma::mat U;
+    if (!information.is_finite() || !arma::chol(U, information))
+      Rcpp::stop("Score scaling requires a finite, positive-definite transformed Fisher information matrix.");
+    arma::vec z = arma::solve(arma::trimatl(U.t()), vS_tilde,
+                              arma::solve_opts::no_approx);
+    if (ScalingType == "Inv")
+      vS_tilde = arma::solve(arma::trimatu(U), z, arma::solve_opts::no_approx);
+    else
+      vS_tilde = z;
+  } else if (ScalingType != "Identity") {
+    Rcpp::stop("Unknown ScalingType.");
+  }
+
   vS_tilde = Thresholding_vec(vS_tilde, 1e5);
   vS_tilde = NaN2Zero(vS_tilde);
   vS_tilde = InfRemover_vec(vS_tilde, 1e5);

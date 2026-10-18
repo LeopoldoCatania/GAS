@@ -242,9 +242,9 @@ DistScalingType <- function(DistLabel) {
     if (DistLabel == "skellam")
         return("Identity")
     if (DistLabel == "mvnorm")
-        return("Identity")
+        return("Identity, Inv, InvSqrt")
     if (DistLabel == "mvt")
-        return("Identity")
+        return("Identity, Inv, InvSqrt")
 }
 
 DistInfo <- function(DistLabel = NULL, N = 2L, FULL = TRUE) {

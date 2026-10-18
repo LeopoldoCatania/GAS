@@ -248,6 +248,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// IM_multi
+arma::mat IM_multi(arma::vec vTheta, std::string Dist, int iN);
+RcppExport SEXP _GAS_IM_multi(SEXP vThetaSEXP, SEXP DistSEXP, SEXP iNSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type vTheta(vThetaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< int >::type iN(iNSEXP);
+    rcpp_result_gen = Rcpp::wrap(IM_multi(vTheta, Dist, iN));
+    return rcpp_result_gen;
+END_RCPP
+}
 // LowerNu_cpp
 double LowerNu_cpp(std::string Dist);
 RcppExport SEXP _GAS_LowerNu_cpp(SEXP DistSEXP) {
@@ -588,6 +601,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_GAS_uGASMultiForcast", (DL_FUNC) &_GAS_uGASMultiForcast, 10},
     {"_GAS_mGASMultiForcast", (DL_FUNC) &_GAS_mGASMultiForcast, 11},
     {"_GAS_IM_univ", (DL_FUNC) &_GAS_IM_univ, 2},
+    {"_GAS_IM_multi", (DL_FUNC) &_GAS_IM_multi, 3},
     {"_GAS_LowerNu_cpp", (DL_FUNC) &_GAS_LowerNu_cpp, 1},
     {"_GAS_UpperNu_cpp", (DL_FUNC) &_GAS_UpperNu_cpp, 1},
     {"_GAS_Map_Vec", (DL_FUNC) &_GAS_Map_Vec, 3},

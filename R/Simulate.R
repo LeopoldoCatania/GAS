@@ -65,6 +65,7 @@ MultiGASSim <- function(fit = NULL, T.sim = 1000L, N = NULL, kappa = NULL, A = N
     mA = A
     mB = B
     iN = N
+    GAS_validate_multi_scaling(ScalingType)
 
     lSim = SimulateGAS_multi(iT, iN, vKappa, mA, mB, Dist, ScalingType)
 

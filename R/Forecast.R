@@ -144,6 +144,7 @@ MultiGASFor <- function(mGASFit, H = NULL, Roll = FALSE, out = NULL, B = 10000L,
     iK = mGASFit@ModelInfo$iK
     iN = mGASFit@ModelInfo$iN
     ScalingType = getScalingType(mGASFit)
+    GAS_validate_multi_scaling(ScalingType)
     lParList = coef(mGASFit, do.list = TRUE)$lCoef
     Dist = getDist(mGASFit)
     GASPar = getGASPar(mGASFit)

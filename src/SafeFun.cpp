@@ -11,14 +11,8 @@ double lgammafn_safe(double dX){
 }
 
 arma::mat chol_safe(arma::mat mX){
-
-  arma::vec vEigval = eig_sym( mX );
-
-  double dMinEigen = min(vEigval);
-
-  if(dMinEigen<1e-15){
-    mX.diag() = mX.diag() + abs3(dMinEigen) + 1e-10;
-  }
-
-  return chol(mX) ;
+  arma::mat U;
+  if (!mX.is_finite() || !arma::chol(U, mX))
+    Rcpp::stop("The dispersion matrix must be finite and positive definite.");
+  return U;
 }

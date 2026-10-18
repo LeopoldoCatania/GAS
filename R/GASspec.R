@@ -28,8 +28,18 @@ UniGASSpec <- function(Dist = "norm", ScalingType = "Identity", GASPar = list(lo
     return(Spec)
 }
 
+GAS_validate_multi_scaling <- function(ScalingType) {
+    if (!is.character(ScalingType) || length(ScalingType) != 1L ||
+        is.na(ScalingType) || !ScalingType %in% c("Identity", "Inv", "InvSqrt"))
+        stop('ScalingType must be "Identity", "Inv", or "InvSqrt".',
+             call. = FALSE)
+    invisible(ScalingType)
+}
+
 MultiGASSpec <- function(Dist = "mvnorm", ScalingType = "Identity", GASPar = list(location = FALSE,
     scale = TRUE, correlation = FALSE, shape = FALSE), ScalarParameters = TRUE) {
+
+    GAS_validate_multi_scaling(ScalingType)
 
     if (is.null(GASPar$location)) {
         GASPar$location = FALSE

@@ -97,6 +97,14 @@ conditional_inference and se_a_tol. Convergence and gradient checks still apply.
 Fit displays explicitly mark conditional standard errors. ConfidenceBands uses
 the same retained block and holds excluded coefficients fixed, with a warning.
 
+## Multivariate inverse scaling
+
+Both `mvnorm` and `mvt` now implement `Inv` and `InvSqrt` using the full
+expected Fisher information, including Student-t shape cross terms. These
+options were previously silently treated as Identity. Refit old multivariate
+objects bearing these labels. See `Multi-scaling.md` for formulas and the
+Cholesky convention. Coefficient inference continues to use OPG scores.
+
 ## Accurate optimizer refinement
 
 The final BFGS retry now supplies Richardson numerical derivatives through
