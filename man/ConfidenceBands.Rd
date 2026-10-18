@@ -36,13 +36,15 @@ The function implements the in-sample simulation-based approach
 described in Section 3.3 of Blasques et al. (2016).
 
 Model coefficients are sampled on the unrestricted estimation
-scale. The covariance estimate is constructed from the Hessian
-stored in the fitted object's optimiser output. Reliable use of
-the normal approximation requires a finite, positive definite
-Hessian at an interior optimum. The function rejects fits failing the
+scale. The covariance estimate is the inverse of the summed outer product
+of per-observation likelihood scores, stored as \code{optimiser$opg} in the
+fitted object. Reliable use of the normal approximation requires nonsingular
+information at an interior optimum. The function rejects fits failing the
 convergence or gradient checks and rejects invalid or numerically singular
-Hessians. It uses the inverse of the validated Hessian without generalized
-inversion or automatic positive-definiteness repair.
+OPG information matrices. No generalized inverse or automatic
+positive-definiteness repair is used. Refit older objects, or objects fitted
+with \code{Compute.SE = FALSE}, with \code{Compute.SE = TRUE} before calling
+this function.
 
 Each sampled coefficient vector is transformed using the mapping
 appropriate to the fitted model. For multivariate models, the

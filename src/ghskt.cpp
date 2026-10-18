@@ -215,10 +215,13 @@ double qGHSKT(double dP, double dMuBar, double dSigma, double dBetaBar, double d
 }
 
 double ghstexkurt(double betabar, double nu){
+  if (!R_FINITE(betabar) || !R_FINITE(nu) || nu <= 4.0) return NA_REAL;
+  // The symmetric limit has Student-t tails, not the asymmetric tail order.
+  if (betabar == 0.0) return 6.0/(nu - 4.0);
 
   double ans = 0.0;
 
-  if(nu < 8.0){
+  if(nu <= 8.0){
     ans = NA_REAL;
   } else{
    arma::vec param = paramghskt(betabar, nu);
@@ -238,10 +241,12 @@ double ghstexkurt(double betabar, double nu){
 }
 
 double ghstskew(double betabar, double nu){
+  if (!R_FINITE(betabar) || !R_FINITE(nu) || nu <= 4.0) return NA_REAL;
+  if (betabar == 0.0) return 0.0;
 
   double ans = 0.0;
 
-  if(nu < 6.0){
+  if(nu <= 6.0){
     ans = NA_REAL;
   } else{
     arma::vec param = paramghskt(betabar, nu);
@@ -251,7 +256,7 @@ double ghstskew(double betabar, double nu){
     double beta2 = beta*beta;
     double delta2 = delta*delta;
 
-    ans = ((2.0 * sqrt(nu - 4.0) * beta * delta)/( pow(2 * beta2 * delta2 + (nu - 2.0) * (nu - 4.0), 3/2) )) *
+    ans = ((2.0 * sqrt(nu - 4.0) * beta * delta)/( pow(2 * beta2 * delta2 + (nu - 2.0) * (nu - 4.0), 1.5) )) *
       (3.0 * (nu - 2.0) + ((8.0 * beta2 * delta2)/(nu - 6.0)));
   }
   return ans;
@@ -259,7 +264,11 @@ double ghstskew(double betabar, double nu){
 
 arma::vec mGHSKT(double dMuBar, double dSigma, double dBetaBar, double dNu){
 
-  arma::vec vMoments(4);
+  arma::vec vMoments(4); vMoments.fill(NA_REAL);
+  // This mean/variance-standardized parameterization requires nu > 4.
+  if (!R_FINITE(dMuBar) || !R_FINITE(dSigma) || dSigma <= 0 ||
+      !R_FINITE(dBetaBar) || !R_FINITE(dNu) || dNu <= 4.0)
+    return vMoments;
   vMoments(0) = dMuBar;
   vMoments(1) = pow(dSigma, 2.0);
   vMoments(2) = ghstskew(dBetaBar, dNu);

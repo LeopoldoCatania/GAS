@@ -1,3 +1,4 @@
+#include "MomentWarnings.h"
 #include <RcppArmadillo.h>
 #include "norm.h"
 #include "snorm.h"
@@ -120,8 +121,7 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist){
   if(Dist == "ghskt") dQ = qGHSKT(dP, vTheta(0), vTheta(1), vTheta(2), vTheta(3));
   return dQ;
 }
-//[[Rcpp::export]]
-arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
+arma::vec mdist_univ_quiet(arma::vec vTheta, std::string Dist){
   arma::vec vMoments(4);
   if(Dist == "norm") vMoments = mNORM(vTheta(0), vTheta(1));
   if(Dist == "snorm") vMoments = mSNORM(vTheta(0), vTheta(1), vTheta(2));
@@ -138,20 +138,40 @@ arma::vec mdist_univ(arma::vec vTheta, std::string Dist){
   if(Dist == "beta") vMoments = mBETA(vTheta(0), vTheta(1));
   if(Dist == "negbin") vMoments = mNEGBIN(vTheta(0), vTheta(1));
   if(Dist == "skellam") vMoments = mSKELLAM(vTheta(0), vTheta(1));
+  GAS_clean_moments(vMoments);
   return vMoments;
 }
 
-//[[Rcpp::export]]
-arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN){
+arma::vec mdist_multi_mean_quiet(arma::vec vTheta, std::string Dist, int iN){
   arma::vec vMu(iN);
   if(Dist == "mvnorm") vMu = mMVNORM_mean(vTheta, iN);
   if(Dist == "mvt")    vMu = mMVT_mean(vTheta, iN);
+  GAS_clean_moments(vMu);
   return vMu;
 }
-//[[Rcpp::export]]
-arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN){
+arma::mat mdist_multi_cov_quiet(arma::vec vTheta, std::string Dist, int iN){
   arma::mat mCov(iN,iN);
   if(Dist == "mvnorm") mCov = mMVNORM_cov(vTheta, iN);
   if(Dist == "mvt")    mCov = mMVT_cov(vTheta, iN);
+  GAS_clean_moments(mCov);
   return mCov;
+}
+
+//[[Rcpp::export]]
+arma::vec mdist_univ(arma::vec vTheta, std::string Dist) {
+  arma::vec values = mdist_univ_quiet(vTheta, Dist);
+  GAS_warn_univ_moments(values, Dist);
+  return values;
+}
+//[[Rcpp::export]]
+arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN) {
+  arma::vec values = mdist_multi_mean_quiet(vTheta, Dist, iN);
+  if (!values.is_finite()) GAS_warn_moments(Dist, "mean");
+  return values;
+}
+//[[Rcpp::export]]
+arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN) {
+  arma::mat values = mdist_multi_cov_quiet(vTheta, Dist, iN);
+  if (!values.is_finite()) GAS_warn_moments(Dist, "covariance");
+  return values;
 }

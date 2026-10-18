@@ -30,6 +30,8 @@ The starting point is retained as a candidate. If convergence, gradient
 or curvature diagnostics fail, \code{stats::nlminb} and a subsequent
 BFGS refinement are attempted. The best finite objective is retained.
 The reported value and Hessian refer to the summed negative log likelihood.
+Curvature is used for optimizer diagnostics only; fitted-model standard errors
+and confidence bands use the outer product of per-observation scores.
 The additional \code{method} field identifies the selected candidate.
 }
 \value{

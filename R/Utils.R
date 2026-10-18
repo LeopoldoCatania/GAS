@@ -12,8 +12,8 @@ UpperB <- function() {
     return(0.9999)
 }
 
-LowerNu <- function() return(4.0)
-UpperNu <- function() return(50)
+LowerNu <- function(Dist = "std") LowerNu_cpp(Dist)
+UpperNu <- function(Dist = "std") UpperNu_cpp(Dist)
 
 Array2Matrix <- function(aArray, type) {
 

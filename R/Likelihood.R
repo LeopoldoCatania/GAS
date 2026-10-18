@@ -126,6 +126,36 @@ UniGASOptimiser <- function(vPw, data, GASSpec) {
 
 }
 
+# Per-observation log likelihoods on the optimizer parameter scale. Refilter
+# at every evaluation: parameter derivatives must include the entire recursion
+# and its initialization, not just the density at a fixed parameter path.
+GAS_loglik_contributions <- function(vPw, data, GASSpec) {
+  if (is.null(names(vPw))) names(vPw) <- getPwNames(GASSpec)
+  Dist <- getDist(GASSpec)
+  ScalingType <- getScalingType(GASSpec)
+  if (is(GASSpec, "uGASSpec")) {
+    iT <- length(data)
+    iK <- NumberParameters(Dist)
+    par <- AddFixedPar(vPw2lPn_Uni(vPw, iK))
+    ll <- GASFilter_univ(data, par$vKappa, par$mA, par$mB,
+                         iT, iK, Dist, ScalingType)$vLLK
+  } else if (is(GASSpec, "mGASSpec")) {
+    iT <- ncol(data)
+    iN <- nrow(data)
+    iK <- NumberParameters(Dist, iN)
+    par <- AddFixedPar(vPw2lPn_Multi(vPw, Dist, iK, iN,
+                                    GASSpec@Spec$ScalarParameters))
+    ll <- GASFilter_multi(data, par$vKappa, par$mA, par$mB,
+                          iT, iN, iK, Dist, ScalingType)$vLLK
+  } else {
+    stop("Log likelihood contributions require a univariate or multivariate GAS specification.")
+  }
+  ll <- as.numeric(ll)
+  if (length(ll) != iT || any(!is.finite(ll)))
+    stop("Log likelihood contributions must be finite for every observation.")
+  ll
+}
+
 MultiGASOptimiser <- function(vPw, data, GASSpec){
 
   if (is.null(names(vPw))) {

@@ -10,4 +10,8 @@ double qdist_univ(double dP, arma::vec vTheta, std::string Dist);
 arma::vec mdist_univ(arma::vec vTheta, std::string Dist);
 arma::vec mdist_multi_mean(arma::vec vTheta, std::string Dist, int iN);
 arma::mat mdist_multi_cov(arma::vec vTheta, std::string Dist, int iN);
+// Silent paths for aggregating warnings over an entire time series.
+arma::vec mdist_univ_quiet(arma::vec vTheta, std::string Dist);
+arma::vec mdist_multi_mean_quiet(arma::vec vTheta, std::string Dist, int iN);
+arma::mat mdist_multi_cov_quiet(arma::vec vTheta, std::string Dist, int iN);
 #endif

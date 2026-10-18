@@ -5,27 +5,34 @@ GAS_sample_size <- function(data, GASSpec) {
   length(data)
 }
 
-GAS_hessian_info <- function(H, p = if (is.matrix(H)) nrow(H) else 0L,
-                             tol = 1e-8) {
-  bad <- function(reason) list(ok = FALSE, reason = reason, matrix = H)
+GAS_information_info <- function(H, p = if (is.matrix(H)) nrow(H) else 0L,
+                                 tol = 1e-8, label = "OPG information matrix") {
+  bad <- function(reason) list(ok = FALSE, reason = paste(label, reason), matrix = H)
   if (!is.matrix(H) || !is.numeric(H) || !identical(dim(H), c(as.integer(p), as.integer(p))) ||
-      p < 1L || any(!is.finite(H))) return(bad("missing, malformed or non-finite Hessian"))
+      p < 1L || any(!is.finite(H))) return(bad("is missing, malformed or non-finite"))
   if (max(abs(H-t(H))) > 1e-7*max(1, max(abs(H))))
-    return(bad("Hessian is not numerically symmetric"))
+    return(bad("is not numerically symmetric"))
   H <- (H+t(H))/2
-  if (any(diag(H) <= 0)) return(bad("Hessian has nonpositive diagonal entries"))
+  if (any(diag(H) <= 0)) return(bad("has nonpositive diagonal entries"))
   # Assess conditioning after removing arbitrary diagonal parameter scales.
   d <- sqrt(diag(H)); C <- H / outer(d,d)
   ev <- eigen(C, symmetric = TRUE, only.values = TRUE)$values
-  if (min(ev) <= tol*max(ev)) return(bad("Hessian is indefinite or numerically singular"))
+  if (min(ev) <= tol*max(ev)) return(bad("is indefinite or numerically singular"))
   U <- tryCatch(chol(H), error = function(e) NULL)
-  if (is.null(U)) return(bad("Hessian Cholesky factorization failed"))
+  if (is.null(U)) return(bad("Cholesky factorization failed"))
   list(ok = TRUE, reason = "", matrix = H, chol = U,
        scaled_condition = max(ev)/min(ev))
 }
 
+# Curvature is still used by fn.optim to decide whether to retry optimization;
+# it is never used to construct the fitted model's covariance estimate.
+GAS_hessian_info <- function(H, p = if (is.matrix(H)) nrow(H) else 0L,
+                             tol = 1e-8) {
+  GAS_information_info(H, p, tol, label = "Hessian")
+}
+
 GAS_checked_covariance <- function(H, p) {
-  info <- GAS_hessian_info(H, p)
+  info <- GAS_information_info(H, p)
   if (!info$ok) return(NULL)
   V <- chol2inv(info$chol)
   if (any(!is.finite(V))) return(NULL)
@@ -40,6 +47,25 @@ GAS_objective_gradient <- function(FUN, par, data, GASSpec) {
   }
   tryCatch(as.numeric(numDeriv::grad(fn, par)),
            error = function(e) rep(NA_real_, length(par)))
+}
+
+# Rows of S are observation scores and columns are optimizer parameters.
+# crossprod(S) is SUM_t s_t s_t'; its inverse estimates Var(p_hat), with
+# no additional factor of T. The asymptotic covariance of sqrt(T)(p_hat-p)
+# is instead the inverse of crossprod(S)/T.
+GAS_opg <- function(par, data, GASSpec) {
+  nm <- names(par)
+  contributions <- function(x) {
+    names(x) <- nm
+    GAS_loglik_contributions(x, data, GASSpec)
+  }
+  S <- numDeriv::jacobian(contributions, par)
+  n <- GAS_sample_size(data, GASSpec)
+  if (!is.matrix(S) || !identical(dim(S), c(as.integer(n), as.integer(length(par)))) ||
+      any(!is.finite(S)))
+    stop("The likelihood score Jacobian is malformed or non-finite.")
+  colnames(S) <- nm
+  list(scores = S, opg = crossprod(S))
 }
 
 GAS_finalize_optimiser <- function(optimiser, par0, data, GASSpec, FUN,
@@ -73,20 +99,31 @@ GAS_finalize_optimiser <- function(optimiser, par0, data, GASSpec, FUN,
   optimiser$convergence <- flag
   optimiser$pars <- p
   optimiser$value <- f
-  H <- optimiser$hessian
+  # A custom optimizer may provide a Hessian; retain it as optimizer output
+  # only. Inference and confidence bands use the OPG computed here.
+  optimiser$scores <- NULL
+  optimiser$opg <- NULL
+  optimiser$covariance <- NULL
+  optimiser$covariance_method <- "OPG"
+  info <- list(ok = FALSE, reason = "Standard errors were not requested.")
   if (Compute.SE) {
-    # Recompute curvature at the FINAL estimate, never at a one-step refit.
-    obj <- function(x) {names(x) <- names(p); FUN(x, data = data, GASSpec = GASSpec)}
-    H <- tryCatch(numDeriv::hessian(obj, p), error = function(e) NULL)
-    if (is.null(H) || any(!is.finite(H)))
-      H <- tryCatch(stats::optimHess(p, obj), error = function(e) NULL)
+    result <- tryCatch(GAS_opg(p, data, GASSpec), error = function(e) e)
+    if (inherits(result, "error")) {
+      info <- list(ok = FALSE, reason = paste("OPG calculation failed:", conditionMessage(result)))
+    } else {
+      optimiser$scores <- result$scores
+      optimiser$opg <- result$opg
+      info <- GAS_information_info(result$opg, length(p))
+      if (info$ok)
+        optimiser$covariance <- GAS_checked_covariance(result$opg, length(p))
+      if (info$ok && is.null(optimiser$covariance))
+        info <- list(ok = FALSE, reason = "The inverse OPG is non-finite.")
+    }
   }
-  info <- GAS_hessian_info(H, length(p))
-  optimiser$hessian <- info$matrix
   optimiser$diagnostics <- list(gradient_per_observation = g,
     max_gradient_per_observation = if (all(is.finite(g))) max(abs(g)) else NA_real_,
-    gradient_ok = stationary, hessian_ok = info$ok, hessian_reason = info$reason,
-    inference_ok = isTRUE(flag == 0) && stationary && info$ok)
+    gradient_ok = stationary, information_ok = info$ok, information_reason = info$reason,
+    inference_ok = Compute.SE && isTRUE(flag == 0) && stationary && info$ok)
   if (Compute.SE && !info$ok)
     warning(paste0("Standard errors are unavailable: ", info$reason, "."), call. = FALSE)
   optimiser

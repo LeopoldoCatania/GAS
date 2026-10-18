@@ -59,7 +59,8 @@ fn.optim <- function(par0, data, GASSpec, FUN) {
   if (length(converged)) ix <- converged
   best <- candidates[[ix[which.min(vals[ix])]]]
   names(best$par) <- nm
-  # Return TOTAL objective and Hessian, preserving the package's SE scaling.
+  # Return TOTAL objective and optimizer curvature for compatibility.
+  # Fitted-model standard errors are constructed separately from the OPG.
   H <- tryCatch(n*stats::optimHess(best$par, objective), error = function(e) NULL)
   list(pars = best$par, value = n*best$value, hessian = H,
        convergence = best$convergence, method = best$method)

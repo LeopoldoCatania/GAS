@@ -39,24 +39,36 @@ The user is free to employ his/her own optimization routine via the \code{fn.opt
 accepts a \code{function} object. The user provided optimizer has to satisfy strict requirements. The arguments of the
 \code{fn.optimizer} are : i) \code{par0} a vector of starting values, ii) \code{data} the data provided, iii) \code{GASSpec}
 an object of the class \link{uGASSpec}, and iv) \code{FUN} the likelihood function. The output of \code{fn.optimizer} has
-to be an object of the class \code{list} with four named elements: i) \code{pars}: a \code{numeric} vector
-where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
-evaluated at its minimum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
-the minimum of the negative log likelihood, this is used for inferential purposes, and iv) \code{convergence} a \code{numeric} variable  reporting information about the convergence of the optimization. This quantity is printed by the
-\code{show()} and \code{summary()} methods. \code{convergence = 0} has to indicate successful completion.
+to be a named list containing \code{pars}, the estimated numeric parameter
+vector; \code{value}, the summed negative log likelihood; and
+\code{convergence}, a numeric solver status with zero indicating success.
+An optional \code{hessian} element is retained as optimizer output but is not
+used for inference.
 
-When \code{Compute.SE = TRUE}, the Hessian is recomputed at the final
-reported estimate using \code{numDeriv::hessian}, with
-\code{stats::optimHess} as a fallback if that calculation fails or is non-finite.
-No additional optimization step is used for Hessian evaluation.
+When \code{Compute.SE = TRUE}, \code{numDeriv::jacobian} differentiates the
+vector of per-observation log likelihood contributions at the final estimate.
+The complete filter, including initialization, is rerun at each perturbed
+coefficient vector. If \eqn{S} is the resulting \eqn{T \times p} score matrix,
+the outer-product information matrix is \eqn{S' S} and the covariance estimate
+on the unrestricted optimizer scale is \eqn{(S' S)^{-1}}. There is no additional
+sample-size divisor. The delta method transforms this covariance to the
+reported coefficient scale. This is the OPG covariance for correctly specified
+maximum likelihood, not a sandwich covariance under misspecification.
+
 A missing convergence flag is recorded as unknown. A zero solver flag that
 fails the numerical gradient check is replaced by code 52. The original
 flag is retained in \code{Estimates$optimiser$solver_convergence}.
 The maximized objective is checked against the starting objective.
 Standard errors, test statistics and p-values are returned as \code{NA}
-when convergence or Hessian checks fail. The coefficient estimates remain
-available. Diagnostics and the Hessian used are stored in
-\code{Estimates$optimiser}.
+when convergence or OPG checks fail. No generalized inverse or automatic
+positive-definiteness repair is used. The coefficient estimates remain available.
+The score matrix, summed OPG matrix and its inverse are stored in
+\code{Estimates$optimiser$scores}, \code{Estimates$optimiser$opg} and
+\code{Estimates$optimiser$covariance}, respectively, when available.
+The \code{covariance_method} field is \code{"OPG"}; validation results are in
+\code{diagnostics}, including \code{information_ok} and \code{inference_ok}.
+With \code{Compute.SE = FALSE}, these matrices are not computed and
+\code{inference_ok} is false.
 
 
 By default, the \code{optim} optimizer with \code{method = "BFGS"} is employed.

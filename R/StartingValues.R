@@ -1,17 +1,19 @@
-StartingNu <- function(vY) {
-  dStart = c(unmapVec_C(12.0, LowerNu(), UpperNu()))
+StartingNu <- function(vY, Dist = "std") {
+  lower <- LowerNu(Dist)
+  upper <- UpperNu(Dist)
+  dStart = c(unmapVec_C(12.0, lower, upper))
   dNu = try(c(Map_Vec(solnp(dStart, function(x, vY) {
-    dNu =  c(Map_Vec(x, LowerNu(), UpperNu()))
+    dNu =  c(Map_Vec(x, lower, upper))
     - sum(dt(vY, dNu, log = TRUE))
-  }, vY = vY, control = list(trace = 0))$pars, LowerNu(), UpperNu())), silent = TRUE)
+  }, vY = vY, control = list(trace = 0))$pars, lower, upper)), silent = TRUE)
 
   if (is(dNu, "try-error") || length(dNu) != 1L || !is.finite(dNu))
     dNu = 7.0
 
-  if (dNu >= UpperNu())
-    dNu = UpperNu() - 1.0
-  if (dNu <= LowerNu())
-    dNu = LowerNu() + 0.02
+  if (dNu >= upper)
+    dNu = upper - 1.0
+  if (dNu <= lower)
+    dNu = lower + 0.02
 
   return(dNu)
 }
@@ -58,14 +60,14 @@ StaticStarting_Uni <- function(vY, Dist, iK) {
   }
   if (Dist == "ast" | Dist == "ast1") {
 
-    dNu1 = StartingNu(vY)
+    dNu1 = StartingNu(vY, Dist)
 
     if (Dist == "ast") {
 
       dNu2 = dNu1 * 1.5
 
-      if (dNu2 > UpperNu()) {
-        dNu2 = UpperNu() - 1.0
+      if (dNu2 >= UpperNu(Dist)) {
+        dNu2 = UpperNu(Dist) - 1.0
       }
 
     } else {
@@ -199,10 +201,20 @@ StaticStarting_Multi <- function(mY, Dist, iN) {
   }
   if (Dist == "mvt") {
 
-    dNu = StartingNu(c(mY))
+    dNu = StartingNu(c(mY), Dist)
 
     vMu_tilde = vEmpMu
-    Theta = c(vEmpMu, vEmpSigma * sqrt((dNu - 2.0)/dNu), vEmpRho, dNu)
+    # Matching variance is meaningful only when nu > 2. For heavier tails,
+    # initialize the t scale by matching the empirical interquartile range.
+    if (dNu > 2.0) {
+      vScale = vEmpSigma * sqrt((dNu - 2.0)/dNu)
+    } else {
+      vScale = apply(mY, 1L, stats::IQR) / (2.0 * stats::qt(0.75, df = dNu))
+      bad = !is.finite(vScale) | vScale <= 0
+      vScale[bad] = vEmpSigma[bad]
+      vScale = pmax(vScale, 1e-7)
+    }
+    Theta = c(vEmpMu, vScale, vEmpRho, dNu)
     vPw = as.numeric(MultiUnmapParameters(Theta, "mvt", iN))
   }
 

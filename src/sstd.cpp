@@ -139,7 +139,7 @@ double sstdexkurt( double dXi, double dNu )
     // double m3  = (my3-3.0*a*my2+2.0*pow(a,3.0) )/pow(b,3.0);
     m4  = -3.0 + (my4-4.0*a*my3+6.0*pow(a,2.0)*my2-3.0*pow(a,4.0) )/pow(b,4.0);
   } else{
-    m4 = dNu > 2.0 ? R_PosInf : NA_REAL;
+    m4 = NA_REAL;
   }
   return m4;
 }

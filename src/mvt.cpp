@@ -231,7 +231,9 @@ arma::vec mvt_Score(arma::vec vY,arma::vec vTheta,  int iN){
 }
 
 arma::vec mMVT_mean(arma::vec vTheta, int iN){
-  arma::vec vMu    = vTheta.subvec(0,iN-1);
+  arma::vec vMu = vTheta.subvec(0,iN-1);
+  const double nu = vTheta(NumberParameters("mvt", iN)-1);
+  if (!R_FINITE(nu) || nu <= 1.0) vMu.fill(NA_REAL);
   return vMu;
 }
 
@@ -243,6 +245,12 @@ arma::mat mMVT_cov(arma::vec vTheta, int iN){
   arma::vec vSigma = vTheta.subvec(iN,2*iN-1);
   arma::vec vRho   = vTheta.subvec(2*iN,iK-2);
   double dNu       = vTheta(iK-1);
+
+  if (!R_FINITE(dNu) || dNu <= 2.0 || !vSigma.is_finite() ||
+      arma::any(vSigma <= 0) || !vRho.is_finite()) {
+    arma::mat missing(iN, iN); missing.fill(NA_REAL);
+    return missing;
+  }
 
   arma::mat mD = diagmat(vSigma);
   arma::mat mR = build_mR(vRho, iN);

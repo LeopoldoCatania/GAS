@@ -51,7 +51,8 @@ test_that("Simulation", {
   tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.00000000, 0.1052736, 1.10000000)))
   expect_true(tmp < tol)
 
-  # std
+  # std: reference values for the distribution-specific (.001, 50) shape map.
+  # The full path is also checked against an independent R recursion in test_NuBounds.R.
 
   iT = 1e3
   A = matrix(c(0.001 , 0.0 , 0.0 ,
@@ -69,9 +70,9 @@ test_that("Simulation", {
 
   tmp = getObs(Sim)
   expect_equal(dim(tmp), c(iT, 1))
-  expect_true(abs(sum(tmp) - -8.063126) < tol)
+  expect_true(abs(sum(tmp) - -8.04314119927743) < tol)
 
-  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.0001108389, 0.0991014929, 7.9800370961)))
+  tmp = max(abs(Sim@GASDyn$mTheta[,100] - c(0.000107510590254363, 0.099119370319187, 7.93604672823201)))
   expect_true(tmp < tol)
 
   # sstd

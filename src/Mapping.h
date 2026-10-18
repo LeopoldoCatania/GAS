@@ -1,5 +1,7 @@
 #ifndef MAPPING_H
 #define MAPPING_H
+double LowerNu_cpp(std::string Dist);
+double UpperNu_cpp(std::string Dist);
 arma::vec MapParameters_univ(arma::vec vTheta_tilde, std::string Dist, int iK);
 arma::vec UnmapParameters_univ(arma::vec vTheta, std::string Dist, int iK);
 arma::vec UnmapParameters_multi(arma::vec vTheta, std::string Dist,int iN, int iK);

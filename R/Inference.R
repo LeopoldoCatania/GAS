@@ -1,5 +1,5 @@
 
-InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
+InferenceFun_Uni <- function(mInformation, vPw, iK, Compute.SE = TRUE) {
 
     vPn = vPw2vPn_Uni(vPw, iK)
     iK_s = length(vPn)
@@ -10,18 +10,18 @@ InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
 
     if (Compute.SE) {
       mJacob = jacobian(vPw2vPn_Uni, vPw, iK = iK)
-      mInvHessian = GAS_checked_covariance(mHessian, length(vPw))
-      if (is.null(mInvHessian)) {
-        warning("Hessian is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
+      mInvInformation = GAS_checked_covariance(mInformation, length(vPw))
+      if (is.null(mInvInformation)) {
+        warning("OPG information matrix is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
         return(out)
       }
-      mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
+      mCovariance = mJacob %*% mInvInformation %*% t(mJacob)
 
-      if (any(!is.finite(mSandwitch)) || any(diag(mSandwitch) <= 0)) {
+      if (any(!is.finite(mCovariance)) || any(diag(mCovariance) <= 0)) {
         warning("Delta-method covariance is unsuitable for inference; returning NA standard errors.", call. = FALSE)
         return(out)
       }
-      vSE = sqrt(diag(mSandwitch))
+      vSE = sqrt(diag(mCovariance))
       vTest = vPn/vSE
       vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)
 
@@ -34,7 +34,7 @@ InferenceFun_Uni <- function(mHessian, vPw, iK, Compute.SE = TRUE) {
     return(out)
 }
 
-InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters, Compute.SE = TRUE) {
+InferenceFun_Multi <- function(mInformation, Dist, vPw, iK, iN, ScalarParameters, Compute.SE = TRUE) {
 
     vPn = vPw2vPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
     iK_s = length(vPn)
@@ -46,18 +46,18 @@ InferenceFun_Multi <- function(mHessian, Dist, vPw, iK, iN, ScalarParameters, Co
     if (Compute.SE) {
 
       mJacob = jacobian(vPw2vPn_Multi, vPw, iK = iK, iN = iN, Dist = Dist, ScalarParameters = ScalarParameters)
-      mInvHessian = GAS_checked_covariance(mHessian, length(vPw))
-      if (is.null(mInvHessian)) {
-        warning("Hessian is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
+      mInvInformation = GAS_checked_covariance(mInformation, length(vPw))
+      if (is.null(mInvInformation)) {
+        warning("OPG information matrix is unsuitable for inference; returning estimates with NA standard errors.", call. = FALSE)
         return(out)
       }
-      mSandwitch = mJacob %*% mInvHessian %*% t(mJacob)
+      mCovariance = mJacob %*% mInvInformation %*% t(mJacob)
 
-      if (any(!is.finite(mSandwitch)) || any(diag(mSandwitch) <= 0)) {
+      if (any(!is.finite(mCovariance)) || any(diag(mCovariance) <= 0)) {
         warning("Delta-method covariance is unsuitable for inference; returning NA standard errors.", call. = FALSE)
         return(out)
       }
-      vSE = sqrt(diag(mSandwitch))
+      vSE = sqrt(diag(mCovariance))
       vTest = vPn/vSE
       vPvalues = 2 * pnorm(abs(vTest), lower.tail = FALSE)
 

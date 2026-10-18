@@ -86,10 +86,10 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE)
   lParList = vPw2lPn_Uni(vPw, iK)
   lParList = AddFixedPar(lParList)
 
-  mHessian = optimiser$hessian
+  mInformation = optimiser$opg
   valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  Inference = InferenceFun_Uni(mHessian, vPw, iK, valid_inference)
+  Inference = InferenceFun_Uni(mInformation, vPw, iK, valid_inference)
 
   GASDyn = GASFilter_univ(vY, lParList$vKappa, lParList$mA, lParList$mB, iT, iK, Dist, ScalingType)
 
@@ -183,10 +183,10 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
   lParList = vPw2lPn_Multi(vPw, Dist, iK, iN, ScalarParameters)
   lParList = AddFixedPar(lParList)
 
-  mHessian = optimiser$hessian
+  mInformation = optimiser$opg
   valid_inference <- Compute.SE && isTRUE(optimiser$diagnostics$inference_ok)
 
-  Inference = InferenceFun_Multi(mHessian, Dist, vPw, iK, iN, ScalarParameters, valid_inference)
+  Inference = InferenceFun_Multi(mInformation, Dist, vPw, iK, iN, ScalarParameters, valid_inference)
 
   GASDyn = GASFilter_multi(mY, lParList$vKappa, lParList$mA, lParList$mB, iT, iN, iK, Dist, ScalingType)
 

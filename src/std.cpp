@@ -38,12 +38,12 @@ arma::vec mSTD(double dMu, double dPhi2, double dNu) {
   arma::vec m(4); m.fill(NA_REAL);
   if (!R_FINITE(dMu) || !R_FINITE(dPhi2) || dPhi2 <= 0 ||
       !R_FINITE(dNu) || dNu <= 0) return m;
-  if (dNu > 1) {
-    m(0)=dMu;
-    m(1)=dNu > 2 ? dPhi2*dNu/(dNu-2.0) : R_PosInf;
-  }
+  // Return only finite, existing moments; unavailable entries remain NA.
+  // EvalMoments_univ issues one warning for the entire parameter path.
+  if (dNu > 1) m(0)=dMu;
+  if (dNu > 2) m(1)=dPhi2*dNu/(dNu-2.0);
   if (dNu > 3) m(2)=0;
-  if (dNu > 2) m(3)=dNu > 4 ? 3.0+6.0/(dNu-4.0) : R_PosInf;
+  if (dNu > 4) m(3)=3.0+6.0/(dNu-4.0);
   return m;
 }
 

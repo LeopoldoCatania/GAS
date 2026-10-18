@@ -300,6 +300,11 @@ arma::vec mAST(double dMu, double dSigma, double dAlpha,
   arma::vec vMoments(4);
   vMoments.fill(NA_REAL);
 
+  if (!R_FINITE(dMu) || !R_FINITE(dSigma) || dSigma <= 0 ||
+      !R_FINITE(dAlpha) || dAlpha <= 0 || dAlpha >= 1 ||
+      !R_FINITE(dNu1) || dNu1 <= 0 || !R_FINITE(dNu2) || dNu2 <= 0)
+    return vMoments;
+
   const double minNu = (dNu1 < dNu2) ? dNu1 : dNu2;
 
   // No finite mean.
@@ -337,7 +342,7 @@ arma::vec mAST(double dMu, double dSigma, double dAlpha,
 
   // Finite mean but infinite variance.
   if (minNu <= 2.0) {
-    vMoments(1) = R_PosInf;
+    vMoments(1) = NA_REAL;
     return vMoments;
   }
 
@@ -368,7 +373,7 @@ arma::vec mAST(double dMu, double dSigma, double dAlpha,
   } else {
 
     // Finite variance but infinite fourth central moment.
-    vMoments(3) = R_PosInf;
+    vMoments(3) = NA_REAL;
   }
 
   return vMoments;
