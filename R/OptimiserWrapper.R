@@ -47,16 +47,30 @@ fn.optim <- function(par0, data, GASSpec, FUN) {
       error = function(e) NULL)
     add(second, "nlminb")
     if (!is.null(second)) {
-      third <- tryCatch(stats::optim(second$par, objective, method = "BFGS",
-        control = list(maxit = 2000L, reltol = 1e-12, abstol = -Inf)), error = function(e) NULL)
-      add(third, "BFGS refinement")
+      # optim's default 1e-3 differences can be too coarse for small GAS
+      # intercepts, especially with high persistence. Refine with the same
+      # Richardson derivatives used in the final stationarity check.
+      gradient <- function(x) GAS_objective_gradient(FUN,
+        stats::setNames(x, nm), data, GASSpec)
+      third <- tryCatch(stats::optim(second$par, objective, gr = gradient,
+        method = "BFGS", control = list(maxit = 2000L, reltol = 1e-14,
+                                       abstol = -Inf)), error = function(e) NULL)
+      add(third, "BFGS gradient refinement")
     }
   }
   vals <- vapply(candidates, function(x) x$value, numeric(1))
-  # On numerically equal objectives, prefer a solver that reported convergence.
+  # Tiny likelihood rounding differences must not discard a stationary
+  # solution in favor of one that only has a successful solver return code.
   ix <- which(vals <= min(vals) + 1e-12*(1+abs(min(vals))))
   converged <- ix[vapply(candidates[ix], function(x) isTRUE(x$convergence == 0), logical(1))]
-  if (length(converged)) ix <- converged
+  if (length(converged)) {
+    ix <- converged
+    stationary <- vapply(candidates[ix], function(x) {
+      g <- GAS_objective_gradient(FUN, stats::setNames(x$par, nm), data, GASSpec)
+      all(is.finite(g)) && max(abs(g)) <= 1e-5
+    }, logical(1))
+    if (any(stationary)) ix <- ix[stationary]
+  }
   best <- candidates[[ix[which.min(vals[ix])]]]
   names(best$par) <- nm
   # Return TOTAL objective and optimizer curvature for compatibility.

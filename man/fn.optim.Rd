@@ -28,7 +28,11 @@ numerical scale across sample sizes. The primary BFGS controls are
 \code{maxit = 2000L}, \code{reltol = 1e-11}, and \code{abstol = -Inf}.
 The starting point is retained as a candidate. If convergence, gradient
 or curvature diagnostics fail, \code{stats::nlminb} and a subsequent
-BFGS refinement are attempted. The best finite objective is retained.
+BFGS refinement are attempted. The refinement supplies Richardson numerical
+gradients from \code{numDeriv::grad}, using \code{reltol = 1e-14}, to avoid
+the coarse default finite-difference step in \code{optim}. The best finite
+objective is retained; among numerically tied objectives, a candidate that
+passes both solver convergence and gradient checks is preferred.
 The reported value and Hessian refer to the summed negative log likelihood.
 Curvature is used for optimizer diagnostics only; fitted-model standard errors
 and confidence bands use the outer product of per-observation scores.
