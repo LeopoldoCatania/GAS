@@ -13,6 +13,10 @@ List GASFilter_univ(arma::vec vY, arma::vec vKappa, arma::mat mA, arma::mat mB, 
   arma::vec vLLK(iT);
   double dLLK = 0;
 
+  // system parametrers
+  const arma::vec vA = mA.diag();
+  const arma::vec vB = mB.diag();
+
   //initialise parameter
   arma::mat mTheta_tilde(iK,iT+1);
   arma::mat mTheta(iK,iT+1);
@@ -30,7 +34,7 @@ List GASFilter_univ(arma::vec vY, arma::vec vKappa, arma::mat mA, arma::mat mB, 
   // Dynamics
   for(i=1;i<iT+1;i++){
     mInnovations.col(i-1) = GASInnovation_univ(vY(i-1), mTheta.col(i-1), mTheta_tilde.col(i-1), iK, Dist, ScalingType);
-    mTheta_tilde.col(i)   = vKappa + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
+    mTheta_tilde.col(i)   = vKappa + vA % mInnovations.col(i-1) + vB %  mTheta_tilde.col(i-1);
     mTheta.col(i)         = MapParameters_univ(mTheta_tilde.col(i),Dist, iK);
     if(i<iT){
       vLLK(i) = ddist_univ(vY(i), mTheta.col(i), Dist, true);
@@ -57,6 +61,10 @@ List GASFilter_multi(arma::mat mY, arma::vec vKappa, arma::mat mA, arma::mat mB,
   arma::vec vLLK(iT);
   double dLLK = 0;
 
+  // system parametrers
+  const arma::vec vA = mA.diag();
+  const arma::vec vB = mB.diag();
+
   //initialise parameter
   arma::mat mTheta_tilde(iK,iT+1);
   arma::mat mTheta(iK,iT+1);
@@ -74,7 +82,7 @@ List GASFilter_multi(arma::mat mY, arma::vec vKappa, arma::mat mA, arma::mat mB,
   // Dynamics
   for(i=1;i<iT+1;i++){
     mInnovations.col(i-1) = GASInnovation_multi(mY.col(i-1), mTheta.col(i-1), mTheta_tilde.col(i-1),iN, iK, Dist, ScalingType);
-    mTheta_tilde.col(i)   = vKappa + mA * mInnovations.col(i-1) + mB *  mTheta_tilde.col(i-1);
+    mTheta_tilde.col(i)   = vKappa + vA % mInnovations.col(i-1) + vB %  mTheta_tilde.col(i-1);
     mTheta.col(i)         = MapParameters_multi(mTheta_tilde.col(i),Dist,iN, iK);
     if(i<iT){
       vLLK(i) = ddist_multi(mY.col(i), mTheta.col(i), iN,Dist, true);
