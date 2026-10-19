@@ -7,7 +7,6 @@
 \alias{getFilteredParameters,uGASSim-method}
 \alias{getMoments,uGASSim-method}
 \alias{getObs,uGASSim-method}
-\alias{plot,uGASSim,missing-method}
 \alias{quantile,uGASSim-method}
 \alias{ES,uGASSim-method}
 \alias{show,uGASSim-method}

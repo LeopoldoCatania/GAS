@@ -23,7 +23,8 @@ dimension. Dimensions greater than four are supported.
 }
 %
 \item{kappa}{
-\code{numeric} vector of unconditional level for the reparametrized vector of parameters.}
+\code{numeric} Vector of intercepts in the recursion for the reparametrised parameters.
+For a target state \eqn{\bar f}, use \eqn{\kappa=(I-B)\bar f}.}
 %
 \item{A}{
 \code{matrix} of coefficients of dimension K x K that premultiply the
@@ -51,7 +52,7 @@ can specify a GAS model via the additional arguments \code{kappa}, \code{A}, \co
 	includes also those parameters that are not time-varying. The GAS recursion
 	for \eqn{\theta_{t}} is: \deqn{\theta_{t} = \Lambda(\tilde{\theta}_{t})}\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}}
 	where \eqn{h(.)} is the mapping function (see \link{MultiMapParameters}) and \eqn{\tilde{\theta}_{t}} is
-	the vector of reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa},
+	the vector of reparametrised parameters. The process is initialized at \eqn{\tilde{\theta}_{1}=(I - B)^{-1}\kappa},
 	where \eqn{\kappa} is the \code{Kappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
 	See Ardia et. al. (2016a) for further details.
 }
@@ -75,8 +76,8 @@ Cambridge University Press.
 \author{Leopoldo Catania}
 \examples{
 # Simulate from a GAS process with Multivariate Student-t conditional
-# distribution, time-varying locations, scales, correlations
-# and fixed shape parameter.
+# distribution, time-varying scales and correlations,
+# and fixed location and shape parameters.
 library("GAS")
 
 set.seed(786)
@@ -85,27 +86,30 @@ T.sim = 1000  # Number of observations to simulate.
 N     = 3     # Trivariate series.
 Dist  = "mvt" # Conditional Multivariate Studen-t distribution.
 
-# Build unconditional vector of reparametrised parameters.
+# Specify the target initial distribution parameters.
 
 Mu  = c(0.1, 0.2, 0.3) # Vector of location parameters (this is not transformed).
-Phi = c(1.0, 1.2, 0.3) # Vector of scale parameters for the firs, second and third variables.
+Phi = c(1.0, 1.2, 0.3) # Vector of scale parameters for the first, second and third variables.
 
 # Distinct correlations, ordered as rho12, rho13, rho23.
 Rho = c(0.1, 0.2, 0.3)
 
 Theta = c(Mu, Phi, Rho, 7) # Vector of parameters such that the degrees of freedom are 7.
 
-kappa = MultiUnmapParameters(Theta, Dist, N)
+fbar = MultiUnmapParameters(Theta, Dist, N)
 
-A = matrix(0, length(kappa), length(kappa))
+A = matrix(0, length(fbar), length(fbar))
 
 # Update scales and correlations, do not update locations and shape parameters.
 diag(A) = c(0, 0, 0, 0.05, 0.01, 0.09, 0.01, 0.04, 0.07, 0)
 
-B = matrix(0, length(kappa), length(kappa))
+B = matrix(0, length(fbar), length(fbar))
 
 # Update scales and correlations, do not update locations and shape parameters.
 diag(B) = c(0, 0, 0, 0.7, 0.7, 0.5, 0.94, 0.97, 0.92, 0)
+
+# Convert the target transformed state into the recursion intercept.
+kappa = (diag(length(fbar)) - B) \%*\% fbar
 
 Sim = MultiGASSim(fit = NULL, T.sim, N, kappa, A, B, Dist, ScalingType = "Identity")
 

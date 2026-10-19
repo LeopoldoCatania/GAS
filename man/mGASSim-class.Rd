@@ -6,7 +6,6 @@
 \alias{coef,mGASSim-method}
 \alias{getMoments,mGASSim-method}
 \alias{getObs,mGASSim-method}
-\alias{plot,mGASSim,missing-method}
 \alias{show,mGASSim-method}
 \alias{getFilteredParameters,mGASSim-method}
 \title{Class for Multivariate GAS Simulation}

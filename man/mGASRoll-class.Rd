@@ -7,7 +7,6 @@
 \alias{LogScore,mGASRoll-method}
 \alias{getForecast,mGASRoll-method}
 \alias{getMoments,mGASRoll-method}
-\alias{plot,mGASRoll,missing-method}
 \alias{show,mGASRoll-method}
 \alias{coef,mGASRoll-method}
 \title{Class for the Multivariate GAS Rolling object}

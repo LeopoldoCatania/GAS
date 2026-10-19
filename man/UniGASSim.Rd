@@ -19,7 +19,8 @@ An estimated object of the class \link{uGASFit}. By default \code{fit = NULL}.
 \code{numeric} Length of the simulated time series.}
 %
 \item{kappa}{
-\code{numeric} Vector of unconditional level for the reparametrised vector of parameters. Only used if \code{fit = NULL}}
+\code{numeric} Vector of intercepts in the recursion for the reparametrised parameters.
+For a target state \eqn{\bar f}, use \eqn{\kappa=(I-B)\bar f}. Only used if \code{fit = NULL}}
 %
 
 \item{A}{
@@ -52,7 +53,7 @@ can specify a GAS model via the additional arguments \code{kappa}, \code{A}, \co
 	also those parameters that are not time-varying.
 	The GAS recursion for \eqn{\theta_{t}} is \deqn{\theta_{t} = \Lambda(\tilde{\theta}_{t})},\deqn{\tilde{\theta}_{t}=\kappa + A*s_{t-1} + B*\tilde{\theta}_{t-1}},
 	where \eqn{\Lambda(.)} is the mapping function (see \link{UniMapParameters}) and \eqn{\tilde{\theta}_{t}} is the vector of
-	reparametrised parameters. The process is initialized at \eqn{\theta_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is
+	reparametrised parameters. The process is initialized at \eqn{\tilde{\theta}_{1}=(I - B)^{-1}\kappa}, where \eqn{\kappa} is
 	the \code{vKappa} vector. The vector \eqn{s_{t}} is the scaled score of \eqn{p(y|.)} with respect to \eqn{\tilde{\theta}_{t}}.
 	See Ardia et. al. (2016a) for further details.
 }
@@ -86,11 +87,9 @@ T.sim  = 1000 # number of observations to simulate
 Dist   = "std" # conditional Studen-t distribution
 
 
-# vector of unconditional reparametrised parameters such that, the unconditional level of
-# \eqn{\theta}_{t} is (0, 1.5 ,7), i.e. location = 0, scale = 1.5,
-# degrees of freedom = 7.
-
-kappa = c(0.0, log(1.5), log(7-2.01))
+# Target initial distribution parameters: location = 0, scale = 1.5,
+# degrees of freedom = 7. Use the package's current parameter mapping.
+fbar = UniUnmapParameters(c(0, 1.5, 7), Dist)
 
 # in this way we specify that the shape parameter is constant while the score
 # coefficients for the location and the scale
@@ -103,6 +102,9 @@ A = matrix(c(0.001 , 0.0  , 0.0 ,
 B = matrix(c(0.7 , 0.0 , 0.0 ,
               0.0 , 0.98, 0.0 ,
               0.0 , 0.0 , 0.0),3,byrow = TRUE) # Matrix of autoregressive parameters.
+
+# Convert the target transformed state into the recursion intercept.
+kappa = (diag(length(fbar)) - B) \%*\% fbar
 
 Sim = UniGASSim(fit = NULL, T.sim, kappa, A, B, Dist, ScalingType = "Identity")
 

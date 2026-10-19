@@ -6,7 +6,6 @@
 \alias{residuals,mGASFit-method}
 \alias{show,mGASFit-method}
 \alias{summary,mGASFit-method}
-\alias{plot,mGASFit,missing-method}
 \alias{coef,mGASFit-method}
 \alias{getFilteredParameters,mGASFit-method}
 \alias{getMoments,mGASFit-method}

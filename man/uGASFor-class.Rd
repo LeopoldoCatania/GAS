@@ -10,7 +10,6 @@
 \alias{pit,uGASFor-method}
 \alias{quantile,uGASFor-method}
 \alias{ES,uGASFor-method}
-\alias{plot,uGASFor,missing-method}
 \alias{show,uGASFor-method}
 \title{Class for the univariate GAS forecast object}
 \description{

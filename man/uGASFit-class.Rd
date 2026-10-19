@@ -10,7 +10,6 @@
 \alias{getMoments,uGASFit-method}
 \alias{getObs,uGASFit-method}
 \alias{pit,uGASFit-method}
-\alias{plot,uGASFit,missing-method}
 \alias{quantile,uGASFit-method}
 \alias{ES,uGASFit-method}
 \alias{show,uGASFit-method}

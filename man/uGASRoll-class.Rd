@@ -9,7 +9,6 @@
 \alias{getMoments,uGASRoll-method}
 \alias{getObs,uGASRoll-method}
 \alias{pit,uGASRoll-method}
-\alias{plot,uGASRoll,missing-method}
 \alias{quantile,uGASRoll-method}
 \alias{ES,uGASRoll-method}
 \alias{show,uGASRoll-method}

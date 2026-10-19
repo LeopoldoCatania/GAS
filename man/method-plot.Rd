@@ -1,8 +1,16 @@
 \name{plot-methods}
 \alias{plot}
+\alias{plot,uGASFit,missing-method}
+\alias{plot,mGASFit,missing-method}
+\alias{plot,uGASSim,missing-method}
+\alias{plot,mGASSim,missing-method}
+\alias{plot,uGASFor,missing-method}
+\alias{plot,mGASFor,missing-method}
+\alias{plot,uGASRoll,missing-method}
+\alias{plot,mGASRoll,missing-method}
 \alias{PlotMenu}
 
-\title{Plot output from an object of the from the \link{GAS} package.}
+\title{Plot output from an object of the \link{GAS} package.}
 
 \description{
 
@@ -13,26 +21,32 @@
 
 
 \usage{
-  plot(x, y, \ldots)
+  \S4method{plot}{uGASFit,missing}(x, which = NULL)
+  \S4method{plot}{mGASFit,missing}(x, which = NULL)
+  \S4method{plot}{uGASSim,missing}(x, which = NULL)
+  \S4method{plot}{mGASSim,missing}(x, which = NULL)
+  \S4method{plot}{uGASFor,missing}(x, which = NULL)
+  \S4method{plot}{mGASFor,missing}(x, which = NULL)
+  \S4method{plot}{uGASRoll,missing}(x, which = NULL)
+  \S4method{plot}{mGASRoll,missing}(x, which = NULL)
 %
   PlotMenu(x)
 }
 %
-%\S4method{plot}{uGASFit, mGASFit, uGASSim, mGASSim, uGASFor, mGASFor, uGASRoll, mGASRoll} plot(x, which = NULL, \ldots)
 \arguments{
 
-\item{x, y}{
+\item{x}{
 objects of class  \link{uGASFit}, \link{mGASFit}, \link{uGASSim},
   \link{mGASSim}, \link{uGASFor}, \link{mGASFor}, \link{uGASRoll}, \link{mGASRoll}.
 }
 
-\item{\ldots}{additional arguments, see Details}
+\item{which}{Numeric menu option to plot. If \code{NULL}, display the interactive menu. See Details.}
 
 }
 
 \details{
 
-\code{plot} accepts the additional argument \code{numeric} argument \code{which}. By default \code{which = NULL}. If \code{which} is provided, \code{plot()} does not show the interactive menu and plot the corresponding option. The available options for each object class is printed by the function \code{PlotMenu(x)}. By default \code{which = NULL}, that is, \code{plot()} display an interactive menu.
+\code{plot} accepts the additional numeric argument \code{which}. By default \code{which = NULL}. If \code{which} is provided, \code{plot()} does not show the interactive menu and plot the corresponding option. The available options for each object class is printed by the function \code{PlotMenu(x)}. By default \code{which = NULL}, that is, \code{plot()} display an interactive menu.
 }
 
 \value{

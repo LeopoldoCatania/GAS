@@ -6,7 +6,6 @@
 \alias{LogScore,mGASFor-method}
 \alias{getForecast,mGASFor-method}
 \alias{getMoments,mGASFor-method}
-\alias{plot,mGASFor,missing-method}
 \alias{show,mGASFor-method}
 \title{Class for the Multivariate GAS Forecast object}
 \description{

@@ -57,10 +57,11 @@ GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
 
 FTSEMIB = StockIndices[, "FTSEMIB"]
 
-InSampleData  = FTSEMIB[1:1500]
-OutSampleData = FTSEMIB[1501:2404]
+InSampleData  = FTSEMIB[1:500]
+OutSampleData = FTSEMIB[501:1000]
 
-Fit = UniGASFit(GASSpec, InSampleData)
+# Parameter standard errors are not needed for this example.
+Fit = UniGASFit(GASSpec, InSampleData, Compute.SE = FALSE)
 
 Forecast = UniGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
