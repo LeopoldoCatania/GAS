@@ -22,6 +22,7 @@ Default value\code{Dist = "norm"}.}
 Possible choices are \code{"Identity"}, \code{"Inv"},
  \code{"InvSqrt"}. Note that, for some distribution only \code{ScalingType = "Identity"} is supported, see the function \link{DistInfo}.
  When  \code{ScalingType = "InvSqrt"} the inverse of the cholesky decomposition of the information matrix is used.
+ Both \code{snorm} and \code{sstd} support all three mechanisms using their full analytic Fisher information matrices.
  Default value \code{ScalingType = "Identity"}.}
 %
 \item{GASPar}{

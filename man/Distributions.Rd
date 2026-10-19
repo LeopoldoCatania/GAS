@@ -75,6 +75,12 @@ For \code{snorm} and \code{sstd}, the two-piece split has probability
 after centering and standardizing the two-piece distribution.
 The \code{sstd} parameterization requires degrees of freedom greater
 than two.
+Both distributions support \code{"Identity"}, \code{"Inv"} and
+\code{"InvSqrt"} scaling. Their full expected Fisher information matrices,
+including cross-parameter entries, are evaluated analytically in the
+mean, standard deviation, skewness and (for \code{sstd}) shape coordinates.
+The information is transformed to the unconstrained state coordinates
+before scaling. \code{"InvSqrt"} uses the inverse lower Cholesky factor.
 
 For \code{skellam}, \code{Theta = c(mu, v)} denotes mean and variance,
 with \eqn{v>|\mu|}. The underlying Poisson intensities are

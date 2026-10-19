@@ -1,6 +1,7 @@
 #include <RcppArmadillo.h>
 #include "Utils.h"
 #include "TwoPiece.h"
+#include "TwoPieceInformation.h"
 
 using namespace arma;
 using namespace Rcpp;
@@ -279,10 +280,6 @@ arma::vec sstd_Score(double dY, arma::vec vTheta){
 }
 
 arma::mat sstd_IM(arma::vec vTheta){
-
-  arma::mat mIM = eye(4,4);
-
-  return mIM;
-
+  return GAS_two_piece_information(vTheta, true);
 }
 

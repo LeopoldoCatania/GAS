@@ -2,6 +2,7 @@
 #include "ber.h"
 #include "Utils.h"
 #include "TwoPiece.h"
+#include "TwoPieceInformation.h"
 
 using namespace arma;
 using namespace Rcpp;
@@ -186,9 +187,5 @@ arma::vec snorm_Score(double dY, arma::vec vTheta){
 }
 
 arma::mat snorm_IM(arma::vec vTheta){
-
-  arma::mat mIM = eye(3,3);
-
-  return mIM;
-
+  return GAS_two_piece_information(vTheta, false);
 }
