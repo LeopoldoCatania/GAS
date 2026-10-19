@@ -96,6 +96,7 @@ Journal of Business & Economic Statistics, 11(3), 351-360.
 \doi{10.1080/07350015.1993.10509963}.
 }
 \examples{
+\dontrun{
 data("StockIndices")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
@@ -109,4 +110,5 @@ Fit = UniGASFit(GASSpec, FTSEMIB)
 U = pit(Fit)
 
 Test = PIT_test(U, G = 20, alpha = 0.05, plot = TRUE)
+}
 }

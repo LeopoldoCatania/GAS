@@ -35,6 +35,7 @@ An object of the class \link{uGASRoll}.
 }
 \author{Leopoldo Catania}
 \examples{
+\dontrun{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 
@@ -54,6 +55,7 @@ Roll = UniGASRoll(cpichg, GASSpec, ForecastLength = 50,
 
 
 Roll
+}
 }
 
 \details{

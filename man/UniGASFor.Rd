@@ -37,6 +37,7 @@ International Journal of Forecasting, 32(3), 875-887.
 }
 \author{Leopoldo Catania}
 \examples{
+\dontrun{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 
@@ -66,6 +67,7 @@ Fit = UniGASFit(GASSpec, InsampleData)
 Forecast = UniGASFor(Fit, Roll = TRUE, out = OutSampleData)
 
 Forecast
+}
 }
 
 \details{
