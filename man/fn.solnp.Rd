@@ -7,7 +7,7 @@
 	This function is a wrapper to the \link[Rsolnp]{solnp} function of the \code{Rsolnp} package of Ghalanos and Theussl (2016).
 }
 \usage{
- fn.solnp(par0, data, GASSpec, FUN)
+ fn.solnp(par0, data, GASSpec, FUN, Compute.Hessian = FALSE)
 }
 \arguments{
 \item{par0}{
@@ -19,6 +19,9 @@
 \item{GASSpec}{
 An object of the class \link{uGASSpec} or \link{mGASSpec}, created via the \link{UniGASSpec} and \link{MultiGASSpec} functions.}
 %
+\item{Compute.Hessian}{Logical, default \code{FALSE}. Whether to return
+SOLNP's internally maintained Hessian approximation. This does not disable
+its internal quasi-Newton updates. No additional numerical Hessian is computed.}
 \item{FUN}{
 A \link{function} to optimize.}
 }
@@ -29,8 +32,7 @@ The following control parameters are used: \code{trace = 0}, \code{rho = 1}, \co
 \value{
 It returns a named list with four elements: i) \code{pars}: a \code{numeric} vector
 where the estimated parameters are stored, ii) \code{value}: a \code{numeric} containing the value of the negative log likelihood
-evaluated at its minumum, iii) \code{hessian}, a \code{numeric} matrix containing the Hessian matrix evaluated at
-the minimum of the negative log likelihood, and iv) \code{convergence} a \code{numeric} element indicating the convergence results of
+evaluated at its minumum, iii) \code{hessian}, SOLNP's Hessian approximation when requested, otherwise \code{NULL}, and iv) \code{convergence} a \code{numeric} element indicating the convergence results of
 \link[Rsolnp]{solnp}.
 }
 \author{Leopoldo Catania}

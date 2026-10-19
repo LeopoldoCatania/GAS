@@ -47,9 +47,10 @@ StaticMLFIT_Multiv <- function(mY, Dist, fn.optimizer) {
   return(out)
 }
 
-UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5) {
+UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5, Compute.Hessian = FALSE) {
 
   GAS_validate_se_a_tol(SE.A.tol)
+  fn.optimizer <- GAS_optimizer_hessian(fn.optimizer, Compute.Hessian)
 
   vY = data
 
@@ -127,10 +128,11 @@ UniGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE,
 }
 
 # mY is NxT
-MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5) {
+MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE, SE.A.tol = 1e-5, Compute.Hessian = FALSE) {
 
   GAS_validate_multi_scaling(getScalingType(GASSpec))
   GAS_validate_se_a_tol(SE.A.tol)
+  fn.optimizer <- GAS_optimizer_hessian(fn.optimizer, Compute.Hessian)
 
   mY = t(data)
 
@@ -173,6 +175,11 @@ MultiGASFit <- function(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRU
     optimiser <- list(pars = vPw,
       value = MultiGASOptimiser(vPw, data = mY, GASSpec = GASSpec),
       convergence = 0L, hessian = NULL, method = "analytical Gaussian MLE")
+    if (Compute.Hessian)
+      optimiser$hessian <- tryCatch(stats::optimHess(vPw, function(p) {
+        names(p) <- names(vPw)
+        MultiGASOptimiser(p, data = mY, GASSpec = GASSpec)
+      }), error = function(e) NULL)
   } else {
     optimiser = fn.optimizer(par0 = vPw, data = mY, GASSpec = GASSpec, FUN = MultiGASOptimiser)
   }

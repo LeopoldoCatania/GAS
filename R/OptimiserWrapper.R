@@ -1,4 +1,25 @@
-fn.solnp <- function(par0, data, GASSpec, FUN) {
+GAS_validate_compute_hessian <- function(Compute.Hessian) {
+  if (!is.logical(Compute.Hessian) || length(Compute.Hessian) != 1L ||
+      is.na(Compute.Hessian))
+    stop("Compute.Hessian must be TRUE or FALSE.", call. = FALSE)
+  invisible(Compute.Hessian)
+}
+
+# Bind once for both initialization and the dynamic fit. Legacy optimizers
+# retain their four-argument interface; opt-in optimizers declare the option.
+GAS_optimizer_hessian <- function(fn.optimizer, Compute.Hessian) {
+  GAS_validate_compute_hessian(Compute.Hessian)
+  if (!"Compute.Hessian" %in% names(formals(fn.optimizer))) return(fn.optimizer)
+  force(fn.optimizer)
+  force(Compute.Hessian)
+  function(par0, data, GASSpec, FUN)
+    fn.optimizer(par0 = par0, data = data, GASSpec = GASSpec, FUN = FUN,
+                 Compute.Hessian = Compute.Hessian)
+}
+
+fn.solnp <- function(par0, data, GASSpec, FUN, Compute.Hessian = FALSE) {
+
+  GAS_validate_compute_hessian(Compute.Hessian)
 
   solver.ctr <- list(trace = 0, rho = 1, outer.iter = 400, inner.iter = 800, delta = 1e-07, tol = 1e-08)
 
@@ -6,14 +27,16 @@ fn.solnp <- function(par0, data, GASSpec, FUN) {
 
   out = list(pars = optimiser$pars,
              value = tail(optimiser$values, 1),
-             hessian = optimiser$hessian,
+             # SOLNP maintains this approximation internally in either mode.
+             hessian = if (Compute.Hessian) optimiser$hessian else NULL,
              convergence = optimiser$convergence)
 
   return(out)
 
 }
 
-fn.optim <- function(par0, data, GASSpec, FUN) {
+fn.optim <- function(par0, data, GASSpec, FUN, Compute.Hessian = FALSE) {
+  GAS_validate_compute_hessian(Compute.Hessian)
   nm <- names(par0)
   n <- GAS_sample_size(data, GASSpec)
   objective <- function(x) {
@@ -37,9 +60,13 @@ fn.optim <- function(par0, data, GASSpec, FUN) {
   add(first, "BFGS")
   best <- candidates[[which.min(vapply(candidates, function(x) x$value, numeric(1)))]]
   g <- GAS_objective_gradient(FUN, stats::setNames(best$par, nm), data, GASSpec)
-  Hmean <- tryCatch(stats::optimHess(best$par, objective), error = function(e) NULL)
+  curvature_failed <- FALSE
+  if (Compute.Hessian) {
+    Hmean <- tryCatch(stats::optimHess(best$par, objective), error = function(e) NULL)
+    curvature_failed <- !GAS_hessian_info(Hmean, length(par0))$ok
+  }
   needs_retry <- !isTRUE(best$convergence == 0) || any(!is.finite(g)) ||
-    max(abs(g)) > 1e-5 || !GAS_hessian_info(Hmean, length(par0))$ok
+    max(abs(g)) > 1e-5 || curvature_failed
   if (needs_retry) {
     # A deterministic alternative solver; always retain the best objective.
     second <- tryCatch(stats::nlminb(best$par, objective,
@@ -75,7 +102,8 @@ fn.optim <- function(par0, data, GASSpec, FUN) {
   names(best$par) <- nm
   # Return TOTAL objective and optimizer curvature for compatibility.
   # Fitted-model standard errors are constructed separately from the OPG.
-  H <- tryCatch(n*stats::optimHess(best$par, objective), error = function(e) NULL)
+  H <- if (Compute.Hessian)
+    tryCatch(n*stats::optimHess(best$par, objective), error = function(e) NULL) else NULL
   list(pars = best$par, value = n*best$value, hessian = H,
        convergence = best$convergence, method = best$method)
 }

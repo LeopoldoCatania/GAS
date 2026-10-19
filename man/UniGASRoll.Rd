@@ -57,6 +57,9 @@ Roll
 }
 
 \details{
+Hessian computation is disabled by default. Pass \code{Compute.Hessian = TRUE}
+through \code{\ldots} to enable it for each refit, independently of \code{Compute.SE}.
+
 
 If ForecastLength is explicitly supplied, it determines the forecast
 horizon and Nstart is ignored. Otherwise, a supplied Nstart is the

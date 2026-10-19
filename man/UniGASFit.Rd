@@ -8,7 +8,7 @@
 }
 \usage{
 UniGASFit(GASSpec, data, fn.optimizer = fn.optim, Compute.SE = TRUE,
-          SE.A.tol = 1e-5)
+          SE.A.tol = 1e-5, Compute.Hessian = FALSE)
 }
 \arguments{
 \item{GASSpec}{
@@ -22,6 +22,11 @@ By default \code{fn.optimizer = fn.optim} where \link{fn.optim} is
 a wrapper to the \link{optim} function. See Details for user defined optimization routines.}
 %
 \item{Compute.SE}{\code{logical}. Should asymptotic Standard Errors be computed? By default \code{Compute.SE = TRUE}}
+\item{Compute.Hessian}{Logical, default \code{FALSE}. With the default
+optimizer, skip both the numerical Hessian used for curvature checks and
+the final returned Hessian. Set to \code{TRUE} to enable both. This option
+is independent of \code{Compute.SE}: OPG standard errors remain available
+without a Hessian. It applies to static initialization and the dynamic fit.}
 \item{SE.A.tol}{Finite nonnegative threshold for near-zero score loadings on
  their reported coefficient scale. If the full OPG fails its numerical checks,
  loadings with absolute value at most this threshold and their matching
@@ -50,6 +55,16 @@ vector; \code{value}, the summed negative log likelihood; and
 \code{convergence}, a numeric solver status with zero indicating success.
 An optional \code{hessian} element is retained as optimizer output but is not
 used for inference.
+
+The \code{Compute.Hessian} option is forwarded to custom optimizers only
+when they explicitly declare an argument with that name. Legacy optimizers
+with the original four-argument interface remain supported; their internal
+Hessian calculations are controlled by the custom optimizer itself.
+The \code{fn.solnp} wrapper only controls whether SOLNP's internally maintained
+Hessian approximation is returned. Its internal optimization updates are
+unaffected. For a static multivariate Gaussian fit, \code{Compute.Hessian = TRUE}
+computes a numerical Hessian at the analytical MLE.
+
 
 When \code{Compute.SE = TRUE}, \code{numDeriv::jacobian} differentiates the
 vector of per-observation log likelihood contributions at the final estimate.
