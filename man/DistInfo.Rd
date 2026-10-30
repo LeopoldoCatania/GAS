@@ -31,6 +31,34 @@ the labels of the currently implemented distributions.
 \details{
 	The information are printed in the console.
 }
+\value{
+\code{DistInfo} prints distribution information to the console and
+returns \code{NULL} invisibly.
+
+The other functions documented on this page return:
+\describe{
+  \item{\code{DistLabels}}{
+    A character vector of supported distribution labels.
+  }
+  \item{\code{DistName}}{
+    A character string containing the distribution name.
+  }
+  \item{\code{DistType}}{
+    A character string: \code{"univariate"} or \code{"multivariate"}.
+  }
+  \item{\code{DistParameters}}{
+    A character vector naming the distribution's parameter groups.
+  }
+  \item{\code{DistScalingType}}{
+    A character string listing the supported score scaling methods,
+    separated by commas.
+  }
+  \item{\code{NumberParameters}}{
+    A numeric scalar giving the number of distribution parameters,
+    accounting for the dimension of a multivariate distribution.
+  }
+}
+}
 \author{Leopoldo Catania}
 \examples{
 # show the information of all the supported distributions

@@ -545,10 +545,12 @@ setMethod("plot", signature(x = "mGASFit", y = "missing"), function(x, which = N
   if (is(mY, "xts")) {
     vDates = as.Date(index(mY))
   } else {
-    vDates = rownames(mY)
-    vDates = try(as.Date(vDates), silent = TRUE)
-    if (is.null(vDates) || is(vDates, "try-error")) {
-      vDates = 1:nrow(mY)
+    vDates <- try(as.Date(rownames(mY)), silent = TRUE)
+
+    if (inherits(vDates, "try-error") ||
+        length(vDates) != nrow(mY) ||
+        anyNA(vDates)) {
+      vDates <- seq_len(nrow(mY))
     }
   }
   PlotType = 1L

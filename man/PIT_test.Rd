@@ -96,7 +96,7 @@ Journal of Business & Economic Statistics, 11(3), 351-360.
 \doi{10.1080/07350015.1993.10509963}.
 }
 \examples{
-\dontrun{
+\donttest{
 data("StockIndices")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",

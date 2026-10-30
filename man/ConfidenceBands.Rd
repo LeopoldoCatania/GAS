@@ -94,7 +94,6 @@ International Journal of Forecasting, 32(3), 875-887.
 \doi{10.1016/j.ijforecast.2016.04.002}.
 }
 \examples{
-\dontrun{
 
 library("GAS")
 
@@ -117,5 +116,5 @@ upper <- Bands[, 2L, ]
 
 # Fitted path, returned separately:
 fitted_path <- getFilteredParameters(Fit)
-}
+
 }

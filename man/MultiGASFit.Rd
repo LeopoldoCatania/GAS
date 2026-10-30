@@ -164,7 +164,7 @@ Ph.D. thesis, Stanford University.
 \author{Leopoldo Catania}
 %
 \examples{
-\dontrun{
+\donttest{
 # Specify an GAS model with multivariate Student-t
 # conditional distribution and time-varying scales and correlations
 

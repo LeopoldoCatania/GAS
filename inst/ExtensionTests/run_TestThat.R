@@ -2,10 +2,8 @@
 ## Obtained with R 3.4.1 & GAS 0.2.5
 ## 20170723
 
-rm(list = ls())
 library("GAS")
 require("testthat")
-options(digits = 10, max.print = 40, prompt = "R> ", warn = 1)
 tol <- 1e-5 # tolerance tests
 
 tmp <- sessionInfo()

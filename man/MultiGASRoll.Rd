@@ -35,7 +35,7 @@ An object of the class \link{mGASRoll}
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+\donttest{
 # Specify a GAS model with Multivariate Student-t conditional
 # distribution and time-varying scale and correlation parameters
 

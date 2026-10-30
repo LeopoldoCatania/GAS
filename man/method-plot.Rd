@@ -58,7 +58,7 @@ Displays a plot of an object of class  \link{uGASFit}, \link{mGASFit}, \link{uGA
 
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+
 ## Plot filtered estimates of a GAS model estimated on the
 ## Quarterly logarithmic change in percentage points of the Consumer Price Index data set (cpichg)
 library("GAS")
@@ -72,5 +72,5 @@ GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
 Fit = UniGASFit(GASSpec, cpichg)
 
 plot(Fit, which = 1)
-}
+
 }

@@ -159,7 +159,7 @@ Ph.D. thesis, Stanford University.
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+\donttest{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying scale.
 library("GAS")
@@ -224,8 +224,8 @@ fn.gosolnp <- function(par0, data, GASSpec, FUN) {
       pars = NULL,
       fun = FUN, data = data, cluster = cluster,
       GASSpec = GASSpec,
-      n.sim = 100000,
-      n.restarts = 10,
+      n.sim = 1000,
+      n.restarts = 2,
       LB = c(-5, -2, -2, -2),
       UB = c(5, 8, 3.0, 5.0))
 

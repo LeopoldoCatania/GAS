@@ -34,7 +34,7 @@ International Journal of Forecasting, 32(3), 875-887.
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+\donttest{
 # Specify a GAS model with multivatiate  Student-t conditional
 # distribution and time-varying scales and correlations.
 

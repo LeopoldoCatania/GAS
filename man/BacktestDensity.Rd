@@ -80,7 +80,7 @@ Journal of Business & Economic Statistics, 29(3), 411-422.
 \doi{10.1198/jbes.2010.08110}.
 }
 \examples{
-\dontrun{
+\donttest{
 data("cpichg")
 
 GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",

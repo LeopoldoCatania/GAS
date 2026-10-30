@@ -37,7 +37,7 @@ International Journal of Forecasting, 32(3), 875-887.
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+\donttest{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 

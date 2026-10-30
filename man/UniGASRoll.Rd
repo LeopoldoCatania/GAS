@@ -35,7 +35,7 @@ An object of the class \link{uGASRoll}.
 }
 \author{Leopoldo Catania}
 \examples{
-\dontrun{
+\donttest{
 # Specify an univariate GAS model with Student-t
 # conditional distribution and time-varying location, scale and shape parameter
 

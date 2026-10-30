@@ -83,6 +83,8 @@ PlotMenu <- function(x) {
 }
 
 PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
     if (iK <= 5L) {
         layout(matrix(1:iK, iK, 1L), heights = c(rep(2, iK - 1), 2.5))
         for (i in 1:(iK)) {
@@ -150,6 +152,9 @@ PlotMultipleSeries <- function(mTheta, iK, iT, vDates) {
 }
 
 PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDates_is) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
 
     iS = nrow(mTheta_is)
 
@@ -233,6 +238,9 @@ PlotMultipleSeries_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDat
 
 PlotSingleSeries <- function(vTheta, iT, vDates) {
 
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
+
     vLim = c(min(vTheta), max(vTheta))
 
     layout(matrix(1, 1L, 1L))
@@ -248,6 +256,9 @@ PlotSingleSeries <- function(vTheta, iT, vDates) {
 }
 
 PlotForecastVsRealized_Univ <- function(mRealVsForecast, vDates_os, object) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
 
     layout(matrix(1:1, 1, 1), heights = c(4))
     par(mar = c(3, 4, 0.1, 2))
@@ -273,6 +284,9 @@ PlotForecastVsRealized_Univ <- function(mRealVsForecast, vDates_os, object) {
 }
 
 PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, object) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
 
     iH = nrow(mForcasted)
 
@@ -359,6 +373,10 @@ PlotForecastVsRealized_Multi <- function(mReal, mForcasted, iN, vDates_os, objec
 }
 
 PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
+
     iQ = dim(cBands)[2L]
     if (iK <= 5L) {
         layout(matrix(1:iK, iK, 1L), heights = c(rep(2, iK - 1), 2.5))
@@ -435,6 +453,10 @@ PlotMultipleSeries_Bands <- function(mTheta, iK, iT, vDates, cBands) {
 }
 
 PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os, vDates_is, cBands) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
+
     iQ = dim(cBands)[2L]
 
     iS = nrow(mTheta_is)
@@ -529,6 +551,9 @@ PlotMultipleSeries_Bands_wis <- function(mTheta_is, mTheta_os, iK, iH, vDates_os
 }
 
 PlotPit <- function(vU, BIN) {
+
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar), add = TRUE)
 
     layout(matrix(1, 1L, 1L), heights = c(4))
     par(mar = c(3, 4, 0.1, 2))
