@@ -159,106 +159,68 @@ Ph.D. thesis, Stanford University.
 }
 \author{Leopoldo Catania}
 \examples{
-\donttest{
-# Specify an univariate GAS model with Student-t
-# conditional distribution and time-varying scale.
 library("GAS")
 
+# Use a short sample to keep the examples quick to run.
 data("sp500ret")
-
-GASSpec = UniGASSpec(Dist = "std", ScalingType = "Identity",
-                     GASPar = list(location = FALSE, scale = TRUE,
-                                   shape = FALSE))
-
-Fit = UniGASFit(GASSpec, sp500ret)
-
+vY <- tail(sp500ret, 500)
+GASSpec <- UniGASSpec(
+  Dist = "std", ScalingType = "Identity",
+  GASPar = list(location = FALSE, scale = TRUE, shape = FALSE)
+)
+Fit <- UniGASFit(GASSpec, vY)
 Fit
 
-# Estimate the model with a different optimizer.
-# Assume we want to use the Nelder and Mead optimization provided by
-# the optim() function, we create
-# the wrapper fn.NM.optim in this way
-
+# Custom optimizer: Nelder-Mead followed by gradient-based refinement.
+# Minimize the average negative log likelihood for numerical scaling,
+# but return the summed negative log likelihood required by UniGASFit.
 fn.NM.optim <- function(par0, data, GASSpec, FUN) {
-
-  optimizer = optim(par0, FUN, data = data, GASSpec = GASSpec, method = "Nelder-Mead",
-                    control = list(trace = 0), hessian = TRUE)
-
-  out = list(pars = optimizer$par,
-             value = optimizer$value,
-             hessian = optimizer$hessian,
-             convergence = optimizer$convergence)
-
-  return(out)
-
+  objective <- function(par) FUN(par, data = data, GASSpec = GASSpec)
+  nm <- stats::optim(
+    par0, function(par) objective(par) / length(data),
+    method = "Nelder-Mead",
+    control = list(maxit = 2000, reltol = 1e-10), hessian = FALSE
+  )
+  start <- par0
+  if (is.finite(nm$value) && objective(nm$par) < objective(par0)) {
+    start <- stats::setNames(nm$par, names(par0))
+  }
+  fn.optim(start, data, GASSpec, FUN, Compute.Hessian = FALSE)
 }
-
-Fit.NM.optim = UniGASFit(GASSpec, sp500ret, fn.optimizer = fn.NM.optim )
-
+Fit.NM.optim <- UniGASFit(GASSpec, vY, fn.optimizer = fn.NM.optim)
 Fit.NM.optim
 
+# Custom optimizer: random restarts with gosolnp(), followed by
+# gradient-based refinement. Retain GAS's starting values as a candidate.
 
-# Estimate time-varying Negative Binomial distribution for the Goals dataset.
-# Let's use the gosolnp() optimizer for the time-varying model estimation and
-# the solnp() optimizer for estimation of the static model for the choice of
-# the starting values. The logical is(GASSpec, "list") is TRUE when the function
-# is evaluated for the choice of starting values, and FALSE when the function
-# is evaluated for the time-varying model.
-# We can also make use of parallel computation calling a cluster object defined
-# in the Global environment.
-
-library("Rsolnp")
 fn.gosolnp <- function(par0, data, GASSpec, FUN) {
-
+  # Static initialization uses the default optimizer.
   if (is(GASSpec, "list")) {
-
-    optimiser = suppressWarnings(solnp(par0, FUN, data = data,
-                                       GASSpec = GASSpec,
-                                       control = list(trace = 0)))
-
-  } else {
-
-    cluster = get("cluster", envir = globalenv())
-
-    optimiser = suppressWarnings(gosolnp(
-      pars = NULL,
-      fun = FUN, data = data, cluster = cluster,
-      GASSpec = GASSpec,
-      n.sim = 1000,
-      n.restarts = 2,
-      LB = c(-5, -2, -2, -2),
-      UB = c(5, 8, 3.0, 5.0))
-
-    )
+    return(fn.optim(par0, data, GASSpec, FUN, Compute.Hessian = FALSE))
   }
-
-  out = list(pars = optimiser$pars,
-             value = tail(optimiser$values, 1),
-             hessian = optimiser$hessian,
-             convergence = optimiser$convergence)
-
-  return(out)
-
+  objective <- function(par) FUN(par, data = data, GASSpec = GASSpec)
+  global <- Rsolnp::gosolnp(
+    pars = par0, fun = FUN, data = data, GASSpec = GASSpec,
+    n.sim = 100, n.restarts = 2, rseed = 123,
+    LB = c(-5, -2, -2, -2), UB = c(5, 8, 3, 5),
+    control = list(trace = 0)
+  )
+  start <- par0
+  if (length(global$pars) == length(par0) &&
+      all(is.finite(global$pars)) &&
+      is.finite(objective(global$pars)) &&
+      objective(global$pars) < objective(par0)) {
+    start <- stats::setNames(global$pars, names(par0))
+  }
+  fn.optim(start, data, GASSpec, FUN, Compute.Hessian = FALSE)
 }
 
-data("Goals")
+data("Goals", package = "GAS")
+GASSpec <- UniGASSpec(
+  Dist = "negbin", ScalingType = "Inv",
+  GASPar = list(location = TRUE, scale = FALSE)
+)
+vY <- as.numeric(stats::na.omit(Goals[, 1]))
+UniGASFit(GASSpec, vY, fn.optimizer = fn.gosolnp)
 
-library("parallel")
-
-cluster = makeCluster(2)
-
-GASSpec = UniGASSpec(Dist = "negbin", ScalingType = "Inv",
-                     GASPar = list(location = TRUE, scale = FALSE))
-
-
-vY = na.omit(Goals[, 1])
-
-Fit = UniGASFit(GASSpec, vY, fn.optimizer = fn.gosolnp)
-
-Fit
-
-stopCluster(cluster)
-rm("cluster")
-
-}
 }
